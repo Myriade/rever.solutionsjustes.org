@@ -1,11 +1,12 @@
-import * as React from "react"
+import * as React from 'react'
+import PageLayout from '../layouts/pageLayout'
 
 const IndexPage = () => {
   return (
-    <main>
+    <PageLayout>
       <h1>Rêver à l'essentiel</h1>
       <p>microsite en développement</p>
-    </main>
+    </PageLayout>
   )
 }
 

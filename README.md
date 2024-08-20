@@ -1,49 +1,21 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby Minimal Starter
-</h1>
+# rever.solutionsjustes.org
+## Un microsite de campagne pour la clinique Solutions justes
+Code author : Myriam Bizier / Myriade web
+Design : Republik & Manon Lecante
+Front-end : Généré par Gatsby/React
 
-## 🚀 Quick start
+## Installation
+- Récupérer le code source dans le repo GIT nommé DEV sur le serveur d'hébergement
+- S'assurer que node.js et NPM sont installés sur la machine locale
+- Dans un terminal : `npm install`
 
-1.  **Create a Gatsby site.**
+## Développement
+- Dans un terminal : `run npm develop`
+- Dans un browser, la version en développement est disponible à l'adresse localhost:8000/
 
-    Use the Gatsby CLI to create a new site, specifying the minimal starter.
+### Variables .env
+Attention!!
+Le variables d'environnement doivent être préfixées de GATSBY_ pour les protéger côté serveur et éviter de les exposer côté browser. C'est important surtout pour le build au déploiement.
 
-    ```shell
-    # create a new Gatsby site using the minimal starter
-    npm init gatsby
-    ```
-
-2.  **Start developing.**
-
-    Navigate into your new site’s directory and start it up.
-
-    ```shell
-    cd my-gatsby-site/
-    npm run develop
-    ```
-
-3.  **Open the code and start customizing!**
-
-    Your site is now running at http://localhost:8000!
-
-    Edit `src/pages/index.js` to see your site update in real-time!
-
-4.  **Learn more**
-
-    - [Documentation](https://www.gatsbyjs.com/docs/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-    - [Tutorials](https://www.gatsbyjs.com/docs/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-    - [Guides](https://www.gatsbyjs.com/docs/how-to/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-    - [API Reference](https://www.gatsbyjs.com/docs/api-reference/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-    - [Plugin Library](https://www.gatsbyjs.com/plugins?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-    - [Cheat Sheet](https://www.gatsbyjs.com/docs/cheat-sheet/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-## 🚀 Quick start (Netlify)
-
-Deploy this starter with one click on [Netlify](https://app.netlify.com/signup):
-
-[<img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify" />](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-minimal)
+## Déploiement
+Push master branch to GitHub repo. It triggers a deployment script on Netlify
