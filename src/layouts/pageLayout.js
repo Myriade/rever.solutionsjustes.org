@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 // import styled from 'styled-components'
 
+import '../styles/globals.css'
 //import '../styles/globals.scss'
 //import { media } from '../styles/mixins.js'
 
@@ -12,13 +13,37 @@ export default function PageLayout({ children }) {
     <TempProtectLayout>
       <div>
       
-        <header>
+        <header
+          style={{
+            position: 'fixed',
+            top: '0',
+            height: '1.5rem',
+            width: '100%',
+            background: 'white',
+            textAlign: 'center'
+          }}
+        >
           <p><Link to='/'>Landing</Link> <Link to='/connaitre'>Connaître</Link> <Link to='/quiz'>Quiz</Link></p>
         </header>
         
-        <main> {children} </main>
+        <main
+          style={{
+            marginTop: '5rem',
+            paddingInline: '10vw',
+          }}
+        > 
+          {children} 
+        </main>
         
-        <footer>
+        <footer
+          style={{
+            position: 'fixed',
+            bottom: '0',
+            width: '100%',
+            background: 'white',
+            textAlign: 'center'
+          }}
+        >
           <p>Bas de page</p>
         </footer>
         
@@ -27,5 +52,9 @@ export default function PageLayout({ children }) {
   )
 }
 
-export const Head = () => <html lang="fr" />;
+export const Head = () => {
+  <>
+    <html lang="fr" />
+  </>
+};
 
