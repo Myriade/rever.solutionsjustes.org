@@ -1,8 +1,10 @@
 import * as React from 'react'
+import useWixData from '../utils/importWixData'
 import PageLayout from '../layouts/pageLayout'
 import { Link } from 'gatsby'
 
 const IndexPage = () => {
+  let content = useWixData('TestsRever-Statutsmigratoires');
   return (
     <PageLayout>
     
@@ -15,8 +17,17 @@ const IndexPage = () => {
       
       <section>
         <h1>Comprendre les statuts migratoires</h1>
-        <p>Court texte</p>
-        <p>Caroussel des status</p>
+        {content.map( statut => {
+          //const imageSrc = statut.ilustration;
+          return (
+            <div key={statut._id}>
+              <h3>{statut.data.title}</h3>
+              <div>
+                {statut.data.texteSimple}
+              </div>
+            </div>
+          )
+        })}
       </section>
       
       <section id='agir'>
