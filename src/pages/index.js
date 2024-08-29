@@ -2,32 +2,50 @@ import * as React from 'react'
 import useWixData from '../utils/importWixData'
 import PageLayout from '../layouts/pageLayout'
 import { Link } from 'gatsby'
+import styled from 'styled-components'
+
+const Carroussel = styled.div`
+  display: flex;
+  gap: 1rem;
+  .carroussel-item {
+    width: 28vw;
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 4px;
+  }
+`;
 
 const IndexPage = () => {
   let content = useWixData('TestsRever-Statutsmigratoires');
   return (
     <PageLayout>
-    
-      <section>
-        <h4>Bannière d'intro</h4>
-        <h1>Rêver à l'essentiel</h1>
-        <p>(image et court paragraphe)</p>
-        <Link to='#agir' className='cta-btn'>Agir</Link>
+      <section
+        style={{background: 'lightgrey'}}>
+        <div style={{maxWidth: '75ch'}}>
+          <h1>Rêver à l'essentiel</h1>
+          <h2>Tout le monde a des rêves, mais ce n'est pas donné à tout le monde de pouvoir en faire une réalité.</h2>
+          <p>Les personnes im·migrantes sans statut ou à statut précaire sont souvent contraintes de mettre de côté leurs plus grandes aspirations pour ne rêver qu'à l'essentiel. En passant de grandes ambitions aux désirs les plus simples—et les plus humains—la campagne Rêver à l'essentiel met en lumière les obstacles auxquels ces personnes doivent faire face pour vivre dignement lorsque leur quotidien est dicté par leur statut migratoire.</p>
+          <p>(image de fond à venir)</p>
+        </div>
+        <Link to='#agir' className='cta-btn'>Soutenir la cause</Link>
       </section>
       
       <section>
-        <h1>Comprendre les statuts migratoires</h1>
-        {content.map( statut => {
-          //const imageSrc = statut.ilustration;
-          return (
-            <div key={statut._id}>
-              <h3>{statut.data.title}</h3>
-              <div>
-                {statut.data.texteSimple}
+        <h2>Les statuts d'immigration</h2>
+        <p>Connaître la réalité des personnes im·migrantes au statut d'immigration absent ou précaire nécessite une meilleure compréhension des termes liés à l'enjeu. Apprenez-en davantage sur les différentes situations qui affectent les personnes im·migrantes.</p>
+        <Carroussel>
+          {content.map( statut => {
+            //const imageSrc = statut.ilustration;
+            return (
+              <div key={statut._id} className='carroussel-item'>
+                <h3>{statut.data.title}</h3>
+                <div>
+                  {statut.data.texteSimple}
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </Carroussel>
       </section>
       
       <section id='agir'>

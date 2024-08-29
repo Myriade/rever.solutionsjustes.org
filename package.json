@@ -18,9 +18,20 @@
   "dependencies": {
     "@wix/data": "^1.0.143",
     "@wix/sdk": "^1.12.12",
+    "babel-plugin-styled-components": "^2.1.4",
     "gatsby": "^5.13.5",
+    "gatsby-plugin-canonical-urls": "^5.13.1",
+    "gatsby-plugin-image": "^3.13.1",
+    "gatsby-plugin-manifest": "^5.13.1",
+    "gatsby-plugin-sass": "^6.13.1",
+    "gatsby-plugin-sharp": "^5.13.1",
+    "gatsby-plugin-sitemap": "^6.13.1",
+    "gatsby-plugin-styled-components": "^6.13.1",
+    "gatsby-transformer-sharp": "^5.13.1",
     "js-cookie": "^3.0.5",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sass": "^1.77.8",
+    "styled-components": "^6.1.12"
   }
 }
