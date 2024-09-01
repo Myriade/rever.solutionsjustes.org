@@ -1,22 +1,11 @@
-import * as React from 'react'
-import useWixData from '../utils/importWixData'
+import React from 'react'
 import PageLayout from '../layouts/pageLayout'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 
-const Carroussel = styled.div`
-  display: flex;
-  gap: 1rem;
-  .carroussel-item {
-    width: 28vw;
-    padding: 1rem;
-    border: 1px solid black;
-    border-radius: 4px;
-  }
-`;
+import StatutsImmigrationList from '../components/statutsImmigrationList'
 
 const IndexPage = () => {
-  let content = useWixData('TestsRever-Statutsmigratoires');
   return (
     <PageLayout>
       <section
@@ -33,19 +22,7 @@ const IndexPage = () => {
       <section>
         <h2>Les statuts d'immigration</h2>
         <p>Connaître la réalité des personnes im·migrantes au statut d'immigration absent ou précaire nécessite une meilleure compréhension des termes liés à l'enjeu. Apprenez-en davantage sur les différentes situations qui affectent les personnes im·migrantes.</p>
-        <Carroussel>
-          {content.map( statut => {
-            //const imageSrc = statut.ilustration;
-            return (
-              <div key={statut._id} className='carroussel-item'>
-                <h3>{statut.data.title}</h3>
-                <div>
-                  {statut.data.texteSimple}
-                </div>
-              </div>
-            )
-          })}
-        </Carroussel>
+        <StatutsImmigrationList />
       </section>
       
       <section id='agir'>
