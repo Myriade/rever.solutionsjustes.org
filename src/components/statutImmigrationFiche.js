@@ -13,7 +13,7 @@ const SatutFiche = styled.div`
 `;
 
 const StatutImmigrationFiche = ({ ficheData }) => {
-	console.log(ficheData);
+	//console.log(ficheData);
 	
 	let imageSrc = '/logo.jpg';
 	if (ficheData.ilustration) {

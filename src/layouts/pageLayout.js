@@ -17,7 +17,7 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   gap: 2rem;
-  
+  z-index: 50;
   .internal-nav {
     display: flex;
     gap: 1rem;}

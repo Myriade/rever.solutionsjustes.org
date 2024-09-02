@@ -65,9 +65,9 @@ const StatutsImmigrationList = () => {
 					})}
 				</div>
 			</div>
-			<div class="glide__arrows" data-glide-el="controls">
-				<button class="glide__arrow glide__arrow--left" data-glide-dir="<">&#8249;</button>
-				<button class="glide__arrow glide__arrow--right" data-glide-dir=">">&#8250;</button>
+			<div className="glide__arrows" data-glide-el="controls">
+				<button className="glide__arrow glide__arrow--left" data-glide-dir="<">&#8249;</button>
+				<button className="glide__arrow glide__arrow--right" data-glide-dir=">">&#8250;</button>
 			</div>
 		</CarrousselContainer>
 	)
