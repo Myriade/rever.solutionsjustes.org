@@ -38,4 +38,10 @@ const IndexPage = () => {
 
 export default IndexPage
 
-export const Head = () => <title>Rêver à l'essentiel | Solutions justes</title>
+export const Head = () => (
+  <>
+    <title>Rêver à l'essentiel | Solutions justes</title>
+    <link rel="stylesheet" href="/glide.core.min.css" />
+    <link rel="stylesheet" href="/glide.theme.min.css" />
+  </>
+);

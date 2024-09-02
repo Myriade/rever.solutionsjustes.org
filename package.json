@@ -16,6 +16,7 @@
   },
   "license": "0BSD",
   "dependencies": {
+    "@glidejs/glide": "^3.6.2",
     "@wix/data": "^1.0.143",
     "@wix/sdk": "^1.12.12",
     "babel-plugin-styled-components": "^2.1.4",
