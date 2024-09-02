@@ -3,7 +3,7 @@ import { Link } from 'gatsby'
 import styled from 'styled-components'
 
 import '../styles/globals.scss'
-//import { media } from '../styles/mixins.js'
+import { media } from '../styles/mixins.js'
 
 import TempProtectLayout from './TempProtectLayout.js';
 

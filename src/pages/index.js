@@ -3,6 +3,8 @@ import PageLayout from '../layouts/pageLayout'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 
+import { media } from '../styles/mixins.js'
+
 import StatutsImmigrationList from '../components/statutsImmigrationList'
 
 const IndexPage = () => {
