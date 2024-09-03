@@ -12,7 +12,8 @@ const Ligne = styled.div`
 	overflow-x: auto;
 	
 	${media.mediumUp`
-		position: relative;
+		position: absolute;
+		right: 0;
 		width: 90vw;
 		z-index: 40;
 	`};
@@ -28,15 +29,16 @@ const Ligne = styled.div`
 	}
 `;
 
-const HistoireLigneTemps = ({ ligneData }) => {
+const HistoireLigneTemps = ({ ligneData, active }) => {
 	const [ligneArray, setLigneArray] = useState(ligneData);
 	console.log(ligneArray);
+	console.log('Active = ', active)
 	
 	return (
 		<Ligne className='ligne-temps'>
 			{ligneArray.map( (item, index) => {
 				return (
-					<div className='point-temporel'>
+					<div className='point-temporel' key={index}>
 						<p className='point-temporel__date'>{item.date}</p>
 						<p className='point-temporel__texte'>{item.texte}</p>
 					</div>

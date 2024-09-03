@@ -8,18 +8,24 @@ import HistoireLigneTemps from './histoireLigneTemps'
 import { media } from '../styles/mixins.js'
 
 const Liste = styled.div`
+	padding-bottom: 20rem;
 	.histoire-unique {
 		&__fiche {
 			display: grid;
 			justify-items: center;
 			gap: 1rem;
+			margin-bottom: 1rem;
+			padding-bottom: 1rem;
 			img {
-				max-width: 150px;
-			}
-		}
-		&:not(:first-child) .ligne-temps {
-			display: none;
-		}
+				max-width: 150px;}}
+		&:not(.active) .ligne-temps {
+			display: none;}
+		&.active {
+			.histoire-unique__fiche {
+				border: 2px solid grey;
+				border-radis: 5px;}
+			.ligne-temps {
+				display: grid;}}
 	}
 	${media.mediumUp`
 		display: grid;
@@ -32,6 +38,7 @@ const Liste = styled.div`
 const HistoiresList = () => {
 	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
 	const [histoiresArray, setHistoiresArray] = useState(histoiresData);
+	const [activeIndex, setActiveIndex] = useState(0);
 	
 	useEffect(() => {
 	})
@@ -40,13 +47,13 @@ const HistoiresList = () => {
 		<Liste className='histoires-container'>
 			{ histoiresArray.map( (item, index) => {
 				return (
-					<div className='histoire-unique' key={index}>
+					<div className={index == activeIndex ? `histoire-unique active` : `histoire-unique`} key={index}>
 						<div className='histoire-unique__fiche'>
 							<h3>{item.titre}</h3>
 							<img src='/portrait-placeholder.gif' alt={item.titre}/>
-							<button>{item.cta}</button>
+							<button onClick={() => setActiveIndex(index)} >{item.cta}</button>
 						</div>
-						<HistoireLigneTemps ligneData={item.ligneTemps}/>
+						<HistoireLigneTemps ligneData={item.ligneTemps} active={activeIndex ? true : false} />
 					</div>
 				)
 			})}
