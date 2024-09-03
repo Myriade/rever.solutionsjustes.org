@@ -1,7 +1,8 @@
 export default function histoiresData() { 
 	return [
 	{
-		titre: `L'histoire de A.B.`,
+		titre: `Une femme en attente de résidence permanente`,
+		cta: `Voir son parcours [cta-tbd]`,
 		ligneTemps: [ 
 			{
 				date: 'Janvier 2013',
@@ -17,7 +18,7 @@ export default function histoiresData() {
 			},
 			{
 				date: 'Mai 2020',
-				texte: `Mai 2020`
+				texte: `Sa demande est acceptée! Ce n'est que la première étape d'un long processus d'examens.`
 			},
 			{
 				date: 'Août 2024',
@@ -26,7 +27,8 @@ export default function histoiresData() {
 		]	
 	},
 	{
-		titre: `L'histoire de C.D.`,
+		titre: `Un père sans statut vivant une séparation familiale`,
+		cta: `Lire la suite [cta-tbd]`,
 		ligneTemps: [ 
 			{
 				date: 'Décembre 2016',
@@ -43,7 +45,8 @@ export default function histoiresData() {
 		]	
 	},
 	{
-		titre: `L'histoire de E.F.`,
+		titre: `Un travailleur avec un permis de travail fermé (PTF)`,
+		cta: `Ça m'intéresse [cta-tbd]`,
 		ligneTemps: [ 
 			{
 				date: 'Février 2022',

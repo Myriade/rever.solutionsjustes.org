@@ -10,12 +10,22 @@ import { media } from '../styles/mixins.js'
 const Liste = styled.div`
 	.histoire-unique {
 		&__fiche {
-			
+			display: grid;
+			justify-items: center;
+			gap: 1rem;
+			img {
+				max-width: 150px;
+			}
 		}
-		&__ligne-temps-cntnr {
-			
+		&:not(:first-child) .ligne-temps {
+			display: none;
 		}
 	}
+	${media.mediumUp`
+		display: grid;
+		grid-template-columns: 33% 33% 33%;
+	`};
+	
 `;
 
 
@@ -33,8 +43,10 @@ const HistoiresList = () => {
 					<div className='histoire-unique' key={index}>
 						<div className='histoire-unique__fiche'>
 							<h3>{item.titre}</h3>
+							<img src='/portrait-placeholder.gif' alt={item.titre}/>
+							<button>{item.cta}</button>
 						</div>
-						<HistoireLigneTemps className='histoire-unique__ligne-temps-cntnr' ligneData={item.ligneTemps}/>
+						<HistoireLigneTemps ligneData={item.ligneTemps}/>
 					</div>
 				)
 			})}

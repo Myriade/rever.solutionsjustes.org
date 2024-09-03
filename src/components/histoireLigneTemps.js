@@ -5,7 +5,20 @@ import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 
 const Ligne = styled.div`
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 320px));
+	gap: 10px;
+	grid-auto-flow: column;
+	overflow-x: auto;
+	
+	${media.mediumUp`
+		position: relative;
+		width: 90vw;
+		z-index: 40;
+	`};
+	
 	.point-temporel {
+		width: 300px;
 		&__date {
 			font-weight: bold;
 		}
@@ -20,7 +33,7 @@ const HistoireLigneTemps = ({ ligneData }) => {
 	console.log(ligneArray);
 	
 	return (
-		<Ligne>
+		<Ligne className='ligne-temps'>
 			{ligneArray.map( (item, index) => {
 				return (
 					<div className='point-temporel'>
