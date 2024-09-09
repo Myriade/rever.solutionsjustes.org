@@ -23,7 +23,7 @@ const Liste = styled.div`
 		&.active {
 			.histoire-unique__fiche {
 				border: 2px solid grey;
-				border-radis: 5px;}
+				border-radius: 5px;}
 			.ligne-temps {
 				display: grid;}}
 	}
