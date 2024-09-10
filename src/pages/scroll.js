@@ -11,39 +11,70 @@ const Test = styled.div`
   gap: 5vw;
   align-items: center;
   width: 100%;
-  padding-block: 4vh;
+  padding: 4vh;
   background-color: #eaeaea;
   overflow: hidden;
   
-  .scroll-item {
+  .timeline__item {
     width: 30vh;
     height: 30vh;
     display: grid;
-    &__inner {
+    > * {
       background-color: pink;
       color: navy;
-      padding: 1rem;
-      transform: translateX(calc(100vw - var(--progress) * 100vw));}}
+      padding: 1rem;}
 `;
 
 const PageScroll = () => {
-  const [isHovered, setIsHovered] = useState(false);
-  const { gsapContainer } = useRef();
+  const [isHovered, setIsHovered] = useState(null);
+  const [isScrollReady, setIsScrollReady] = useState(null);
+  const gsapContainer = useRef(null);
+  const scrollRef = useRef(null);
   
-  function hoverHandler() {
-    setIsHovered(true);
-  }
-  function notHoverHandler() {
-    setIsHovered(false);
-  }
-
+  // Test 1 - Tween
+  function hoverHandler() { setIsHovered(true) }
+  function notHoverHandler() { setIsHovered(false) }
   useGSAP(() => {
     if (isHovered) {
       gsap.to('h2', { rotation: 180, duration: 1 });
-    } else {
+    } else if (!isHovered) {
       gsap.to('h2', { rotation: 355, duration: 1 });
     }
   }, { dependencies: [isHovered], scope: gsapContainer});
+  
+  // Test 2 ScrollTrigger
+  
+  /////// TODO : extraire le code JS dans un fichier static pour le loader en dehors de React
+  
+  function mouseMoveHandler() { 
+    setIsScrollReady(true);
+  }
+  useGSAP(() => {
+    if (isScrollReady) {
+      console.log('isScrollReady = ', isScrollReady);
+      const target = scrollRef.current.childNodes[0];
+      gsap.registerPlugin(ScrollTrigger);
+      
+      // gsap.to('.timeline', {
+      //     scrollTrigger: '.timeline', // start animation when ".box" enters the viewport
+      //     x: 500
+      // });
+      
+      // Pin the timeline element
+      gsap.to('.timeline', {
+        scrollTrigger: {
+          trigger: '.timeline',
+          pin: true,
+          start: 'top top',
+          end: () => '+=' + (target.offsetHeight),
+          scrub: true,
+          markers: true,
+        },
+        duration: 1,
+      });
+    }
+  }, { dependencies: [isScrollReady], scope: scrollRef});
+  
 
   return (
     
@@ -54,7 +85,12 @@ const PageScroll = () => {
       </section>
       
       <section>
-        <div style={{height: '25vh', textAlign: 'center'}} ref={gsapContainer} onMouseEnter={hoverHandler} onMouseLeave={notHoverHandler}>
+        <div 
+          ref={gsapContainer} 
+          onMouseEnter={hoverHandler} 
+          onMouseLeave={notHoverHandler}
+          style={{height: '25vh', textAlign: 'center'}}
+        >
           <h2>MW</h2>
         </div>
       </section>
@@ -73,24 +109,16 @@ const PageScroll = () => {
         </div>
       </section>
       
-      <section id='horizontal-scroll'>
-        <Test 
-          className="scroll-content-list"
-          data-scroll-section
-          >
-          <div
-            className="scroll-item"
-            data-scroll 
-            data-scroll-css-progress
-          >
-            <p className='scroll-item__inner'>scroll-item 1</p>
+      <section 
+        ref={scrollRef} 
+        onMouseMove={mouseMoveHandler}
+      >
+        <Test className="timeline">
+          <div className="timeline__item" >
+            <p>timeline__item 1</p>
           </div>
-          <div
-            className="scroll-item"
-            data-scroll 
-            data-scroll-css-progress
-          >
-            <p className='scroll-item__inner'>scroll-item 2</p>
+          <div className="timeline__item">
+            <p>timeline__item 2</p>
           </div>
         </Test>
       </section>

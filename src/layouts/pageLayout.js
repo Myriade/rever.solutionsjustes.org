@@ -5,6 +5,10 @@ import styled from 'styled-components'
 import '../styles/globals.scss'
 import { media } from '../styles/mixins.js'
 
+import { gsap } from "gsap";
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import TempProtectLayout from './TempProtectLayout.js';
 
 const Header = styled.header`
@@ -35,6 +39,11 @@ const Main = styled.main`
 `
 
 export default function PageLayout({ children }) {
+  
+  useGSAP(() => {
+    //gsap
+  });
+  
   return (
     <TempProtectLayout>
       <div>
