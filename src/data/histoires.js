@@ -1,8 +1,8 @@
 export default function histoiresData() { 
 	return [
 	{
+		nom: 'Anabel',
 		titre: `Une femme en attente de résidence permanente`,
-		cta: `Voir son parcours [cta-tbd]`,
 		ligneTemps: [ 
 			{
 				date: 'Janvier 2013',
@@ -27,8 +27,8 @@ export default function histoiresData() {
 		]	
 	},
 	{
+		nom: 'Daniel',
 		titre: `Un père sans statut vivant une séparation familiale`,
-		cta: `Lire la suite [cta-tbd]`,
 		ligneTemps: [ 
 			{
 				date: 'Décembre 2016',
@@ -45,8 +45,8 @@ export default function histoiresData() {
 		]	
 	},
 	{
+		nom: 'Saïd',
 		titre: `Un travailleur avec un permis de travail fermé (PTF)`,
-		cta: `Ça m'intéresse [cta-tbd]`,
 		ligneTemps: [ 
 			{
 				date: 'Février 2022',

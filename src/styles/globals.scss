@@ -12,7 +12,7 @@ body {
 	box-sizing: border-box;}
 
 section {
-	padding: 2vh 2vw;
+	padding: 2vh 5vw 6vh;
 	border-bottom: 1px solid;}
 	
 // REUSABLES
@@ -22,3 +22,13 @@ section {
 	padding: 0.25em 1em;
 	margin-bottom: 1em;
 	border: 1px solid;}
+	
+.text-centered {
+	text-align: center;}
+
+.label {
+	text-transform: uppercase;
+	margin-block: 0;
+	font-family: sans-serif;
+	font-weight: bold;
+}
