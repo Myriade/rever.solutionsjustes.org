@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PageLayout from '../layouts/pageLayout'
 import styled from 'styled-components'
 
@@ -26,7 +26,6 @@ const PageScroll = () => {
   const [isScrollReady, setIsScrollReady] = useState(null);
   const scrollRef = useRef(null);
   
-
   function firstHoverTouchHandler() { setIsScrollReady(true) }
   
   useGSAP(() => {
@@ -37,8 +36,6 @@ const PageScroll = () => {
       
       gsap.registerPlugin(ScrollTrigger);
       let sections = gsap.utils.toArray(timelineContainer.querySelectorAll('.timeline__item'));
-      
-      timelineContainer.style.width = `calc(${sections.length} * 100%)`;
       
       gsap.to(sections, {
         xPercent: -100 * (sections.length - 1),

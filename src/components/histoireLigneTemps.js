@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { convertImageUrl } from '../utils/utils'
 import styled from 'styled-components'
 
 import { media } from '../styles/mixins.js'
 
-const Ligne = styled.div`
+const LigneTemps = styled.div`
 	opacity: 0;
 	transition: opacity 0.7s ease-in-out;
 	margin-top: 2rem;
@@ -13,6 +13,9 @@ const Ligne = styled.div`
 	&.active {
 		opacity: 1;
 		z-index: 10;}
+		
+	.ligne-temps__scrolljack {
+		overflow-x: hidden;}
 	
 	${media.mediumUp`
 		grid-column-start: 1;
@@ -21,44 +24,51 @@ const Ligne = styled.div`
 		grid-row-end: 3;
 	`};
 	
-	.horizontal-scroll {
+	.time-list {
+		background-color: lavender;
+		height: 100%;
+		display: flex;
+		flex-wrap: nowrap;}
+		
+	.time-list__item {
+		min-width: 80%;
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 320px));
-		gap: 10px;
-		grid-auto-flow: column;
-		overflow-x: auto;
-		border-top: 2px dashed grey;
-		margin-top: 0.5rem;
-		padding-block: 0.5rem;}
-	
-	.point-temporel {
-		width: 300px;
+		background : pink;
+		border: 1px solid navy;
+		color: navy;
+		padding: 1rem;
+		margin: 1rem;
 		&__date {
 			font-weight: bold;
 		}
 		&__texte {
 			
-		}
-	}
+		}}
 `;
 
-const HistoireLigneTemps = ({ ligneData, active, prenom }) => {
+const HistoireLigneTemps = forwardRef( function HistoireLigneTemps(props, ref) {
+	const { ligneData, active, prenom } = props;
 	const [ligneArray, setLigneArray] = useState(ligneData);
 	
 	return (
-		<Ligne className={ active ? `ligne-temps active` : `ligne-temps`} >
+		<LigneTemps 
+			className={ active ? `ligne-temps active` : `ligne-temps`} 
+			ref={ active ? ref : null }
+		>
 			<p className='label'>L'histoire de {prenom}</p>
-			<div className='horizontal-scroll'>
-				{ligneArray.map( (item, index) => {
-					return (
-						<div className='point-temporel' key={index}>
-							<p className='point-temporel__date'>{item.date}</p>
-							<p className='point-temporel__texte'>{item.texte}</p>
-						</div>
-				)})}
+			<div className='ligne-temps__scrolljack'>
+				<ul className="time-list">
+					{ligneArray.map( (item, index) => {
+						return (
+							<li className="time-list__item" key={index}>
+								<p className='time-list__item__date'>{index + 1}. {item.date}</p>
+								<p className='time-list__item__texte'>{item.texte}</p>
+							</li>
+					)})}
+				</ul>
 			</div>
-		</Ligne>
+		</LigneTemps>
 	);
-}
+})
 	
 export default HistoireLigneTemps;
