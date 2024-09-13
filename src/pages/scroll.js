@@ -26,8 +26,9 @@ const PageScroll = () => {
   const [isScrollReady, setIsScrollReady] = useState(null);
   const scrollRef = useRef(null);
   
-  // Test 1 - Tween
-  function hoverHandler() { setIsScrollReady(true) }
+
+  function firstHoverTouchHandler() { setIsScrollReady(true) }
+  
   useGSAP(() => {
     if (isScrollReady) {
       
@@ -44,7 +45,7 @@ const PageScroll = () => {
         ease: 'none',
         scrollTrigger: {
           trigger: timelineContainer,
-          start: 'center 75%',
+          start: 'center 50%',
           end: () => '+=' + timelineContainer.offsetWidth,
           pin: scrollRef.current.querySelector('.pin-container'),
           pinSapincing: false,
@@ -63,7 +64,8 @@ const PageScroll = () => {
     <PageLayout>
       <div
         ref={scrollRef} 
-        onMouseEnter={hoverHandler} >
+        onMouseEnter={firstHoverTouchHandler} 
+        onTouchStart={firstHoverTouchHandler} >
         <section>
           <h1>Tests de scroll</h1>
           <p>Avec GSAP ScrollTrigger </p>
@@ -75,15 +77,13 @@ const PageScroll = () => {
           </div>
         </section>
         
-        <section class='pin-container'>
-          <ul style={{display: 'grid', gap: '8vh'}}>
-            <li>Many  </li>
-            <li>Words</li>
-            <li>Displayed</li>
-            <li>In</li>
-            <li>An</li>
-            <li>Unorded</li>
-            <li>List</li>
+        <section className='pin-container'>
+          <ul style={{display: 'grid', gap: '4vh'}}>
+            <li>A</li>
+            <li>few</li>
+            <li>content</li>
+            <li>displayed</li>
+            <li>here</li>
           </ul>
           <div style={{overflowX: 'hidden'}} >
             <LigneTemps className="timeline">
@@ -98,6 +98,12 @@ const PageScroll = () => {
               </div>
             </LigneTemps>
           </div>
+          <ul style={{display: 'grid', gap: '4vh'}}>
+            <li>More</li>
+            <li>content</li>
+            <li>displayed</li>
+            <li>here</li>
+          </ul>
         </section>
         
         <section>        
