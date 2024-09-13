@@ -1,9 +1,11 @@
 @import './mixins.scss'; 
-@font-face {}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
+// Typography
 html {
-font-size: 16px;
-line-height: 1.4;}
+	font-size: 16px;
+	line-height: 1.4;
+	font-family: "Montserrat", sans-serif}
 
 body {
 	margin: 0;}
@@ -11,11 +13,47 @@ body {
 * {
 	box-sizing: border-box;}
 
+// ELEMENTS
 section {
 	padding: 2vh 5vw 6vh;
 	border-bottom: 1px solid;}
-	
+
 // REUSABLES
+button.button {
+	display: block;
+	position: relative;
+	background: navy;
+	color: white;
+	border: 0;
+	padding: 0.5em 1em;
+	font-size: 1.25rem;
+	&::before,
+	&::after {
+		content: '';
+		background: navy;
+		position: absolute;
+		width: 2.5rem;
+		top: 0;
+		bottom: 0;
+		z-index: -1;}
+	&::before {
+		left: -1rem;
+		border-top-left-radius: 50%;
+		border-bottom-left-radius: 50%;}
+	&::after {
+		right: -1rem;
+		border-top-right-radius: 50%;
+		border-bottom-right-radius: 50%;}
+	&:hover {
+		cursor: pointer;
+		background: white;
+		color: navy;
+		&::before,
+		&::after {
+			background: white;
+			color: navy;
+		}}}
+
 .cta-btn {
 	display: inline-block;
 	text-decoration: none;
@@ -30,8 +68,7 @@ section {
 	text-transform: uppercase;
 	margin-block: 0;
 	font-family: sans-serif;
-	font-weight: bold;
-}
+	font-weight: bold;}
 
 // Utils
 .gsap-marker-start, 

@@ -11,26 +11,41 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const Liste = styled.div`
-	padding-block: 5vh 2vh;
-	
+	position: relative;
 	.histoire-unique {
+		padding-block: 5vh 2vh;
 		&__fiche {
 			display: grid;
-			justify-items: center;
 			gap: 1rem;
-			margin-bottom: 1rem;
+			justify-content: center;
+			border-radius: 15px;
 			padding-block: 1rem;
-			img {
-				max-width: 150px;}
+			position: relative;
+			overflow: hidden;
+			.bg-img {
+				background-size: cover;
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				z-index: -1;
+				filter: saturate(0);
+				transition: opacity 0.4s ease-in-out;}
+			.nom {
+				color: white;
+				font-weight: bold;
+				text-align: center;
+				font-size: 2rem;
+				margin-block: 0;}
 			button {
 				transition: opacity 0.4s ease-in-out;
 				&.hidden {
-				opacity: 0;	}}}
+					opacity: 0;}}}
 			
-		&.active {
-			.histoire-unique__fiche {
-				background: rgb(230, 230, 230);
-				border-radius: 20px;}}
+		&.active .bg-img {
+			filter: saturate(1);}
+		
 		h3 {
 			font-family: sans-serif;
 			margin-block: 0 0.5em;
@@ -38,9 +53,26 @@ const Liste = styled.div`
 			font-weight: normal;}}
 			
 	${media.mediumUp`
-		display: grid;
-		grid-template-columns: 33% 33% 33%;
-		grid-template-rows: 1fr 1fr;
+		height: 80vh;
+		.histoire-unique {
+			position: absolute;
+			height: 80vh;
+			display: grid;
+			gap: 1rem;
+			grid-template-columns: 33% 33% 33%;
+			grid-template-rows: 300px 250px;
+			&__fiche {
+				grid-row-start: 1;
+				grid-row-end: 2;
+				z-index: 20;
+				gap: 200px;}
+			&.active {
+				z-index: -1;
+				&_fiche {
+					z-index: -1;
+				}
+			}
+		}
 	`};
 `;
 
@@ -49,10 +81,9 @@ const HistoiresList = () => {
 	const [histoiresArray, setHistoiresArray] = useState(histoiresData);
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [isScrollReady, setIsScrollReady] = useState(null);
-	const [scrollProgress, setScrollProgress] = useState(0)
 	
 	const wrapperRef = useRef(null);
-	const activeElemRef = useRef(null);
+	const elemRef = useRef(null);
 	
 	function firstHoverTouchHandler() { setIsScrollReady(true) }
 	
@@ -63,27 +94,27 @@ const HistoiresList = () => {
 	
 	useGSAP(() => {
 		if (isScrollReady) {
-			const scrollTriggerWrapper = wrapperRef.current;
-			const scrollActiveElem = activeElemRef.current;
-			console.log(scrollActiveElem);
-			
 			gsap.registerPlugin(ScrollTrigger);
-			let sections = gsap.utils.toArray(scrollActiveElem.querySelectorAll('li.time-list__item'));
+			const myWrapperRef = wrapperRef.current;
+			const scrollTriggerWrapper = elemRef.current;
+			let allTimeList = gsap.utils.toArray(scrollTriggerWrapper.querySelectorAll('li.time-list__item'));
 			
-			gsap.to(sections, {
-				xPercent: -100 * (sections.length - 1),
+			console.log(scrollTriggerWrapper);
+			console.log(allTimeList);
+			
+			gsap.to(allTimeList, {
+				xPercent: -100 * (allTimeList.length - 1),
 				ease: 'none',
 				scrollTrigger: {
-					trigger: scrollTriggerWrapper,
+					trigger: myWrapperRef,
 					start: 'bottom bottom',
 					end: () => '+=' + scrollTriggerWrapper.offsetWidth,
 					pin: true,
 					pinSapincing: false,
 					scrub: true,
-					snap: 1 / (sections.length - 1),
+					snap: 1 / (allTimeList.length - 1),
 					toggleClasse: 'is-active',
 					markers: true,
-					onUpdate: (self) => console.log("progress:", self.progress),
 				}
 			});
 			
@@ -96,36 +127,40 @@ const HistoiresList = () => {
 			className='histoires-container' 
 			onMouseEnter={firstHoverTouchHandler} 
 			onTouchStart={firstHoverTouchHandler}
-			ref={wrapperRef} 
+			ref={wrapperRef}
 		>
 			{ histoiresArray.map( (item, index) => {
 				return (
-					<React.Fragment key={index}>
-						<div 
-							className={index === activeIndex ? `histoire-unique active` : `histoire-unique`}
+					<div 
+						key={index}
+						className={index === activeIndex ? `histoire-unique active` : `histoire-unique`}
+						ref={ index === activeIndex ? elemRef : null } 
+					>
+						<div className='histoire-unique__fiche' 
+							style={{ 
+								gridColumnStart: `${index + 1}`,
+								gridColumnEnd: `${index + 2}`
+							}}
 						>
-							<div className='histoire-unique__fiche'>
-								<div className='text-centered'>
-									<p className='label'>{item.nom}</p>
-									<h3>{item.titre}</h3>
-								</div>
-								<img src='/portrait-placeholder.gif' alt={item.titre}/>
-								<button 
-									onClick={() => histoireSwitchClickHandler(index)} 
-									className={ index === activeIndex ? `hidden` : `` } 
-								>
-									Lire son histoire
-								</button>
-							</div>
+							<div 
+								className='bg-img'
+								style={{ backgroundImage: 'url(/portrait1.webp)' }} 
+								></div>
+							<p className='nom'>{item.nom}</p>
+							<button 
+								onClick={() => histoireSwitchClickHandler(index)} 
+								className={ index === activeIndex ? `button hidden` : `button` } 
+							>
+								Lire son histoire
+							</button>
 						</div>
 						
 						<HistoireLigneTemps 
 							ligneData={item.ligneTemps} 
 							prenom={item.nom} 
 							active={activeIndex === index ? true : false}
-							ref={activeElemRef} 
 						/>
-					</React.Fragment>
+					</div>
 				)
 			})}
 		</Liste>

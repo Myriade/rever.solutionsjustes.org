@@ -69,7 +69,8 @@ export default function PageLayout({ children }) {
             bottom: '0',
             width: '100%',
             background: 'white',
-            textAlign: 'center'
+            textAlign: 'center',
+            zIndex: '50'
           }}
         >
           <p>Bas de page</p>

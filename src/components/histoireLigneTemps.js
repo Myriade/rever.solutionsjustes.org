@@ -6,22 +6,27 @@ import { media } from '../styles/mixins.js'
 
 const LigneTemps = styled.div`
 	opacity: 0;
-	transition: opacity 0.7s ease-in-out;
 	margin-top: 2rem;
-	z-index: 1;
+	height: 0;
+	transform: translateX(4vw);
+	transition: opacity 0.4s ease-out, transform 0.8s ease-in;
 	
 	&.active {
+		height: auto;
 		opacity: 1;
-		z-index: 10;}
+		transform: translateX(0);}
 		
 	.ligne-temps__scrolljack {
-		overflow-x: hidden;}
+		overflow: hidden;}
 	
 	${media.mediumUp`
 		grid-column-start: 1;
 		grid-column-end: 4;
 		grid-row-start: 2;
 		grid-row-end: 3;
+		.ligne-temps__scrolljack {
+			height: 200px;
+		}
 	`};
 	
 	.time-list {
