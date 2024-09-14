@@ -6,33 +6,19 @@ import { media } from '../styles/mixins.js'
 
 const LigneTemps = styled.div`
 	opacity: 0;
-	margin-top: 2rem;
-	height: 0;
-	transform: translateX(4vw);
-	transition: opacity 0.4s ease-out, transform 0.8s ease-in;
+	margin-top: 1rem;
 	
 	&.active {
-		height: auto;
-		opacity: 1;
-		transform: translateX(0);}
+		opacity: 1;}
 		
 	.ligne-temps__scrolljack {
 		overflow: hidden;}
-	
-	${media.mediumUp`
-		grid-column-start: 1;
-		grid-column-end: 4;
-		grid-row-start: 2;
-		grid-row-end: 3;
-		.ligne-temps__scrolljack {
-			height: 200px;
-		}
-	`};
 	
 	.time-list {
 		background-color: lavender;
 		height: 100%;
 		display: flex;
+		gap: 1rem;
 		flex-wrap: nowrap;}
 		
 	.time-list__item {
@@ -42,7 +28,6 @@ const LigneTemps = styled.div`
 		border: 1px solid navy;
 		color: navy;
 		padding: 1rem;
-		margin: 1rem;
 		&__date {
 			font-weight: bold;
 		}
@@ -57,8 +42,7 @@ const HistoireLigneTemps = forwardRef( function HistoireLigneTemps(props, ref) {
 	
 	return (
 		<LigneTemps 
-			className={ active ? `ligne-temps active` : `ligne-temps`} 
-			ref={ active ? ref : null }
+			className={ active ? `ligne-temps active` : `ligne-temps`}
 		>
 			<p className='label'>L'histoire de {prenom}</p>
 			<div className='ligne-temps__scrolljack'>
