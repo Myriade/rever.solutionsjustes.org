@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
+import { Link } from 'gatsby'
 import { media } from '../styles/mixins.js'
 
 //import useWixData from '../utils/useWixData'
@@ -11,13 +12,13 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const Liste = styled.div`
-	position: relative;
 	.histoire-unique {
 		padding-block: 5vh 2vh;
 		&__fiche {
 			display: grid;
 			gap: 1rem;
 			justify-content: center;
+			align-content: space-between;
 			border-radius: 15px;
 			padding-block: 1rem;
 			position: relative;
@@ -31,14 +32,15 @@ const Liste = styled.div`
 				left: 0;
 				z-index: -1;
 				filter: saturate(0);
-				transition: opacity 0.4s ease-in-out;}
+				transition: all 0.4s ease-in-out;}
 			.nom {
 				color: white;
 				font-weight: bold;
 				text-align: center;
 				font-size: 2rem;
 				margin-block: 0;}
-			button {
+			.button {
+				opacity: 1;
 				transition: opacity 0.4s ease-in-out;
 				&.hidden {
 					opacity: 0;}}}
@@ -53,21 +55,18 @@ const Liste = styled.div`
 			font-weight: normal;}}
 			
 	${media.mediumUp`
-		height: 80vh;
+		display: grid;
 		.histoire-unique {
-			position: absolute;
-			height: 80vh;
+			grid-area: 1 / 1 / 2 / 2;
 			display: grid;
 			gap: 1rem;
-			grid-template-columns: 33% 33% 33%;
-			grid-template-rows: 300px 250px;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-template-rows: 370px 250px;
 			&__fiche {
 				grid-row-start: 1;
 				grid-row-end: 2;
-				z-index: 20;
-				gap: 200px;}
+				z-index: 20;}
 			&.active {
-				z-index: -1;
 				&_fiche {
 					z-index: -1;
 				}
@@ -82,88 +81,102 @@ const HistoiresList = () => {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [isScrollReady, setIsScrollReady] = useState(null);
 	
-	const wrapperRef = useRef(null);
-	const elemRef = useRef(null);
+	const pinRef = useRef();
+	const scrollRef = useRef(null);
+	
+	let gsapAnimInstance = {};
+	const pinElem = pinRef.current;
+	const scrollElemRef = scrollRef.current;
 	
 	function firstHoverTouchHandler() { setIsScrollReady(true) }
 	
 	function histoireSwitchClickHandler( clickedIndex ) {
 		setActiveIndex(clickedIndex);
-		ScrollTrigger.killAll();
+			ScrollTrigger.killAll();
+		// gsapAnimInstance.scrollTrigger.trigger = scrollElemRef;
+		// gsapAnimInstance.scrollTrigger.end = () => '+=' + scrollElemRef.offsetWidth;
+		// gsapAnimInstance.scrollTrigger.scroll(0);
 	}
 	
-	useGSAP(() => {
-		if (isScrollReady) {
-			gsap.registerPlugin(ScrollTrigger);
-			const myWrapperRef = wrapperRef.current;
-			const scrollTriggerWrapper = elemRef.current;
-			let allTimeList = gsap.utils.toArray(scrollTriggerWrapper.querySelectorAll('li.time-list__item'));
-			
-			console.log(scrollTriggerWrapper);
-			console.log(allTimeList);
-			
-			gsap.to(allTimeList, {
-				xPercent: -100 * (allTimeList.length - 1),
-				ease: 'none',
-				scrollTrigger: {
-					trigger: myWrapperRef,
-					start: 'bottom bottom',
-					end: () => '+=' + scrollTriggerWrapper.offsetWidth,
-					pin: true,
-					pinSapincing: false,
-					scrub: true,
-					snap: 1 / (allTimeList.length - 1),
-					toggleClasse: 'is-active',
-					markers: true,
-				}
-			});
-			
-		}
-		
-	}, { dependencies: [isScrollReady, activeIndex] });
+	// useGSAP(() => {
+	// 	if (isScrollReady) {
+	// 		gsap.registerPlugin(ScrollTrigger);
+	// 		
+	// 		let allTimeList = gsap.utils.toArray(scrollElemRef.querySelectorAll('li.time-list__item'));
+	// 		
+	// 		// gsap.to(pinElem, {
+	// 		// 	scrollTrigger: {
+	// 		// 		pin: pinElem,
+	// 		// 		pinSapincing: false,
+	// 		// 	}
+	// 		// });
+	// 		
+	// 		gsapAnimInstance = gsap.to(allTimeList, {
+	// 			xPercent: -100 * (allTimeList.length - 1),
+	// 			ease: 'none',
+	// 			scrollTrigger: {
+	// 			  trigger: scrollElemRef,
+	// 				start: 'bottom 90%',
+	// 				end: () => '+=' + scrollElemRef.offsetWidth,
+	// 				//end: 'top 10%',
+	// 				pin: true,
+	// 				pinSapincing: false,
+	// 				scrub: true,
+	// 				//snap: 1 / (allTimeList.length - 1),
+	// 				//toggleClasse: 'is-active',
+	// 				markers: true,
+	// 			}
+	// 		});
+	// 	}
+	// 	
+	// }, { dependencies: [isScrollReady, activeIndex] });
 
 	return (
-		<Liste
-			className='histoires-container' 
+		<section 
+			id='consequences' 
 			onMouseEnter={firstHoverTouchHandler} 
 			onTouchStart={firstHoverTouchHandler}
-			ref={wrapperRef}
+			ref={pinRef}
 		>
-			{ histoiresArray.map( (item, index) => {
-				return (
-					<div 
-						key={index}
-						className={index === activeIndex ? `histoire-unique active` : `histoire-unique`}
-						ref={ index === activeIndex ? elemRef : null } 
-					>
-						<div className='histoire-unique__fiche' 
-							style={{ 
-								gridColumnStart: `${index + 1}`,
-								gridColumnEnd: `${index + 2}`
-							}}
+			<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
+			<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
+			<Liste className='histoires-container' >
+				{ histoiresArray.map( (item, index) => {
+					return (
+						<div 
+							key={index}
+							className={index === activeIndex ? `histoire-unique active` : `histoire-unique`}
 						>
-							<div 
-								className='bg-img'
-								style={{ backgroundImage: 'url(/portrait1.webp)' }} 
-								></div>
-							<p className='nom'>{item.nom}</p>
-							<button 
-								onClick={() => histoireSwitchClickHandler(index)} 
-								className={ index === activeIndex ? `button hidden` : `button` } 
+							<div className='histoire-unique__fiche' 
+								style={{ 
+									gridColumnStart: `${index + 1}`,
+									gridColumnEnd: `${index + 2}`
+								}}
 							>
-								Lire son histoire
-							</button>
+								<div 
+									className='bg-img'
+									style={{ backgroundImage: 'url(/portrait1.webp)' }} 
+									></div>
+								<p className='nom'>{item.nom}</p>
+								<button
+									onClick={() => histoireSwitchClickHandler(index)} 
+									className={ index === activeIndex ? `button hidden` : `button` } 
+								>
+									Lire son histoire
+								</button>
+							</div>
+							
+							<HistoireLigneTemps 
+								ligneData={item.ligneTemps} 
+								prenom={item.nom} 
+								active={activeIndex === index ? true : false}
+								ref={scrollRef} 
+							/>
 						</div>
-						
-						<HistoireLigneTemps 
-							ligneData={item.ligneTemps} 
-							prenom={item.nom} 
-							active={activeIndex === index ? true : false}
-						/>
-					</div>
-				)
-			})}
-		</Liste>
+					)
+				})}
+			</Liste>
+		</section>	
 	)
 }
 	

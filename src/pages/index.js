@@ -28,11 +28,7 @@ const IndexPage = () => {
         <StatutsImmigrationList />
       </section>
       
-      <section id='consequences'>
-        <h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
-        <p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
-        <HistoiresList />
-      </section>
+      <HistoiresList />
       
       <section id='video'>
         <h2>De toi à moi: témoignage d'une personne sans statut d'immigration.</h2>
