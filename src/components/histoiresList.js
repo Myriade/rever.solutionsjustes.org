@@ -27,6 +27,7 @@ const Cards = styled.div`
 		overflow: hidden;
 		.bg-img {
 			background-size: cover;
+			background-position: center 35%;
 			position: absolute;
 			top: 0;
 			right: 0;
@@ -48,33 +49,29 @@ const Cards = styled.div`
 				opacity: 0;}}
 			
 		&.active .bg-img {
-			filter: saturate(1);}
-		
-		h3 {
-			font-family: sans-serif;
-			margin-block: 0 0.5em;
-			max-width: 30ch;
-			font-weight: normal;}}
+			filter: saturate(1);}}
 			
 	${media.mediumUp`
 		display: grid;
 		gap: 1rem;
 		grid-template-columns: 1fr 1fr 1fr;
-		grid-template-rows: 370px;
+		grid-template-rows: 30vh;
 		.histoire-card {
 			grid-row-start: 1;
-			grid-row-end: 2;
-			z-index: 20;
-			&.active {
-			z-index: -1;}}
+			grid-row-end: 2;}
 	`};
 `;
 
-const Histoires = styled.div`
-	.histoires__lignes {
-		display: grid;
-		> * {
-			grid-area: 1 / 1 / 2 / 2;}}
+const Histoire = styled.div`
+	.histoire-scrolljack {
+		margin-top: 1rem;
+		overflow: hidden;
+		&__anime {
+			display: flex;
+			flex-wrap: nowrap;
+			padding-left: 0;
+		}
+	}
 `;
 
 const HistoiresList = () => {
@@ -87,34 +84,53 @@ const HistoiresList = () => {
 	// Data fetch
 	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
 	
-	// Dom referennces
+	// Dom references
 	const pinRef = useRef(null);
 	const pinElem = pinRef.current;
+	const scrolljackAnime = useRef();
+	const scrolljackAnimeElem = scrolljackAnime.current;
 	
 	// event handlers
-	function histoireSwitchClickHandler(clickedIndex) { setActiveIndex(clickedIndex) }
 	function firstHoverTouchHandler() { setIsScrollReady(true) }
+	function histoireSwitchClickHandler(clickedIndex) { 
+		setActiveIndex(clickedIndex)
+	}
 
-	// initialiser une instance GSAP et la storer dans un state
+	// GSAP configs
 	gsap.registerPlugin(ScrollTrigger);
+	
 	useGSAP(() => {
+		// initialiser un PIN et un Scroll si le dom est pret et s'il n'y a pas deja d'instance GSAP
 		if (isScrollReady && !gsapAnimInstance) {
-			const myGsap = gsap.to(pinElem, {
-				x: 100,
+			const myGsap = gsap.to( scrolljackAnimeElem, {
+				xPercent: -100 * (histoiresArray[activeIndex].ligneTemps.length - 1),
+				ease: 'none',
 				scrollTrigger: {
 					pin: pinElem,
 					start: 'top 5%',
-					end: 'bottom 5%',
+					end: () => '+=' + scrolljackAnimeElem.scrollWidth,
 					scrub: true,
-					markers: true,
+					snap: 1 / (histoiresArray[activeIndex].ligneTemps.length - 1),
+					// markers: true,
 				}
 			});
 			setGsapAnimInstance(myGsap);
+			console.log(scrolljackAnimeElem.scrollWidth);
 		}
 		
-		// remettre le premier point temporel en vue lors du changement d'histoire 
+		// Mettre à jour le Pin et le ScrollTrigger lorsque les données changent
 		if (gsapAnimInstance) {
+			const timelineWidth = scrolljackAnimeElem.scrollWidth;
 			gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
+			gsapAnimInstance.vars.xPercent = -100 * (histoiresArray[activeIndex].ligneTemps.length - 1);
+			gsapAnimInstance.scrollTrigger.update(
+				scrolljackAnimeElem, {
+					end: () => '+=' + timelineWidth,
+					snap: 1 / (histoiresArray[activeIndex].ligneTemps.length - 1)
+				}
+			);
+			gsapAnimInstance.invalidate();
+			ScrollTrigger.update(gsapAnimInstance.scrollTrigger);
 		}
 		
 	}, { dependencies: [isScrollReady, activeIndex], scope: pinRef });
@@ -156,27 +172,15 @@ const HistoiresList = () => {
 					)
 				})}
 			</Cards>
-				
-			<Histoires className='histoires' >
-				<div 
-					//ref={histoiresBufferRef} 
-					className='histoires__buffer'></div>
-				<div 
-					//ref={scrollRef} 
-					className='histoires__lignes'>
-					{ histoiresArray.map( (item, index) => {
-						return (
-							<React.Fragment key={`histoire-ligne-${index}`}>
-								<HistoireLigneTemps 
-									ligneData={item.ligneTemps} 
-									prenom={item.nom} 
-									active={activeIndex === index ? true : false}
-								/>
-							</React.Fragment >
-						)
-					})}
+			
+			<Histoire className='histoire' >
+				<p className='label'>L'histoire de {histoiresArray[activeIndex].nom}</p>
+				<div className='histoire-scrolljack' >
+					<ul className='histoire-scrolljack__anime' ref={scrolljackAnime}>
+						<HistoireLigneTemps data={ histoiresArray[activeIndex].ligneTemps } />
+					</ul>
 				</div>
-			</Histoires>
+			</Histoire>
 		</section>	
 	)
 }

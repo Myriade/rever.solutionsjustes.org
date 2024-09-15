@@ -1,5 +1,4 @@
-export default function histoiresData() { 
-	return [
+export default function histoiresData() { return [
 	{
 		nom: 'Anabel',
 		titre: `Une femme en attente de résidence permanente`,
@@ -24,7 +23,7 @@ export default function histoiresData() {
 				date: 'Août 2024',
 				texte: `Quatre ans plus tard, 9 ans après son arrivée, elle obtient finalement sa résidence permanente.`
 			}
-		]	
+		]
 	},
 	{
 		nom: 'Daniel',
@@ -42,7 +41,7 @@ export default function histoiresData() {
 				date: 'Février 2024',
 				texte: `On lui accorde finalement, après 51 mois, sa résidence permanente. Ce n'est qu'à partir de ce moment qu'il peut entamer les démarches pour une réunification familiale dont les délais sont actuellement de presque 3 ans.`
 			}
-		]	
+		]
 	},
 	{
 		nom: 'Saïd',
@@ -76,7 +75,6 @@ export default function histoiresData() {
 				date: 'Décembre 2023',
 				texte: `L'employeur n'a toutefois pas effectué les démarches nécessaires, laissant le travailleur sans statut d'immigration au Canada. Pris dans l'anonymat, il ne peut ni rester dans son pays d'accueil ni retourner dans son pays d'origine où des dettes insurmontables l'attendent.`
 			}
-		]	
+		]
 	}
-	]
-}
+]}
