@@ -78,94 +78,58 @@ const Histoires = styled.div`
 `;
 
 const HistoiresList = () => {
-	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
+	// States
 	const [histoiresArray, setHistoiresArray] = useState(histoiresData);
 	const [activeIndex, setActiveIndex] = useState(0);
-	const [isScrollReady, setIsScrollReady] = useState(null);
+	const [gsapAnimInstance, setGsapAnimInstance] = useState();
+	const [isScrollReady, setIsScrollReady ] = useState(null);
 	
+	// Data fetch
+	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
+	
+	// Dom referennces
 	const pinRef = useRef(null);
-	const histoiresBufferRef = useRef(null);
-	const scrollRef = useRef(null);
+	const pinElem = pinRef.current;
 	
-	let cardsPin = {};
-	let histoiresBufferAnim = {};
-	let timelineAnim = {};
-	
+	// event handlers
+	function histoireSwitchClickHandler(clickedIndex) { setActiveIndex(clickedIndex) }
 	function firstHoverTouchHandler() { setIsScrollReady(true) }
-	
-	function histoireSwitchClickHandler( clickedIndex ) {
-		setActiveIndex(clickedIndex);
-		ScrollTrigger.killAll();
-	}
-	
+
+	// initialiser une instance GSAP et la storer dans un state
+	gsap.registerPlugin(ScrollTrigger);
 	useGSAP(() => {
-		if (isScrollReady) {
-			gsap.registerPlugin(ScrollTrigger);
-			
-			const pinElem = pinRef.current;
-			const histoiresBufferElem = histoiresBufferRef.current;
-			const scrollElem = scrollRef.current;
-			
-			const allTimeList = gsap.utils.toArray(scrollElem.querySelectorAll('.ligne-temps.active li.time-list__item'));
-			const totalHeight = pinElem.offsetHeight + scrollElem.offsetHeight;
-			console.log(allTimeList[0].querySelector('.time-list__item__date').innerText);
-			
-			cardsPin = gsap.to(pinElem, {
+		if (isScrollReady && !gsapAnimInstance) {
+			const myGsap = gsap.to(pinElem, {
+				x: 100,
 				scrollTrigger: {
 					pin: pinElem,
-					pinSpacing: false,
-					start: 'top 10%',
-					end: 'bottom 10%',
-					// markers: true,
-				}
-			});
-			
-			//  Todo : positionner ce buffer pour créer l'effet de slide depuis la droite
-			histoiresBufferAnim = gsap.from(histoiresBufferElem, {
-				marginLeft: 100, 
-				duration: 1,
-			});
-			
-			timelineAnim = timelineAnim = gsap.to(allTimeList, {
-				xPercent: -100 * (allTimeList.length - 1),
-				ease: 'none',
-				scrollTrigger: {
-				  trigger: scrollElem,
-					start: 'bottom 90%',
-					//end: () => '+=' + scrollElem.offsetWidth,
-					end: 'top 10%',
-					pin: true,
-					//pinSpacing: false,
+					start: 'top 5%',
+					end: 'bottom 5%',
 					scrub: true,
-					//snap: 1 / (allTimeList.length - 1),
-					//toggleClasse: 'is-active',
 					markers: true,
 				}
 			});
-			
-			// Todo : utiliser un state pour remettre le progress à 0
-			if (cardsPin.scrollTrigger) {
-				console.log(cardsPin.scrollTrigger);
-				if (cardsPin.scrollTrigger.progress > 0) {
-					cardsPin.scrollTrigger.progress(0);
-				}
-			}
-			
+			setGsapAnimInstance(myGsap);
 		}
 		
-	}, { dependencies: [isScrollReady, activeIndex] });
+		// remettre le premier point temporel en vue lors du changement d'histoire 
+		if (gsapAnimInstance) {
+			gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
+		}
+		
+	}, { dependencies: [isScrollReady, activeIndex], scope: pinRef });
 
 	return (
 		<section 
 			id='consequences' 
 			onMouseEnter={firstHoverTouchHandler} 
 			onTouchStart={firstHoverTouchHandler}
+			ref={ pinRef }
 		>
 			<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
 			<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
 			<Cards 
 				className='cards' 
-				ref={ pinRef }
 			>
 				{ histoiresArray.map( (item, index) => {
 					return (
@@ -194,8 +158,12 @@ const HistoiresList = () => {
 			</Cards>
 				
 			<Histoires className='histoires' >
-				<div ref={histoiresBufferRef} className='histoires__buffer'></div>
-				<div ref={scrollRef} className='histoires__lignes'>
+				<div 
+					//ref={histoiresBufferRef} 
+					className='histoires__buffer'></div>
+				<div 
+					//ref={scrollRef} 
+					className='histoires__lignes'>
 					{ histoiresArray.map( (item, index) => {
 						return (
 							<React.Fragment key={`histoire-ligne-${index}`}>
