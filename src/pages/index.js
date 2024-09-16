@@ -25,7 +25,7 @@ const IndexPage = () => {
       <section>
         <h2>Les statuts d'immigration</h2>
         <p>Connaître la réalité des personnes im·migrantes au statut d'immigration absent ou précaire nécessite une meilleure compréhension des termes liés à l'enjeu. Apprenez-en davantage sur les différentes situations qui affectent les personnes im·migrantes.</p>
-        {/* <StatutsImmigrationList /> */}
+        <StatutsImmigrationList />
       </section>
       
       <HistoiresList />

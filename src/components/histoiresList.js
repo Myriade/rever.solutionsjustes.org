@@ -35,7 +35,7 @@ const Cards = styled.div`
 			left: 0;
 			z-index: -1;
 			filter: saturate(0);
-			transition: all 0.4s ease-in-out;}
+			transition: all 1s ease-in-out;}
 		.nom {
 			color: white;
 			font-weight: bold;
@@ -44,7 +44,7 @@ const Cards = styled.div`
 			margin-block: 0;}
 		.button {
 			opacity: 1;
-			transition: opacity 0.4s ease-in-out;
+			transition: opacity 1s ease-in-out;
 			&.hidden {
 				opacity: 0;}}
 			
@@ -63,14 +63,40 @@ const Cards = styled.div`
 `;
 
 const Histoire = styled.div`
+	margin-top: 1rem;
 	.histoire-scrolljack {
-		margin-top: 1rem;
 		overflow: hidden;
 		&__anime {
 			display: flex;
 			flex-wrap: nowrap;
-			padding-left: 0;
-		}
+			padding-left: 0;}}
+			
+	.points-list {
+		display: flex;
+		justify-content: stretch;
+		margin-bottom: 1rem;
+		.item {
+			flex-grow: 1;
+			position: relative;
+			padding-inline: 3vw;
+			border-bottom: 3px solid navy;
+			&:first-child {
+				padding-inline: 0 3vw;}
+			&:last-child {
+				padding-inline: 3vw 0;
+				flex-grow: initial;}
+			&.active .point {
+				background: navy;}}
+				
+		.point {
+			position: relative;
+			top: 14px;
+			background: white;
+			border: 3px solid navy;
+			border-radius: 50%;
+			width: 25px;
+			height: 25px;}
+			
 	}
 `;
 
@@ -85,17 +111,40 @@ const HistoiresList = () => {
 	// Data fetch
 	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
 	
-	// Dom references
-	const pinRef = useRef(null);
+	// Dom references and variables
+	const pinRef = useRef();
 	const pinElem = pinRef.current;
 	const scrolljackAnime = useRef();
 	const scrolljackAnimeElem = scrolljackAnime.current;
+	const pointsListRef = useRef();
+	const pointsListElem = pointsListRef.current;
 	
 	// event handlers
 	function firstHoverTouchHandler() { setIsScrollReady(true) }
 	function histoireSwitchClickHandler(clickedIndex) { 
 		setActiveIndex(clickedIndex);
 		setHasNewData(true);
+		
+		pointsListElem.childNodes[0].classList.add('active');
+		
+		pointsListElem.childNodes.forEach( (item, index) => {
+			if (index !== 0) {
+				item.classList.remove('active');
+			}
+		});
+	}
+	
+	// Fonction pour mettre une classe active sur le point correspondant dans la ligne au scroll
+	const setActivePoint = (progress, ligneTempsArrayLength) => {
+		const progressPercent = Math.round(progress*100);
+		const rangActuel = Math.round(((ligneTempsArrayLength - 1) * progressPercent) / 100);
+		
+		pointsListElem.childNodes[rangActuel].classList.toggle('active');
+		pointsListElem.childNodes.forEach( (item, index) => {
+			if (index !== rangActuel) {
+				item.classList.remove('active');
+			}
+		});
 	}
 
 	// GSAP configs
@@ -104,31 +153,33 @@ const HistoiresList = () => {
 	useGSAP(() => {
 		// initialiser un PIN et un Scroll si le dom est pret et s'il n'y a pas deja d'instance GSAP
 		if (isScrollReady && !gsapAnimInstance) {
+			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
+			const timelineWidth = scrolljackAnimeElem.scrollWidth;
+			
 			const myGsap = gsap.to( scrolljackAnimeElem, {
-				xPercent: -100 * (histoiresArray[activeIndex].ligneTemps.length - 1),
+				xPercent: -100 * (ligneTempsArrayLength - 1),
 				ease: 'none',
 				scrollTrigger: {
 					pin: pinElem,
 					start: 'top 5%',
-					end: () => '+=' + scrolljackAnimeElem.scrollWidth,
+					end: () => '+=' + timelineWidth,
 					scrub: true,
-					snap: 1 / (histoiresArray[activeIndex].ligneTemps.length - 1),
-					markers: true,
+					snap: 1 / (ligneTempsArrayLength - 1),
+					fastScrollEnd: true,
+					onEnter: () => pointsListElem.childNodes[0].classList.toggle('active'),
+					onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
+					// preventOverlaps: true,
+					// markers: true,
 				}
 			});
 			setGsapAnimInstance(myGsap);
-			console.log('1er if hasNewData = ', hasNewData);
-			console.log(scrolljackAnimeElem.scrollWidth);
 		}
 		
-		// Mettre à jour le Pin et le ScrollTrigger lorsque les données changent
+		// Lorsque l'histoire visible change, ramener le scroll au début et invalider l'instance ScrollTrigger
 		if ( gsapAnimInstance && hasNewData ) {
 			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
+			const timelineWidth = scrolljackAnimeElem.scrollWidth;
 			
-			console.log('2e if hasNewData = ', hasNewData);
-			console.log(scrolljackAnimeElem.scrollWidth);
-			
-			// Bring the animation scrolls to the start position
 			gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
 			gsapAnimInstance.scrollTrigger.kill();
 			gsapAnimInstance.vars.xPercent = -100 * (ligneTempsArrayLength - 1);
@@ -136,21 +187,22 @@ const HistoiresList = () => {
 			setHasNewData(false);
 		}
 		
+		// Monter à nouveau le composant et une nouvelle instance ScrollTrigger avec les nouveaux calculs
 		if ( gsapAnimInstance && !hasNewData ) {
-			const timelineWidth = scrolljackAnimeElem.scrollWidth;
 			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
-			
-			console.log('3e if hasNewData = ', hasNewData);
-			console.log(scrolljackAnimeElem.scrollWidth);
+			const timelineWidth = scrolljackAnimeElem.scrollWidth;
 			
 			ScrollTrigger.create({
 				animation: gsapAnimInstance,
 				pin: pinElem,
 				start: 'top 5%',
-				end: () => '+=' + scrolljackAnimeElem.scrollWidth,
+				end: () => '+=' + timelineWidth,
 				scrub: true,
-				snap: 1 / (histoiresArray[activeIndex].ligneTemps.length - 1),
-				markers: true,
+				snap: 1 / (ligneTempsArrayLength - 1),
+				fastScrollEnd: true,
+				onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
+				// preventOverlaps: true,
+				// markers: true,
 			});
 			
 			ScrollTrigger.refresh();
@@ -198,6 +250,16 @@ const HistoiresList = () => {
 			
 			<Histoire className='histoire' >
 				<p className='label'>L'histoire de {histoiresArray[activeIndex].nom}</p>
+				
+				<div className='points-list' ref={pointsListRef} >
+					{histoiresArray[activeIndex].ligneTemps.map( (item, index) => {
+						return ( 
+							<div key={index} className='item' >
+								<div className='point'></div>
+							</div>
+					)})}
+				</div>
+				
 				<div className='histoire-scrolljack' >
 					<ul className='histoire-scrolljack__anime' ref={scrolljackAnime}>
 						<HistoireLigneTemps data={ histoiresArray[activeIndex].ligneTemps } />

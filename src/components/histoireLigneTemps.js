@@ -9,13 +9,14 @@ const LigneTempsItemLi = styled.li`
 	display: grid;
 	gap: 1em;
 	color: navy;
+	align-content: start;
 	p {
 		margin-block: 0;}
 	.list__item__date {
 		font-weight: bold;}
 		
 	.list__item__texte {
-		max-width: 75ch;
+		max-width: 45ch;
 	}
 `;
 
