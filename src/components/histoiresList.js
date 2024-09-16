@@ -80,6 +80,7 @@ const HistoiresList = () => {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [gsapAnimInstance, setGsapAnimInstance] = useState();
 	const [isScrollReady, setIsScrollReady ] = useState(null);
+	const [hasNewData, setHasNewData] = useState(false);
 	
 	// Data fetch
 	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
@@ -93,7 +94,8 @@ const HistoiresList = () => {
 	// event handlers
 	function firstHoverTouchHandler() { setIsScrollReady(true) }
 	function histoireSwitchClickHandler(clickedIndex) { 
-		setActiveIndex(clickedIndex)
+		setActiveIndex(clickedIndex);
+		setHasNewData(true);
 	}
 
 	// GSAP configs
@@ -111,29 +113,50 @@ const HistoiresList = () => {
 					end: () => '+=' + scrolljackAnimeElem.scrollWidth,
 					scrub: true,
 					snap: 1 / (histoiresArray[activeIndex].ligneTemps.length - 1),
-					// markers: true,
+					markers: true,
 				}
 			});
 			setGsapAnimInstance(myGsap);
+			console.log('1er if hasNewData = ', hasNewData);
 			console.log(scrolljackAnimeElem.scrollWidth);
 		}
 		
 		// Mettre à jour le Pin et le ScrollTrigger lorsque les données changent
-		if (gsapAnimInstance) {
-			const timelineWidth = scrolljackAnimeElem.scrollWidth;
+		if ( gsapAnimInstance && hasNewData ) {
+			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
+			
+			console.log('2e if hasNewData = ', hasNewData);
+			console.log(scrolljackAnimeElem.scrollWidth);
+			
+			// Bring the animation scrolls to the start position
 			gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
-			gsapAnimInstance.vars.xPercent = -100 * (histoiresArray[activeIndex].ligneTemps.length - 1);
-			gsapAnimInstance.scrollTrigger.update(
-				scrolljackAnimeElem, {
-					end: () => '+=' + timelineWidth,
-					snap: 1 / (histoiresArray[activeIndex].ligneTemps.length - 1)
-				}
-			);
+			gsapAnimInstance.scrollTrigger.kill();
+			gsapAnimInstance.vars.xPercent = -100 * (ligneTempsArrayLength - 1);
 			gsapAnimInstance.invalidate();
-			ScrollTrigger.update(gsapAnimInstance.scrollTrigger);
+			setHasNewData(false);
 		}
 		
-	}, { dependencies: [isScrollReady, activeIndex], scope: pinRef });
+		if ( gsapAnimInstance && !hasNewData ) {
+			const timelineWidth = scrolljackAnimeElem.scrollWidth;
+			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
+			
+			console.log('3e if hasNewData = ', hasNewData);
+			console.log(scrolljackAnimeElem.scrollWidth);
+			
+			ScrollTrigger.create({
+				animation: gsapAnimInstance,
+				pin: pinElem,
+				start: 'top 5%',
+				end: () => '+=' + scrolljackAnimeElem.scrollWidth,
+				scrub: true,
+				snap: 1 / (histoiresArray[activeIndex].ligneTemps.length - 1),
+				markers: true,
+			});
+			
+			ScrollTrigger.refresh();
+		}
+		
+	}, { dependencies: [isScrollReady, hasNewData], scope: pinRef });
 
 	return (
 		<section 

@@ -26,7 +26,7 @@ const HistoireLigneTemps = ({ data }) => {
 			{data.map( (item, index) => {
 				return (
 					<LigneTempsItemLi className="list__item" key={index}>
-						<p className='list__item__date'>{item.date}</p>
+						<p className='list__item__date'>{index + 1}. {item.date}</p>
 						<p className='list__item__texte'>{item.texte}</p>
 					</LigneTempsItemLi>
 			)})}
