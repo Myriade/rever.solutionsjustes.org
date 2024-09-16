@@ -9,12 +9,13 @@ import StatutsImmigrationList from '../components/statutsImmigrationList'
 import HistoiresList from '../components/histoiresList'
 
 const Section_1_hero = styled.section`
-  padding-block: 0;
-  background: url(/portrait4.webp);
-  height: calc(40vh - var(--header-height));
-  width: 100%;
+  background-color: var(--color-bleu-tres-pale);
+  background-image: url(/portrait4.webp);
   background-size: cover;
   background-position: center center;
+  padding-block: 0;
+  height: calc(40vh - var(--header-height));
+  width: 100%;
   h1 {
     height: calc(40vh - var(--header-height));
     font-size: calc( (40vh - var(--header-height) - 10vh) / 3 );
