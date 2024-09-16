@@ -16,8 +16,8 @@ const LigneTemps = styled.div`
     height: 6em;
     display: grid;
     background : pink;
-    border: 1px solid navy;
-    color: navy;
+    border: 1px solid var(--color-bleu-tres-fonce);
+    color: var(--color-bleu-tres-fonce);
     padding: 1rem;
     margin: 1rem;}
 `;

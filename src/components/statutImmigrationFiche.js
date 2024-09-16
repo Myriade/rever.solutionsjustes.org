@@ -8,8 +8,12 @@ const SatutFiche = styled.div`
 	display: grid;
 	img {
 		width: auto;
-		height: 200px;
-	}
+		height: 200px;}
+	
+	${media.mediumUp`
+		grid-template-columns: 1fr 1.5fr;
+	`};
+	
 `;
 
 const StatutImmigrationFiche = ({ ficheData }) => {
@@ -23,8 +27,10 @@ const StatutImmigrationFiche = ({ ficheData }) => {
 	return (
 		<SatutFiche>
 			<img src={imageSrc} alt="Illustration" />
-			<h3>{ficheData.title}</h3>
-			<div>{ficheData.texteSimple}</div>
+			<div>
+				<h3>{ficheData.title}</h3>
+				<div>{ficheData.texteSimple}</div>
+			</div>
 		</SatutFiche>
 	);
 }

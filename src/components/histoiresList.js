@@ -13,8 +13,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const Cards = styled.div`
 	padding-block: 2vh;
-	position: relative;
-	z-index: 25;
+	display: grid;
+	gap: 1rem;
 	
 	.histoire-card {
 		display: grid;
@@ -34,8 +34,7 @@ const Cards = styled.div`
 			bottom: 0;
 			left: 0;
 			z-index: -1;
-			filter: saturate(0);
-			transition: all 1s ease-in-out;}
+			filter: saturate(0);}
 		.nom {
 			color: white;
 			font-weight: bold;
@@ -43,8 +42,8 @@ const Cards = styled.div`
 			font-size: 2rem;
 			margin-block: 0;}
 		.button {
+			left: 0;
 			opacity: 1;
-			transition: opacity 1s ease-in-out;
 			&.hidden {
 				opacity: 0;}}
 			
@@ -52,8 +51,6 @@ const Cards = styled.div`
 			filter: saturate(1);}}
 			
 	${media.mediumUp`
-		display: grid;
-		gap: 1rem;
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-template-rows: 30vh;
 		.histoire-card {
@@ -79,20 +76,20 @@ const Histoire = styled.div`
 			flex-grow: 1;
 			position: relative;
 			padding-inline: 3vw;
-			border-bottom: 3px solid navy;
+			border-bottom: 3px solid var(--color-bleu-tres-fonce);
 			&:first-child {
 				padding-inline: 0 3vw;}
 			&:last-child {
 				padding-inline: 3vw 0;
 				flex-grow: initial;}
 			&.active .point {
-				background: navy;}}
+				background: var(--color-bleu-tres-fonce);}}
 				
 		.point {
 			position: relative;
 			top: 14px;
 			background: white;
-			border: 3px solid navy;
+			border: 3px solid var(--color-bleu-tres-fonce);
 			border-radius: 50%;
 			width: 25px;
 			height: 25px;}

@@ -8,7 +8,7 @@ const LigneTempsItemLi = styled.li`
 	min-width: 100%;
 	display: grid;
 	gap: 1em;
-	color: navy;
+	color: var(--color-bleu-tres-fonce);
 	align-content: start;
 	p {
 		margin-block: 0;}
@@ -27,7 +27,7 @@ const HistoireLigneTemps = ({ data }) => {
 			{data.map( (item, index) => {
 				return (
 					<LigneTempsItemLi className="list__item" key={index}>
-						<p className='list__item__date'>{index + 1}. {item.date}</p>
+						<p className='list__item__date'>{item.date}</p>
 						<p className='list__item__texte'>{item.texte}</p>
 					</LigneTempsItemLi>
 			)})}
