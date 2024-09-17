@@ -10,7 +10,7 @@ const SatutFiche = styled.div`
 		width: auto;
 		height: 200px;}
 	
-	${media.mediumUp`
+	${media.desktopUp`
 		grid-template-columns: 1fr 1.5fr;
 	`};
 	

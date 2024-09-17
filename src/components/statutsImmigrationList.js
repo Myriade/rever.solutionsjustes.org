@@ -16,20 +16,7 @@ const CarrousselContainer = styled.div`
 		padding: calc( var(--v-spacer) / 2 );
 		background: white;
 		border-radius: 30px;
-		height: auto;
-	}
-	.glide__arrow {
-		top: 40%;
-		color: var(--color-bleu-tres-fonce);
-		font-size: 3rem;
-		background: rgba(255,255,255, 0.75);
-		border: none;
-		&--left {
-			left: 0.5em;
-		}
-		&--right {
-			right: 0.5em;
-		}}
+		height: auto;}
 		
 	${media.mediumUp`
 		.glide__slide {
@@ -40,48 +27,39 @@ const CarrousselContainer = styled.div`
 const BulletsControls = styled.div`
 	display: grid;
 	justify-items: center;
-	padding-top: var(--v-spacer);
+	padding-top: var(--v-spacer);	
 	position: relative;
 	
 	.glide__bullets {
-		position: initial;
-	}
-	
+		position: initial;}
+
 	.glide__bullet {
 		width: 15px;
 		height: 15px;
 		box-shadow: none;
 		&--active, &:focus {
 			background: black;
-			border-color: black;
-		}
-	}
+			border-color: black;}}
 `;
 
 const StatutsImmigrationList = () => {
-	const [glideInstance, setGlideInstance] = useState();
 	let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
 	
 	useEffect(() => {
 		new Glide('.glide', {
 			type: 'slider',
-			bound: true,
-			perView: 1,
+			perView: 1.2,
 			gap: 20,
+			bound: true,
 			swipeThreshold: 50,
-			peek: { before: 0, after: 175 },
+			rewind: false,
 			breakpoints: {
 				768: {
 					perView: 1,
-					peek: { before: 0, after: 0 },
 				},
-				992: {
-					perView: 1,
-					peek: { before: 0, after: 100 },
-				}
 			}
 		}).mount()
-	});
+	}, [content]);
 	
 	return (
 		<>
@@ -90,22 +68,18 @@ const StatutsImmigrationList = () => {
 					<div className='glide__slides'>
 						{ content.map( (item, index) => {
 							return (
-								<div className='carroussel-item glide__slide' key={index}>
+								<div className='carroussel-item glide__slide' key={`fiche-${index}`}>
 									<StatutImmigrationFiche ficheData={item.data} />
 								</div>
 							)
 						})}
 					</div>
 				</div>
-				{/* <div className="glide__arrows" data-glide-el="controls">
-					<button className="glide__arrow glide__arrow--left" data-glide-dir="<">&#8249;</button>
-					<button className="glide__arrow glide__arrow--right" data-glide-dir=">">&#8250;</button>
-				</div> */}
 				<BulletsControls>
 					<div className="glide__bullets" data-glide-el="controls[nav]">
 						{ content.map( (item, index) => {
 							return (
-								<button className="glide__bullet" data-glide-dir={`=${index}`} key={index}></button>
+								<button className="glide__bullet" data-glide-dir={`=${index}`} key={`point-${index}`}></button>
 							)
 						})}
 					</div>
