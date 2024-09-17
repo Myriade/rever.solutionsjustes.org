@@ -38,33 +38,33 @@ section {
 
 
 .button {
+	font-size: 1rem;
+	padding: 0.5em 0;
+	line-height: 1;
+	left: 2.5em;
 	display: inline-block;
 	text-decoration: none;
 	position: relative;
-	left: calc(1.25rem + 1rem);
 	background: var(--color-bleu-tres-fonce);
 	color: white;
 	border: 0;
-	padding: 0.75rem 1em;
-	font-size: 1.25rem;
 	font-weight: 500;
 	line-height: 1em;
-	height: calc(1.25rem + 1.5rem);
 	&::before,
 	&::after {
+		width: 2.5em;
 		content: '';
 		background: var(--color-bleu-tres-fonce);
 		position: absolute;
-		width: calc(1.25rem + 1.5rem);
 		top: 0;
 		bottom: 0;
 		z-index: -1;}
 	&::before {
-		left: calc( -1 * (1.25rem + 1.5rem) );
+		left: -1.5em;
 		border-top-left-radius: 50%;
 		border-bottom-left-radius: 50%;}
 	&::after {
-		right: calc( -1 * (1.25rem + 1.5rem) );
+		right: -1.5em;
 		border-top-right-radius: 50%;
 		border-bottom-right-radius: 50%;}
 	&:hover {
@@ -73,8 +73,13 @@ section {
 		color: var(--color-bleu-tres-fonce);
 		&::before,
 		&::after {
-			background: var(--color-bleu-clair);
-}}}
+			background: var(--color-bleu-clair);}}
+	
+	@include mediumUp {
+		font-size: 1.25rem;
+		padding: 0.75em 0;
+	}	
+}
 	
 .text-centered {
 	text-align: center;}
