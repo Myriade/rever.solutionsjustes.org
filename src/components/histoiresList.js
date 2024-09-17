@@ -62,9 +62,26 @@ const Cards = styled.div`
 const Histoire = styled.div`
 	margin-top: 1rem;
 	.histoire-scrolljack {
+		max-width: 65ch;
 		overflow: hidden;
+		position: relative;
+		right: 5ch;
+		&::before, &::after {
+			content: '';
+			display: block;
+			z-index: 25;
+			width: 5ch;
+			position: absolute;
+			top: 0;
+			bottom: 0;}
+		&::before {
+			background-image: linear-gradient(to right, rgba(255,255,255,1) , rgba(255,255,255,0));}
+		&::after {
+			background-image: linear-gradient(to left, rgba(255,255,255,1) , rgba(255,255,255,0));
+			right: 0;}
 		&__anime {
 			display: flex;
+			gap: 2rem;
 			flex-wrap: nowrap;
 			padding-left: 0;}}
 			
@@ -156,16 +173,22 @@ const HistoiresList = () => {
 			const myGsap = gsap.to( scrolljackAnimeElem, {
 				xPercent: -100 * (ligneTempsArrayLength - 1),
 				ease: 'none',
+				duration: 5,
 				scrollTrigger: {
 					pin: pinElem,
 					start: 'top 5%',
 					end: () => '+=' + timelineWidth,
 					scrub: true,
-					snap: 1 / (ligneTempsArrayLength - 1),
+					snap: {
+						snapTo: 1 / (ligneTempsArrayLength - 1), 
+						duration: 0.5,
+						ease: 'sine.inOut'
+					},
 					fastScrollEnd: true,
 					onEnter: () => pointsListElem.childNodes[0].classList.toggle('active'),
 					onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
-					// preventOverlaps: true,
+					anticipatePin: 1,
+					preventOverlaps: true,
 					// markers: true,
 				}
 			});
@@ -195,10 +218,15 @@ const HistoiresList = () => {
 				start: 'top 5%',
 				end: () => '+=' + timelineWidth,
 				scrub: true,
-				snap: 1 / (ligneTempsArrayLength - 1),
+				snap: {
+					snapTo: 1 / (ligneTempsArrayLength - 1), 
+					duration: 0.5,
+					ease: 'sine.inOut',
+				},
 				fastScrollEnd: true,
 				onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
-				// preventOverlaps: true,
+				anticipatePin: 1,
+				preventOverlaps: true,
 				// markers: true,
 			});
 			

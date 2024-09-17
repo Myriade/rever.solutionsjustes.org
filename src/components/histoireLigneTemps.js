@@ -10,14 +10,17 @@ const LigneTempsItemLi = styled.li`
 	gap: 1em;
 	color: var(--color-bleu-tres-fonce);
 	align-content: start;
+	position: relative;
+	padding-inline: 5ch;
+	
 	p {
 		margin-block: 0;}
+		
 	.list__item__date {
 		font-weight: bold;}
-		
+	
 	.list__item__texte {
-		max-width: 45ch;
-	}
+		max-width: 45ch;}
 `;
 
 const HistoireLigneTemps = ({ data }) => {
