@@ -14,6 +14,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 const Cards = styled.div`
 	padding-block: 2vh;
 	display: grid;
+	grid-template-columns: 1fr;
 	gap: 1rem;
 	
 	.histoire-card {
@@ -121,6 +122,7 @@ const HistoiresList = () => {
 	const [gsapAnimInstance, setGsapAnimInstance] = useState();
 	const [isScrollReady, setIsScrollReady ] = useState(null);
 	const [hasNewData, setHasNewData] = useState(false);
+	const [isTouch, setIsTouch] = useState(null);
 	
 	// Data fetch
 	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
@@ -134,7 +136,18 @@ const HistoiresList = () => {
 	const pointsListElem = pointsListRef.current;
 	
 	// event handlers
-	function firstHoverTouchHandler() { setIsScrollReady(true) }
+	function firstHoverTouchHandler() { 
+		setIsScrollReady(true); 
+		// Detect computer mouse or touch screen 
+		if (window.matchMedia('(hover: hover)').matches) {
+			console.log('Device has a mouse or touchpad events');
+			setIsTouch(false);
+		} else {
+			console.log('Device has no mouse, so has touch events');
+			setIsTouch(true);
+		}
+	}
+	
 	function histoireSwitchClickHandler(clickedIndex) { 
 		setActiveIndex(clickedIndex);
 		setHasNewData(true);
@@ -161,14 +174,16 @@ const HistoiresList = () => {
 		});
 	}
 
-	// GSAP configs
+	//GSAP configs
 	gsap.registerPlugin(ScrollTrigger);
 	
 	useGSAP(() => {
 		// initialiser un PIN et un Scroll si le dom est pret et s'il n'y a pas deja d'instance GSAP
-		if (isScrollReady && !gsapAnimInstance) {
+		if (isScrollReady && !gsapAnimInstance && !isTouch) {
 			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
 			const timelineWidth = scrolljackAnimeElem.scrollWidth;
+			
+			console.log('GSAP Init');
 			
 			const myGsap = gsap.to( scrolljackAnimeElem, {
 				xPercent: -100 * (ligneTempsArrayLength - 1),
@@ -181,7 +196,7 @@ const HistoiresList = () => {
 					scrub: true,
 					snap: {
 						snapTo: 1 / (ligneTempsArrayLength - 1), 
-						duration: 0.5,
+						duration: 0.4,
 						ease: 'sine.inOut'
 					},
 					fastScrollEnd: true,
@@ -220,8 +235,8 @@ const HistoiresList = () => {
 				scrub: true,
 				snap: {
 					snapTo: 1 / (ligneTempsArrayLength - 1), 
-					duration: 0.5,
-					ease: 'sine.inOut',
+					duration: 0.4,
+					ease: 'sine.inOut'
 				},
 				fastScrollEnd: true,
 				onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
@@ -233,7 +248,7 @@ const HistoiresList = () => {
 			ScrollTrigger.refresh();
 		}
 		
-	}, { dependencies: [isScrollReady, hasNewData], scope: pinRef });
+	}, { dependencies: [isScrollReady, isTouch, hasNewData], scope: pinRef });
 
 	return (
 		<section 
@@ -251,10 +266,6 @@ const HistoiresList = () => {
 					return (
 						<div 
 							className={ index === activeIndex ? `histoire-card active` : `histoire-card` }
-							style={{ 
-								gridColumnStart: `${index + 1}`,
-								gridColumnEnd: `${index + 2}`
-							}}
 							key={index}
 						>
 							<div 
