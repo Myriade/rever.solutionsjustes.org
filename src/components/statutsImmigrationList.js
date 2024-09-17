@@ -13,7 +13,7 @@ const CarrousselContainer = styled.div`
 		align-items: stretch;
 	}
 	.glide__slide {
-		padding: var(--v-spacer);
+		padding: calc( var(--v-spacer) / 2 );
 		background: white;
 		border-radius: 30px;
 		height: auto;
@@ -30,6 +30,11 @@ const CarrousselContainer = styled.div`
 		&--right {
 			right: 0.5em;
 		}}
+		
+	${media.mediumUp`
+		.glide__slide {
+			padding: var(--v-spacer);}
+	`};
 `;
 
 const BulletsControls = styled.div`
@@ -54,6 +59,7 @@ const BulletsControls = styled.div`
 `;
 
 const StatutsImmigrationList = () => {
+	const [glideInstance, setGlideInstance] = useState();
 	let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
 	
 	useEffect(() => {
@@ -61,6 +67,8 @@ const StatutsImmigrationList = () => {
 			type: 'slider',
 			bound: true,
 			perView: 1,
+			gap: 20,
+			swipeThreshold: 50,
 			peek: { before: 0, after: 175 },
 			breakpoints: {
 				768: {
@@ -73,7 +81,7 @@ const StatutsImmigrationList = () => {
 				}
 			}
 		}).mount()
-	})
+	});
 	
 	return (
 		<>
@@ -94,10 +102,10 @@ const StatutsImmigrationList = () => {
 					<button className="glide__arrow glide__arrow--right" data-glide-dir=">">&#8250;</button>
 				</div> */}
 				<BulletsControls>
-					<div class="glide__bullets" data-glide-el="controls[nav]">
+					<div className="glide__bullets" data-glide-el="controls[nav]">
 						{ content.map( (item, index) => {
 							return (
-								<button class="glide__bullet" data-glide-dir={`=${index}`}></button>
+								<button className="glide__bullet" data-glide-dir={`=${index}`} key={index}></button>
 							)
 						})}
 					</div>
