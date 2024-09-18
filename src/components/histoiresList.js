@@ -219,7 +219,7 @@ const HistoiresList = () => {
 					onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
 					anticipatePin: 1,
 					preventOverlaps: true,
-					markers: true,
+					//markers: true,
 				}
 			});
 			setGsapAnimInstance(myGsap);
