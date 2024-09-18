@@ -12,14 +12,9 @@ const LigneTempsItemLi = styled.li`
 	align-content: start;
 	position: relative;
 	padding-inline: 5ch;
-	
-	p {
-		margin-block: 0;}
-		
-	.list__item__date {
-		font-weight: bold;}
-	
-	.list__item__texte {
+
+	p.list__item__texte {
+		margin-block: 0;
 		max-width: 45ch;}
 `;
 
@@ -30,7 +25,7 @@ const HistoireLigneTemps = ({ data }) => {
 			{data.map( (item, index) => {
 				return (
 					<LigneTempsItemLi className="list__item" key={index}>
-						<p className='list__item__date'>{item.date}</p>
+						<h3 className='list__item__date'>{item.date}</h3>
 						<p className='list__item__texte'>{item.texte}</p>
 					</LigneTempsItemLi>
 			)})}

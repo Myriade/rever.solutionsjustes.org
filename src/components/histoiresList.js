@@ -11,18 +11,30 @@ import { gsap } from "gsap";
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const Intro = styled.div`
+	gap: var(--v-h2-spacer);
+	
+	h2, p {
+		margin-block: 0;}
+	
+	${media.mediumUp`
+		grid-template-columns: 1fr 1fr;
+	`}
+`;
+
 const Cards = styled.div`
 	padding-block: 2vh;
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 1rem;
+	justify-content: space-around;
 	
 	.histoire-card {
 		display: grid;
 		gap: 1rem;
 		justify-content: center;
 		align-content: space-between;
-		border-radius: 15px;
+		border-radius: var(--border-radius);
 		padding-block: 1rem;
 		position: relative;
 		overflow: hidden;
@@ -52,8 +64,8 @@ const Cards = styled.div`
 			filter: saturate(1);}}
 			
 	${media.mediumUp`
-		grid-template-columns: 1fr 1fr 1fr;
-		grid-template-rows: 30vh;
+		grid-template-columns: repeat(3, 340px);
+		grid-template-rows: 340px;
 		.histoire-card {
 			grid-row-start: 1;
 			grid-row-end: 2;}
@@ -62,6 +74,10 @@ const Cards = styled.div`
 
 const Histoire = styled.div`
 	margin-top: 1rem;
+	
+	h3, p {
+		margin-block: 0;}
+	
 	.histoire-scrolljack {
 		max-width: 65ch;
 		overflow: hidden;
@@ -82,14 +98,13 @@ const Histoire = styled.div`
 			right: 0;}
 		&__anime {
 			display: flex;
-			gap: 2rem;
 			flex-wrap: nowrap;
 			padding-left: 0;}}
 			
 	.points-list {
 		display: flex;
 		justify-content: stretch;
-		margin-bottom: 1rem;
+		margin-block: 2rem;
 		.item {
 			flex-grow: 1;
 			position: relative;
@@ -191,7 +206,7 @@ const HistoiresList = () => {
 				duration: 5,
 				scrollTrigger: {
 					pin: pinElem,
-					start: 'top 5%',
+					start: 'top 115px',
 					end: () => '+=' + timelineWidth,
 					scrub: true,
 					snap: {
@@ -204,7 +219,7 @@ const HistoiresList = () => {
 					onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
 					anticipatePin: 1,
 					preventOverlaps: true,
-					// markers: true,
+					markers: true,
 				}
 			});
 			setGsapAnimInstance(myGsap);
@@ -230,7 +245,7 @@ const HistoiresList = () => {
 			ScrollTrigger.create({
 				animation: gsapAnimInstance,
 				pin: pinElem,
-				start: 'top 5%',
+				start: 'top 115px',
 				end: () => '+=' + timelineWidth,
 				scrub: true,
 				snap: {
@@ -255,53 +270,58 @@ const HistoiresList = () => {
 			id='consequences' 
 			onMouseEnter={firstHoverTouchHandler} 
 			onTouchStart={firstHoverTouchHandler}
-			ref={ pinRef }
 		>
-			<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
-			<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
-			<Cards 
-				className='cards' 
-			>
-				{ histoiresArray.map( (item, index) => {
-					return (
-						<div 
-							className={ index === activeIndex ? `histoire-card active` : `histoire-card` }
-							key={index}
-						>
-							<div 
-								className='bg-img'
-								style={{ backgroundImage: 'url(/portrait1.webp)' }} 
-								></div>
-							<p className='nom'>{item.nom}</p>
-							<button
-								onClick={() => histoireSwitchClickHandler(index)} 
-								className={ index === activeIndex ? `button hidden` : `button` } 
-							>
-								Lire son histoire
-							</button>
-						</div>
-					)
-				})}
-			</Cards>
+			<Intro className='grid'>
+				<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
+				<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
+			</Intro>
 			
-			<Histoire className='histoire' >
-				<p className='label'>L'histoire de {histoiresArray[activeIndex].nom}</p>
-				
-				<div className='points-list' ref={pointsListRef} >
-					{histoiresArray[activeIndex].ligneTemps.map( (item, index) => {
-						return ( 
-							<div key={index} className='item' >
-								<div className='point'></div>
+			<div ref={pinRef} style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}>
+				<Cards 
+					className='cards' 
+				>
+					{ histoiresArray.map( (item, index) => {
+						return (
+							<div 
+								className={ index === activeIndex ? `histoire-card active` : `histoire-card` }
+								key={index}
+							>
+								<div 
+									className='bg-img'
+									style={{ backgroundImage: 'url(/portrait1.webp)' }} 
+									></div>
+								<p className='nom'>{item.nom}</p>
+								<button
+									onClick={() => histoireSwitchClickHandler(index)} 
+									className={ index === activeIndex ? `button hidden` : `button` } 
+								>
+									Lire son histoire
+								</button>
 							</div>
-					)})}
-				</div>
+						)
+					})}
+				</Cards>
 				
-				<div className='histoire-scrolljack' >
-					<ul className='histoire-scrolljack__anime' ref={scrolljackAnime}>
-						<HistoireLigneTemps data={ histoiresArray[activeIndex].ligneTemps } />
-					</ul>
-				</div>
-			</Histoire>
+				<Histoire className='histoire' >
+					<h3>L'histoire de {histoiresArray[activeIndex].nom}</h3>
+					<p>{histoiresArray[activeIndex].titre}</p>
+					
+					<div className='points-list' ref={pointsListRef} >
+						{histoiresArray[activeIndex].ligneTemps.map( (item, index) => {
+							return ( 
+								<div key={index} className='item' >
+									<div className='point'></div>
+								</div>
+						)})}
+					</div>
+					
+					<div className='histoire-scrolljack' >
+						<ul className='histoire-scrolljack__anime' ref={scrolljackAnime}>
+							<HistoireLigneTemps data={ histoiresArray[activeIndex].ligneTemps } />
+						</ul>
+					</div>
+				</Histoire>
+			</div>
 		</section>	
 	)
 }

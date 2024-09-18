@@ -6,12 +6,15 @@ import { media } from '../styles/mixins.js'
 
 const SatutFiche = styled.div`
 	display: grid;
+	align-items: center;
+	justify-items: center;
 	img {
 		width: auto;
 		height: 200px;}
 	
 	${media.desktopUp`
 		grid-template-columns: 1fr 1.5fr;
+		justify-items: initial;
 	`};
 	
 `;

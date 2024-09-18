@@ -9,16 +9,28 @@ import { media } from '../styles/mixins.js'
 
 const CarrousselContainer = styled.div`
 	margin-top: var(--v-spacer);
+	
 	.glide__slides {
-		align-items: stretch;
-	}
+		align-items: stretch;}
+	
 	.glide__slide {
 		padding: calc( var(--v-spacer) / 2 );
 		background: white;
-		border-radius: 30px;
+		border-radius: var(--border-radius);
 		height: auto;}
 		
 	${media.mediumUp`
+		.glide__track {
+			&::after {
+				content: '';
+				display: block;
+				z-index: 25;
+				width: 7vw;
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				background-image: linear-gradient(to left, var(--color-bleu-tres-pale) , rgba(255,255,255,0));
+				right: 0;}}
 		.glide__slide {
 			padding: var(--v-spacer);}
 	`};
@@ -27,7 +39,7 @@ const CarrousselContainer = styled.div`
 const BulletsControls = styled.div`
 	display: grid;
 	justify-items: center;
-	padding-top: var(--v-spacer);	
+	padding-top: calc(var(--v-spacer) / 2);	
 	position: relative;
 	
 	.glide__bullets {
