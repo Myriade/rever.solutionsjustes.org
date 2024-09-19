@@ -26,7 +26,7 @@ const Section1Hero = styled.section`
     color: white;
     line-height: 1em;
     text-transform: uppercase;
-    margin: 0;
+    margin: 0 var(--h-spacer);
     display: grid;
     align-items: center;
     span {

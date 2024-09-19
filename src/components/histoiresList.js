@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { media } from '../styles/mixins.js'
@@ -10,6 +10,7 @@ import HistoireLigneTemps from './histoireLigneTemps'
 import { gsap } from "gsap";
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Glide from '@glidejs/glide'
 
 const Intro = styled.div`
 	gap: var(--v-h2-spacer);
@@ -226,7 +227,7 @@ const HistoiresList = () => {
 		}
 		
 		// Lorsque l'histoire visible change, ramener le scroll au début et invalider l'instance ScrollTrigger
-		if ( gsapAnimInstance && hasNewData ) {
+		if ( gsapAnimInstance && hasNewData && !isTouch) {
 			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
 			const timelineWidth = scrolljackAnimeElem.scrollWidth;
 			
@@ -238,7 +239,7 @@ const HistoiresList = () => {
 		}
 		
 		// Monter à nouveau le composant et une nouvelle instance ScrollTrigger avec les nouveaux calculs
-		if ( gsapAnimInstance && !hasNewData ) {
+		if ( gsapAnimInstance && !hasNewData && !isTouch) {
 			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
 			const timelineWidth = scrolljackAnimeElem.scrollWidth;
 			
@@ -264,6 +265,17 @@ const HistoiresList = () => {
 		}
 		
 	}, { dependencies: [isScrollReady, isTouch, hasNewData], scope: pinRef });
+	
+	// Slider Glide pour écrans Touch
+	useEffect(() => {
+		if(isScrollReady && isTouch) {
+			new Glide('.histoire-glide', {
+				type: 'slider',
+				perView: 1,
+				gap: 10,
+			}).mount()
+		}
+	}, [isTouch, isScrollReady]);
 
 	return (
 		<section 
@@ -302,7 +314,7 @@ const HistoiresList = () => {
 					})}
 				</Cards>
 				
-				<Histoire className='histoire' >
+				<Histoire className='histoire'>
 					<h3>L'histoire de {histoiresArray[activeIndex].nom}</h3>
 					<p>{histoiresArray[activeIndex].titre}</p>
 					
@@ -315,11 +327,23 @@ const HistoiresList = () => {
 						)})}
 					</div>
 					
-					<div className='histoire-scrolljack' >
-						<ul className='histoire-scrolljack__anime' ref={scrolljackAnime}>
-							<HistoireLigneTemps data={ histoiresArray[activeIndex].ligneTemps } />
-						</ul>
+					<div className='histoire-glide'>
+						<div 
+							className={ !isTouch ? 'histoire-scrolljack' : 'glide__track' } 
+							data-glide-el={ !isTouch ? null : 'track' }
+						>
+							<ul 
+								className={ !isTouch ? 'histoire-scrolljack__anime' : 'glide__slides' }  
+								ref={scrolljackAnime}
+							>
+								<HistoireLigneTemps 
+									data={ histoiresArray[activeIndex].ligneTemps } 
+									isTouch={isTouch}
+								/>
+							</ul>
+						</div>
 					</div>
+					
 				</Histoire>
 			</div>
 		</section>	
