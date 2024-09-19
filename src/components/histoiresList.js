@@ -137,7 +137,7 @@ const HistoiresList = () => {
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [gsapAnimInstance, setGsapAnimInstance] = useState();
 	const [isScrollReady, setIsScrollReady ] = useState(null);
-	const [hasNewData, setHasNewData] = useState(false);
+	const [hasNewData, setHasNewData] = useState(null);
 	const [isTouch, setIsTouch] = useState(null);
 	
 	// Data fetch
@@ -150,17 +150,20 @@ const HistoiresList = () => {
 	const scrolljackAnimeElem = scrolljackAnime.current;
 	const pointsListRef = useRef();
 	const pointsListElem = pointsListRef.current;
+	const glideInstance = useRef(null);
 	
 	// event handlers
-	function firstHoverTouchHandler() { 
-		setIsScrollReady(true); 
-		// Detect computer mouse or touch screen 
-		if (window.matchMedia('(hover: hover)').matches) {
-			console.log('Device has a mouse or touchpad events');
-			setIsTouch(false);
-		} else {
-			console.log('Device has no mouse, so has touch events');
-			setIsTouch(true);
+	function firstHoverTouchHandler() {
+		if (isScrollReady === null) {
+			setIsScrollReady(true); 
+			// Detect computer mouse or touch screen 
+			if (window.matchMedia('(hover: hover)').matches) {
+				console.log('Device has a mouse or touchpad events');
+				setIsTouch(false);
+			} else {
+				console.log('Device has no mouse, so has touch events');
+				setIsTouch(true);
+			}
 		}
 	}
 	
@@ -177,10 +180,16 @@ const HistoiresList = () => {
 		});
 	}
 	
-	// Fonction pour mettre une classe active sur le point correspondant dans la ligne au scroll
-	const setActivePoint = (progress, ligneTempsArrayLength) => {
-		const progressPercent = Math.round(progress*100);
-		const rangActuel = Math.round(((ligneTempsArrayLength - 1) * progressPercent) / 100);
+	// mettre une classe active sur le point correspondant dans la ligne au scroll
+	const setActivePoint = (origin, progress, ligneTempsArrayLength) => {
+		let rangActuel = 0;
+		if (origin === 'gsap' && ligneTempsArrayLength) { // GSAP pour desktop 
+			const progressPercent = Math.round(progress*100);
+			rangActuel = Math.round(((ligneTempsArrayLength - 1) * progressPercent) / 100);
+		} else if (glideInstance.current) { // touch screen seulement, glide.js
+			rangActuel = glideInstance.current.index;
+			console.log('setactivepoint origin = glide, index = ', rangActuel);
+		}
 		
 		pointsListElem.childNodes[rangActuel].classList.toggle('active');
 		pointsListElem.childNodes.forEach( (item, index) => {
@@ -190,22 +199,62 @@ const HistoiresList = () => {
 		});
 	}
 
-	//GSAP configs
+	// Desktop seulement: GSAP configs, ligne du temps défilement horizontal déclanché par défilement vertical (scrolljack)
 	gsap.registerPlugin(ScrollTrigger);
 	
 	useGSAP(() => {
-		// initialiser un PIN et un Scroll si le dom est pret et s'il n'y a pas deja d'instance GSAP
-		if (isScrollReady && !gsapAnimInstance && !isTouch) {
-			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
-			const timelineWidth = scrolljackAnimeElem.scrollWidth;
+		if (!isTouch) {
+			// initialiser un PIN et un Scroll si le dom est pret et s'il n'y a pas deja d'instance GSAP
+			if (isScrollReady && !gsapAnimInstance) {
+				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
+				const timelineWidth = scrolljackAnimeElem.scrollWidth;
+				
+				console.log('GSAP Init');
+				
+				const myGsap = gsap.to( scrolljackAnimeElem, {
+					xPercent: -100 * (ligneTempsArrayLength - 1),
+					ease: 'none',
+					duration: 5,
+					scrollTrigger: {
+						pin: pinElem,
+						start: 'top 115px',
+						end: () => '+=' + timelineWidth,
+						scrub: true,
+						snap: {
+							snapTo: 1 / (ligneTempsArrayLength - 1), 
+							duration: 0.4,
+							ease: 'sine.inOut'
+						},
+						fastScrollEnd: true,
+						onEnter: () => pointsListElem.childNodes[0].classList.toggle('active'),
+						onSnapComplete: ({progress}) => setActivePoint('gsap', progress, ligneTempsArrayLength),
+						anticipatePin: 1,
+						preventOverlaps: true,
+						//markers: true,
+					}
+				});
+				setGsapAnimInstance(myGsap);
+			}
 			
-			console.log('GSAP Init');
+			// Lorsque l'histoire visible change, ramener le scroll au début et invalider l'instance ScrollTrigger
+			if ( gsapAnimInstance && hasNewData) {
+				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
+				const timelineWidth = scrolljackAnimeElem.scrollWidth;
+				
+				gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
+				gsapAnimInstance.scrollTrigger.kill();
+				gsapAnimInstance.vars.xPercent = -100 * (ligneTempsArrayLength - 1);
+				gsapAnimInstance.invalidate();
+				setHasNewData(false);
+			}
 			
-			const myGsap = gsap.to( scrolljackAnimeElem, {
-				xPercent: -100 * (ligneTempsArrayLength - 1),
-				ease: 'none',
-				duration: 5,
-				scrollTrigger: {
+			// Monter à nouveau le composant et une nouvelle instance ScrollTrigger avec les nouveaux calculs
+			if ( gsapAnimInstance && !hasNewData) {
+				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
+				const timelineWidth = scrolljackAnimeElem.scrollWidth;
+				
+				ScrollTrigger.create({
+					animation: gsapAnimInstance,
 					pin: pinElem,
 					start: 'top 115px',
 					end: () => '+=' + timelineWidth,
@@ -216,66 +265,46 @@ const HistoiresList = () => {
 						ease: 'sine.inOut'
 					},
 					fastScrollEnd: true,
-					onEnter: () => pointsListElem.childNodes[0].classList.toggle('active'),
-					onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
+					onSnapComplete: ({progress}) => setActivePoint('gsap', progress, ligneTempsArrayLength),
 					anticipatePin: 1,
 					preventOverlaps: true,
-					//markers: true,
-				}
-			});
-			setGsapAnimInstance(myGsap);
-		}
-		
-		// Lorsque l'histoire visible change, ramener le scroll au début et invalider l'instance ScrollTrigger
-		if ( gsapAnimInstance && hasNewData && !isTouch) {
-			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
-			const timelineWidth = scrolljackAnimeElem.scrollWidth;
-			
-			gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
-			gsapAnimInstance.scrollTrigger.kill();
-			gsapAnimInstance.vars.xPercent = -100 * (ligneTempsArrayLength - 1);
-			gsapAnimInstance.invalidate();
-			setHasNewData(false);
-		}
-		
-		// Monter à nouveau le composant et une nouvelle instance ScrollTrigger avec les nouveaux calculs
-		if ( gsapAnimInstance && !hasNewData && !isTouch) {
-			const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
-			const timelineWidth = scrolljackAnimeElem.scrollWidth;
-			
-			ScrollTrigger.create({
-				animation: gsapAnimInstance,
-				pin: pinElem,
-				start: 'top 115px',
-				end: () => '+=' + timelineWidth,
-				scrub: true,
-				snap: {
-					snapTo: 1 / (ligneTempsArrayLength - 1), 
-					duration: 0.4,
-					ease: 'sine.inOut'
-				},
-				fastScrollEnd: true,
-				onSnapComplete: ({progress}) => setActivePoint(progress, ligneTempsArrayLength),
-				anticipatePin: 1,
-				preventOverlaps: true,
-				// markers: true,
-			});
-			
-			ScrollTrigger.refresh();
+					// markers: true,
+				});
+				
+				ScrollTrigger.refresh();
+			}
 		}
 		
 	}, { dependencies: [isScrollReady, isTouch, hasNewData], scope: pinRef });
 	
-	// Slider Glide pour écrans Touch
+	// Écrans Touch seulement : Slider Glide configs pour défilement ligne du temps en slide touch
 	useEffect(() => {
-		if(isScrollReady && isTouch) {
-			new Glide('.histoire-glide', {
-				type: 'slider',
-				perView: 1,
-				gap: 10,
-			}).mount()
+		if (isTouch) {
+			
+			// rendre le premier point témoin actif
+			pointsListElem.childNodes[0].classList.toggle('active');
+			
+			// premiere initialisation
+			if(isScrollReady && !glideInstance.current && hasNewData === null) {
+				glideInstance.current =  new Glide('.histoire-glide', {
+					type: 'slider',
+					perView: 1,
+					gap: 10,
+				}).on('run', setActivePoint).mount() 
+			}
+			
+			// Lorsque l'histoire change, refaire une nouvelle instance de glide.
+			if (isScrollReady && glideInstance.current && hasNewData) {
+				glideInstance.current.destroy();
+				glideInstance.current = new Glide('.histoire-glide', {
+					type: 'slider',
+					perView: 1,
+					gap: 10,
+				}).on('run', setActivePoint).mount();
+				setHasNewData(false);
+			}
 		}
-	}, [isTouch, isScrollReady]);
+	}, [isTouch, isScrollReady, hasNewData]);
 
 	return (
 		<section 
