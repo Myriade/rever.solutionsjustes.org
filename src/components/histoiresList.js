@@ -48,7 +48,8 @@ const Cards = styled.div`
 			bottom: 0;
 			left: 0;
 			z-index: -1;
-			filter: saturate(0);}
+			filter: saturate(0);
+			transition: all 2 ease-in-out;}
 		.nom {
 			color: white;
 			font-weight: bold;
@@ -58,6 +59,7 @@ const Cards = styled.div`
 		.button {
 			left: 0;
 			opacity: 1;
+			transition: all 2 ease-in-out;
 			&.hidden {
 				opacity: 0;}}
 			
@@ -317,7 +319,10 @@ const HistoiresList = () => {
 				<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
 			</Intro>
 			
-			<div ref={pinRef} style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}>
+			<div 
+				ref={pinRef} 
+				style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}
+			>
 				<Cards 
 					className='cards' 
 				>
@@ -329,7 +334,7 @@ const HistoiresList = () => {
 							>
 								<div 
 									className='bg-img'
-									style={{ backgroundImage: 'url(/portrait1.webp)' }} 
+									style={{ backgroundImage: `url(/images/${item.fichierImage}.webp)` }} 
 									></div>
 								<p className='nom'>{item.nom}</p>
 								<button

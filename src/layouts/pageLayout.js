@@ -6,10 +6,6 @@ import styled from 'styled-components'
 import '../styles/globals.scss'
 import { media } from '../styles/mixins.js'
 
-import { gsap } from "gsap";
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import TempProtectLayout from './TempProtectLayout.js';
 
 const Header = styled.header`
@@ -46,19 +42,21 @@ const Main = styled.main`
 `
 
 const Footer = styled.footer`
-  height: var(--footer-height);
-  padding-block: 0.5rem;
+  padding: calc(var(--v-spacer) / 2 ) var(--h-spacer);
   width: 100%;
   background: var(--color-bleu-tres-fonce);
   color: white;
-  text-align: center;
+  display: flex;
+  gap: 1rem 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  p {
+    text-align: center;
+    margin-block: 0;
+    font-size: 0.8rem;}
 `;
 
 export default function PageLayout({ children }) {
-  
-  useGSAP(() => {
-    //gsap
-  });
   
   return (
     <TempProtectLayout>
@@ -66,8 +64,7 @@ export default function PageLayout({ children }) {
       
         <Header>
           <a 
-            href='https://www.solutionsjustes.org/' 
-            target='_blank' rel='noreferrer' 
+            href='https://www.solutionsjustes.org/'
             title='Solutions Justes MCM'
             className='sj-logo'
           >
@@ -90,7 +87,8 @@ export default function PageLayout({ children }) {
         </Main>
         
         <Footer>
-          Bas de page
+          <p>Numéro d'organisme de bienfaisance enregistré : 107718868 RR 0001</p>
+          <p>Copyright © 2024 <a href='https://www.solutionsjustes.org/'>Solutions Justes</a></p>
         </Footer>
         
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import PageLayout from '../layouts/pageLayout'
 import { Link } from 'gatsby'
+import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 
@@ -140,8 +141,12 @@ const Section8Apropos = styled.section`
   .grid {
     gap: var(--v-h2-spacer);}
    
-  h2, p {
-    margin-block: 1rem;}
+  h2 {
+    margin-block: 0 var(--h-spacer);}
+  
+  p {
+    margin-block: 1rem;
+    max-width: 39ch;}
   
   ${media.mediumUp`
     .grid {
@@ -253,7 +258,12 @@ const IndexPage = () => {
               <p>Solutions Justes est un programme de la MCM visant à améliorer l'accès à la justice pour les personnes im·migrantes et réfugiées. Elle est une clinique juridique qui adopte une approche holistique et offre des services accessibles à toutes les personnes dans le besoin.</p>
             </div>
             <div>
-              image
+              <StaticImage 
+                src='../images/MCM_Visuel-Histoire.png'
+                placeholder='dominantColor'
+                alt='MCM portrait d\u2019archive, équipe'
+                style={{borderRadius: 'var(--border-radius)'}}
+              />
             </div>  
           </div>
         </Section8Apropos>
