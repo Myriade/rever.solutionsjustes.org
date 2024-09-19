@@ -13,7 +13,7 @@ import HistoiresList from '../components/histoiresList'
 
 const Section1Hero = styled.section`
   background-color: var(--color-bleu-tres-pale);
-  background-image: url(/portrait4.webp);
+  background-image: url(/grand-portrait.webp);
   background-size: cover;
   background-position: center center;
   padding-block: 0;
@@ -163,7 +163,7 @@ const IndexPage = () => {
   
   return (
     <PageLayout>
-      <div ref={gsapContainerRef}  style={{overflow: 'scroll'}} id='gsap-container'>
+      <div ref={gsapContainerRef} id='gsap-container'>
         <Section1Hero >
           <div className='overlay-text'>
             <h1>
