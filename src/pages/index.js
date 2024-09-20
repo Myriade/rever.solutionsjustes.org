@@ -11,6 +11,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 import StatutsImmigrationList from '../components/statutsImmigrationList'
 import HistoiresList from '../components/histoiresList'
+import DonsImpactTabs from '../components/donsImpactsTabs'
 
 const Section1Hero = styled.section`
   background-color: var(--color-bleu-tres-pale);
@@ -102,7 +103,6 @@ const Section5Video = styled.section`
 `;
 
 const Section6Agir = styled.section`
-  
   .grid {
     display: grid;
     gap: var(--h-spacer) 2rem;
@@ -114,7 +114,8 @@ const Section6Agir = styled.section`
       display: grid;
       gap: 1.5rem;
       justify-items: left;
-      align-content: space-between;}
+      align-content: space-between;
+      overflow: hidden;}
       
     h3, p {
       margin-block: 0;}
@@ -129,7 +130,12 @@ const Section6Agir = styled.section`
     ${media.mediumUp`
       grid-template-columns: 1fr 1fr 1fr;
     `}
-  }
+    
+    .donner {
+      padding: 0;
+      gap: 0;
+      .intro {
+        padding: calc(var(--v-spacer) / 2) var(--h-spacer)}}
 `;
 
 const Section7Partenaires = styled.section`
@@ -163,7 +169,7 @@ const IndexPage = () => {
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   
   const onClickHandler = contextSafe(() => {
-    gsap.to( window, { duration: 1.5, scrollTo: '#agir' });
+    gsap.to( window, { duration: 1, scrollTo: '#agir' });
   });
   
   return (
@@ -214,17 +220,14 @@ const IndexPage = () => {
         <Section6Agir id='agir'>
           <h2>Comment vous pouvez aider</h2>
           <div className='grid'>
-            <div>
-              <h3>1. Faire un don</h3>
-              <p>Chaque don compte. Découvrez l'impact de votre générosité.</p>
-              <a 
-                className='button centered' 
-                href='https://www.canadahelps.org/en/charities/montreal-city-mission/campaign/just-solutions-20th-anniversary-campaign' 
-                target='_blank' 
-                rel="nofollow"
-              >
-                Donner
-              </a>
+            <div className='donner'>
+              <div className='intro'>
+                <h3>1. Faire un don</h3>
+                <p>Chaque don compte. Découvrez l'impact de votre générosité.</p>
+              </div>
+              
+              <DonsImpactTabs />
+              
             </div>
             <div>
               <h3>2. Vous sensibiliser à la cause</h3>
