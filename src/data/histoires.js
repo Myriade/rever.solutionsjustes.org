@@ -32,25 +32,6 @@ export default function histoiresData() { return [
 		fichierImage: 'MCM_Visuel-Persona_2',
 		ligneTemps: [ 
 			{
-				date: 'Décembre 2016',
-				texte: `Un père prend la décision extrêmement difficile de quitter sa conjointe et son enfant pour fuir la violence des gangs dans son pays. Il souhaite créer une vie plus sécuritaire pour sa famille au Québec. Il dépose une demande s'asile.`
-			},
-			{
-				date: 'Décembre 2019',
-				texte: `Après trois ans de travail au Québec, on lui refuse sa demande d'asile en raison de preuves insuffisantes. Il ne peut revenir en arrière. Il dépose une demande humanitaire.`
-			},
-			{
-				date: 'Février 2024',
-				texte: `On lui accorde finalement, après 51 mois, sa résidence permanente. Ce n'est qu'à partir de ce moment qu'il peut entamer les démarches pour une réunification familiale dont les délais sont actuellement de presque 3 ans.`
-			}
-		]
-	},
-	{
-		nom: 'Saïd',
-		titre: `Un travailleur avec un permis de travail fermé (PTF)`,
-		fichierImage: 'MCM_Visuel-Persona_3',
-		ligneTemps: [ 
-			{
 				date: 'Février 2022',
 				texte: `Rêvant de subvenir aux besoins économiques de sa famille, il fait affaire à une agence de recrutement pour se trouver un travail à l'étranger, au Québec. Ces agences, non régulées, peuvent demander entre 5 000$ et 15 000$ en frais de recrutement.`
 			},
@@ -77,6 +58,25 @@ export default function histoiresData() { return [
 			{
 				date: 'Décembre 2023',
 				texte: `L'employeur n'a toutefois pas effectué les démarches nécessaires, laissant le travailleur sans statut d'immigration au Canada. Pris dans l'anonymat, il ne peut ni rester dans son pays d'accueil ni retourner dans son pays d'origine où des dettes insurmontables l'attendent.`
+			}
+		]
+	},
+	{
+		nom: 'Saïd',
+		titre: `Un travailleur avec un permis de travail fermé (PTF)`,
+		fichierImage: 'MCM_Visuel-Persona_3',
+		ligneTemps: [ 
+			{
+				date: 'Décembre 2016',
+				texte: `Un père prend la décision extrêmement difficile de quitter sa conjointe et son enfant pour fuir la violence des gangs dans son pays. Il souhaite créer une vie plus sécuritaire pour sa famille au Québec. Il dépose une demande s'asile.`
+			},
+			{
+				date: 'Décembre 2019',
+				texte: `Après trois ans de travail au Québec, on lui refuse sa demande d'asile en raison de preuves insuffisantes. Il ne peut revenir en arrière. Il dépose une demande humanitaire.`
+			},
+			{
+				date: 'Février 2024',
+				texte: `On lui accorde finalement, après 51 mois, sa résidence permanente. Ce n'est qu'à partir de ce moment qu'il peut entamer les démarches pour une réunification familiale dont les délais sont actuellement de presque 3 ans.`
 			}
 		]
 	}

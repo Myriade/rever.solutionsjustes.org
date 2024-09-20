@@ -32,6 +32,7 @@ const Header = styled.header`
       text-decoration: underline;}}
   
   .sj-logo svg {
+    background: var(--color-bleu-tres-fonce)
     width: auto;
     height: 4rem;}
   
@@ -70,7 +71,7 @@ export default function PageLayout({ children }) {
           >
             <StaticImage 
               src='../images/logo-horizontal.svg'
-              placeholder='dominantColor'
+              placeholder='#282560'
               alt='Solutions Justes'
               style={{maxWidth: '120px'}}
             />
