@@ -10,6 +10,7 @@ import HistoireLigneTemps from './histoireLigneTemps'
 import { gsap } from "gsap";
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import Glide from '@glidejs/glide'
 
 const Intro = styled.div`
@@ -203,6 +204,7 @@ const HistoiresList = () => {
 
 	// Desktop seulement: GSAP configs, ligne du temps défilement horizontal déclanché par défilement vertical (scrolljack)
 	gsap.registerPlugin(ScrollTrigger);
+	gsap.registerPlugin(ScrollToPlugin);
 	
 	useGSAP(() => {
 		if (!isTouch) {
@@ -210,8 +212,6 @@ const HistoiresList = () => {
 			if (isScrollReady && !gsapAnimInstance) {
 				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
 				const timelineWidth = scrolljackAnimeElem.scrollWidth;
-				
-				console.log('GSAP Init');
 				
 				const myGsap = gsap.to( scrolljackAnimeElem, {
 					xPercent: -100 * (ligneTempsArrayLength - 1),
@@ -243,10 +243,17 @@ const HistoiresList = () => {
 				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
 				const timelineWidth = scrolljackAnimeElem.scrollWidth;
 				
-				gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
+				gsap.to( window, { 
+					duration: 1, 
+					scrollTo: { y: '#consequences', offsetY: -130 },
+					ease: 'circ.in'
+				});
 				gsapAnimInstance.scrollTrigger.kill();
 				gsapAnimInstance.vars.xPercent = -100 * (ligneTempsArrayLength - 1);
 				gsapAnimInstance.invalidate();
+				setTimeout(() => {
+					gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
+				}, 800);
 				setHasNewData(false);
 			}
 			
@@ -323,9 +330,7 @@ const HistoiresList = () => {
 				ref={pinRef} 
 				style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}
 			>
-				<Cards 
-					className='cards' 
-				>
+				<Cards className='cards' >
 					{ histoiresArray.map( (item, index) => {
 						return (
 							<div 
