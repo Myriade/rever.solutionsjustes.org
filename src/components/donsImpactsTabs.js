@@ -127,7 +127,6 @@ const DonsImpactTabs = () => {
 	const [activeIndex, setActiveIndex] = useState(0)
 	
 	const data = donsImpactsData();
-	console.log(data);
 	
 	function clickHandler(e) {
 		const clickedDataIndex = e.target.dataset.index;

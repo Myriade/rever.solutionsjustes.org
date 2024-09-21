@@ -136,6 +136,32 @@ const Section6Agir = styled.section`
       gap: 0;
       .intro {
         padding: calc(var(--v-spacer) / 2) var(--h-spacer)}}
+  
+  .partager .cta {
+    position: relative;
+    width: 100%;
+    display: grid;
+    justify-items; center;
+    }
+  .tooltip {
+    opacity: 0;
+    position: absolute;
+    top: -72px;
+    right: 0;
+    background: var(--color-bleu-tres-fonce);
+    color: white;
+    padding: 0.5rem 3rem;
+    border-radius: var(--border-radius);
+    border-bottom-left-radius: 0;
+    z-index: 30;
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      display: flex;
+      gap: 1rem;
+    }
+  }
+  
 `;
 
 const Section7Partenaires = styled.section`
@@ -164,12 +190,24 @@ gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollToPlugin);
 
 const IndexPage = () => {
+  const [shareTooltipOn, setShareTooltipOn] = useState(false);
+  
   const gsapContainerRef = useRef();
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   
-  const onClickHandler = contextSafe(() => {
+  const shortcutClickHandler = contextSafe(() => {
     gsap.to( window, { duration: 1, scrollTo: '#agir' });
+  });
+  
+  const shareClickHandler = contextSafe(() => {
+    if (!shareTooltipOn) {
+      gsap.to( '.tooltip', { duration: 0.5, opacity: 1 });
+      setShareTooltipOn(true);
+    } else {
+      gsap.to( '.tooltip', { duration: 0.5, opacity: 0 });
+      setShareTooltipOn(false);
+    }
   });
   
   return (
@@ -192,7 +230,7 @@ const IndexPage = () => {
               <p>Les personnes im·migrantes sans statut ou à statut précaire sont souvent contraintes de mettre de côté leurs plus grandes aspirations pour ne rêver qu'à l'essentiel. En passant de grandes ambitions aux désirs les plus simples—et les plus humains—la campagne Rêver à l'essentiel met en lumière les obstacles auxquels ces personnes doivent faire face pour vivre dignement lorsque leur quotidien est dicté par leur statut migratoire.</p>
               <button 
                 className='button soutenir'
-                onClick={onClickHandler}
+                onClick={shortcutClickHandler}
               >
                 Soutenir la cause
               </button>
@@ -225,25 +263,41 @@ const IndexPage = () => {
                 <h3>1. Faire un don</h3>
                 <p>Chaque don compte. Découvrez l'impact de votre générosité.</p>
               </div>
-              
               <DonsImpactTabs />
-              
             </div>
-            <div>
+            
+            <div className='sensibiliser'>
               <h3>2. Vous sensibiliser à la cause</h3>
               <p>En apprendre davantage sur les enjeux qui touchent les personnes sans statut ou à statut précaire, c'est un pas dans la bonne direction. Devenez un.e défenseur.euse de leur bien-être en vous sensibilisant à l'impact qu'ont les différents statuts d'immigration sur la vie quotidienne des personnes im.migrantes et réfugiées.</p>
               <Link to='/connaitre' className='button centered'>
                 En savoir plus
               </Link>
             </div>
-            <div>
+            
+            <div className='partager'>
               <h3>3. Passer le mot</h3>
               <p>Partagez cette campagne à vos proches et collègues afin de les sensibiliser à la cause</p>
-              <button 
-                className='button centered'
-              >
-                Partager
-              </button>
+              <StaticImage
+                src='../images/rever-a-l-essentiel-MCM.webp'
+                placeholder='dominantColor'
+                alt='Je rêvais de contribuer à la société québécoise, je rêve maintenant d\u2019être payé pour mon travail' 
+                style={{width: '180px', marginInline: 'auto'}}
+              />
+              <div className='cta'>
+                <button 
+                  className='button centered'
+                  onClick={shareClickHandler}
+                >
+                  Partager
+                </button>
+                <div className='tooltip'>
+                  <ul>
+                    <li><a href='mailto:'>courriel</a></li>
+                    <li><a>FB</a></li>
+                    <li><a>LI</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </Section6Agir>
