@@ -64,12 +64,12 @@ const Container = styled.div`
 			z-index: 1;
 			&:before, 
 			&:after {
-				width: 10px;
-				height: 10px;}
+				width: 26px;
+				height: 26px;}
 			&:before {
-				left: -10px;}
+				left: -26px;}
 			&:after { 
-				right: -10px;}}
+				right: -26px;}}
 			
 		button { 
 			width: 100%;
@@ -79,20 +79,24 @@ const Container = styled.div`
 			text-align: center;
 			padding: 0.5em 1rem;
 			text-decoration: none;
-			border-top-left-radius: 15px;
-			border-top-right-radius: 15px;
+			border-top-left-radius: 26px;
+			border-top-right-radius: 26px;
 			&::after, 
 			&::before {
-				width: 20px; 
-				height: 20px;
-				border-radius: 10px;
+				width: 26px; 
+				height: 53px;
 				z-index: 2;}
 				
 			&::before {
-				left: -20px;}
+				border-radius: 0 53px 53px 0;
+				left: -26px;}
 				
 			&::after {
-				right: -20px;}}
+				border-radius: 53px 0 0 53px;
+				right: -26px;}
+			
+			&:hover {
+				cursor: pointer;}}
 		
 		li.active {
 			z-index: 5;
@@ -112,7 +116,11 @@ const Container = styled.div`
 	.cta {
 		padding: calc(var(--v-spacer) / 2) var(--h-spacer);
 		text-align: center;
-		width: 100%;}
+		width: 100%;
+		.button:hover {
+			background-color: white;
+			&:before, &:after {
+				background-color: white;}}}
 `;
 
 const DonsImpactTabs = () => {
