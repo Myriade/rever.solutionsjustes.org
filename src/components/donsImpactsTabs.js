@@ -159,7 +159,7 @@ const DonsImpactTabs = () => {
 					className='button centered' 
 					href='https://www.canadahelps.org/en/charities/montreal-city-mission/campaign/just-solutions-20th-anniversary-campaign' 
 					target='_blank' 
-					rel="nofollow"
+					rel='noreferrer'
 				>
 					Donner
 				</a>

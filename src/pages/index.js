@@ -322,14 +322,17 @@ const IndexPage = () => {
                     <li><a 
                       href='mailto:?subject=R%C3%AAver+%C3%A0+l%27essentiel&body=Bonjour,%0A%0AJ%27ai+le+plaisir+de+vous+partager+ici+le+lien+de+la+campagne+R%C3%AAver+%C3%A0+l%27essentiel+:%0A%0Ahttps%3A%2F%2Frever.solutionsjustes.org%2F'
                       target='_blank'
+                      rel='noreferrer'
                       >Courriel</a></li>
                     <li><a 
                       href='https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=https%3A%2F%2Frever.solutionsjustes.org'
                       target='_blank'
+                      rel='noreferrer'
                       >Facebook</a></li>
                     <li><a
                       href='https://www.linkedin.com/sharing/share-offsite/?url=https://rever.solutionsjustes.org'
                       target='_blank'
+                      rel='noreferrer'
                       >LinkedIn</a></li>
                   </ul>
                 </div>

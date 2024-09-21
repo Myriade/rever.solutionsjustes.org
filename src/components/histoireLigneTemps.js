@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
-import { convertImageUrl } from '../utils/utils'
+import React from 'react';
 import styled from 'styled-components'
-
-import { media } from '../styles/mixins.js'
 
 const LigneTempsItemLi = styled.li`
 	display: grid;

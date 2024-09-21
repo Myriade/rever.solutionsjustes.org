@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import { Link } from 'gatsby'
 import { media } from '../styles/mixins.js'
 
 //import useWixData from '../utils/useWixData'
@@ -241,7 +240,6 @@ const HistoiresList = () => {
 			// Lorsque l'histoire visible change, ramener le scroll au début et invalider l'instance ScrollTrigger
 			if ( gsapAnimInstance && hasNewData) {
 				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
-				const timelineWidth = scrolljackAnimeElem.scrollWidth;
 				
 				gsap.to( window, { 
 					duration: 1, 

@@ -13,12 +13,18 @@ const CopyLinkButton = ({ url }) => {
 	};
 
 	return (
-		<div 
+		<button 
 			className='copylink'
 			onClick={copyToClipboard}
+			style={{
+				display: 'inline-block',
+				background: 'transparent',
+				color: 'white',
+				fontSize: '1rem',
+			}}
 		>
 			{copied ? 'Copié !' : 'Copier le lien'}
-		</div>
+		</button>
 	);
 };
 

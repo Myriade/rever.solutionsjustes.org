@@ -1,6 +1,6 @@
 const convertImageUrl = (wixMediaString) => {
 	// Regex pattern to match the Wix media string
-	const pattern = /^wix:image:\/\/v1\/([^\/]+)\/(.+)#originWidth=(\d+)&originHeight=(\d+)/;
+	const pattern = /^wix:image:\/\/v1\/([^]+)\/(.+)#originWidth=(\d+)&originHeight=(\d+)/;
 	
 	// Match the input string against the pattern
 	const match = wixMediaString.match(pattern);

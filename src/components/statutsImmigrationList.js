@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import useWixData from '../utils/useWixData'
 import StatutImmigrationFiche from './statutImmigrationFiche'
@@ -91,7 +91,12 @@ const StatutsImmigrationList = () => {
 					<div className="glide__bullets" data-glide-el="controls[nav]">
 						{ content.map( (item, index) => {
 							return (
-								<button className="glide__bullet" data-glide-dir={`=${index}`} key={`point-${index}`}></button>
+								<button 
+									className='glide__bullet' 
+									data-glide-dir={`=${index}`} 
+									key={`point-${index}`}
+									aria-label={`Aller à la fiche ${index + 1}`}
+								></button>
 							)
 						})}
 					</div>

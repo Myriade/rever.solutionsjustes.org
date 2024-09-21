@@ -4,7 +4,6 @@ import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 
 import '../styles/globals.scss'
-import { media } from '../styles/mixins.js'
 
 import TempProtectLayout from './TempProtectLayout.js';
 
