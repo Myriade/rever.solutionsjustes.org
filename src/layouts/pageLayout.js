@@ -29,7 +29,14 @@ const Header = styled.header`
     color: white;
     text-decoration: none;
     &:hover {
-      text-decoration: underline;}}
+      text-decoration: underline;}
+    &.active {
+      font-weight: 300;
+      &:hover {
+        text-decoration: none;
+        cursor: default;
+      }
+    }}
   
   .sj-logo svg {
     background: var(--color-bleu-tres-fonce)
@@ -40,7 +47,7 @@ const Header = styled.header`
 
 const Main = styled.main`
   margin-top: var(--header-height);
-`
+`;
 
 const Footer = styled.footer`
   padding: calc(var(--v-spacer) / 2 ) var(--h-spacer);
@@ -77,9 +84,9 @@ export default function PageLayout({ children }) {
             />
           </a>
           <div className='internal-nav'>
-            <Link to='/'>Rêver</Link>
-            <Link to='/connaitre'>Connaître</Link>
-            <Link to='/quiz'>Derrière les statuts</Link>
+            <Link to='/' activeClassName='active'>Rêver</Link>
+            <Link to='/connaitre' activeClassName='active'>Connaître</Link>
+            <Link to='/quiz' activeClassName='active'>Derrière les statuts</Link>
           </div>
         </Header>
         
