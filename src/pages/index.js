@@ -12,6 +12,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import StatutsImmigrationList from '../components/statutsImmigrationList'
 import HistoiresList from '../components/histoiresList'
 import DonsImpactTabs from '../components/donsImpactsTabs'
+import CopyLinkButton from '../components/copyLinkButton'
 
 const Section1Hero = styled.section`
   background-color: var(--color-bleu-tres-pale);
@@ -141,24 +142,44 @@ const Section6Agir = styled.section`
     position: relative;
     width: 100%;
     display: grid;
-    justify-items; center;
-    }
+    justify-items; center;}
+    
   .tooltip {
     opacity: 0;
+    height: 0;
+    overflow: hidden;
     position: absolute;
-    top: -72px;
+    top: -150px;
     right: 0;
-    background: var(--color-bleu-tres-fonce);
+    background: var(--color-bleu-clair);
     color: white;
-    padding: 0.5rem 3rem;
+    padding: 0.5rem 1.5rem;
     border-radius: var(--border-radius);
     border-bottom-left-radius: 0;
     z-index: 30;
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 1.25rem;
     ul {
       list-style-type: none;
       padding-left: 0;
       display: flex;
       gap: 1rem;
+      margin-block:0;}
+    a, .copylink {
+      text-align: center;
+      border: 1px solid white;
+      border-radius: 4px;
+      padding: 0.25em;
+      font-weight: bold;
+      &:hover {
+        cursor: pointer;
+        border-color: var(--color-bleu-tres-fonce);
+      }
+    }
+    p {
+      margin-block: 0;
+      text-align: center;
     }
   }
   
@@ -202,10 +223,10 @@ const IndexPage = () => {
   
   const shareClickHandler = contextSafe(() => {
     if (!shareTooltipOn) {
-      gsap.to( '.tooltip', { duration: 0.5, opacity: 1 });
+      gsap.to( '.tooltip', { duration: 0.5, opacity: 1, height: 'auto' });
       setShareTooltipOn(true);
     } else {
-      gsap.to( '.tooltip', { duration: 0.5, opacity: 0 });
+      gsap.to( '.tooltip', { duration: 0.5, opacity: 0, height: 0 });
       setShareTooltipOn(false);
     }
   });
@@ -291,10 +312,21 @@ const IndexPage = () => {
                   Partager
                 </button>
                 <div className='tooltip'>
+                  <CopyLinkButton url={'https://rever.solutionsjustes.org/'} />
+                  <p>ou partager par : </p>
                   <ul>
-                    <li><a href='mailto:'>courriel</a></li>
-                    <li><a>FB</a></li>
-                    <li><a>LI</a></li>
+                    <li><a 
+                      href='mailto:?subject=R%C3%AAver+%C3%A0+l%27essentiel&body=Bonjour,%0A%0AJ%27ai+le+plaisir+de+vous+partager+ici+le+lien+de+la+campagne+R%C3%AAver+%C3%A0+l%27essentiel+:%0A%0Ahttps%3A%2F%2Frever.solutionsjustes.org%2F'
+                      target='_blank'
+                      >Courriel</a></li>
+                    <li><a 
+                      href='https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=https%3A%2F%2Frever.solutionsjustes.org'
+                      target='_blank'
+                      >Facebook</a></li>
+                    <li><a
+                      href='https://www.linkedin.com/sharing/share-offsite/?url=https://rever.solutionsjustes.org'
+                      target='_blank'
+                      >LinkedIn</a></li>
                   </ul>
                 </div>
               </div>
