@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { media } from '../styles/mixins.js'
 
 import donsImpactsData from '../data/dons-impacts'
 
@@ -74,13 +73,14 @@ const Container = styled.div`
 		button { 
 			width: 100%;
 			border: 0;
-			font-size: 1.5rem;
+			font-size: clamp(19px,4vw,1.5rem);
 			color: white;
 			text-align: center;
 			padding: 0.5em 1rem;
 			text-decoration: none;
 			border-top-left-radius: 26px;
 			border-top-right-radius: 26px;
+			height: 53px;
 			&::after, 
 			&::before {
 				width: 26px; 
@@ -106,7 +106,7 @@ const Container = styled.div`
 				z-index: 1;}}}
 
 	.text {
-		padding: 1.35rem var(--h-spacer) 0;
+		padding: 1.35rem 1.5rem 0;
 		p {
 			color: white;
 			height: calc(10 * 1.35rem);

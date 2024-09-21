@@ -106,10 +106,10 @@ const Section5Video = styled.section`
 const Section6Agir = styled.section`
   .grid {
     display: grid;
-    gap: var(--h-spacer) 2rem;
+    gap: calc(var(--v-spacer) / 2) var(--h-spacer);
     margin-inline: -1vw;
     > div {
-      padding: calc(var(--v-spacer) / 2) var(--h-spacer);
+      padding: calc(var(--v-spacer) / 2) 1.5rem;
       background: var(--color-bleu-tres-pale);
       border-radius: var(--border-radius);
       display: grid;
@@ -129,6 +129,10 @@ const Section6Agir = styled.section`
       padding-inline: 3vw;}
     
     ${media.mediumUp`
+      grid-template-columns: 1fr 1fr;
+    `}
+    
+    ${media.largeUp`
       grid-template-columns: 1fr 1fr 1fr;
     `}
     
@@ -136,7 +140,7 @@ const Section6Agir = styled.section`
       padding: 0;
       gap: 0;
       .intro {
-        padding: calc(var(--v-spacer) / 2) var(--h-spacer)}}
+        padding: calc(var(--v-spacer) / 2) 1.5rem}}
   
   .partager .cta {
     position: relative;
