@@ -45,6 +45,7 @@ const Section1Hero = styled.section`
 `;
 
 const Section2Intro = styled.section`
+  padding-bottom: 0;
   .grid {
     gap: var(--v-h2-spacer);}
     
@@ -80,31 +81,39 @@ const SectionRealites = styled.section`
       padding: 0 3vw 0 0;
       margin-top: 0;
       display: grid;
-      gap: var(--v-spacer);}
+      gap: var(--v-spacer);
+    }
     li.realite-nav-item {
       background: var(--color-bleu-clair);
       color: white;
-      border: 2px solid var(--color-bleu-clair);
-      border-radius: 5px;
-      padding: 0.5em;
+      border: 2px solid white;
+      border-radius: 15px;
+      padding: 0.5em 0.75em;
       a {
         display: block;
         &:hover {
           cursor: pointer;}}
       &:hover, &.active {
-        border-color: var(--color-bleu-tres-fonce);}}}
+        background: var(--color-bleu-aqua);
+        border-color: var(--color-bleu-tres-fonce);
+      }
+    }
+  }
   
   .realites-container {}
   
   .realite-bundle {
-    height: calc(95vh - var(--header-height));
+    height: calc(100vh - var(--header-height));
     
     h2 {
     font-size: 2rem;
     font-weight: 400;
     text-transform: none;
-    span {
-      font-weight: 800}}}
+      span {
+        font-weight: 800;
+      }
+    }
+  }
 
 `;
 
@@ -112,7 +121,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const ConnaitrePage = () => {
   const [screenType, setScreenType] = useState(''); 
-  const [activeRealiteBundle, setActiveRealiteBundle] = useState(null);
+  const [activeRealite, setActiveRealite] = useState(null);
   
   const gsapContainerRef = useRef();
   
@@ -140,7 +149,7 @@ const ConnaitrePage = () => {
       duration: 1, 
       scrollTo: {
         y: `#${clickedId}`,
-        offsetY: 100
+        offsetY: 120
       } 
     });
   });
@@ -166,6 +175,23 @@ const ConnaitrePage = () => {
         start: 'top 120px'
       }
     });
+    
+    // update active Realite for nav bar li .active style
+    const realitesArr = gsap.utils.toArray('.realite-bundle');
+    
+    realitesArr.forEach((element, index) => {
+      const trigger = ScrollTrigger.create({
+        trigger: element,
+        start: 'top 120px',
+        onEnter: () => {
+          setActiveRealite(index);
+        },
+        onEnterBack: () => {
+          setActiveRealite(index);
+        },
+      });
+    });
+    
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
   return (
@@ -194,7 +220,7 @@ const ConnaitrePage = () => {
               {realitesArray.map( (realite, index) => { return (
                 <li 
                   key={index} 
-                  className='realite-nav-item'
+                  className={activeRealite === index ? 'realite-nav-item active' : 'realite-nav-item'}
                 >
                   <a 
                     onClick={() => navClickHandler(index)}
