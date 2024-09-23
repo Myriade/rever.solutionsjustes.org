@@ -1,0 +1,104 @@
+export default function connaitreData() { return [
+	{
+		idUnique: 'sans-statut',
+		titreCourt: 'sans statut',
+		intro: `Bonjour, je suis Maria et je suis une personne`,
+		statut: 'sans statut d’immigration',
+		presentation: [
+			`Cela signifie que je n'ai pas de statut d'immigration régulier au Canada. Les personnes im·migrantes peuvent se retrouver dans cette situation pour diverses raisons, comme avoir dépassé la durée de leur visa de résident temporaire, de permis d'études ou de travail, etc.`,
+			`Il y a plusieurs raisons pour lesquelles nous, personnes sans statut d’immigration,  n'avons pas quitté le Canada malgré notre situation précaire. Parmi ces raisons : nous n'avons plus de liens avec notre pays d’origine, nous avons construit notre vie au Québec où nous résidons depuis des années et nous voulons rester ici, notre pays d’origine est marqué par la violence et l’insécurité, etc.`
+		],
+		impacts: [
+			`On ne me donne pas accès aux services de santé et aux services sociaux. Cette situation impacte mon bien-être général et ma santé physique, car je n'ai pas accès aux soins dont j'ai besoin ;`,
+			`J’ai la crainte de porter plainte si je suis victime d’un crime, par exemple, de violence sexuelle ;`,
+			`Je vis constamment dans l'angoisse et l'invisibilité. J'appréhende de marcher dans la rue pour rendre visite à une amie ou d'ouvrir la porte au facteur, craignant d’être arrêtée par la police et de devoir m’identifier ;`,
+			`Je n’ai pas accès aux services municipaux de Sherbrooke qui nécessitent une pièce d'identité, comme la bibliothèque ou la piscine ;`,
+			`On ne me permet pas de me projeter dans l’avenir en raison de l'incertitude dans laquelle je vis. Mes aspirations sont restreintes par mon statut d’immigration, ce qui engendre un profond sentiment d’exclusion et de manque d’appartenance à la société où je vis depuis plus de 15 ans.`
+		],
+		mytheTitre: `Les personnes sans statut sont des « illégaux ».`,
+		mytheSoustitre: `On ne dit pas que les personnes sont illégales : personne n'est illégal`,
+		mytheExplications: [
+			`Certaines personnes peuvent se retrouver sans statut d'immigration régulier en raison de circonstances échappant à leur contrôle.`,
+			`Par exemple, une personne provenant du Mexique a déposé une demande d’asile pour échapper à la violence domestique et conjugale, mais cette demande a été rejetée quatre ans plus tard à cause des mauvais conseils et du manque de connaissance du système. Pendant cette période, la personne a reconstruit sa vie au Québec, créant un réseau de soutien et d’ami·e·s sur lesquels elle compte désormais. Elle craint de retourner au Mexique , où elle risquerait de se retrouver dans le même cercle de violence qu’auparavant. Elle a été convoquée pour être déportée du Canada, mais elle ne s'est pas présentée au rendez-vous. Elle a donc choisi de rester sans statut d’immigration au Québec, malgré les défis liés à l’accès aux services, la peur, la vulnérabilité et l’invisibilité.`,
+			`Un étudiant international en génie civil doit renouveler son permis d’études deux ans après le début de ses études, mais il oublie de le faire à temps. En conséquence, il se retrouve sans statut d’immigration valide, son permis d’études étant expiré.`,
+		]
+	} ,
+	{
+		idUnique: 'asile-refuse',
+		titreCourt: 'demande d’asile refusée',
+		intro: `Bonjour, je m'appelle Hassan et j’ai un statut d’`,
+		statut: 'immigration demandeur d’asile refusé',
+		presentation: [
+			``,
+			''
+		],
+		impacts: [
+			``,
+			``,
+			``,
+			``,
+			''
+		],
+		mytheTitre: ``,
+		mytheSoustitre: ``,
+		mytheExplications: [
+			``,
+			``,
+			``,
+			``,
+			''
+		]
+	} ,
+	{
+		idUnique: 'violence-conjugale',
+		titreCourt: 'violence conjugale',
+		intro: `Bonjour, je m'appelle Priya et j’ai un statut`,
+		statut: 'permis séjour temporaire pour victimes de violence conjugale',
+		presentation: [
+			``,
+			''
+		],
+		impacts: [
+			``,
+			``,
+			``,
+			``,
+			''
+		],
+		mytheTitre: ``,
+		mytheSoustitre: ``,
+		mytheExplications: [
+			``,
+			``,
+			``,
+			``,
+			''
+		]
+	} , 
+	{
+		idUnique: 'permis-travail-ferme',
+		titreCourt: 'Permis de travail fermé',
+		intro: `Bonjour, je m'appelle Mohammed et j’ai un `,
+		statut: 'permis de travail fermé',
+		presentation: [
+			``,
+			''
+		],
+		impacts: [
+			``,
+			``,
+			``,
+			``,
+			''
+		],
+		mytheTitre: ``,
+		mytheSoustitre: ``,
+		mytheExplications: [
+			``,
+			``,
+			``,
+			``,
+			''
+		]
+	} ,
+]}
