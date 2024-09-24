@@ -107,7 +107,8 @@ const SectionRealites = styled.section`
   .realites-container {}
   
   .realite-unique {
-    min-height: calc(100vh - var(--header-height) - var(--v-spacer));
+    height: calc(100vh - var(--header-height) - var(--v-spacer));
+    overflow: hidden;
     background: white;
     border-radius: var(--border-radius);
     padding: var(--v-h-spacer);
@@ -122,14 +123,43 @@ const SectionRealites = styled.section`
         font-weight: 400;
         text-transform: none;
         span {
-          font-weight: 800;
-        }
-      }
-    }
+          font-weight: 800;}}}
     
     .narratif {
       p {
-        margin-block: 0 1em;
+        margin-block: 0 1em;}
+        
+      .presentation {
+        overflow: hidden;}
+      
+      .impacts {
+        height: calc(100vh - var(--header-height) - var(--v-spacer));
+        position: relative;}
+        
+      .impact {
+        background: var(--color-bleu-tres-pale);
+        color: white;
+        border-radius: 4px;
+        margin-bottom: 2vh;
+        opacity: 0;
+        position: absolute;
+        top: 30%;
+        left: 0;
+        
+        &:first-child {
+          color: var(--bleu-tres-fonce);}
+        &:nth-child(2n) {
+          background: var(--color-bleu-clair);}
+        &:nth-child(3n) {
+          background: var(--color-bleu-aqua);}
+        &:nth-child(4n) {
+          background: var(--color-bleu-gris);}
+        &:nth-child(5n) {
+          background: var(--color-bleu-tres-fonce);}
+        p {
+          padding: 0.75em 1em;
+          margin-bottom: 0;
+        }
       }
     }
   }
@@ -213,11 +243,26 @@ const ConnaitrePage = () => {
       // create a timeline
       let timeline = gsap.timeline();
       
-      // add a second animation to the timeline
+      // add animations to the timeline
       timeline.from( element.querySelectorAll('.narratif .presentation'), {
         opacity: 0,
-        duration: 1,
-        stagger: 0.5
+        duration: 1.5,
+        stagger: 2
+      });
+      
+      timeline.to( element.querySelector('.presentation'), {
+        opacity: 0,
+        height: 0,
+        duration: 1
+      });
+      
+      timeline.to( element.querySelectorAll('.narratif .impact'), {
+        y: 'random(-150, 150, 5)',
+        x: 'random(-250, 50, 5)',
+        opacity: 1,
+        duration: 1.5,
+        stagger: 1,
+        ease: 'back.out(4)'
       });
       
       ScrollTrigger.create({
@@ -227,16 +272,13 @@ const ConnaitrePage = () => {
         scrub: true,
         pin: element,
         animation: timeline,
-        onEnter: (self) => {
-          //console.log('onEnter self = ', self);
+        onEnter: ({ progress }) => {
           setActiveRealite(realiteIndex);
         },
-        onEnterBack: (self) => {
-          //console.log('onEnterBack self = ', self);
+        onEnterBack: () => {
           setActiveRealite(realiteIndex);
         },
-        onLeave: (self) => {
-          console.log('onLeave self = ', self);
+        onLeave: ({ progress }) => {
           setActiveRealite(realiteIndex + 1);
         },
         onLeaveBack: (self) => {
@@ -301,10 +343,20 @@ const ConnaitrePage = () => {
                   </h2>
                 </div>
                 <div className='narratif'>
-                  {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
+                  <div className='presentation'>
+                    {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
+                      return (
+                      <p key={pIndex} className='presentation'>{paragraphe}</p>
+                    )})}
+                  </div>
+                  <div className='impacts'>
+                  {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
                     return (
-                    <p key={pIndex} className='presentation'>{paragraphe}</p>
+                      <div key={pIndex} className='impact'>
+                        <p>{paragraphe}</p>
+                      </div>
                   )})}
+                  </div>
                 </div>
               </div>
             )})}
