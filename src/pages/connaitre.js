@@ -140,7 +140,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const ConnaitrePage = () => {
   const [screenType, setScreenType] = useState(''); 
-  const [activeRealite, setActiveRealite] = useState(null);
+  const [activeRealite, setActiveRealite] = useState(0);
   
   const gsapContainerRef = useRef();
   
@@ -173,6 +173,7 @@ const ConnaitrePage = () => {
         offsetY: 120
       }
     });
+    setActiveRealite(clickedIndex);
   });
   
   // GSAP Animations pour la barre de navigation et les realite uniquess
@@ -207,7 +208,7 @@ const ConnaitrePage = () => {
     
     // REALITE UNIQUE
     // todo : mettre l'array de timelines dans une state? pour pouvoir les remettre a un point au debut de leur timeline au changement.
-    const timelines = realitesGsapArr.forEach((element, index) => {
+    const timelines = realitesGsapArr.forEach((element, realiteIndex) => {
       
       // create a timeline
       let timeline = gsap.timeline();
@@ -226,11 +227,21 @@ const ConnaitrePage = () => {
         scrub: true,
         pin: element,
         animation: timeline,
-        onEnter: () => {
-          setActiveRealite(index);
+        onEnter: (self) => {
+          //console.log('onEnter self = ', self);
+          setActiveRealite(realiteIndex);
         },
-        onEnterBack: () => {
-          setActiveRealite(index);
+        onEnterBack: (self) => {
+          //console.log('onEnterBack self = ', self);
+          setActiveRealite(realiteIndex);
+        },
+        onLeave: (self) => {
+          console.log('onLeave self = ', self);
+          setActiveRealite(realiteIndex + 1);
+        },
+        onLeaveBack: (self) => {
+          //console.log('onLeaveBack self = ', self);
+          setActiveRealite(realiteIndex - 1);
         },
         //markers: true,
       });
