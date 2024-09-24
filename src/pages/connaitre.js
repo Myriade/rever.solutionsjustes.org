@@ -201,12 +201,12 @@ const ConnaitrePage = () => {
         pin: true,
         start: 'top 120px',
         end: '200% bottom',
-        markers: true,
+        //markers: true,
       }
     });
     
     // REALITE UNIQUE
-    // todo : mettre l'array de timelines dans une state?
+    // todo : mettre l'array de timelines dans une state? pour pouvoir les remettre a un point au debut de leur timeline au changement.
     const timelines = realitesGsapArr.forEach((element, index) => {
       
       // create a timeline
@@ -246,15 +246,15 @@ const ConnaitrePage = () => {
       >
         <div className='overlay-text'>
           <h1>
-            <span>L'essentiel</span> 
-            <span className='right'></span> 
-            <span>raconté</span>
+            <span>Connaître</span> 
+            <span className='right'>...</span> 
+            <span>l'essentiel</span>
           </h1>
         </div>
       </Section1Hero>
       
       <Section2Intro>
-        <h2>Pour mieux connaître certains statuts d'immigration précaires.</h2>
+        <h2>... de certains statuts d'immigration précaires et de l'absence de statut</h2>
       </Section2Intro>
         
       <div ref={gsapContainerRef} id='gsap-container'>
