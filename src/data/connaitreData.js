@@ -29,8 +29,8 @@ export default function connaitreData() { return [
 		intro: `Bonjour, je m'appelle Hassan et j’ai un statut d’`,
 		statut: 'immigration demandeur d’asile refusé',
 		presentation: [
-			``,
-			''
+			`Cela signifie que j'ai déposé une demande d’asile à mon arrivée au Canada, mais celle-ci a été rejetée.`,
+			`Après le refus de la demande d'asile, nous pouvons encore rester sur le territoire en tant que personnes demandeuses d’asile refusées. Cependant, nos droits sont considérablement limités, et nous vivons dans l'angoisse d'être renvoyées à notre pays d'origine, là où nous croyons que nous serions en péril ou en danger de persécution, d'où la raison de notre demande d'asile. Il existe des recours et des démarches pour régulariser notre situation. Cependant, le processus est complexe et long, s'étendant sur plusieurs années, et le résultat demeure incertain, sans aucune garantie.`
 		],
 		impacts: [
 			``,
@@ -55,8 +55,7 @@ export default function connaitreData() { return [
 		intro: `Bonjour, je m'appelle Priya et j’ai un statut`,
 		statut: 'permis séjour temporaire pour victimes de violence conjugale',
 		presentation: [
-			``,
-			''
+			`Cela signifie que j'ai dû fuir mon foyer pour échapper à la violence de mon conjoint. L'État canadien m'a accordé un Permis de séjour temporaire pour victimes de violence conjugale. Toutefois, ce permis doit être renouvelé chaque année, sans garantie de prolongation et avec un taux de succès relativement faible.`,
 		],
 		impacts: [
 			``,
@@ -81,8 +80,7 @@ export default function connaitreData() { return [
 		intro: `Bonjour, je m'appelle Mohammed et j’ai un `,
 		statut: 'permis de travail fermé',
 		presentation: [
-			``,
-			''
+			`Cela signifie que j’ai un permis de travail temporaire qui me permet de travailler uniquement pour un employeur, me rendant ainsi entièrement dépendant de lui. Par conséquent, ma présence sur le territoire dépend entièrement de cette personne.`,
 		],
 		impacts: [
 			``,

@@ -45,7 +45,6 @@ const Section1Hero = styled.section`
 `;
 
 const Section2Intro = styled.section`
-  padding-bottom: 0;
   .grid {
     gap: var(--v-h2-spacer);}
     
@@ -74,6 +73,7 @@ const Section2Intro = styled.section`
 const SectionRealites = styled.section`
   display: grid;
   grid-template-columns: 10% 90%;
+  background: var(--color-bleu-tres-pale);
 
   nav {
     ul {
@@ -87,30 +87,49 @@ const SectionRealites = styled.section`
       background: var(--color-bleu-clair);
       color: white;
       border: 2px solid white;
-      border-radius: 15px;
-      padding: 0.5em 0.75em;
+      border-radius: 17px;
+      padding: 0.5em 1em;
+      line-height: 1.1;
+      height: 5em;
+      display: grid;
+      align-items: center;
       a {
         display: block;
         &:hover {
           cursor: pointer;}}
       &:hover, &.active {
-        background: var(--color-bleu-aqua);
-        border-color: var(--color-bleu-tres-fonce);
+        background: var(--color-bleu-gris);
+        
       }
     }
   }
   
   .realites-container {}
   
-  .realite-bundle {
-    height: calc(100vh - var(--header-height));
+  .realite-unique {
+    min-height: calc(100vh - var(--header-height) - var(--v-spacer));
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--v-h-spacer);
+    margin-bottom: var(--v-spacer);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--h-spacer);
     
-    h2 {
-    font-size: 2rem;
-    font-weight: 400;
-    text-transform: none;
-      span {
-        font-weight: 800;
+    .personna {
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        text-transform: none;
+        span {
+          font-weight: 800;
+        }
+      }
+    }
+    
+    .narratif {
+      p {
+        margin-block: 0 1em;
       }
     }
   }
@@ -127,7 +146,8 @@ const ConnaitrePage = () => {
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   
-  const realitesArray = connaitreData();
+  const realitesDataArray = connaitreData();
+  
   // event handlers
   function firstHoverTouchHandler() {
     // Detect computer mouse or touch screen 
@@ -135,26 +155,33 @@ const ConnaitrePage = () => {
       if (window.matchMedia('(hover: hover)').matches) {
         console.log('Device has a mouse or touchpad events');
         setScreenType('mouse');
-        onPageScrollGsapAnimation();
+        gsapAnimations();
+        //realiteScrollGsapAnimation();
       } else {
         console.log('Device has no mouse, so has touch events');
         setScreenType('touch');
       }
     }
-    }
+  }
   
   const navClickHandler = contextSafe( (clickedIndex) => {
-    const clickedId = realitesArray[clickedIndex].idUnique;
+    const clickedId = realitesDataArray[clickedIndex].idUnique;
     gsap.to( window, { 
       duration: 1, 
       scrollTo: {
         y: `#${clickedId}`,
         offsetY: 120
-      } 
+      }
     });
   });
   
-  const onPageScrollGsapAnimation = contextSafe(() => {
+  // GSAP Animations pour la barre de navigation et les realite uniquess
+  const gsapAnimations = contextSafe(() => {
+    
+    // creates an array of realite-unique items
+    const realitesGsapArr = gsap.utils.toArray('.realite-unique');
+    
+    // NAVIGATION 
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
       opacity: 0, 
@@ -172,23 +199,40 @@ const ConnaitrePage = () => {
       scrollTrigger: {
         trigger: '#realites-nav',
         pin: true,
-        start: 'top 120px'
+        start: 'top 120px',
+        end: '200% bottom',
+        markers: true,
       }
     });
     
-    // update active Realite for nav bar li .active style
-    const realitesArr = gsap.utils.toArray('.realite-bundle');
-    
-    realitesArr.forEach((element, index) => {
-      const trigger = ScrollTrigger.create({
+    // REALITE UNIQUE
+    // todo : mettre l'array de timelines dans une state?
+    const timelines = realitesGsapArr.forEach((element, index) => {
+      
+      // create a timeline
+      let timeline = gsap.timeline();
+      
+      // add a second animation to the timeline
+      timeline.from( element.querySelectorAll('.narratif .presentation'), {
+        opacity: 0,
+        duration: 1,
+        stagger: 0.5
+      });
+      
+      ScrollTrigger.create({
         trigger: element,
         start: 'top 120px',
+        end: 'bottom 10%',
+        scrub: true,
+        pin: element,
+        animation: timeline,
         onEnter: () => {
           setActiveRealite(index);
         },
         onEnterBack: () => {
           setActiveRealite(index);
         },
+        //markers: true,
       });
     });
     
@@ -203,21 +247,21 @@ const ConnaitrePage = () => {
         <div className='overlay-text'>
           <h1>
             <span>L'essentiel</span> 
-            <span className='right'>en</span> 
-            <span>histoires</span>
+            <span className='right'></span> 
+            <span>raconté</span>
           </h1>
         </div>
       </Section1Hero>
       
       <Section2Intro>
-        <h2>Mieux connaître certains statuts d'immigration précaires.</h2>
+        <h2>Pour mieux connaître certains statuts d'immigration précaires.</h2>
       </Section2Intro>
         
       <div ref={gsapContainerRef} id='gsap-container'>
         <SectionRealites>
           <nav id='realites-nav'>
             <ul>
-              {realitesArray.map( (realite, index) => { return (
+              {realitesDataArray.map( (realite, index) => { return (
                 <li 
                   key={index} 
                   className={activeRealite === index ? 'realite-nav-item active' : 'realite-nav-item'}
@@ -234,13 +278,23 @@ const ConnaitrePage = () => {
           </nav>
           
           <div className='realites-container'>
-            {realitesArray.map( (realite, index) => { return (
+            {realitesDataArray.map( (realite, index) => { return (
               <div
-                className='realite-bundle' 
+                className='realite-unique' 
                 id={realite.idUnique} 
                 key={index}
-              >
-                <h2>{realite.intro} <span>{realite.statut}</span>.</h2>
+              > 
+                <div className='personna'>
+                  <h2>
+                    {realite.intro} <span>{realite.statut}</span>.
+                  </h2>
+                </div>
+                <div className='narratif'>
+                  {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
+                    return (
+                    <p key={pIndex} className='presentation'>{paragraphe}</p>
+                  )})}
+                </div>
               </div>
             )})}
           </div>
