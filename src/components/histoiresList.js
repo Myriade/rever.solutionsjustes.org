@@ -220,10 +220,11 @@ const HistoiresList = () => {
 						pin: pinElem,
 						start: 'top 115px',
 						end: () => '+=' + timelineWidth,
-						scrub: true,
+						scrub: 0.2,
 						snap: {
-							snapTo: 1 / (ligneTempsArrayLength - 1), 
-							duration: 0.4,
+							snapTo: 1 / (ligneTempsArrayLength - 1),  
+							delay: 0.1,
+							duration: 0.3,
 							ease: 'sine.inOut'
 						},
 						fastScrollEnd: true,
@@ -265,10 +266,11 @@ const HistoiresList = () => {
 					pin: pinElem,
 					start: 'top 115px',
 					end: () => '+=' + timelineWidth,
-					scrub: true,
+					scrub: 0.2,
 					snap: {
 						snapTo: 1 / (ligneTempsArrayLength - 1), 
-						duration: 0.4,
+						delay: 0.1,
+						duration: 0.3,
 						ease: 'sine.inOut'
 					},
 					fastScrollEnd: true,
