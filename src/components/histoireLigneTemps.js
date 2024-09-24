@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const LigneTempsItemLi = styled.li`
 	display: grid;
-	gap: 1em;
+	gap: 1vh;
 	color: var(--color-bleu-tres-fonce);
 	align-content: start;
 	position: relative;

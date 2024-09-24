@@ -68,7 +68,7 @@ const Cards = styled.div`
 			
 	${media.mediumUp`
 		grid-template-columns: repeat(3, 340px);
-		grid-template-rows: 340px;
+		grid-template-rows: clamp(80px, 30vh, 340px);
 		.histoire-card {
 			grid-row-start: 1;
 			grid-row-end: 2;}
@@ -76,7 +76,7 @@ const Cards = styled.div`
 `;
 
 const Histoire = styled.div`
-	margin-top: 1rem;
+	margin-top: 1vh;
 	
 	h3, p {
 		margin-block: 0;}
@@ -100,6 +100,7 @@ const Histoire = styled.div`
 			background-image: linear-gradient(to left, rgba(255,255,255,1) , rgba(255,255,255,0));
 			right: 0;}
 		&__anime {
+			margin-top: 0;
 			display: flex;
 			flex-wrap: nowrap;
 			padding-left: 0;}}
@@ -107,7 +108,7 @@ const Histoire = styled.div`
 	.points-list {
 		display: flex;
 		justify-content: stretch;
-		margin-block: 2rem;
+		margin-block: 1vh 3vh;
 		.item {
 			flex-grow: 1;
 			position: relative;
@@ -123,14 +124,12 @@ const Histoire = styled.div`
 				
 		.point {
 			position: relative;
-			top: 14px;
+			top: 1.5vh;
 			background: white;
 			border: 3px solid var(--color-bleu-tres-fonce);
 			border-radius: 50%;
-			width: 25px;
-			height: 25px;}
-			
-	}
+			width: 3vh;
+			height: 3vh;}}
 `;
 
 const HistoiresList = () => {
