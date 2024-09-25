@@ -99,7 +99,7 @@ const SectionRealites = styled.section`
       &:hover, &.active {
         background: var(--color-bleu-gris);}}}
   
-  .realites-container {
+  #realites-container {
     margin-left: 2vw !important;}
   
   .realite-unique {
@@ -127,6 +127,7 @@ const SectionRealites = styled.section`
         margin-block: 0 1em;}
         
       .presentation {
+        background: white;
         overflow: hidden;}
       
       .impacts {
@@ -199,13 +200,19 @@ const ConnaitrePage = () => {
   const navClickHandler = contextSafe( (clickedIndex) => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
     gsap.to( window, { 
-      duration: 1, 
+      duration: 0, 
       scrollTo: {
         y: `#${clickedId}`,
         offsetY: 120
       }
     });
+    gsap.from( '#realites-container' , {
+      autoAlpha: 0,
+      duration: 1
+    });
     setActiveRealite(clickedIndex);
+    const associateScrollTrigger = ScrollTrigger.getById(`realitesScroll-index-${clickedIndex}`);
+    associateScrollTrigger.scroll(associateScrollTrigger.start);
   });
   
   // GSAP Animations pour la barre de navigation et les realite uniquess
@@ -222,6 +229,7 @@ const ConnaitrePage = () => {
       duration: 0.3, 
       stagger: 0.5,
       scrollTrigger: {
+        id: 'realitesNavReveal',
         trigger: '#realites-nav',
         start: 'top 50%'
       }
@@ -239,7 +247,18 @@ const ConnaitrePage = () => {
     });
     
     // REALITE UNIQUE
-    const timelines = realitesGsapArr.forEach((element, realiteIndex) => {
+    // La première realité apparaît doucement
+    gsap.from( '#realites-container' , {
+      autoAlpha: 0,
+      duration: 1.5,
+      scrollTrigger: {
+        id: 'firstRealiteReveal',
+        trigger: '#realites-nav',
+        start: 'top 50%'
+      }
+    });
+    
+    realitesGsapArr.forEach((element, realiteIndex) => {
       
       // create a timeline
       let timeline = gsap.timeline();
@@ -254,7 +273,7 @@ const ConnaitrePage = () => {
       // Présentation disparait
       timeline.to( element.querySelector('.presentation'), {
         autoAlpha: 0,
-        height: 0,
+        yPercent: -100,
         duration: 1.5
       });
       
@@ -284,6 +303,7 @@ const ConnaitrePage = () => {
       });    
       
       ScrollTrigger.create({
+        id: `realitesScroll-index-${realiteIndex}`,
         trigger: element,
         animation: timeline,
         start: 'top 120px',
@@ -291,23 +311,25 @@ const ConnaitrePage = () => {
         scrub: 0.75,
         pin: element,
         toggleClass: 'active',
-        // toggleActions: 'play pause resume restart',
         fastScrollEnd: true,
-        onEnter: ({ progress }) => {
+        onEnter: (self) => {
           setActiveRealite(realiteIndex);
         },
-        onEnterBack: () => {
+        onEnterBack: (self) => {
           setActiveRealite(realiteIndex);
+          self.scroll(self.start);
         },
-        onLeave: ({ progress }) => {
+        onLeave: (self) => {
           setActiveRealite(realiteIndex + 1);
         },
-        onLeaveBack: () => {
+        onLeaveBack: (self) => {
           setActiveRealite(realiteIndex - 1);
         },
         //markers: true,
       });
     });
+    
+    console.log(ScrollTrigger.getById('realitesScroll-index-1'));
     
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
@@ -352,7 +374,7 @@ const ConnaitrePage = () => {
             </ul>
           </nav>
           
-          <div className='realites-container'>
+          <div id='realites-container'>
             {realitesDataArray.map( (realite, index) => { return (
               <div
                 className='realite-unique' 
