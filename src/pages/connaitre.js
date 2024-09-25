@@ -78,33 +78,29 @@ const SectionRealites = styled.section`
   nav {
     ul {
       list-style-type: none;
-      padding: 0 3vw 0 0;
+      padding: 0;
       margin-top: 0;
       display: grid;
-      gap: var(--v-spacer);
-    }
+      gap: calc(var(--v-spacer) / 2);}
     li.realite-nav-item {
       background: var(--color-bleu-clair);
       color: white;
       border: 2px solid white;
       border-radius: 17px;
-      padding: 0.5em 1em;
-      line-height: 1.1;
-      height: 5em;
-      display: grid;
-      align-items: center;
+      border-bottom-left-radius: 0;
+      line-height: 1.25;
       a {
-        display: block;
+        display: grid;;
+        font-weight: 400;
+        align-items: center;
+        padding: 0.75em 1em;
         &:hover {
           cursor: pointer;}}
       &:hover, &.active {
-        background: var(--color-bleu-gris);
-        
-      }
-    }
-  }
+        background: var(--color-bleu-gris);}}}
   
-  .realites-container {}
+  .realites-container {
+    margin-left: 2vw !important;}
   
   .realite-unique {
     height: calc(100vh - var(--header-height) - var(--v-spacer));
@@ -126,6 +122,7 @@ const SectionRealites = styled.section`
           font-weight: 800;}}}
     
     .narratif {
+      position: relative;
       p {
         margin-block: 0 1em;}
         
@@ -133,28 +130,34 @@ const SectionRealites = styled.section`
         overflow: hidden;}
       
       .impacts {
-        height: calc(100vh - var(--header-height) - var(--v-spacer));
-        position: relative;}
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        align-items: center;
+        justify-items: center;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;}
         
       .impact {
-        background: var(--color-bleu-tres-pale);
+        width: 50%;
+        grid-area: 2 / 1 / 3 / 2;
         color: white;
         border-radius: 4px;
-        margin-bottom: 2vh;
+        margin-block: 20px;
         opacity: 0;
-        position: absolute;
-        top: 30%;
-        left: 0;
         
-        &:first-child {
+        &:first-of-type {
+          background: var(--color-bleu-tres-pale);
           color: var(--bleu-tres-fonce);}
-        &:nth-child(2n) {
+        &:nth-of-type(2n) {
           background: var(--color-bleu-clair);}
-        &:nth-child(3n) {
+        &:nth-of-type(3n) {
           background: var(--color-bleu-aqua);}
-        &:nth-child(4n) {
+        &:nth-of-type(4n) {
           background: var(--color-bleu-gris);}
-        &:nth-child(5n) {
+        &:nth-of-type(5n) {
           background: var(--color-bleu-tres-fonce);}
         p {
           padding: 0.75em 1em;
@@ -163,7 +166,6 @@ const SectionRealites = styled.section`
       }
     }
   }
-
 `;
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
@@ -237,41 +239,60 @@ const ConnaitrePage = () => {
     });
     
     // REALITE UNIQUE
-    // todo : mettre l'array de timelines dans une state? pour pouvoir les remettre a un point au debut de leur timeline au changement.
     const timelines = realitesGsapArr.forEach((element, realiteIndex) => {
       
       // create a timeline
       let timeline = gsap.timeline();
       
-      // add animations to the timeline
+      // Présentation, paragraphes un à un
       timeline.from( element.querySelectorAll('.narratif .presentation'), {
-        opacity: 0,
+        autoAlpha: 0,
         duration: 1.5,
-        stagger: 2
+        stagger: 1
       });
       
+      // Présentation disparait
       timeline.to( element.querySelector('.presentation'), {
-        opacity: 0,
+        autoAlpha: 0,
         height: 0,
-        duration: 1
+        duration: 1.5
       });
       
+      // Impacts intro apparaît
+      timeline.from( element.querySelector('.impacts__intro'), {
+        y: '70vh',
+        autoAlpha: 0,
+        duration: 1.5
+      });      
+      
+      // Les impacts apparaissent, placés en désordre
       timeline.to( element.querySelectorAll('.narratif .impact'), {
-        y: 'random(-150, 150, 5)',
-        x: 'random(-250, 50, 5)',
-        opacity: 1,
+        y: 'random(-20, 20, 5)',
+        xPercent: 'random(-50, 50, 5)',
+        transformOrigin: 'center center',
+        autoAlpha: 1,
         duration: 1.5,
         stagger: 1,
         ease: 'back.out(4)'
       });
       
+      // Impacts message de fin apparaît
+      timeline.from( element.querySelector('.impacts__fin'), {
+        y: '70vh',
+        autoAlpha: 0,
+        duration: 1.5
+      });    
+      
       ScrollTrigger.create({
         trigger: element,
+        animation: timeline,
         start: 'top 120px',
         end: 'bottom 10%',
-        scrub: true,
+        scrub: 0.75,
         pin: element,
-        animation: timeline,
+        toggleClass: 'active',
+        // toggleActions: 'play pause resume restart',
+        fastScrollEnd: true,
         onEnter: ({ progress }) => {
           setActiveRealite(realiteIndex);
         },
@@ -281,8 +302,7 @@ const ConnaitrePage = () => {
         onLeave: ({ progress }) => {
           setActiveRealite(realiteIndex + 1);
         },
-        onLeaveBack: (self) => {
-          //console.log('onLeaveBack self = ', self);
+        onLeaveBack: () => {
           setActiveRealite(realiteIndex - 1);
         },
         //markers: true,
@@ -313,6 +333,7 @@ const ConnaitrePage = () => {
       <div ref={gsapContainerRef} id='gsap-container'>
         <SectionRealites>
           <nav id='realites-nav'>
+            <p className='intro'>Les récits et les mythes&nbsp;:</p>
             <ul>
               {realitesDataArray.map( (realite, index) => { return (
                 <li 
@@ -323,7 +344,8 @@ const ConnaitrePage = () => {
                     onClick={() => navClickHandler(index)}
                     aria-label='Aller à la section'
                   >
-                    {realite.titreCourt}
+                    {realite.nom}, <br/>
+                    <em>{realite.titreCourt}</em>
                   </a>
                 </li>
               )})}
@@ -350,12 +372,14 @@ const ConnaitrePage = () => {
                     )})}
                   </div>
                   <div className='impacts'>
-                  {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
-                    return (
-                      <div key={pIndex} className='impact'>
-                        <p>{paragraphe}</p>
-                      </div>
-                  )})}
+                    <p className='impacts__intro'>{realite.impactIntro}</p>
+                    {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
+                      return (
+                        <div key={pIndex} className='impact'>
+                          <p>{paragraphe}</p>
+                        </div>
+                    )})}
+                    <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
                   </div>
                 </div>
               </div>
