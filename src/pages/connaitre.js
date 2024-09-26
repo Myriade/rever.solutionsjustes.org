@@ -192,7 +192,20 @@ const SectionRealites = styled.section`
     background: var(--color-bleu-tres-fonce);
     color: white;
     display: grid;
-    align-items: center;}
+    align-items: center;
+    &__intro {
+      .mythe__titre {
+        position: relative;
+        display: inline-block;
+        .biffe {
+          position: absolute;
+          bottom: 0.5em;
+          border: 2px solid var(--color-bleu-clair);
+          width: 0;
+        }
+      }
+    }
+  }
       
   .progress {
     grid-area: 2 / 1 / 3 / 2;
@@ -352,10 +365,19 @@ const ConnaitrePage = () => {
         backgroundColor: 'var(--color-bleu-tres-fonce)',
       }, '<');
       
-      // Mythe Titre apparaît en même temps
-      // contentTimeline.to( element.querySelector('.mythe__titre'), {
-      //   y: '100'
-      // });
+      // Mythe Titre se raye
+      contentTimeline.to( element.querySelector('.mythe__titre .biffe'), {
+        width: '100%',
+        ease: 'none',
+        delay: 0.5,
+      });
+      
+      // Sous-titre apparaît
+      contentTimeline.from( element.querySelector('.mythe__sous-titre'), {
+        autoAlpha: 0,
+        yPercent: '-150'
+      });
+
       
       ScrollTrigger.create({
         id: `realiteContent-index-${realiteIndex}`,
@@ -467,7 +489,14 @@ const ConnaitrePage = () => {
                     </div>
                   </div>
                   <div className='mythe'>
-                    <h3 className='mythe__titre'>MYTHE&nbsp;:&nbsp;{realite.mytheTitre}</h3>
+                    <div className='mythe__intro'>
+                      <h3 className='mythe__titre'>
+                        MYTHE&nbsp;:<br/>
+                        {realite.mytheTitre}
+                        <div className='biffe'></div>
+                      </h3>
+                      <h3 className='mythe__sous-titre'>{realite.mytheSoustitre}</h3>
+                    </div>
                   </div>
                   <div className='progress'>
                     <div className='progress__bar'></div>
