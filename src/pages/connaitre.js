@@ -107,31 +107,46 @@ const SectionRealites = styled.section`
     overflow: hidden;
     background: white;
     border-radius: var(--border-radius);
-    padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
     margin-bottom: var(--v-spacer);
     display: grid;
+    grid-template-rows: 1fr auto;}
+      
+  .recit {
+    grid-area: 1 / 1 / 2 / 2;
+    position: relative;
+    z-index: 2;
+    padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
+    background: white;
+    display: grid;
     grid-template-columns: 1fr 2fr;
-    grid-template-rows: 1fr auto;
     gap: var(--h-spacer);
-    
-    .personna {
+        
+    &__personna {
+      background: white;
       h2 {
         font-size: 1.5rem;
         font-weight: 400;
         text-transform: none;
         span {
           font-weight: 800;}}}
-    
-    .narratif {
+        
+    &__narratif {
+      background: white;
       position: relative;
+      display: grid;
+      
       p {
         margin-block: 0 1em;}
         
-      .presentation {
+      p.paragr {
         background: white;
         overflow: hidden;}
+        
+      .presentation {
+        grid-area: 1 / 1 / 2 / 2; }
       
       .impacts {
+        grid-area: 1 / 1 / 2 / 2; 
         display: grid;
         grid-template-rows: auto 1fr auto;
         align-items: center;
@@ -167,15 +182,25 @@ const SectionRealites = styled.section`
         }
       }
     }
-    
-    .progress-bar {
-      grid-area: 2 / 1 / 3 / 3;
+  }
+  
+  .mythe {
+    grid-area: 1 / 1 / 2 / 2;
+    position: relative;
+    z-index: 1;
+    padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
+    background: var(--color-bleu-tres-fonce);
+    color: white;
+    display: grid;
+    align-items: center;}
+      
+  .progress {
+    grid-area: 2 / 1 / 3 / 2;
+    padding: calc(var(--v-spacer) / 4) calc(var(--h-spacer) /2);
+    &__bar {
       height: 0.8rem;
       background-color: var(--color-bleu-tres-pale);
-      border-radius: 0.4rem;
-      margin-top: calc(var(--h-spacer) / 2);
-    }
-  }
+      border-radius: 0.4rem;}}
 `;
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
@@ -274,7 +299,7 @@ const ConnaitrePage = () => {
       // ProgressBar timeline
       let ProgressBarTimeline = gsap.timeline();
       
-      ProgressBarTimeline.from( element.querySelector('.progress-bar'), {
+      ProgressBarTimeline.from( element.querySelector('.progress__bar'), {
         width: 0,
         ease: 'none'
       });
@@ -283,9 +308,10 @@ const ConnaitrePage = () => {
       let contentTimeline = gsap.timeline();
       
       // Présentation, paragraphes un à un
-      contentTimeline.from( element.querySelectorAll('.narratif .presentation'), {
+      contentTimeline.from( element.querySelectorAll('.presentation .paragr'), {
         autoAlpha: 0,
-        stagger: 0.5
+        ease: 'power3.out',
+        stagger: 1,
       });
       
       // Présentation disparait
@@ -301,7 +327,7 @@ const ConnaitrePage = () => {
       });      
       
       // Les impacts apparaissent, placés en désordre
-      contentTimeline.to( element.querySelectorAll('.narratif .impact'), {
+      contentTimeline.to( element.querySelectorAll('.impacts .impact'), {
         y: 'random(-20, 20, 5)',
         xPercent: 'random(-50, 50, 5)',
         transformOrigin: 'center center',
@@ -314,7 +340,22 @@ const ConnaitrePage = () => {
       contentTimeline.from( element.querySelector('.impacts__fin'), {
         yPercent: '200',
         autoAlpha: 0,
-      });    
+      });
+      
+      // Le récit disparait (persona et narratif), laissant apparaître le mythe
+      contentTimeline.to( element.querySelector('.recit'), {
+        yPercent: '-100',
+      });
+      
+      // La barre de progression s'adapte à la couleur de fond
+      contentTimeline.to( element.querySelector('.progress'), {
+        backgroundColor: 'var(--color-bleu-tres-fonce)',
+      }, '<');
+      
+      // Mythe Titre apparaît en même temps
+      // contentTimeline.to( element.querySelector('.mythe__titre'), {
+      //   y: '100'
+      // });
       
       ScrollTrigger.create({
         id: `realiteContent-index-${realiteIndex}`,
@@ -332,7 +373,7 @@ const ConnaitrePage = () => {
         onEnterBack: (self) => {
           setActiveRealite(realiteIndex);
           self.scroll(self.start);
-        }
+        },
         //markers: true,
       });
       
@@ -400,30 +441,37 @@ const ConnaitrePage = () => {
                   id={realite.idUnique} 
                   key={index}
                 > 
-                  <div className='personna'>
-                    <h2>
-                      {realite.intro} <span>{realite.statut}</span>.
-                    </h2>
-                  </div>
-                  <div className='narratif'>
-                    <div className='presentation'>
-                      {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
-                        return (
-                        <p key={pIndex} className='presentation'>{paragraphe}</p>
-                      )})}
+                  <div className='recit'>
+                    <div className='recit__personna'>
+                      <h2>
+                        {realite.intro} <span>{realite.statut}</span>.
+                      </h2>
                     </div>
-                    <div className='impacts'>
-                      <p className='impacts__intro'>{realite.impactIntro}</p>
-                      {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
-                        return (
-                          <div key={pIndex} className='impact'>
-                            <p>{paragraphe}</p>
-                          </div>
-                      )})}
-                      <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
+                    <div className='recit__narratif'>
+                      <div className='presentation'>
+                        {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
+                          return (
+                          <p key={pIndex} className='paragr'>{paragraphe}</p>
+                        )})}
+                      </div>
+                      <div className='impacts'>
+                        <p className='impacts__intro'>{realite.impactIntro}</p>
+                        {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
+                          return (
+                            <div key={pIndex} className='impact'>
+                              <p>{paragraphe}</p>
+                            </div>
+                        )})}
+                        <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
+                      </div>
                     </div>
                   </div>
-                  <div className='progress-bar'></div>
+                  <div className='mythe'>
+                    <h3 className='mythe__titre'>MYTHE&nbsp;:&nbsp;{realite.mytheTitre}</h3>
+                  </div>
+                  <div className='progress'>
+                    <div className='progress__bar'></div>
+                  </div>
                 </div>
               )})}
             </div>
