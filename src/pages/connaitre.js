@@ -107,10 +107,11 @@ const SectionRealites = styled.section`
     overflow: hidden;
     background: white;
     border-radius: var(--border-radius);
-    padding: var(--v-h-spacer);
+    padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
     margin-bottom: var(--v-spacer);
     display: grid;
     grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr auto;
     gap: var(--h-spacer);
     
     .personna {
@@ -166,6 +167,14 @@ const SectionRealites = styled.section`
         }
       }
     }
+    
+    .progress-bar {
+      grid-area: 2 / 1 / 3 / 3;
+      height: 0.8rem;
+      background-color: var(--color-bleu-tres-pale);
+      border-radius: 0.4rem;
+      margin-top: calc(var(--h-spacer) / 2);
+    }
   }
 `;
 
@@ -211,8 +220,10 @@ const ConnaitrePage = () => {
       duration: 1
     });
     setActiveRealite(clickedIndex);
-    const associateScrollTrigger = ScrollTrigger.getById(`realitesScroll-index-${clickedIndex}`);
+    // reset scroll progress to its start
+    const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
     associateScrollTrigger.scroll(associateScrollTrigger.start);
+    
   });
   
   // GSAP Animations pour la barre de navigation et les realite uniquess
@@ -248,7 +259,7 @@ const ConnaitrePage = () => {
     
     // REALITE UNIQUE
     // La première realité apparaît doucement
-    gsap.from( '#realites-container' , {
+    gsap.from( '#realites-container', {
       autoAlpha: 0,
       duration: 1.5,
       scrollTrigger: {
@@ -260,55 +271,58 @@ const ConnaitrePage = () => {
     
     realitesGsapArr.forEach((element, realiteIndex) => {
       
-      // create a timeline
-      let timeline = gsap.timeline();
+      // ProgressBar timeline
+      let ProgressBarTimeline = gsap.timeline();
+      
+      ProgressBarTimeline.from( element.querySelector('.progress-bar'), {
+        width: 0,
+        ease: 'none'
+      });
+      
+      // Content timeline
+      let contentTimeline = gsap.timeline();
       
       // Présentation, paragraphes un à un
-      timeline.from( element.querySelectorAll('.narratif .presentation'), {
+      contentTimeline.from( element.querySelectorAll('.narratif .presentation'), {
         autoAlpha: 0,
-        duration: 1.5,
-        stagger: 1
+        stagger: 0.5
       });
       
       // Présentation disparait
-      timeline.to( element.querySelector('.presentation'), {
+      contentTimeline.to( element.querySelector('.presentation'), {
         autoAlpha: 0,
-        yPercent: -100,
-        duration: 1.5
+        yPercent: -50,
       });
       
       // Impacts intro apparaît
-      timeline.from( element.querySelector('.impacts__intro'), {
-        y: '70vh',
+      contentTimeline.from( element.querySelector('.impacts__intro'), {
+        yPercent: '200',
         autoAlpha: 0,
-        duration: 1.5
       });      
       
       // Les impacts apparaissent, placés en désordre
-      timeline.to( element.querySelectorAll('.narratif .impact'), {
+      contentTimeline.to( element.querySelectorAll('.narratif .impact'), {
         y: 'random(-20, 20, 5)',
         xPercent: 'random(-50, 50, 5)',
         transformOrigin: 'center center',
         autoAlpha: 1,
-        duration: 1.5,
         stagger: 1,
         ease: 'back.out(4)'
       });
       
       // Impacts message de fin apparaît
-      timeline.from( element.querySelector('.impacts__fin'), {
-        y: '70vh',
+      contentTimeline.from( element.querySelector('.impacts__fin'), {
+        yPercent: '200',
         autoAlpha: 0,
-        duration: 1.5
       });    
       
       ScrollTrigger.create({
-        id: `realitesScroll-index-${realiteIndex}`,
+        id: `realiteContent-index-${realiteIndex}`,
         trigger: element,
-        animation: timeline,
+        animation: contentTimeline,
         start: 'top 120px',
         end: 'bottom 10%',
-        scrub: 0.75,
+        scrub: 1.5,
         pin: element,
         toggleClass: 'active',
         fastScrollEnd: true,
@@ -318,100 +332,107 @@ const ConnaitrePage = () => {
         onEnterBack: (self) => {
           setActiveRealite(realiteIndex);
           self.scroll(self.start);
-        },
-        onLeave: (self) => {
-          setActiveRealite(realiteIndex + 1);
-        },
-        onLeaveBack: (self) => {
-          setActiveRealite(realiteIndex - 1);
-        },
+        }
         //markers: true,
       });
+      
+      ScrollTrigger.create({
+        id: `realiteProgressBar-index-${realiteIndex}`,
+        trigger: element,
+        animation: ProgressBarTimeline,
+        start: 'top 120px',
+        end: 'bottom 10%',
+        scrub: 1.5,
+        //markers: true,
+      });
+      
     });
-    
-    console.log(ScrollTrigger.getById('realitesScroll-index-1'));
     
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
   return (
-    <PageLayout>
-      <Section1Hero 
-        onMouseEnter={firstHoverTouchHandler} 
-        onTouchStart={firstHoverTouchHandler}
-      >
-        <div className='overlay-text'>
-          <h1>
-            <span>Connaître</span> 
-            <span className='right'>...</span> 
-            <span>l'essentiel</span>
-          </h1>
-        </div>
-      </Section1Hero>
-      
-      <Section2Intro>
-        <h2>... de certains statuts d'immigration précaires et de l'absence de statut</h2>
-      </Section2Intro>
-        
-      <div ref={gsapContainerRef} id='gsap-container'>
-        <SectionRealites>
-          <nav id='realites-nav'>
-            <p className='intro'>Les récits et les mythes&nbsp;:</p>
-            <ul>
-              {realitesDataArray.map( (realite, index) => { return (
-                <li 
-                  key={index} 
-                  className={activeRealite === index ? 'realite-nav-item active' : 'realite-nav-item'}
-                >
-                  <a 
-                    onClick={() => navClickHandler(index)}
-                    aria-label='Aller à la section'
-                  >
-                    {realite.nom}, <br/>
-                    <em>{realite.titreCourt}</em>
-                  </a>
-                </li>
-              )})}
-            </ul>
-          </nav>
-          
-          <div id='realites-container'>
-            {realitesDataArray.map( (realite, index) => { return (
-              <div
-                className='realite-unique' 
-                id={realite.idUnique} 
-                key={index}
-              > 
-                <div className='personna'>
-                  <h2>
-                    {realite.intro} <span>{realite.statut}</span>.
-                  </h2>
-                </div>
-                <div className='narratif'>
-                  <div className='presentation'>
-                    {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
-                      return (
-                      <p key={pIndex} className='presentation'>{paragraphe}</p>
-                    )})}
-                  </div>
-                  <div className='impacts'>
-                    <p className='impacts__intro'>{realite.impactIntro}</p>
-                    {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
-                      return (
-                        <div key={pIndex} className='impact'>
-                          <p>{paragraphe}</p>
-                        </div>
-                    )})}
-                    <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
-                  </div>
-                </div>
-              </div>
-            )})}
+    <div 
+      id='firstHoverTouchCheck' 
+      onMouseEnter={firstHoverTouchHandler} 
+      onTouchStart={firstHoverTouchHandler}
+    >
+      <PageLayout>
+        <Section1Hero>
+          <div className='overlay-text'>
+            <h1>
+              <span>Connaître</span> 
+              <span className='right'>...</span> 
+              <span>l'essentiel</span>
+            </h1>
           </div>
+        </Section1Hero>
+        
+        <Section2Intro>
+          <h2>... de certains statuts d'immigration précaires et de l'absence de statut</h2>
+        </Section2Intro>
           
-        </SectionRealites>  
-      </div>
-      
-    </PageLayout>
+        <div ref={gsapContainerRef} id='gsap-container'>
+          <SectionRealites>
+            <nav id='realites-nav'>
+              <p className='intro'>Les récits et les mythes&nbsp;:</p>
+              <ul>
+                {realitesDataArray.map( (realite, index) => { return (
+                  <li 
+                    key={index} 
+                    className={activeRealite === index ? 'realite-nav-item active' : 'realite-nav-item'}
+                  >
+                    <a 
+                      onClick={() => navClickHandler(index)}
+                      aria-label='Aller à la section'
+                    >
+                      {realite.nom}, <br/>
+                      <em>{realite.titreCourt}</em>
+                    </a>
+                  </li>
+                )})}
+              </ul>
+            </nav>
+            
+            <div id='realites-container'>
+              {realitesDataArray.map( (realite, index) => { return (
+                <div
+                  className='realite-unique' 
+                  id={realite.idUnique} 
+                  key={index}
+                > 
+                  <div className='personna'>
+                    <h2>
+                      {realite.intro} <span>{realite.statut}</span>.
+                    </h2>
+                  </div>
+                  <div className='narratif'>
+                    <div className='presentation'>
+                      {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
+                        return (
+                        <p key={pIndex} className='presentation'>{paragraphe}</p>
+                      )})}
+                    </div>
+                    <div className='impacts'>
+                      <p className='impacts__intro'>{realite.impactIntro}</p>
+                      {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
+                        return (
+                          <div key={pIndex} className='impact'>
+                            <p>{paragraphe}</p>
+                          </div>
+                      )})}
+                      <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
+                    </div>
+                  </div>
+                  <div className='progress-bar'></div>
+                </div>
+              )})}
+            </div>
+            
+          </SectionRealites>  
+        </div>
+        
+      </PageLayout>
+    </div>
   )
 }
 

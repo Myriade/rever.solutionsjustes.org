@@ -219,7 +219,7 @@ const HistoiresList = () => {
 						pin: pinElem,
 						start: 'top 115px',
 						end: () => '+=' + timelineWidth,
-						scrub: 0.2,
+						scrub: 0.75,
 						snap: {
 							snapTo: 1 / (ligneTempsArrayLength - 1),  
 							delay: 0.1,
