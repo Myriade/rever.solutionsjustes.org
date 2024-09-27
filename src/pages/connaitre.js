@@ -14,7 +14,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const Section1Hero = styled.section`
   background-color: var(--color-bleu-tres-pale);
-  background-image: url(/grand-portrait.webp);
+  background-image: url(/images/grand-portrait-Anabel.webp);
   background-size: cover;
   background-position: center center;
   padding-block: 0;
@@ -192,7 +192,7 @@ const SectionRealites = styled.section`
     background: var(--color-bleu-tres-fonce);
     color: white;
     display: grid;
-    align-items: center;
+    align-content: center;
     &__intro {
       .mythe__titre {
         position: relative;
@@ -200,9 +200,15 @@ const SectionRealites = styled.section`
         .biffe {
           position: absolute;
           bottom: 0.5em;
-          border: 2px solid var(--color-bleu-clair);
+          border: 2px solid rgba(30, 142, 210, 0.75);
           width: 0;
         }
+      }
+    }
+    &__explications {
+      p {
+        margin-block: 0 1em;
+        font-size: clamp(11px, 2vh, 16px);
       }
     }
   }
@@ -372,12 +378,17 @@ const ConnaitrePage = () => {
         delay: 0.5,
       });
       
-      // Sous-titre apparaît
+      // Mythe sous-titre apparaît
       contentTimeline.from( element.querySelector('.mythe__sous-titre'), {
         autoAlpha: 0,
-        yPercent: '-150'
+        yPercent: '150'
       });
-
+      
+      // Mythe explications apparaît un paragraphe à la fois. 
+      contentTimeline.from( element.querySelector('.mythe__explications'), {
+        autoAlpha: 0,
+        height: 0
+      });
       
       ScrollTrigger.create({
         id: `realiteContent-index-${realiteIndex}`,
@@ -394,7 +405,6 @@ const ConnaitrePage = () => {
         },
         onEnterBack: (self) => {
           setActiveRealite(realiteIndex);
-          self.scroll(self.start);
         },
         //markers: true,
       });
@@ -463,6 +473,7 @@ const ConnaitrePage = () => {
                   id={realite.idUnique} 
                   key={index}
                 > 
+                
                   <div className='recit'>
                     <div className='recit__personna'>
                       <h2>
@@ -488,19 +499,27 @@ const ConnaitrePage = () => {
                       </div>
                     </div>
                   </div>
+                  
                   <div className='mythe'>
                     <div className='mythe__intro'>
                       <h3 className='mythe__titre'>
                         MYTHE&nbsp;:<br/>
-                        {realite.mytheTitre}
+                        «&nbsp;{realite.mytheTitre}&nbsp;»
                         <div className='biffe'></div>
                       </h3>
                       <h3 className='mythe__sous-titre'>{realite.mytheSoustitre}</h3>
                     </div>
+                    <div className='mythe__explications'>
+                      {realite.mytheExplications.map( (paragraphe, pIndex) => { return (
+                        <p key={pIndex}>{paragraphe}</p>
+                      )})}
+                    </div>
                   </div>
+                  
                   <div className='progress'>
                     <div className='progress__bar'></div>
                   </div>
+                  
                 </div>
               )})}
             </div>

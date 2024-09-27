@@ -16,7 +16,7 @@ import CopyLinkButton from '../components/copyLinkButton'
 
 const Section1Hero = styled.section`
   background-color: var(--color-bleu-tres-pale);
-  background-image: url(/grand-portrait.webp);
+  background-image: url(/images/grand-portrait-Said.webp);
   background-size: cover;
   background-position: center center;
   padding-block: 0;
