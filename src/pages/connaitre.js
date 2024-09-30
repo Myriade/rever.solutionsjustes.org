@@ -327,11 +327,10 @@ const ConnaitrePage = () => {
       // Content timeline
       let contentTimeline = gsap.timeline();
       
-      // Présentation, paragraphes un à un
-      contentTimeline.from( element.querySelectorAll('.presentation .paragr'), {
+      // Présentation
+      contentTimeline.from( element.querySelector('.presentation'), {
         autoAlpha: 0,
-        ease: 'power3.out',
-        stagger: 1,
+        yPercent: 50,
       });
       
       // Présentation disparait
@@ -342,7 +341,7 @@ const ConnaitrePage = () => {
       
       // Impacts intro apparaît
       contentTimeline.from( element.querySelector('.impacts__intro'), {
-        yPercent: '200',
+        yPercent: '100',
         autoAlpha: 0,
       });      
       
