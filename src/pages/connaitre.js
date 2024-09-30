@@ -11,6 +11,7 @@ import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { TextPlugin } from 'gsap/TextPlugin'
 
 const Section1Hero = styled.section`
   background-color: var(--color-bleu-tres-pale);
@@ -198,10 +199,9 @@ const SectionRealites = styled.section`
         position: relative;
         display: inline-block;
         .biffe {
-          position: absolute;
-          bottom: 0.5em;
-          border: 2px solid rgba(30, 142, 210, 0.75);
-          width: 0;
+          text-decoration: line-through;
+          text-decoration-color: hsla(353, 90%, 61%, 0.7);
+          text-decoration-thickness: 5px;
         }
       }
     }
@@ -222,7 +222,7 @@ const SectionRealites = styled.section`
       border-radius: 0.4rem;}}
 `;
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, TextPlugin);
 
 const ConnaitrePage = () => {
   const [screenType, setScreenType] = useState(''); 
@@ -296,7 +296,7 @@ const ConnaitrePage = () => {
         trigger: '#realites-nav',
         pin: true,
         start: 'top 120px',
-        end: '200% bottom',
+        end: "+=" + (window.innerHeight * 5),
         //markers: true,
       }
     });
@@ -314,6 +314,7 @@ const ConnaitrePage = () => {
     });
     
     realitesGsapArr.forEach((element, realiteIndex) => {
+      const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
       
       // ProgressBar timeline
       let ProgressBarTimeline = gsap.timeline();
@@ -372,9 +373,11 @@ const ConnaitrePage = () => {
       }, '<');
       
       // Mythe Titre se raye
-      contentTimeline.to( element.querySelector('.mythe__titre .biffe'), {
-        width: '100%',
-        ease: 'none',
+      contentTimeline.to( element.querySelector('.mythe__titre .biffer'), {
+        text: {
+          value: mythTextToStrike,
+          newClass: 'biffe',
+        },
         delay: 0.5,
       });
       
@@ -395,7 +398,7 @@ const ConnaitrePage = () => {
         trigger: element,
         animation: contentTimeline,
         start: 'top 120px',
-        end: 'bottom 10%',
+        end: "+=" + (window.innerHeight * 5),
         scrub: 1.5,
         pin: element,
         toggleClass: 'active',
@@ -414,7 +417,7 @@ const ConnaitrePage = () => {
         trigger: element,
         animation: ProgressBarTimeline,
         start: 'top 120px',
-        end: 'bottom 10%',
+        end: "+=" + (window.innerHeight * 5),
         scrub: 1.5,
         //markers: true,
       });
@@ -504,8 +507,7 @@ const ConnaitrePage = () => {
                     <div className='mythe__intro'>
                       <h3 className='mythe__titre'>
                         MYTHE&nbsp;:<br/>
-                        «&nbsp;{realite.mytheTitre}&nbsp;»
-                        <div className='biffe'></div>
+                        «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
                       </h3>
                       <h3 className='mythe__sous-titre'>{realite.mytheSoustitre}</h3>
                     </div>
