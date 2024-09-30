@@ -37,11 +37,6 @@ const Header = styled.header`
       }
     }}
   
-  .sj-logo svg {
-    background: var(--color-bleu-tres-fonce)
-    width: auto;
-    height: 4rem;}
-  
 `;
 
 const Main = styled.main`
@@ -79,7 +74,7 @@ export default function PageLayout({ children }) {
               src='../images/logo-horizontal.svg'
               placeholder='#282560'
               alt='Solutions Justes'
-              style={{maxWidth: '120px'}}
+              style={{maxWidth: '180px'}}
             />
           </a>
           <div className='internal-nav'>

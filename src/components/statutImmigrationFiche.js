@@ -15,6 +15,8 @@ const SatutFiche = styled.div`
 	${media.desktopUp`
 		grid-template-columns: 1fr 1.5fr;
 		justify-items: initial;
+		img {
+			height: 500px;}
 	`};
 	
 `;

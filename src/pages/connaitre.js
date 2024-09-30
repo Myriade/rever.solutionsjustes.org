@@ -40,7 +40,7 @@ const Section1Hero = styled.section`
     height: calc(95vh - var(--header-height));
     h1 {
       height: calc(95vh - var(--header-height));
-      font-size: clamp(25px, 12vw, 22vh);
+      font-size: clamp(25px, 12vw, 15ch);
     }
   `};
 `;
@@ -437,8 +437,8 @@ const ConnaitrePage = () => {
           <div className='overlay-text'>
             <h1>
               <span>Connaître</span> 
-              <span className='right'>...</span> 
-              <span>l'essentiel</span>
+              <span></span> 
+              <span>l'essentiel&nbsp;...</span>
             </h1>
           </div>
         </Section1Hero>

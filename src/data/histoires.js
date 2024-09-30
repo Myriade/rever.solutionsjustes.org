@@ -28,7 +28,7 @@ export default function histoiresData() { return [
 	},
 	{
 		nom: 'Daniel',
-		titre: `Un père sans statut vivant une séparation familiale`,
+		titre: `Un travailleur avec un permis de travail fermé (PTF)`,
 		fichierImage: 'MCM_Visuel-Persona_2',
 		ligneTemps: [ 
 			{
@@ -63,7 +63,7 @@ export default function histoiresData() { return [
 	},
 	{
 		nom: 'Saïd',
-		titre: `Un travailleur avec un permis de travail fermé (PTF)`,
+		titre: `Un père sans statut vivant une séparation familiale`,
 		fichierImage: 'MCM_Visuel-Persona_3',
 		ligneTemps: [ 
 			{
