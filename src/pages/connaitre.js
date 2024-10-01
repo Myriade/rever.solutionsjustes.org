@@ -262,7 +262,6 @@ const ConnaitrePage = () => {
         console.log('Device has a mouse or touchpad events');
         setScreenType('mouse');
         gsapAnimations();
-        //realiteScrollGsapAnimation();
       } else {
         console.log('Device has no mouse, so has touch events');
         setScreenType('touch');

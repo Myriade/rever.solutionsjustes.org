@@ -17,14 +17,14 @@ const LigneTempsItemLi = styled.li`
 		max-width: 45ch;}
 `;
 
-const HistoireLigneTemps = ({ data, isTouch }) => {
+const HistoireLigneTemps = ({ data, screenType }) => {
 	
 	return (
 		<>
 			{data.map( (item, index) => {
 				return (
 					<LigneTempsItemLi 
-						className={ !isTouch ? 'list__item' : 'glide__slide' }  
+						className={ screenType === 'mouse' ? 'list__item' : 'glide__slide' }  
 						key={index}
 					>
 						<h3 className='list__item__date'>{item.date}</h3>

@@ -1,5 +1,6 @@
 export default function histoiresData() { return [
 	{
+		idUnique: 'anabel',
 		nom: 'Anabel',
 		titre: `Une femme en attente de résidence permanente`,
 		fichierImage: 'MCM_Visuel-Persona_1',
@@ -27,6 +28,7 @@ export default function histoiresData() { return [
 		]
 	},
 	{
+		idUnique: 'daniel',
 		nom: 'Daniel',
 		titre: `Un travailleur avec un permis de travail fermé (PTF)`,
 		fichierImage: 'MCM_Visuel-Persona_2',
@@ -62,6 +64,7 @@ export default function histoiresData() { return [
 		]
 	},
 	{
+		idUnique: 'said',
 		nom: 'Saïd',
 		titre: `Un père sans statut vivant une séparation familiale`,
 		fichierImage: 'MCM_Visuel-Persona_3',

@@ -8,7 +8,6 @@ import HistoireLigneTemps from './histoireLigneTemps'
 
 import { gsap } from "gsap";
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import Glide from '@glidejs/glide'
 
@@ -48,8 +47,7 @@ const Cards = styled.div`
 			bottom: 0;
 			left: 0;
 			z-index: -1;
-			filter: saturate(0);
-			transition: all 2 ease-in-out;}
+			filter: saturate(0);}
 		.nom {
 			color: white;
 			font-weight: bold;
@@ -59,12 +57,9 @@ const Cards = styled.div`
 		.button {
 			left: 0;
 			opacity: 1;
-			transition: all 2 ease-in-out;
 			&.hidden {
 				opacity: 0;}}
-			
-		&.active .bg-img {
-			filter: saturate(1);}}
+		}
 			
 	${media.mediumUp`
 		grid-template-columns: repeat(3, 340px);
@@ -76,12 +71,15 @@ const Cards = styled.div`
 `;
 
 const Histoire = styled.div`
-	margin-top: 1vh;
+	display: grid;
+	overflow: hidden;
+
+	.histoire {
+		grid-area: 1 / 1 / 2 / 2;
+		visibility: hidden;
+		margin-top: 1vh;}
 	
-	h3, p {
-		margin-block: 0;}
-	
-	.histoire-scrolljack {
+	.histoire-gsap {
 		max-width: 65ch;
 		overflow: hidden;
 		position: relative;
@@ -132,64 +130,82 @@ const Histoire = styled.div`
 			height: 3vh;}}
 `;
 
+gsap.registerPlugin(useGSAP);
+
 const HistoiresList = () => {
 	// States
 	const [histoiresArray, setHistoiresArray] = useState(histoiresData);
 	const [activeIndex, setActiveIndex] = useState(0);
-	const [gsapAnimInstance, setGsapAnimInstance] = useState();
 	const [isScrollReady, setIsScrollReady ] = useState(null);
 	const [hasNewData, setHasNewData] = useState(null);
-	const [isTouch, setIsTouch] = useState(null);
+	const [screenType, setScreenType] = useState(null);
 	
 	// Data fetch
 	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
 	
 	// Dom references and variables
-	const pinRef = useRef();
-	const pinElem = pinRef.current;
-	const scrolljackAnime = useRef();
-	const scrolljackAnimeElem = scrolljackAnime.current;
+	const interactiveContentRef = useRef();
+	const interactiveContentElem = interactiveContentRef.current;
+	const gsapAnime = useRef();
+	const gsapAnimeElem = gsapAnime.current;
 	const pointsListRef = useRef();
 	const pointsListElem = pointsListRef.current;
 	const glideInstance = useRef(null);
 	
+	const { contextSafe } = useGSAP({ scope: interactiveContentRef });
+	
 	// event handlers
 	function firstHoverTouchHandler() {
-		if (isScrollReady === null) {
-			setIsScrollReady(true); 
-			// Detect computer mouse or touch screen 
+		// Detect computer mouse or touch screen 
+		if (!screenType) {
 			if (window.matchMedia('(hover: hover)').matches) {
 				console.log('Device has a mouse or touchpad events');
-				setIsTouch(false);
+				setScreenType('mouse');
+				gsapAnimations();
 			} else {
 				console.log('Device has no mouse, so has touch events');
-				setIsTouch(true);
+				setScreenType('touch');
 			}
 		}
 	}
 	
-	function histoireSwitchClickHandler(clickedIndex) { 
+	const histoireSwitchClickHandler = contextSafe( (clickedIndex) => {
+		const clickedId = histoiresArray[clickedIndex].idUnique;
 		setActiveIndex(clickedIndex);
-		setHasNewData(true);
 		
-		pointsListElem.childNodes[0].classList.add('active');
+		let histoireSwitchTl = gsap.timeline();
 		
-		pointsListElem.childNodes.forEach( (item, index) => {
-			if (index !== 0) {
-				item.classList.remove('active');
-			}
+		// Toutes les histoires disparaissent à droite
+		histoireSwitchTl.to( interactiveContentElem.querySelectorAll('.histoire') , {
+			autoAlpha: 0,
+			xPercent: 20,
+			duration: 0.5
 		});
-	}
+		
+		/// À faire! !!
+		histoireSwitchTl.to( interactiveContentElem.querySelector(`.histoire-card active`), {
+			filter: 'saturate(1)',
+			duration: 0.5
+		})
+		
+		// L'histoire active apparaît de la droite
+		histoireSwitchTl.to( interactiveContentElem.querySelector(`#histoire-${clickedId}`) , {
+			autoAlpha: 1,
+			xPercent: 0,
+			duration: 0.5
+		});
+	
+	})
 	
 	// mettre une classe active sur le point correspondant dans la ligne au scroll
 	const setActivePoint = (origin, progress, ligneTempsArrayLength) => {
 		let rangActuel = 0;
 		if (origin === 'gsap' && ligneTempsArrayLength) { // GSAP pour desktop 
-			const progressPercent = Math.round(progress*100);
-			rangActuel = Math.round(((ligneTempsArrayLength - 1) * progressPercent) / 100);
+			// const progressPercent = Math.round(progress*100);
+			// rangActuel = Math.round(((ligneTempsArrayLength - 1) * progressPercent) / 100);
 		} else if (glideInstance.current) { // touch screen seulement, glide.js
 			rangActuel = glideInstance.current.index;
-			console.log('setactivepoint origin = glide, index = ', rangActuel);
+			//console.log('setactivepoint origin = glide, index = ', rangActuel);
 		}
 		
 		pointsListElem.childNodes[rangActuel].classList.toggle('active');
@@ -200,94 +216,24 @@ const HistoiresList = () => {
 		});
 	}
 
-	// Desktop seulement: GSAP configs, ligne du temps défilement horizontal déclanché par défilement vertical (scrolljack)
-	gsap.registerPlugin(ScrollTrigger);
-	gsap.registerPlugin(ScrollToPlugin);
+	// Desktop seulement: GSAP configs, ligne du temps défilement horizontal déclanché par clics
 	
-	useGSAP(() => {
-		if (!isTouch) {
+	const gsapAnimations = contextSafe(() => {
+		if (screenType === 'mouse') {
 			// initialiser un PIN et un Scroll si le dom est pret et s'il n'y a pas deja d'instance GSAP
-			if (isScrollReady && !gsapAnimInstance) {
+			if (isScrollReady) {
 				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
-				const timelineWidth = scrolljackAnimeElem.scrollWidth;
+				const timelineWidth = gsapAnimeElem.scrollWidth;
 				
-				const myGsap = gsap.to( scrolljackAnimeElem, {
-					xPercent: -100 * (ligneTempsArrayLength - 1),
-					ease: 'none',
-					duration: 5,
-					scrollTrigger: {
-						pin: pinElem,
-						start: 'top 115px',
-						end: () => '+=' + timelineWidth,
-						scrub: 0.75,
-						snap: {
-							snapTo: 1 / (ligneTempsArrayLength - 1),  
-							delay: 0.1,
-							duration: 0.3,
-							ease: 'sine.inOut'
-						},
-						fastScrollEnd: true,
-						onEnter: () => pointsListElem.childNodes[0].classList.toggle('active'),
-						onSnapComplete: ({progress}) => setActivePoint('gsap', progress, ligneTempsArrayLength),
-						anticipatePin: 1,
-						preventOverlaps: true,
-						//markers: true,
-					}
-				});
-				setGsapAnimInstance(myGsap);
-			}
-			
-			// Lorsque l'histoire visible change, ramener le scroll au début et invalider l'instance ScrollTrigger
-			if ( gsapAnimInstance && hasNewData) {
-				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
+				console.log('isScrollReady and is not touch');
 				
-				gsap.to( window, { 
-					duration: 1, 
-					scrollTo: { y: '#consequences', offsetY: -130 },
-					ease: 'circ.in'
-				});
-				gsapAnimInstance.scrollTrigger.kill();
-				gsapAnimInstance.vars.xPercent = -100 * (ligneTempsArrayLength - 1);
-				gsapAnimInstance.invalidate();
-				setTimeout(() => {
-					gsapAnimInstance.scrollTrigger.scroll(gsapAnimInstance.scrollTrigger.start);
-				}, 800);
-				setHasNewData(false);
-			}
-			
-			// Monter à nouveau le composant et une nouvelle instance ScrollTrigger avec les nouveaux calculs
-			if ( gsapAnimInstance && !hasNewData) {
-				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
-				const timelineWidth = scrolljackAnimeElem.scrollWidth;
-				
-				ScrollTrigger.create({
-					animation: gsapAnimInstance,
-					pin: pinElem,
-					start: 'top 115px',
-					end: () => '+=' + timelineWidth,
-					scrub: 0.2,
-					snap: {
-						snapTo: 1 / (ligneTempsArrayLength - 1), 
-						delay: 0.1,
-						duration: 0.3,
-						ease: 'sine.inOut'
-					},
-					fastScrollEnd: true,
-					onSnapComplete: ({progress}) => setActivePoint('gsap', progress, ligneTempsArrayLength),
-					anticipatePin: 1,
-					preventOverlaps: true,
-					// markers: true,
-				});
-				
-				ScrollTrigger.refresh();
 			}
 		}
-		
-	}, { dependencies: [isScrollReady, isTouch, hasNewData], scope: pinRef });
+	}, { dependencies: [isScrollReady, screenType, hasNewData], scope: interactiveContentRef });
 	
 	// Écrans Touch seulement : Slider Glide configs pour défilement ligne du temps en slide touch
 	useEffect(() => {
-		if (isTouch) {
+		if (screenType === 'touch') {
 			
 			// rendre le premier point témoin actif
 			pointsListElem.childNodes[0].classList.toggle('active');
@@ -312,7 +258,7 @@ const HistoiresList = () => {
 				setHasNewData(false);
 			}
 		}
-	}, [isTouch, isScrollReady, hasNewData]);
+	}, [screenType, isScrollReady, hasNewData]);
 
 	return (
 		<section 
@@ -326,62 +272,63 @@ const HistoiresList = () => {
 			</Intro>
 			
 			<div 
-				ref={pinRef} 
+				ref={interactiveContentRef} 
 				style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}
 			>
 				<Cards className='cards' >
-					{ histoiresArray.map( (item, index) => {
-						return (
+					{ histoiresArray.map( (item, index) => { return (
+						<div 
+							className={ index === activeIndex ? `histoire-card active` : `histoire-card` }
+							key={index}
+						>
 							<div 
-								className={ index === activeIndex ? `histoire-card active` : `histoire-card` }
-								key={index}
+								className='bg-img'
+								style={{ backgroundImage: `url(/images/${item.fichierImage}.webp)` }} 
+								></div>
+							<p className='nom'>{item.nom}</p>
+							<button
+								onClick={() => histoireSwitchClickHandler(index)} 
+								className={ index === activeIndex ? `button hidden` : `button` } 
 							>
-								<div 
-									className='bg-img'
-									style={{ backgroundImage: `url(/images/${item.fichierImage}.webp)` }} 
-									></div>
-								<p className='nom'>{item.nom}</p>
-								<button
-									onClick={() => histoireSwitchClickHandler(index)} 
-									className={ index === activeIndex ? `button hidden` : `button` } 
-								>
-									Lire son histoire
-								</button>
-							</div>
-						)
-					})}
+								Lire son histoire
+							</button>
+						</div>
+					)})}
 				</Cards>
 				
-				<Histoire className='histoire'>
-					<h3>L'histoire de {histoiresArray[activeIndex].nom}</h3>
-					<p>{histoiresArray[activeIndex].titre}</p>
-					
-					<div className='points-list' ref={pointsListRef} >
-						{histoiresArray[activeIndex].ligneTemps.map( (item, index) => {
-							return ( 
-								<div key={index} className='item' >
-									<div className='point'></div>
+				<Histoire className='histoires'>
+					{ histoiresArray.map( (histoireItem, histoireIndex) => { return (
+						<div className='histoire' id={`histoire-${histoireItem.idUnique}`} key={histoireIndex}>
+							<h3>L'histoire de {histoireItem.nom}</h3>
+							<p>{histoireItem.titre}</p>
+							
+							<div className='points-list' ref={pointsListRef} >
+								{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => {
+									return ( 
+										<div key={index} className='item' >
+											<div className='point'></div>
+										</div>
+								)})}
+							</div>
+							
+							<div className='histoire-glide'>
+								<div 
+									className={ screenType === 'mouse' ? 'histoire-gsap' : 'glide__track' } 
+									data-glide-el={ screenType === 'touch' ? 'track' : null }
+								>
+									<ul 
+										className={ screenType === 'mouse' ? 'histoire-gsap__anime' : 'glide__slides' }  
+										ref={gsapAnime}
+									>
+										<HistoireLigneTemps 
+											data={ histoireItem.ligneTemps } 
+											screenType={screenType}
+										/>
+									</ul>
 								</div>
-						)})}
-					</div>
-					
-					<div className='histoire-glide'>
-						<div 
-							className={ !isTouch ? 'histoire-scrolljack' : 'glide__track' } 
-							data-glide-el={ !isTouch ? null : 'track' }
-						>
-							<ul 
-								className={ !isTouch ? 'histoire-scrolljack__anime' : 'glide__slides' }  
-								ref={scrolljackAnime}
-							>
-								<HistoireLigneTemps 
-									data={ histoiresArray[activeIndex].ligneTemps } 
-									isTouch={isTouch}
-								/>
-							</ul>
+							</div>
 						</div>
-					</div>
-					
+					)})}
 				</Histoire>
 			</div>
 		</section>	

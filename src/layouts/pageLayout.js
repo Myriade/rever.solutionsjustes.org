@@ -80,7 +80,6 @@ export default function PageLayout({ children }) {
           <div className='internal-nav'>
             <Link to='/' activeClassName='active'>Rêver</Link>
             <Link to='/connaitre' activeClassName='active'>Connaître</Link>
-            <Link to='/quiz' activeClassName='active'>Derrière les statuts</Link>
           </div>
         </Header>
         
