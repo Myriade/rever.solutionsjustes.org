@@ -32,9 +32,7 @@ const Section1Hero = styled.section`
     display: grid;
     align-items: center;
     span {
-      display: block;
-      &.right {
-        text-align: right;}}}
+      display: block;}}
   
   ${media.mediumUp`
     height: calc(95vh - var(--header-height));
@@ -57,7 +55,8 @@ const Section2Intro = styled.section`
     max-width: 21ch;
     font-weight: 500;
     line-height: 1.25;
-    text-transform: initial;}
+    text-transform: initial;
+    margin-top: var(--v-spacer);}
     
   ${media.mediumUp`
     .grid {
@@ -164,7 +163,8 @@ const SectionRealites = styled.section`
         color: white;
         border-radius: 4px;
         margin-block: 20px;
-        opacity: 0;
+        visibility: hidden;
+        opacity: 0.8;
         
         &:first-of-type {
           background: var(--color-bleu-tres-pale);
@@ -194,6 +194,7 @@ const SectionRealites = styled.section`
     color: white;
     display: grid;
     align-content: center;
+    overflow: hidden;
     &__intro {
       .mythe__titre {
         position: relative;
@@ -204,11 +205,24 @@ const SectionRealites = styled.section`
           text-decoration-thickness: 5px;
         }
       }
+      .mythe__sous-titre {
+        display: grid;
+        grid-template-columns: 100px auto;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        align-items: center;
+        h3 {
+          margin-bottom: 0;
+        }
+      }
     }
     &__explications {
+      overflow: hidden;
       p {
         margin-block: 0 1em;
-        font-size: clamp(11px, 2vh, 16px);
+        max-width: 60ch;
+        margin-inline: auto;
+        line-height: 1.6;
       }
     }
   }
@@ -216,9 +230,15 @@ const SectionRealites = styled.section`
   .progress {
     grid-area: 2 / 1 / 3 / 2;
     padding: calc(var(--v-spacer) / 4) calc(var(--h-spacer) /2);
-    &__bar {
+    &__bar-background {
       height: 0.8rem;
+      width: 50%;
+      margin-inline: auto;
       background-color: var(--color-bleu-tres-pale);
+      border-radius: 0.4rem;}
+    &__bar-animate {
+      height: 100%;
+      background-color: var(--color-bleu-clair);
       border-radius: 0.4rem;}}
 `;
 
@@ -296,7 +316,7 @@ const ConnaitrePage = () => {
         trigger: '#realites-nav',
         pin: true,
         start: 'top 120px',
-        end: "+=" + (window.innerHeight * 5),
+        end: "+=" + ( window.innerHeight * 5 * (realitesDataArray.length + 0.6)),
         //markers: true,
       }
     });
@@ -306,6 +326,7 @@ const ConnaitrePage = () => {
     gsap.from( '#realites-container', {
       autoAlpha: 0,
       duration: 1.5,
+      delay: 1,
       scrollTrigger: {
         id: 'firstRealiteReveal',
         trigger: '#realites-nav',
@@ -316,10 +337,12 @@ const ConnaitrePage = () => {
     realitesGsapArr.forEach((element, realiteIndex) => {
       const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
       
+      const mytheAllParagraphesHeight = element.querySelector('.mythe__explications').scrollHeight;
+      
       // ProgressBar timeline
       let ProgressBarTimeline = gsap.timeline();
       
-      ProgressBarTimeline.from( element.querySelector('.progress__bar'), {
+      ProgressBarTimeline.from( element.querySelector('.progress__bar-animate'), {
         width: 0,
         ease: 'none'
       });
@@ -350,9 +373,10 @@ const ConnaitrePage = () => {
         y: 'random(-20, 20, 5)',
         xPercent: 'random(-50, 50, 5)',
         transformOrigin: 'center center',
-        autoAlpha: 1,
+        visibility: 'visible',
+        opacity: 1,
         stagger: 1,
-        ease: 'back.out(4)'
+        ease: 'power1.inOut'
       });
       
       // Impacts message de fin apparaît
@@ -377,19 +401,25 @@ const ConnaitrePage = () => {
           value: mythTextToStrike,
           newClass: 'biffe',
         },
-        delay: 0.5,
       });
       
       // Mythe sous-titre apparaît
       contentTimeline.from( element.querySelector('.mythe__sous-titre'), {
         autoAlpha: 0,
-        yPercent: '150'
+        yPercent: '50',
+        height: 0
       });
       
-      // Mythe explications apparaît un paragraphe à la fois. 
+      // Mythe explications apparaît 
       contentTimeline.from( element.querySelector('.mythe__explications'), {
         autoAlpha: 0,
-        height: 0
+        height: 0,
+        yPercent: '50'
+      });
+      
+      // Mythe textes défilent vers le haut 
+      contentTimeline.to( element.querySelectorAll('.mythe__explications p'), {
+        y: -1 * mytheAllParagraphesHeight / 2,
       });
       
       ScrollTrigger.create({
@@ -443,13 +473,15 @@ const ConnaitrePage = () => {
         </Section1Hero>
         
         <Section2Intro>
-          <h2>... de certains statuts d'immigration précaires et de l'absence de statut</h2>
+          <div>
+            <p>... de certains statuts d'immigration précaires et de l'absence de statut</p>
+            <h2 className='intro'>Les récits et les mythes&nbsp;:</h2>
+          </div>
         </Section2Intro>
           
         <div ref={gsapContainerRef} id='gsap-container'>
           <SectionRealites>
             <nav id='realites-nav'>
-              <p className='intro'>Les récits et les mythes&nbsp;:</p>
               <ul>
                 {realitesDataArray.map( (realite, index) => { return (
                   <li 
@@ -494,7 +526,7 @@ const ConnaitrePage = () => {
                         {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
                           return (
                             <div key={pIndex} className='impact'>
-                              <p>{paragraphe}</p>
+                              <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
                             </div>
                         )})}
                         <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
@@ -508,7 +540,13 @@ const ConnaitrePage = () => {
                         MYTHE&nbsp;:<br/>
                         «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
                       </h3>
-                      <h3 className='mythe__sous-titre'>{realite.mytheSoustitre}</h3>
+                      <div className='mythe__sous-titre'>
+                        <img
+                          src='/images/logo-sans-texte.svg'
+                          alt='Solutions Justes'
+                        />
+                        <h3>{realite.mytheSoustitre}</h3>
+                      </div>
                     </div>
                     <div className='mythe__explications'>
                       {realite.mytheExplications.map( (paragraphe, pIndex) => { return (
@@ -518,7 +556,9 @@ const ConnaitrePage = () => {
                   </div>
                   
                   <div className='progress'>
-                    <div className='progress__bar'></div>
+                    <div className='progress__bar-background'>
+                      <div className='progress__bar-animate'></div>
+                    </div>
                   </div>
                   
                 </div>

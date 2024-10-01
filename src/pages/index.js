@@ -351,7 +351,7 @@ const IndexPage = () => {
             <div>
               <h2>À propos</h2>
               <p>Fondée en 1910, la MCM est un organisme communautaire à but non lucratif de l'Église Unie du Canada ouvert, diversifié et interconfessionnel qui cherche à défendre les droits et les intérêts des personnes les plus vulnérables de notre société et à les rendre autonomes.</p>
-              <p>Solutions Justes est un programme de la MCM visant à améliorer l'accès à la justice pour les personnes im·migrantes et réfugiées. Elle est une clinique juridique qui adopte une approche holistique et offre des services accessibles à toutes les personnes dans le besoin.</p>
+              <p><a href='https://solutionsjustes.org' target='_blank' rel="noreferrer">Solutions Justes</a> est un programme de la MCM visant à améliorer l'accès à la justice pour les personnes im·migrantes et réfugiées. Elle est une clinique juridique qui adopte une approche holistique et offre des services accessibles à toutes les personnes dans le besoin.</p>
             </div>
             <div>
               <StaticImage 

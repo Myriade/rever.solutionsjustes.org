@@ -38,7 +38,9 @@ h3 {
 	
 p {
 	font-size: 1.2rem;
-	line-height: 1.35;}
+	line-height: 1.35;
+	a:hover {
+		text-decoration: underline;}}
 	
 a {
 	color: inherit;
