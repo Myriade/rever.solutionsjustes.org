@@ -35,9 +35,36 @@ const Section1Hero = styled.section`
   `};
 `;
 
+const Section2Intro = styled.section`
+  .grid {
+    gap: var(--v-h2-spacer);}
+    
+  h2 {
+    font-size: clamp(24px, 2vw, 2rem);
+    max-width: 21ch;
+    font-weight: 500;
+    line-height: 1.25;
+    text-transform: initial;}
+    
+  p {
+    margin-top: 0;}
+    
+  ${media.mediumUp`
+    .grid {
+      grid-template-columns: 1fr 1fr;}
+    
+    h2 {
+      max-width: initial;}
+  `};
+  
+  .button {
+    margin-top: calc(var(--v-spacer) / 2);}
+`;
+
 const QuizPage = () => {
   return (
     <PageLayout>
+    
       <Section1Hero>
         <div className='overlay-text'>
           <h1>
@@ -47,6 +74,24 @@ const QuizPage = () => {
           </h1>
         </div>
       </Section1Hero>
+      
+      <Section2Intro>
+        <div className='grid'>
+          <div>
+            <h2>Testez vos connaissances avec le quiz Derrière les statuts</h2>
+          </div>
+          <div>
+            <p><strong>Vous vous demandez comment les différents statuts d'immigration influencent la vie quotidienne des personnes migrantes ? Testez vos connaissances avec notre quiz interactif&nbsp;!</strong> 🧠💡</p>
+            <p>Ce quiz vous offrira une perspective unique sur les défis auxquels font face les personnes migrantes et vous permettra de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien.</p>
+            <button 
+              className='button'
+            >
+              commencer le quiz !
+            </button>
+          </div>
+        </div>
+      </Section2Intro>
+      
     </PageLayout>
   )
 }
