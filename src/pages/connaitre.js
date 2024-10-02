@@ -1,5 +1,6 @@
 import React, { useState, useRef }  from 'react'
 import PageLayout from '../layouts/pageLayout'
+import { Link } from 'gatsby'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 
@@ -30,7 +31,9 @@ const Section1Hero = styled.section`
     display: grid;
     align-items: center;
     span {
-      display: block;}}
+      display: block;
+      &.right {
+        text-align: right;}}}
   
   ${media.mediumUp`
     height: calc(95vh - var(--header-height));
@@ -238,6 +241,37 @@ const SectionRealites = styled.section`
       height: 100%;
       background-color: var(--color-bleu-clair);
       border-radius: 0.4rem;}}
+`;
+
+const Section4Cta = styled.section`
+  .grid {
+    display: grid;
+    gap: calc(var(--v-spacer) / 2) var(--h-spacer);
+    margin-inline: -1vw;
+    > div {
+      padding: calc(var(--v-spacer) / 2) var(--h-spacer);
+      background: var(--color-bleu-tres-pale);
+      border-radius: var(--border-radius);
+      display: grid;
+      justify-items: left;
+      align-content: space-between;
+      overflow: hidden;}
+    
+  h3 {
+    font-size: 2rem;
+    font-weight: 500;}
+    
+  .intro p {
+    font-weight: 500;
+    max-width: 32ch;}
+  
+  .button {
+    margin-top: var(--h-spacer);
+    padding-inline: 3vw;}
+  
+  ${media.mediumUp`
+    grid-template-columns: 1fr 1fr;
+  `}
 `;
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, TextPlugin);
@@ -463,7 +497,7 @@ const ConnaitrePage = () => {
         <Section1Hero>
           <div className='overlay-text'>
             <h1>
-              <span>Connaître</span> 
+              <span className='right'>Connaître</span> 
               <span></span> 
               <span>l'essentiel&nbsp;...</span>
             </h1>
@@ -566,6 +600,32 @@ const ConnaitrePage = () => {
             
           </SectionRealites>  
         </div>
+        
+        <Section4Cta>
+          <h2>S'impliquer davantage</h2>
+          <div className='grid'>
+          
+            <div className='benevolat'>
+              <div className='intro'>
+                <h3>Je veux faire du bénévolat</h3>
+                <p>Vous souhaitez aider et vous avez un peu de temps à nous offrir&nbsp;? Devenez bénévole chez nous&nbsp;!</p>
+              </div>
+              <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
+              <p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
+              <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
+            </div>
+            
+            <div className='petitions'>
+              <div className='intro'>
+                <h3>Je souhaite signer des pétitions</h3>
+                <p>Signer des pétitions de nos allié.e.s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
+              </div>
+              <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
+                Agir
+              </a>
+            </div>
+          </div>
+        </Section4Cta>
         
       </PageLayout>
     </div>
