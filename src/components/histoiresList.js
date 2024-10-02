@@ -47,7 +47,7 @@ const Cards = styled.div`
 			bottom: 0;
 			left: 0;
 			z-index: -1;
-			filter: saturate(0);}
+			filter: grayscale(100%);}
 		.nom {
 			color: white;
 			font-weight: bold;
@@ -62,8 +62,8 @@ const Cards = styled.div`
 		}
 			
 	${media.mediumUp`
-		grid-template-columns: repeat(3, 340px);
-		grid-template-rows: clamp(80px, 30vh, 340px);
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: clamp(80px, 30vw, 440px);
 		.histoire-card {
 			grid-row-start: 1;
 			grid-row-end: 2;}
@@ -73,6 +73,7 @@ const Cards = styled.div`
 const Histoire = styled.div`
 	display: grid;
 	overflow: hidden;
+	margin-top: var(--v-spacer);
 
 	.histoire {
 		grid-area: 1 / 1 / 2 / 2;
@@ -144,15 +145,41 @@ const HistoiresList = () => {
 	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
 	
 	// Dom references and variables
-	const interactiveContentRef = useRef();
-	const interactiveContentElem = interactiveContentRef.current;
-	const gsapAnime = useRef();
-	const gsapAnimeElem = gsapAnime.current;
+	const gsapScopeRef = useRef();
+	const gsapScopeElem = gsapScopeRef.current;
 	const pointsListRef = useRef();
 	const pointsListElem = pointsListRef.current;
 	const glideInstance = useRef(null);
 	
-	const { contextSafe } = useGSAP({ scope: interactiveContentRef });
+	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
+	
+	// GSAP first animation
+	const gsapFirstAnimations = contextSafe(() => {
+		// Active la 1ere carte
+		gsap.to( '.histoire-card:first-child .bg-img', { 
+			filter: 'grayscale(0%)',
+			duration: 0.5
+		});
+		
+		// Désactive le 1er bouton
+		gsap.to( '.histoire-card:first-child .button', {
+			autoAlpha: 0,
+			duration: 0.5
+		})
+		
+		// Active la 1ere histoire
+		gsap.to( '.histoire:first-child', {
+			autoAlpha: 1,
+			duration: 0.5
+		})
+		
+		gsap.from( '.histoire:first-child', {
+			xPercent: -20,
+			duration: 0.5
+		})
+				
+		console.log('isScrollReady and is not touch');
+	}, { dependencies: [screenType], scope: gsapScopeRef });
 	
 	// event handlers
 	function firstHoverTouchHandler() {
@@ -161,41 +188,68 @@ const HistoiresList = () => {
 			if (window.matchMedia('(hover: hover)').matches) {
 				console.log('Device has a mouse or touchpad events');
 				setScreenType('mouse');
-				gsapAnimations();
 			} else {
 				console.log('Device has no mouse, so has touch events');
 				setScreenType('touch');
 			}
+			gsapFirstAnimations();
 		}
 	}
 	
 	const histoireSwitchClickHandler = contextSafe( (clickedIndex) => {
 		const clickedId = histoiresArray[clickedIndex].idUnique;
+		const activeCard = gsapScopeElem.querySelector(`#card-${clickedId}`);
+		const nonActiveCardsImg = gsap.utils.toArray(`.histoire-card:not(#card-${clickedId}) .bg-img`);
+		const nonActiveCardsBtn = gsap.utils.toArray(`.histoire-card:not(#card-${clickedId}) .button`);
+		
 		setActiveIndex(clickedIndex);
 		
 		let histoireSwitchTl = gsap.timeline();
 		
-		// Toutes les histoires disparaissent à droite
-		histoireSwitchTl.to( interactiveContentElem.querySelectorAll('.histoire') , {
-			autoAlpha: 0,
-			xPercent: 20,
-			duration: 0.5
-		});
-		
-		/// À faire! !!
-		histoireSwitchTl.to( interactiveContentElem.querySelector(`.histoire-card active`), {
-			filter: 'saturate(1)',
+		// La carte active se colore
+		histoireSwitchTl.to( activeCard.querySelector(`.bg-img`), {
+			filter: 'grayscale(0%)',
 			duration: 0.5
 		})
 		
+		// Les cartes inactives se décolorent
+		histoireSwitchTl.to( nonActiveCardsImg, {
+			filter: 'grayscale(100%)',
+			duration: 0.5
+		}, '<')
+		
+		// Le bouton de la carte active disparait
+		histoireSwitchTl.to( nonActiveCardsBtn, {
+			autoAlpha: 0,
+			duration: 0.5
+		},'<')
+		
+		// Le bouton des cartes inactives apparaissent
+		histoireSwitchTl.to( nonActiveCardsBtn, {
+			autoAlpha: 1,
+			duration: 0.5
+		},'<')
+		
+		// Toutes les histoires disparaissent à droite
+		histoireSwitchTl.to( gsapScopeElem.querySelectorAll('.histoire') , {
+			autoAlpha: 0,
+			xPercent: 20,
+			duration: 0.5,
+			delay: 0.25
+		},'<');
+		
 		// L'histoire active apparaît de la droite
-		histoireSwitchTl.to( interactiveContentElem.querySelector(`#histoire-${clickedId}`) , {
+		histoireSwitchTl.to( gsapScopeElem.querySelector(`#histoire-${clickedId}`) , {
 			autoAlpha: 1,
 			xPercent: 0,
 			duration: 0.5
 		});
 	
 	})
+	
+	const PointClickHandler = contextSafe( () => {
+		console.log();
+	});
 	
 	// mettre une classe active sur le point correspondant dans la ligne au scroll
 	const setActivePoint = (origin, progress, ligneTempsArrayLength) => {
@@ -215,21 +269,6 @@ const HistoiresList = () => {
 			}
 		});
 	}
-
-	// Desktop seulement: GSAP configs, ligne du temps défilement horizontal déclanché par clics
-	
-	const gsapAnimations = contextSafe(() => {
-		if (screenType === 'mouse') {
-			// initialiser un PIN et un Scroll si le dom est pret et s'il n'y a pas deja d'instance GSAP
-			if (isScrollReady) {
-				const ligneTempsArrayLength = histoiresArray[activeIndex].ligneTemps.length;
-				const timelineWidth = gsapAnimeElem.scrollWidth;
-				
-				console.log('isScrollReady and is not touch');
-				
-			}
-		}
-	}, { dependencies: [isScrollReady, screenType, hasNewData], scope: interactiveContentRef });
 	
 	// Écrans Touch seulement : Slider Glide configs pour défilement ligne du temps en slide touch
 	useEffect(() => {
@@ -272,23 +311,24 @@ const HistoiresList = () => {
 			</Intro>
 			
 			<div 
-				ref={interactiveContentRef} 
+				ref={gsapScopeRef} 
 				style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}
 			>
 				<Cards className='cards' >
-					{ histoiresArray.map( (item, index) => { return (
+					{ histoiresArray.map( (cardItem, cardIndex) => { return (
 						<div 
-							className={ index === activeIndex ? `histoire-card active` : `histoire-card` }
-							key={index}
+							id={`card-${cardItem.idUnique}`}
+							className='histoire-card'
+							key={cardIndex}
 						>
 							<div 
 								className='bg-img'
-								style={{ backgroundImage: `url(/images/${item.fichierImage}.webp)` }} 
+								style={{ backgroundImage: `url(/images/${cardItem.fichierImage}.webp)` }} 
 								></div>
-							<p className='nom'>{item.nom}</p>
+							<p className='nom'>{cardItem.nom}</p>
 							<button
-								onClick={() => histoireSwitchClickHandler(index)} 
-								className={ index === activeIndex ? `button hidden` : `button` } 
+								onClick={() => histoireSwitchClickHandler(cardIndex)} 
+								className='button' 
 							>
 								Lire son histoire
 							</button>
@@ -317,8 +357,7 @@ const HistoiresList = () => {
 									data-glide-el={ screenType === 'touch' ? 'track' : null }
 								>
 									<ul 
-										className={ screenType === 'mouse' ? 'histoire-gsap__anime' : 'glide__slides' }  
-										ref={gsapAnime}
+										className={ screenType === 'mouse' ? 'histoire-gsap__anime' : 'glide__slides' }
 									>
 										<HistoireLigneTemps 
 											data={ histoireItem.ligneTemps } 
