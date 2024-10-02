@@ -1,7 +1,5 @@
 import React, { useState, useRef }  from 'react'
 import PageLayout from '../layouts/pageLayout'
-import { Link } from 'gatsby'
-import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 
@@ -314,6 +312,7 @@ const ConnaitrePage = () => {
       scrollTrigger: {
         trigger: '#realites-nav',
         pin: true,
+        pinSpacing: false,
         start: 'top 120px',
         end: "+=" + ( window.innerHeight * 5 * (realitesDataArray.length + 0.6)),
         //markers: true,
@@ -505,6 +504,7 @@ const ConnaitrePage = () => {
                   className='realite-unique' 
                   id={realite.idUnique} 
                   key={index}
+                  rel='noreferrer'
                 > 
                 
                   <div className='recit'>

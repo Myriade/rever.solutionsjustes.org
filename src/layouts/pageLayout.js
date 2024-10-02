@@ -40,6 +40,7 @@ const Header = styled.header`
 `;
 
 const Main = styled.main`
+  overflow: hidden;
   margin-top: var(--header-height);
 `;
 
@@ -62,37 +63,33 @@ export default function PageLayout({ children }) {
   
   return (
     <TempProtectLayout>
-      <div>
+      <Header>
+        <a 
+          href='https://www.solutionsjustes.org/'
+          title='Solutions Justes MCM'
+          className='sj-logo'
+        >
+          <StaticImage 
+            src='../images/logo-horizontal.svg'
+            placeholder='#282560'
+            alt='Solutions Justes'
+            style={{maxWidth: '180px'}}
+          />
+        </a>
+        <div className='internal-nav'>
+          <Link to='/' activeClassName='active'>Rêver</Link>
+          <Link to='/connaitre' activeClassName='active'>Connaître</Link>
+        </div>
+      </Header>
       
-        <Header>
-          <a 
-            href='https://www.solutionsjustes.org/'
-            title='Solutions Justes MCM'
-            className='sj-logo'
-          >
-            <StaticImage 
-              src='../images/logo-horizontal.svg'
-              placeholder='#282560'
-              alt='Solutions Justes'
-              style={{maxWidth: '180px'}}
-            />
-          </a>
-          <div className='internal-nav'>
-            <Link to='/' activeClassName='active'>Rêver</Link>
-            <Link to='/connaitre' activeClassName='active'>Connaître</Link>
-          </div>
-        </Header>
-        
-        <Main> 
-          {children} 
-        </Main>
-        
-        <Footer>
-          <p>Numéro d'organisme de bienfaisance enregistré : 107718868 RR 0001</p>
-          <p>Copyright © 2024 <a href='https://www.solutionsjustes.org/'>Solutions Justes</a></p>
-        </Footer>
-        
-      </div>
+      <Main> 
+        {children} 
+      </Main>
+      
+      <Footer>
+        <p>Numéro d'organisme de bienfaisance enregistré : 107718868 RR 0001</p>
+        <p>Copyright © 2024 <a href='https://www.solutionsjustes.org/'>Solutions Justes</a></p>
+      </Footer>
     </TempProtectLayout>
   )
 }

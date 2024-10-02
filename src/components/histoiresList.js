@@ -169,7 +169,6 @@ const HistoiresList = () => {
 	// Dom references and variables
 	const gsapScopeRef = useRef();
 	const gsapScopeElem = gsapScopeRef.current;
-	const glideInstance = useRef(null);
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
 	// GSAP first animation
@@ -234,7 +233,7 @@ const HistoiresList = () => {
 		}, '<')
 		
 		// Le bouton de la carte active disparait
-		histoireSwitchTl.to( nonActiveCardsBtn, {
+		histoireSwitchTl.to( activeCard.querySelector(`.button`), {
 			autoAlpha: 0,
 			duration: 0.5
 		},'<')
@@ -265,7 +264,6 @@ const HistoiresList = () => {
 	useEffect(() => {
 		if (screenType) {
 			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire--glide');
-			const pointsListElems = gsapScopeElem.querySelectorAll('.histoire--glide .points-list');
 			
 			// Glide.js initialisation
 			histoiresElems.forEach( (item) => {
@@ -284,7 +282,7 @@ const HistoiresList = () => {
 				}).mount() 
 			});
 		}
-	}, [screenType]);
+	}, [screenType, gsapScopeElem]);
 
 	return (
 		<section 
