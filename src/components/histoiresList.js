@@ -6,7 +6,7 @@ import { media } from '../styles/mixins.js'
 import histoiresData from '../data/histoires'
 import HistoireLigneTemps from './histoireLigneTemps'
 
-import { gsap } from "gsap";
+import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import Glide from '@glidejs/glide'
 
@@ -79,34 +79,54 @@ const Histoire = styled.div`
 		visibility: hidden;
 		margin-top: 1vh;}
 		
-	.glide__track {
-		max-width: 85vw;}
-		
-	.points-list {
+	.glide__bullets.points-list {
 		display: flex;
 		justify-content: stretch;
 		margin-block: 1vh 3vh;
-		.item {
+		position: static;
+		transform: unset;
+		border-bottom: 3px solid var(--color-bleu-tres-fonce);
+		width: calc(99% - 3vh);
+		
+		button.list-item {
+			display: block;
+			border: 0;
+			border-radius: 0;
+			background-color: transparent;
+			box-shadow: none;
+			margin: 0;
+			height: 1.5rem;
 			flex-grow: 1;
 			position: relative;
+			top: 0.75rem;
 			padding-inline: 3vw;
-			border-bottom: 3px solid var(--color-bleu-tres-fonce);
+			
+			&.glide__bullet--active {
+				.point {
+					background: var(--color-bleu-tres-fonce);}
+				&:hover {
+					cursor: unset;}}
+			
+			&:hover:not(.glide__bullet--active) .point {
+				background-color: var(--color-bleu-clair); 
+				border-color: var(--color-bleu-clair);}
+				
 			&:first-child {
 				padding-inline: 0 3vw;}
 			&:last-child {
 				padding-inline: 3vw 0;
-				flex-grow: initial;}
-			&.active .point {
-				background: var(--color-bleu-tres-fonce);}}
+				flex-grow: initial;}}
 				
 		.point {
 			position: relative;
-			top: 1.2vh;
 			background: white;
 			border: 3px solid var(--color-bleu-tres-fonce);
 			border-radius: 50%;
-			width: 2vh;
-			height: 2vh;}}
+			width: 1.5rem;
+			height: 1.5rem;}}
+			
+	.glide__track {
+		max-width: 85vw;}
 			
 	${media.mediumUp`
 		.glide__track {
@@ -131,10 +151,8 @@ const Histoire = styled.div`
 			position: relative;
 			left: 5ch;}
 			
-		.points-list .point {
-			top: 1.75vh;
-			width: 3vh;
-			height: 3vh;}
+		.glide__bullets.points-list .point {
+		}
 	`}
 `;
 
@@ -243,46 +261,18 @@ const HistoiresList = () => {
 		});
 	})
 	
-	const PointClickHandler = contextSafe( () => {
-		console.log('(PointClickHandler)');
-	});
-	
-	// mettre une classe active sur le point correspondant dans la ligne au scroll
-	const setActivePoint = (origin, progress, ligneTempsArrayLength) => {
-		// let rangActuel = 0;
-		// if (origin === 'gsap' && ligneTempsArrayLength) { // GSAP pour desktop 
-		// 	// const progressPercent = Math.round(progress*100);
-		// 	// rangActuel = Math.round(((ligneTempsArrayLength - 1) * progressPercent) / 100);
-		// } else if (glideInstance.current) { // touch screen seulement, glide.js
-		// 	rangActuel = glideInstance.current.index;
-		// 	//console.log('setactivepoint origin = glide, index = ', rangActuel);
-		// }
-		// 
-		// pointsListElem.childNodes[rangActuel].classList.toggle('active');
-		// pointsListElem.childNodes.forEach( (item, index) => {
-		// 	if (index !== rangActuel) {
-		// 		item.classList.remove('active');
-		// 	}
-		// });
-	}
-	
 	// Lignes du temps : Slider Glide configs pour défilement mouse drag ou slide touch
 	useEffect(() => {
 		if (screenType) {
-			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire-glide');
-			const pointsListElems = gsapScopeElem.querySelectorAll('.points-list');
-			
-			console.log(histoiresElems);
-			
-			// Rendre le premier point de chaque histoire actif
-			pointsListElems.forEach( (item) => item.childNodes[0].classList.toggle('active'));
+			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire--glide');
+			const pointsListElems = gsapScopeElem.querySelectorAll('.histoire--glide .points-list');
 			
 			// Glide.js initialisation
 			histoiresElems.forEach( (item) => {
 				const thisGlide = new Glide( item, {
 					type: 'slider',
-					perView: 1.2,
-					gap: 20,
+					perView: 1.25,
+					gap: 50,
 					bound: true,
 					swipeThreshold: 50,
 					rewind: false,
@@ -293,7 +283,6 @@ const HistoiresList = () => {
 					}
 				}).mount() 
 			});
-			
 		}
 	}, [screenType]);
 
@@ -332,31 +321,34 @@ const HistoiresList = () => {
 				</Cards>
 				
 				<Histoire className='histoires'>
+				
 					{ histoiresArray.map( (histoireItem, histoireIndex) => { return (
-						<div className='histoire' id={`histoire-${histoireItem.idUnique}`} key={histoireIndex}>
+						<div 
+							className='histoire histoire--glide' 
+							id={`histoire-${histoireItem.idUnique}`} 
+							key={histoireIndex}
+						>
 							<h3>L'histoire de {histoireItem.nom}</h3>
 							<p>{histoireItem.titre}</p>
 							
-							<div className='points-list'>
-								{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => {
-									return ( 
-										<div key={index} className='item' >
-											<div className='point'></div>
-										</div>
+							<div className='glide__bullets points-list' data-glide-el='controls[nav]'>
+								{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => { return (
+									<button key={index} className='glide__bullet list-item' data-glide-dir={`=${index}`}>
+										<div className='point'></div>
+									</button>
 								)})}
 							</div>
 							
-							<div className='histoire-glide'>
-								<div className='glide__track' data-glide-el='track'>
-									<ul className='glide__slides'>
-										<HistoireLigneTemps 
-											data={ histoireItem.ligneTemps }
-										/>
-									</ul>
-								</div>
+							<div className='glide__track' data-glide-el='track'>
+								<ul className='glide__slides'>
+									<HistoireLigneTemps 
+										data={ histoireItem.ligneTemps }
+									/>
+								</ul>
 							</div>
 						</div>
 					)})}
+					
 				</Histoire>
 			</div>
 		</section>	
