@@ -8,7 +8,6 @@ import HistoireLigneTemps from './histoireLigneTemps'
 
 import { gsap } from "gsap";
 import { useGSAP } from '@gsap/react';
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import Glide from '@glidejs/glide'
 
 const Intro = styled.div`
@@ -72,38 +71,17 @@ const Cards = styled.div`
 
 const Histoire = styled.div`
 	display: grid;
-	overflow: hidden;
 	margin-top: var(--v-spacer);
+	overflow: hidden;
 
 	.histoire {
 		grid-area: 1 / 1 / 2 / 2;
 		visibility: hidden;
 		margin-top: 1vh;}
-	
-	.histoire-gsap {
-		max-width: 65ch;
-		overflow: hidden;
-		position: relative;
-		right: 5ch;
-		&::before, &::after {
-			content: '';
-			display: block;
-			z-index: 25;
-			width: 5ch;
-			position: absolute;
-			top: 0;
-			bottom: 0;}
-		&::before {
-			background-image: linear-gradient(to right, rgba(255,255,255,1) , rgba(255,255,255,0));}
-		&::after {
-			background-image: linear-gradient(to left, rgba(255,255,255,1) , rgba(255,255,255,0));
-			right: 0;}
-		&__anime {
-			margin-top: 0;
-			display: flex;
-			flex-wrap: nowrap;
-			padding-left: 0;}}
-			
+		
+	.glide__track {
+		max-width: 85vw;}
+		
 	.points-list {
 		display: flex;
 		justify-content: stretch;
@@ -123,12 +101,41 @@ const Histoire = styled.div`
 				
 		.point {
 			position: relative;
-			top: 1.5vh;
+			top: 1.2vh;
 			background: white;
 			border: 3px solid var(--color-bleu-tres-fonce);
 			border-radius: 50%;
+			width: 2vh;
+			height: 2vh;}}
+			
+	${media.mediumUp`
+		.glide__track {
+			position: relative;
+			right: 5ch;
+			max-width: 65ch;
+			&::before, &::after {
+				content: '';
+				display: block;
+				z-index: 25;
+				width: 5ch;
+				position: absolute;
+				top: 0;
+				bottom: 0;}
+			&::before {
+				background-image: linear-gradient(to right, rgba(255,255,255,1) , rgba(255,255,255,0));}
+			&::after {
+				background-image: linear-gradient(to left, rgba(255,255,255,1) , rgba(255,255,255,0));
+				right: 0;}}
+			
+		.glide__slides {
+			position: relative;
+			left: 5ch;}
+			
+		.points-list .point {
+			top: 1.75vh;
 			width: 3vh;
-			height: 3vh;}}
+			height: 3vh;}
+	`}
 `;
 
 gsap.registerPlugin(useGSAP);
@@ -136,9 +143,6 @@ gsap.registerPlugin(useGSAP);
 const HistoiresList = () => {
 	// States
 	const [histoiresArray, setHistoiresArray] = useState(histoiresData);
-	const [activeIndex, setActiveIndex] = useState(0);
-	const [isScrollReady, setIsScrollReady ] = useState(null);
-	const [hasNewData, setHasNewData] = useState(null);
 	const [screenType, setScreenType] = useState(null);
 	
 	// Data fetch
@@ -147,10 +151,7 @@ const HistoiresList = () => {
 	// Dom references and variables
 	const gsapScopeRef = useRef();
 	const gsapScopeElem = gsapScopeRef.current;
-	const pointsListRef = useRef();
-	const pointsListElem = pointsListRef.current;
 	const glideInstance = useRef(null);
-	
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
 	// GSAP first animation
@@ -177,8 +178,6 @@ const HistoiresList = () => {
 			xPercent: -20,
 			duration: 0.5
 		})
-				
-		console.log('isScrollReady and is not touch');
 	}, { dependencies: [screenType], scope: gsapScopeRef });
 	
 	// event handlers
@@ -186,10 +185,10 @@ const HistoiresList = () => {
 		// Detect computer mouse or touch screen 
 		if (!screenType) {
 			if (window.matchMedia('(hover: hover)').matches) {
-				console.log('Device has a mouse or touchpad events');
+				console.log('Device has a mouse or touchpad events (firstHoverTouchHandler)');
 				setScreenType('mouse');
 			} else {
-				console.log('Device has no mouse, so has touch events');
+				console.log('Device has no mouse, so has touch events (firstHoverTouchHandler)');
 				setScreenType('touch');
 			}
 			gsapFirstAnimations();
@@ -201,8 +200,6 @@ const HistoiresList = () => {
 		const activeCard = gsapScopeElem.querySelector(`#card-${clickedId}`);
 		const nonActiveCardsImg = gsap.utils.toArray(`.histoire-card:not(#card-${clickedId}) .bg-img`);
 		const nonActiveCardsBtn = gsap.utils.toArray(`.histoire-card:not(#card-${clickedId}) .button`);
-		
-		setActiveIndex(clickedIndex);
 		
 		let histoireSwitchTl = gsap.timeline();
 		
@@ -244,60 +241,61 @@ const HistoiresList = () => {
 			xPercent: 0,
 			duration: 0.5
 		});
-	
 	})
 	
 	const PointClickHandler = contextSafe( () => {
-		console.log();
+		console.log('(PointClickHandler)');
 	});
 	
 	// mettre une classe active sur le point correspondant dans la ligne au scroll
 	const setActivePoint = (origin, progress, ligneTempsArrayLength) => {
-		let rangActuel = 0;
-		if (origin === 'gsap' && ligneTempsArrayLength) { // GSAP pour desktop 
-			// const progressPercent = Math.round(progress*100);
-			// rangActuel = Math.round(((ligneTempsArrayLength - 1) * progressPercent) / 100);
-		} else if (glideInstance.current) { // touch screen seulement, glide.js
-			rangActuel = glideInstance.current.index;
-			//console.log('setactivepoint origin = glide, index = ', rangActuel);
-		}
-		
-		pointsListElem.childNodes[rangActuel].classList.toggle('active');
-		pointsListElem.childNodes.forEach( (item, index) => {
-			if (index !== rangActuel) {
-				item.classList.remove('active');
-			}
-		});
+		// let rangActuel = 0;
+		// if (origin === 'gsap' && ligneTempsArrayLength) { // GSAP pour desktop 
+		// 	// const progressPercent = Math.round(progress*100);
+		// 	// rangActuel = Math.round(((ligneTempsArrayLength - 1) * progressPercent) / 100);
+		// } else if (glideInstance.current) { // touch screen seulement, glide.js
+		// 	rangActuel = glideInstance.current.index;
+		// 	//console.log('setactivepoint origin = glide, index = ', rangActuel);
+		// }
+		// 
+		// pointsListElem.childNodes[rangActuel].classList.toggle('active');
+		// pointsListElem.childNodes.forEach( (item, index) => {
+		// 	if (index !== rangActuel) {
+		// 		item.classList.remove('active');
+		// 	}
+		// });
 	}
 	
-	// Écrans Touch seulement : Slider Glide configs pour défilement ligne du temps en slide touch
+	// Lignes du temps : Slider Glide configs pour défilement mouse drag ou slide touch
 	useEffect(() => {
-		if (screenType === 'touch') {
+		if (screenType) {
+			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire-glide');
+			const pointsListElems = gsapScopeElem.querySelectorAll('.points-list');
 			
-			// rendre le premier point témoin actif
-			pointsListElem.childNodes[0].classList.toggle('active');
+			console.log(histoiresElems);
 			
-			// premiere initialisation
-			if(isScrollReady && !glideInstance.current && hasNewData === null) {
-				glideInstance.current =  new Glide('.histoire-glide', {
+			// Rendre le premier point de chaque histoire actif
+			pointsListElems.forEach( (item) => item.childNodes[0].classList.toggle('active'));
+			
+			// Glide.js initialisation
+			histoiresElems.forEach( (item) => {
+				const thisGlide = new Glide( item, {
 					type: 'slider',
-					perView: 1,
-					gap: 10,
-				}).on('run', setActivePoint).mount() 
-			}
+					perView: 1.2,
+					gap: 20,
+					bound: true,
+					swipeThreshold: 50,
+					rewind: false,
+					breakpoints: {
+						768: {
+							perView: 1,
+						},
+					}
+				}).mount() 
+			});
 			
-			// Lorsque l'histoire change, refaire une nouvelle instance de glide.
-			if (isScrollReady && glideInstance.current && hasNewData) {
-				glideInstance.current.destroy();
-				glideInstance.current = new Glide('.histoire-glide', {
-					type: 'slider',
-					perView: 1,
-					gap: 10,
-				}).on('run', setActivePoint).mount();
-				setHasNewData(false);
-			}
 		}
-	}, [screenType, isScrollReady, hasNewData]);
+	}, [screenType]);
 
 	return (
 		<section 
@@ -310,10 +308,7 @@ const HistoiresList = () => {
 				<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
 			</Intro>
 			
-			<div 
-				ref={gsapScopeRef} 
-				style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}
-			>
+			<div ref={gsapScopeRef} style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}>
 				<Cards className='cards' >
 					{ histoiresArray.map( (cardItem, cardIndex) => { return (
 						<div 
@@ -342,7 +337,7 @@ const HistoiresList = () => {
 							<h3>L'histoire de {histoireItem.nom}</h3>
 							<p>{histoireItem.titre}</p>
 							
-							<div className='points-list' ref={pointsListRef} >
+							<div className='points-list'>
 								{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => {
 									return ( 
 										<div key={index} className='item' >
@@ -352,16 +347,10 @@ const HistoiresList = () => {
 							</div>
 							
 							<div className='histoire-glide'>
-								<div 
-									className={ screenType === 'mouse' ? 'histoire-gsap' : 'glide__track' } 
-									data-glide-el={ screenType === 'touch' ? 'track' : null }
-								>
-									<ul 
-										className={ screenType === 'mouse' ? 'histoire-gsap__anime' : 'glide__slides' }
-									>
+								<div className='glide__track' data-glide-el='track'>
+									<ul className='glide__slides'>
 										<HistoireLigneTemps 
-											data={ histoireItem.ligneTemps } 
-											screenType={screenType}
+											data={ histoireItem.ligneTemps }
 										/>
 									</ul>
 								</div>
