@@ -313,7 +313,8 @@ const HistoiresList = () => {
 	return (
 		<section 
 			id='consequences' 
-			onWheel={firstHoverTouchHandler}
+			onMouseEnter={firstHoverTouchHandler} 
+			onTouchStart={firstHoverTouchHandler}
 		>
 			<Intro className='grid'>
 				<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
