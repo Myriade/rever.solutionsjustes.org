@@ -29,7 +29,13 @@ const Section1Hero = styled.section`
     text-transform: uppercase;
     margin: 0 var(--h-spacer);
     display: grid;
-    align-items: center;}
+    align-items: center;
+    position: relative;
+    span.small {
+      position: absolute;
+      bottom: 1rem;
+      font-size: 1.5rem;
+      line-height: 1;}}
   
   ${media.mediumUp`
     height: calc(95vh - var(--header-height));
@@ -43,37 +49,19 @@ const Section1Hero = styled.section`
   `};
 `;
 
-const Section2Intro = styled.section`
-  .grid {
-    gap: var(--v-h2-spacer);}
-    
-  h2, p {
-    margin-block: 0;}
-    
-  h2 {
-    font-size: clamp(24px, 2vw, 2rem);
-    max-width: 21ch;
-    font-weight: 500;
-    line-height: 1.25;
-    text-transform: initial;
-    margin-top: var(--v-spacer);}
-    
-  ${media.mediumUp`
-    .grid {
-      grid-template-columns: 1fr 1fr;}
-    
-    h2 {
-      max-width: initial;}
-  `};
-  
-  .button {
-    margin-top: var(--v-spacer);}
-`;
-
 const SectionRealites = styled.section`
+  padding: 0.5rem;
   display: grid;
   grid-template-columns: 10% 90%;
+  grid-template-rows: auto auto;
   background: var(--color-bleu-tres-pale);
+  
+  > .titre {
+    grid-area: 1 / 1 / 2 / 3;
+    width: 100%;
+    h2 {
+      color: var(--color-bleu-tres-fonce);
+      margin-bottom: 1rem;}}
 
   nav {
     ul {
@@ -163,8 +151,6 @@ const SectionRealites = styled.section`
         color: white;
         border-radius: 4px;
         margin-block: 20px;
-        visibility: hidden;
-        opacity: 0.8;
         
         &:first-of-type {
           background: var(--color-bleu-tres-pale);
@@ -404,8 +390,9 @@ const ConnaitrePage = () => {
         y: 'random(-20, 20, 5)',
         xPercent: 'random(-50, 50, 5)',
         transformOrigin: 'center center',
-        visibility: 'visible',
-        opacity: 1,
+        // visibility: 'visible',
+        // opacity: 1,
+        autoAlpha: 1,
         stagger: 1,
         ease: 'power1.inOut'
       });
@@ -499,19 +486,16 @@ const ConnaitrePage = () => {
               <span className='right'>Connaître</span> 
               <span></span> 
               <span>l'essentiel&nbsp;...</span>
+              <span className='small'>... de certains statuts d'immigration précaires et de l'absence de statut</span>
             </h1>
           </div>
         </Section1Hero>
-        
-        <Section2Intro>
-          <div>
-            <p>... de certains statuts d'immigration précaires et de l'absence de statut</p>
-            <h2 className='intro'>Les récits et les mythes&nbsp;:</h2>
-          </div>
-        </Section2Intro>
           
         <div ref={gsapContainerRef} id='gsap-container'>
           <SectionRealites>
+            <div className='titre'>
+              <h2>Récits mythes et réalités</h2>
+            </div>
             <nav id='realites-nav'>
               <ul>
                 {realitesDataArray.map( (realite, index) => { return (
@@ -573,10 +557,12 @@ const ConnaitrePage = () => {
                         «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
                       </h3>
                       <div className='mythe__sous-titre'>
-                        <img
-                          src='/images/logo-sans-texte.svg'
-                          alt='Solutions Justes'
-                        />
+                        <div>
+                          <img
+                            src='/images/logo-sans-texte.svg'
+                            alt='Solutions Justes'
+                          />
+                        </div>
                         <h3>{realite.mytheSoustitre}</h3>
                       </div>
                     </div>
