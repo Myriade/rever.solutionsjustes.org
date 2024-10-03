@@ -29,17 +29,16 @@ const Section1Hero = styled.section`
     text-transform: uppercase;
     margin: 0 var(--h-spacer);
     display: grid;
-    align-items: center;
-    span {
-      display: block;
-      &.right {
-        text-align: right;}}}
+    align-items: center;}
   
   ${media.mediumUp`
     height: calc(95vh - var(--header-height));
     h1 {
       height: calc(95vh - var(--header-height));
       font-size: clamp(25px, 12vw, 15ch);
+      span.right {
+        text-align: right;
+      }
     }
   `};
 `;
