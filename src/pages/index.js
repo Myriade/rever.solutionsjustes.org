@@ -330,7 +330,7 @@ const IndexPage = () => {
             
             <div className='sensibiliser'>
               <h3>2. Vous sensibiliser à la cause</h3>
-              <p>En apprendre davantage sur les enjeux qui touchent les personnes sans statut ou à statut précaire, c'est un pas dans la bonne direction. Devenez un.e défenseur.euse de leur bien-être en vous sensibilisant à l'impact qu'ont les différents statuts d'immigration sur la vie quotidienne des personnes im.migrantes et réfugiées.</p>
+              <p>En apprendre davantage sur les enjeux qui touchent les personnes sans statut ou à statut précaire, c'est un pas dans la bonne direction. Devenez un défenseur ou une défenseuse de leur bien-être en vous sensibilisant à l'impact qu'ont les différents statuts d'immigration sur la vie quotidienne des personnes im.migrantes et réfugiées.</p>
               <Link to='/connaitre' className='button centered'>
                 En savoir plus
               </Link>
@@ -402,7 +402,7 @@ const IndexPage = () => {
           <div className='grid'>
             <div>
               <h2>À propos</h2>
-              <p>Fondée en 1910, la MCM est un organisme communautaire à but non lucratif de l'Église Unie du Canada ouvert, diversifié et interconfessionnel qui cherche à défendre les droits et les intérêts des personnes les plus vulnérables de notre société et à les rendre autonomes.</p>
+              <p>Fondée en 1910, la MCM est un organisme communautaire à but non lucratif de l'Église Unie du Canada ouvert, diversifié et interconfessionnel qui cherche à défendre les droits et les intérêts des personnes les plus vulnérables afin de créer une société accueillante, inclusive et juste. Bien que la MCM ait vu le jour à Montréal, elle s’étend désormais à l’ensemble du Québec.</p>
               <p><a href='https://solutionsjustes.org' target='_blank' rel="noreferrer">Solutions Justes</a> est un programme de la MCM visant à améliorer l'accès à la justice pour les personnes im·migrantes et réfugiées. Elle est une clinique juridique qui adopte une approche holistique et offre des services accessibles à toutes les personnes dans le besoin.</p>
             </div>
             <div>

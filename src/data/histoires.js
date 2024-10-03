@@ -11,7 +11,7 @@ export default function histoiresData() { return [
 			},
 			{
 				date: 'Mai 2017',
-				texte: `Ce n'est que quatre ans plus tard, après avoir bâti une nouvelle vie et un nouveau réseau au Québec, qu'elle reçoit sa réponse: un refus. Elle doit maintenant attendre de pouvoir faire une demande humanitaire.`
+				texte: `Ce n'est que quatre ans plus tard, après avoir bâti une nouvelle vie et un nouveau réseau au Québec, qu'elle reçoit sa réponse: un refus. Elle doit maintenant attendre un an pour pouvoir régulariser son statut, à travers une demande humanitaire.`
 			},
 			{
 				date: 'Mai 2018 ',
@@ -75,7 +75,7 @@ export default function histoiresData() { return [
 			},
 			{
 				date: 'Décembre 2019',
-				texte: `Après trois ans de travail au Québec, on lui refuse sa demande d'asile en raison de preuves insuffisantes. Il ne peut revenir en arrière. Il dépose une demande humanitaire.`
+				texte: `Après trois ans de travail au Québec, on lui refuse sa demande d'asile en raison de preuves insuffisantes. Il ne peut revenir en arrière. Pour régulariser son statut d'immigration, un an plus tard, il dépose une demande humanitaire pour avoir la résidence permanente.`
 			},
 			{
 				date: 'Février 2024',
