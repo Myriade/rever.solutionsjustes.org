@@ -49,7 +49,7 @@ const Cards = styled.div`
 			filter: grayscale(100%);}
 		.nom {
 			color: white;
-			font-weight: bold;
+			font-weight: 600;
 			text-align: center;
 			font-size: 2rem;
 			margin-block: 0;}
@@ -71,18 +71,23 @@ const Cards = styled.div`
 
 const Histoire = styled.div`
 	display: grid;
-	margin-top: var(--v-spacer);
+	margin-top: calc(var(--v-spacer) / 2);
 	overflow: hidden;
 
 	.histoire {
 		grid-area: 1 / 1 / 2 / 2;
 		visibility: hidden;
-		margin-top: 1vh;}
+		margin-top: 1vh;
+		
+		&__titre {
+			margin-bottom: 0.5em;}
+		&__resume {
+			margin-top: 0.5em;}}
 		
 	.glide__bullets.points-list {
 		display: flex;
 		justify-content: stretch;
-		margin-block: 1vh 3vh;
+		margin-block: 1vh 5vh;
 		position: static;
 		transform: unset;
 		border-bottom: 3px solid var(--color-bleu-tres-fonce);
@@ -326,8 +331,8 @@ const HistoiresList = () => {
 							id={`histoire-${histoireItem.idUnique}`} 
 							key={histoireIndex}
 						>
-							<h3>L'histoire de {histoireItem.nom}</h3>
-							<p>{histoireItem.titre}</p>
+							<h3 className='histoire__titre'>L'histoire de {histoireItem.nom}</h3>
+							<p className='histoire__resume'>{histoireItem.titre}</p>
 							
 							<div className='glide__bullets points-list' data-glide-el='controls[nav]'>
 								{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => { return (

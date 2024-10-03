@@ -23,18 +23,21 @@ html {
 	line-height: 1.4;
 	font-family: "Montserrat", sans-serif;}
 	
+h1 {
+	font-weight: 600;	}
+	
 h2 {
 	margin-block: 0 var(--v-spacer);
 	text-transform: uppercase;
-	font-size: 2.5rem;
-	line-height: 1.25;
-	font-weight: 500;}
+	font-size: clamp(25px, 4vw, 2.5rem);
+	line-height: 1.12;
+	font-weight: 600;}
 	
 h3 {
 	margin-top: 0;
 	font-size: clamp(24px, 2vw, 2rem);
-	font-weight: 500;
-	line-height: 1.25;}
+	font-weight: 600;
+	line-height: 1.12;}
 	
 p {
 	font-size: 1.2rem;
@@ -81,7 +84,7 @@ body {
 	background: var(--color-bleu-tres-fonce);
 	color: white;
 	border: 0;
-	font-weight: 500;
+	font-weight: 600;
 	line-height: 1em;
 	&::before,
 	&::after {

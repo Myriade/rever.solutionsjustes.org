@@ -6,11 +6,12 @@ import { media } from '../styles/mixins.js'
 
 const SatutFiche = styled.div`
 	display: grid;
-	align-items: center;
 	justify-items: center;
 	img {
 		width: auto;
 		height: 200px;}
+	h3 {
+		margin-top: 0.5em;}
 	
 	${media.desktopUp`
 		grid-template-columns: 1fr 1.5fr;

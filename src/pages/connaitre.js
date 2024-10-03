@@ -322,8 +322,9 @@ const ConnaitrePage = () => {
       scrollTrigger: {
         id: 'realitesNavReveal',
         trigger: '#realites-nav',
-        start: 'top 50%'
-      }
+        start: 'top 70%',
+        //markers: true,
+      },
     });
     
     // nav bar pins 
@@ -347,10 +348,11 @@ const ConnaitrePage = () => {
       scrollTrigger: {
         id: 'firstRealiteReveal',
         trigger: '#realites-nav',
-        start: 'top 50%'
+        start: 'top 70%'
       }
     });
     
+    // Animations au scroll dans chacune des fiches de réalité
     realitesGsapArr.forEach((element, realiteIndex) => {
       const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
       
@@ -512,6 +514,11 @@ const ConnaitrePage = () => {
                     </a>
                   </li>
                 )})}
+                <li className='realite-nav-item shortcut'>
+                  <a href='#s-impliquer'>
+                    S'impliquer
+                  </a>
+                </li>
               </ul>
             </nav>
             
@@ -586,7 +593,7 @@ const ConnaitrePage = () => {
           </SectionRealites>  
         </div>
         
-        <Section4Cta>
+        <Section4Cta id='s-impliquer'>
           <h2>S'impliquer davantage</h2>
           <div className='grid'>
           

@@ -6,6 +6,9 @@ const LigneTempsItemLi = styled.li`
 	gap: 1vh;
 	color: var(--color-bleu-tres-fonce);
 	align-content: start;
+	
+	h3 {
+		margin-bottom: 1rem;}
 
 	p {
 		margin-block: 0;

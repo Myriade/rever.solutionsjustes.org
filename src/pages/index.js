@@ -56,10 +56,10 @@ const Section2Intro = styled.section`
     margin-block: 0;}
     
   h2 {
-    font-size: clamp(24px, 2vw, 2rem);
+    font-size: clamp(22px, 1.75vw, 1.75rem);
     max-width: 21ch;
-    font-weight: 500;
-    line-height: 1.25;
+    font-weight: 600;
+    line-height: 1.12;
     text-transform: initial;}
     
   ${media.mediumUp`
@@ -67,7 +67,7 @@ const Section2Intro = styled.section`
       grid-template-columns: 1fr 1fr;}
     
     h2 {
-      max-width: initial;}
+      max-width: 30ch;}
   `};
   
   .button {
@@ -124,8 +124,7 @@ const Section6Agir = styled.section`
       margin-block: 0;}
       
     h3 {
-      font-size: 2rem;
-      font-weight: 500;}
+      font-weight: 600;}
     
     .button {
       padding-inline: 3vw;}
@@ -280,7 +279,7 @@ const IndexPage = () => {
             <h1>
               <span>Rêver</span> 
               <span className='right'>à</span> 
-              <span>l'essentiel</span>
+              <span>l’essentiel</span>
             </h1>
           </div>
         </Section1Hero>
