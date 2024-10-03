@@ -496,7 +496,7 @@ const ConnaitrePage = () => {
         <div ref={gsapContainerRef} id='gsap-container'>
           <SectionRealites>
             <div className='titre'>
-              <h2>Récits mythes et réalités</h2>
+              <h2>Récits, mythes et réalités</h2>
             </div>
             <nav id='realites-nav'>
               <ul>

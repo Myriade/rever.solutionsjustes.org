@@ -79,6 +79,10 @@ const Histoire = styled.div`
 		visibility: hidden;
 		margin-top: 1vh;
 		
+		&.glide--swipeable:hover {
+			cursor: initial;
+		}
+		
 		&__titre {
 			margin-bottom: 0.5em;}
 		&__resume {
@@ -88,7 +92,7 @@ const Histoire = styled.div`
 		display: flex;
 		justify-content: stretch;
 		margin-block: 1vh 5vh;
-		position: static;
+		position: unset;
 		transform: unset;
 		border-bottom: 3px solid var(--color-bleu-tres-fonce);
 		width: calc(99% - 3vh);
@@ -131,7 +135,25 @@ const Histoire = styled.div`
 			height: 1.5rem;}}
 			
 	.glide__track {
-		max-width: 85vw;}
+		max-width: 85vw;
+		&:hover {
+			cursor: grab;}}
+			
+	.control-arrows button {
+		margin: 1rem 1rem 0;
+		color: white;
+		border: 2px solid white;
+		border-radius: 4px;
+		background: var(--color-bleu-clair);
+		padding: 0 0.5rem;
+		font-size: 4rem;
+		line-height: 0.75;
+		font-family: sans;
+		&:hover {
+			cursor: pointer;
+			border-color: var(--color-bleu-clair);
+		}
+	}
 			
 	${media.mediumUp`
 		.glide__track {
@@ -145,7 +167,9 @@ const Histoire = styled.div`
 				width: 5ch;
 				position: absolute;
 				top: 0;
-				bottom: 0;}
+				bottom: 0;
+				&:hover {
+					cursor: initial;}}
 			&::before {
 				background-image: linear-gradient(to right, rgba(255,255,255,1) , rgba(255,255,255,0));}
 			&::after {
@@ -155,9 +179,6 @@ const Histoire = styled.div`
 		.glide__slides {
 			position: relative;
 			left: 5ch;}
-			
-		.glide__bullets.points-list .point {
-		}
 	`}
 `;
 
@@ -292,8 +313,7 @@ const HistoiresList = () => {
 	return (
 		<section 
 			id='consequences' 
-			onMouseEnter={firstHoverTouchHandler} 
-			onTouchStart={firstHoverTouchHandler}
+			onWheel={firstHoverTouchHandler}
 		>
 			<Intro className='grid'>
 				<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
@@ -343,11 +363,18 @@ const HistoiresList = () => {
 							</div>
 							
 							<div className='glide__track' data-glide-el='track'>
+							
 								<ul className='glide__slides'>
 									<HistoireLigneTemps 
 										data={ histoireItem.ligneTemps }
 									/>
 								</ul>
+								
+							</div>
+							
+							<div className='control-arrows' data-glide-el='controls'>
+								<button data-glide-dir="<" title='Précédent'> &#8249; </button>
+								<button data-glide-dir=">" title='Suivant'> &#8250; </button>
 							</div>
 						</div>
 					)})}

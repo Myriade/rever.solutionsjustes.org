@@ -2,7 +2,7 @@ export default function connaitreData() { return [
 	{
 		idUnique: 'sans-statut',
 		nom: `Maria`,
-		titreCourt: 'sans statut',
+		titreCourt: 'sans statut d’immigration',
 		intro: `Bonjour, je suis Maria et je suis une personne`,
 		statut: 'sans statut d’immigration',
 		presentation: [

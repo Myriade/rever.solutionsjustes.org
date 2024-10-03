@@ -370,6 +370,14 @@ const IndexPage = () => {
                       target='_blank'
                       rel='noreferrer'
                       >LinkedIn</a></li>
+                    <li>
+                      <a
+                        href='https://twitter.com/intent/tweet?text=https://rever.solutionsjustes.org/'
+                        target='_blank'
+                        rel='noreferrer'
+                        >
+                      X</a>
+                    </li>
                   </ul>
                 </div>
               </div>

@@ -43,7 +43,7 @@ export default function histoiresData() { return [
 			},
 			{
 				date: 'Mai 2022',
-				texte: `Il découvre rapidement que les conditions de son travail sont inacceptables: il travaille 120 heures par semaine, mais n'est rémunéré que pour 30 de celles-ci.`
+				texte: `Il découvre rapidement que les conditions de son travail sont inacceptables: il travaille 75 heures par semaine, mais n'est rémunéré que pour 30 de celles-ci.`
 			},
 			{
 				date: 'Octobre 2022',

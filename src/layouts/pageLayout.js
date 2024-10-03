@@ -152,7 +152,7 @@ export default function PageLayout({ children }) {
       
       { !isConsentOk ? 
         <Consentement>
-          <p>Nous utilisons des cookies pour comprendre comment vous interagissez avec notre site. En poursuivant, vous consentez à notre utilisation de ces cookies. <a href='https://www.solutionsjustes.org/politique-confidentialite' target='_blank' rel='noreferrer'>Voir notre politique de confidentialité</a></p>
+          <p>Nous utilisons des cookies pour comprendre comment vous interagissez avec notre site. En poursuivant la visite de ce site web, vous consentez à notre utilisation de ces cookies. <a href='https://www.solutionsjustes.org/politique-confidentialite' target='_blank' rel='noreferrer'>Voir notre politique de confidentialité</a></p>
           <div>
             <button
               className='button'

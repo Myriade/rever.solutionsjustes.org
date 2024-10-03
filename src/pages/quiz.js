@@ -68,8 +68,8 @@ const QuizPage = () => {
       <Section1Hero>
         <div className='overlay-text'>
           <h1>
-            <span>Derrière</span> 
-            <span className='right'>les</span> 
+            <span>Au delà</span> 
+            <span className='right'>des</span> 
             <span>statuts</span>
           </h1>
         </div>
@@ -78,7 +78,7 @@ const QuizPage = () => {
       <Section2Intro>
         <div className='grid'>
           <div>
-            <h2>Testez vos connaissances avec le quiz Derrière les statuts</h2>
+            <h2>Testez vos connaissances avec le quiz Au delà les statuts</h2>
           </div>
           <div>
             <p><strong>Vous vous demandez comment les différents statuts d'immigration influencent la vie quotidienne des personnes migrantes ? Testez vos connaissances avec notre quiz interactif&nbsp;!</strong> 🧠💡</p>
@@ -98,4 +98,4 @@ const QuizPage = () => {
 
 export default QuizPage
 
-export const Head = () => <title>Quiz | Derrière les statuts</title>
+export const Head = () => <title>Quiz | Au delà les statuts</title>
