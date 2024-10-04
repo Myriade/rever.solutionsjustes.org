@@ -72,7 +72,7 @@ const Cards = styled.div`
 const Histoire = styled.div`
 	display: grid;
 	margin-top: calc(var(--v-spacer) / 2);
-	overflow: hidden;
+	overflow: visible;
 
 	.histoire {
 		grid-area: 1 / 1 / 2 / 2;
@@ -95,7 +95,7 @@ const Histoire = styled.div`
 		position: unset;
 		transform: unset;
 		border-bottom: 3px solid var(--color-bleu-tres-fonce);
-		width: calc(99% - 3vh);
+		width: calc(80% - 3vh);
 		
 		button.list-item {
 			display: block;
@@ -127,7 +127,6 @@ const Histoire = styled.div`
 				flex-grow: initial;}}
 				
 		.point {
-			position: relative;
 			background: white;
 			border: 3px solid var(--color-bleu-tres-fonce);
 			border-radius: 50%;
@@ -139,21 +138,26 @@ const Histoire = styled.div`
 		&:hover {
 			cursor: grab;}}
 			
-	.control-arrows button {
-		margin: 1rem 1rem 0;
-		color: white;
-		border: 2px solid white;
-		border-radius: 4px;
-		background: var(--color-bleu-clair);
-		padding: 0 0.5rem;
-		font-size: 4rem;
-		line-height: 0.75;
-		font-family: sans;
-		&:hover {
-			cursor: pointer;
-			border-color: var(--color-bleu-clair);
-		}
-	}
+	.control-arrows {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-right: 1rem;
+		button {
+			position: relative;
+			bottom: 0.25rem;
+			color: var(--color-bleu-tres-fonce);
+			border-radius: 4px;
+			background: white;
+			border: 0;
+			padding: 0 0.25rem;
+			font-size: 2.5rem;
+			line-height: 0.75;
+			font-family: sans;
+			&:hover {
+				cursor: pointer;
+				background-color: var(--color-bleu-tres-fonce);
+				color: white;}}}
 			
 	${media.mediumUp`
 		.glide__track {
@@ -162,20 +166,23 @@ const Histoire = styled.div`
 			max-width: 65ch;
 			&::before, &::after {
 				content: '';
-				display: block;
 				z-index: 25;
 				width: 5ch;
 				position: absolute;
 				top: 0;
-				bottom: 0;
-				&:hover {
-					cursor: initial;}}
+				bottom: 0;}
 			&::before {
 				background-image: linear-gradient(to right, rgba(255,255,255,1) , rgba(255,255,255,0));}
 			&::after {
 				background-image: linear-gradient(to left, rgba(255,255,255,1) , rgba(255,255,255,0));
-				right: 0;}}
-			
+				right: 0;}
+			&:hover {
+				&::before, &::after {
+					cursor: initial;}}}
+		
+		.glide__bullets.points-list {
+			width: calc(94% - 3vh);}
+		
 		.glide__slides {
 			position: relative;
 			left: 5ch;}
@@ -199,6 +206,12 @@ const HistoiresList = () => {
 	
 	// GSAP first animation
 	const gsapFirstAnimations = contextSafe(() => {
+		// Cache les histoires qui ne sont pas la premiere
+		gsap.to( '.histoire:not(:first-child)', {
+			autoAlpha: 0,
+			duration: 0
+		})
+		
 		// Active la 1ere carte
 		gsap.to( '.histoire-card:first-child .bg-img', { 
 			filter: 'grayscale(0%)',
@@ -355,27 +368,26 @@ const HistoiresList = () => {
 							<h3 className='histoire__titre'>L'histoire de {histoireItem.nom}</h3>
 							<p className='histoire__resume'>{histoireItem.titre}</p>
 							
-							<div className='glide__bullets points-list' data-glide-el='controls[nav]'>
-								{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => { return (
-									<button key={index} className='glide__bullet list-item' data-glide-dir={`=${index}`}>
-										<div className='point'></div>
-									</button>
-								)})}
+							<div className='flex'>
+								<div className='control-arrows' data-glide-el='controls'>
+									<button data-glide-dir="<" title='Précédent'> &#8249; </button>
+									<button data-glide-dir=">" title='Suivant'> &#8250; </button>
+								</div>
+								<div className='glide__bullets points-list' data-glide-el='controls[nav]'>
+									{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => { return (
+										<button key={index} className='glide__bullet list-item' data-glide-dir={`=${index}`}>
+											<div className='point'></div>
+										</button>
+									)})}
+								</div>
 							</div>
 							
 							<div className='glide__track' data-glide-el='track'>
-							
 								<ul className='glide__slides'>
 									<HistoireLigneTemps 
 										data={ histoireItem.ligneTemps }
 									/>
 								</ul>
-								
-							</div>
-							
-							<div className='control-arrows' data-glide-el='controls'>
-								<button data-glide-dir="<" title='Précédent'> &#8249; </button>
-								<button data-glide-dir=">" title='Suivant'> &#8250; </button>
 							</div>
 						</div>
 					)})}
