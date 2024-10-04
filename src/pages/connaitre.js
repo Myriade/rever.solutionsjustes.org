@@ -176,7 +176,6 @@ const SectionRealites = styled.section`
     position: relative;
     z-index: 1;
     padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
-    background: var(--color-bleu-tres-fonce);
     color: white;
     display: grid;
     align-content: center;
@@ -356,7 +355,7 @@ const ConnaitrePage = () => {
     realitesGsapArr.forEach((element, realiteIndex) => {
       const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
       
-      const mytheAllParagraphesHeight = element.querySelector('.mythe__explications').scrollHeight;
+      const mytheExplicationsHiddenHeight = element.querySelector('.mythe__explications').scrollHeight - element.querySelector('.mythe__explications').offsetHeight;
       
       // ProgressBar timeline
       let ProgressBarTimeline = gsap.timeline();
@@ -410,7 +409,12 @@ const ConnaitrePage = () => {
         yPercent: '-100',
       });
       
-      // La barre de progression s'adapte à la couleur de fond
+      // Le conteneur du mythe devient bleu foncé tout de suite.
+      contentTimeline.to( element.querySelector('.mythe'), {
+        backgroundColor: 'var(--color-bleu-tres-fonce)',
+      }, '<');
+      
+      // La barre de progression devient bleu foncé tout de suite.
       contentTimeline.to( element.querySelector('.progress'), {
         backgroundColor: 'var(--color-bleu-tres-fonce)',
       }, '<');
@@ -426,7 +430,6 @@ const ConnaitrePage = () => {
       // Mythe sous-titre apparaît
       contentTimeline.from( element.querySelector('.mythe__sous-titre'), {
         autoAlpha: 0,
-        yPercent: '50',
         height: 0
       });
       
@@ -434,12 +437,11 @@ const ConnaitrePage = () => {
       contentTimeline.from( element.querySelector('.mythe__explications'), {
         autoAlpha: 0,
         height: 0,
-        yPercent: '50'
       });
       
       // Mythe textes défilent vers le haut 
       contentTimeline.to( element.querySelectorAll('.mythe__explications p'), {
-        y: -1 * mytheAllParagraphesHeight / 2,
+        y: -1 * mytheExplicationsHiddenHeight,
       });
       
       ScrollTrigger.create({
