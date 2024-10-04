@@ -9,7 +9,7 @@ export default function connaitreData() { return [
 			`Cela signifie que je n'ai pas de statut d'immigration régulier au Canada. Les personnes im·migrantes peuvent se retrouver dans cette situation pour diverses raisons, comme avoir dépassé la durée de leur visa de résident temporaire, de permis d'études ou de travail, etc.`,
 			`Il y a plusieurs raisons pour lesquelles nous, personnes sans statut d’immigration,  n'avons pas quitté le Canada malgré notre situation précaire. Parmi ces raisons : nous n'avons plus de liens avec notre pays d’origine, nous avons construit notre vie au Québec où nous résidons depuis des années et nous voulons rester ici, notre pays d’origine est marqué par la violence et l’insécurité, etc.`
 		],
-		impactIntro: `L'absence de statut d'immigration entraîne que ...`,
+		impactIntro: `<strong>L'absence de statut</strong> d'immigration entraîne que ...`,
 		impacts: [
 			`On ne me donne pas accès aux services de santé et aux services sociaux. Cette situation impacte mon bien-être général et ma santé physique, car je n'ai pas accès aux soins dont j'ai besoin.`,
 			`J’ai la crainte de porter plainte si je suis victime d’un crime, par exemple, de violence sexuelle.`,
@@ -34,7 +34,7 @@ export default function connaitreData() { return [
 			`Cela signifie que j'ai déposé une demande d’asile à mon arrivée au Canada, mais celle-ci a été rejetée.`,
 			`Après le refus de la demande d'asile, nous pouvons encore rester sur le territoire en tant que personnes demandeuses d’asile refusées. Cependant, nos droits sont considérablement limités, et nous vivons dans l'angoisse d'être renvoyées à notre pays d'origine, là où nous croyons que nous serions en péril ou en danger de persécution, d'où la raison de notre demande d'asile. Il existe des recours et des démarches pour régulariser notre situation. Cependant, le processus est complexe et long, s'étendant sur plusieurs années, et le résultat demeure incertain, sans aucune garantie.`
 		],
-		impactIntro: `Mon statut d'immigration est précaire car ...`,
+		impactIntro: `Mon statut d'immigration est <strong>précaire car ...</strong>`,
 		impacts: [
 			`On m’a contraint de quitter mon emploi et de vivre de l’aide sociale car je n’ai plus un permis de travail valide.`,
 			`Je ne peux faire aucune démarche pour amener mon ou ma conjointe et enfants au Canada, et je ne peux plus leur envoyer de l’argent, car mes revenus sur l’aide sociale sont insuffisants.`,
@@ -58,7 +58,7 @@ export default function connaitreData() { return [
 		presentation: [
 			`Cela signifie que j'ai dû fuir mon foyer pour échapper à la violence de mon conjoint. L'État canadien m'a accordé un Permis de séjour temporaire pour victimes de violence conjugale. Toutefois, ce permis doit être renouvelé chaque année, sans garantie de prolongation et avec un taux de succès relativement faible.`,
 		],
-		impactIntro: `Mon statut d'immigration est précaire car ...`,
+		impactIntro: `Mon statut d'immigration est <strong>précaire car ...</strong>`,
 		impacts: [
 			`Je vis dans l’angoisse quant à la possibilité de renouveler mon Permis de séjour temporaire l’année prochaine. Si on ne m'accorde pas le renouvellement de mon permis annuel, je devrai quitter le territoire canadien.`,
 			`Je vis dans l’incertitude car je ne peux pas me projeter dans l’avenir.`,
@@ -82,7 +82,7 @@ export default function connaitreData() { return [
 		presentation: [
 			`Cela signifie que j’ai un permis de travail temporaire qui me permet de travailler uniquement pour un employeur, me rendant ainsi entièrement dépendant de lui. Par conséquent, ma présence sur le territoire dépend entièrement de cette personne.`,
 		],
-		impactIntro: `Mon statut d'immigration est précaire car ...`,
+		impactIntro: `Mon statut d'immigration est <strong>précaire car ...</strong>`,
 		impacts: [
 			`J’ai peur de faire valoir mes droits et de dénoncer une situation d’exploitation de la part de mon employeur par crainte de perdre mon emploi et, par conséquent, mon statut d’immigration.`,
 			`On ne me permet pas de changer de travail ni d'employeur.`,

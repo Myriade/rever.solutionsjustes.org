@@ -60,8 +60,7 @@ const SectionRealites = styled.section`
     grid-area: 1 / 1 / 2 / 3;
     width: 100%;
     h2 {
-      color: var(--color-bleu-tres-fonce);
-      margin-bottom: 1rem;}}
+      color: var(--color-bleu-tres-fonce);}}
 
   nav {
     ul {
@@ -137,20 +136,22 @@ const SectionRealites = styled.section`
         grid-area: 1 / 1 / 2 / 2; 
         display: grid;
         grid-template-rows: auto 1fr auto;
-        align-items: center;
-        justify-items: center;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;}
+        gap: 1rem;
+        &__intro {
+          max-width: 30ch;
+          background: white;}
+        &__content {
+          display: grid;
+          align-items: center;
+        }
+      }
         
       .impact {
-        width: 50%;
-        grid-area: 2 / 1 / 3 / 2;
+        margin: 5vh 5vw;
+        grid-area: 1 / 1 / 2 / 2;
         color: white;
-        border-radius: 4px;
-        margin-block: 20px;
+        border-radius: 6px;
+        transform-origin: center center;
         
         &:first-of-type {
           background: var(--color-bleu-tres-pale);
@@ -164,12 +165,18 @@ const SectionRealites = styled.section`
         &:nth-of-type(5n) {
           background: var(--color-bleu-tres-fonce);}
         p {
-          padding: 0.75em 1em;
+          padding: 1.5em 2.5em;
           margin-bottom: 0;
+          line-height: clamp(1.1em, 3vh, 1.6em);}
+        
+        &:first-child p {
+          visibility: visible !important;
+          opacity: 1 !important;
         }
       }
     }
   }
+}
   
   .mythe {
     grid-area: 1 / 1 / 2 / 2;
@@ -352,7 +359,10 @@ const ConnaitrePage = () => {
     });
     
     // Animations au scroll dans chacune des fiches de réalité
-    realitesGsapArr.forEach((element, realiteIndex) => {
+    realitesGsapArr.forEach( (element, realiteIndex) => {
+      const elementYMargin = window.innerHeight * 0.05;
+      const elementXMargin = window.innerWidth * 0.05;
+      
       const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
       
       const mytheExplicationsHiddenHeight = element.querySelector('.mythe__explications').scrollHeight - element.querySelector('.mythe__explications').offsetHeight;
@@ -387,16 +397,26 @@ const ConnaitrePage = () => {
       });      
       
       // Les impacts apparaissent, placés en désordre
+      contentTimeline.from( element.querySelectorAll('.impacts .impact'), {
+        yPercent: -100,
+        autoAlpha: 0,
+        stagger: 1,
+        ease: 'power1.inOut',
+      });
+      
       contentTimeline.to( element.querySelectorAll('.impacts .impact'), {
-        y: 'random(-20, 20, 5)',
-        xPercent: 'random(-50, 50, 5)',
-        transformOrigin: 'center center',
-        // visibility: 'visible',
-        // opacity: 1,
-        autoAlpha: 1,
+        x: `random(-${elementXMargin}, ${elementXMargin}, 3)`,
+        y: `random(-${elementYMargin}, ${elementYMargin}, 3)`,
         stagger: 1,
         ease: 'power1.inOut'
-      });
+      }, '<');
+      
+      contentTimeline.from( element.querySelectorAll('.impacts .impact > p'), {
+        autoAlpha: 0,
+        stagger: 1,
+        ease: 'power2.in',
+        delay: 0.2
+      }, '<');
       
       // Impacts message de fin apparaît
       contentTimeline.from( element.querySelector('.impacts__fin'), {
@@ -487,8 +507,7 @@ const ConnaitrePage = () => {
         <Section1Hero>
           <div className='overlay-text'>
             <h1>
-              <span className='right'>Connaître</span> 
-              <span></span> 
+              <span className='right'>Connaître</span>
               <span>l'essentiel&nbsp;...</span>
               <span className='small'>... de certains statuts d'immigration précaires et de l'absence de statut</span>
             </h1>
@@ -547,13 +566,15 @@ const ConnaitrePage = () => {
                         )})}
                       </div>
                       <div className='impacts'>
-                        <p className='impacts__intro'>{realite.impactIntro}</p>
-                        {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
-                          return (
-                            <div key={pIndex} className='impact'>
-                              <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
-                            </div>
-                        )})}
+                        <p className='impacts__intro' dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
+                        <div className='impacts__content'>
+                          {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
+                            return (
+                              <div key={pIndex} className='impact'>
+                                <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
+                              </div>
+                          )})}
+                        </div>
                         <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
                       </div>
                     </div>
