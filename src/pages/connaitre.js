@@ -62,7 +62,7 @@ const SectionRealites = styled.section`
     h2 {
       color: var(--color-bleu-tres-fonce);}}
 
-  nav {
+  nav#realites-nav {
     ul {
       list-style-type: none;
       padding: 0;
@@ -315,8 +315,7 @@ const ConnaitrePage = () => {
   // GSAP Animations pour la barre de navigation et les realite uniquess
   const gsapAnimations = contextSafe(() => {
     
-    // creates an array of realite-unique items
-    const realitesGsapArr = gsap.utils.toArray('.realite-unique');
+    let allRealitesHeight = 1000;
     
     // NAVIGATION 
     // nav items appears smoothly
@@ -336,17 +335,17 @@ const ConnaitrePage = () => {
     // nav bar pins 
     gsap.to('#realites-nav', {
       scrollTrigger: {
+        id: 'realitesNavPin',
         trigger: '#realites-nav',
         pin: true,
         pinSpacing: false,
         start: 'top 120px',
-        end: "+=" + ( window.innerHeight * 5 * (realitesDataArray.length + 0.6)),
-        //markers: true,
+        end: () => allRealitesHeight,
       }
     });
     
     // REALITE UNIQUE
-    // La première realité apparaît doucement
+    // La zone des realités apparaît doucement
     gsap.from( '#realites-container', {
       autoAlpha: 0,
       duration: 1.5,
@@ -359,7 +358,10 @@ const ConnaitrePage = () => {
     });
     
     // Animations au scroll dans chacune des fiches de réalité
-    realitesGsapArr.forEach( (element, realiteIndex) => {
+    // creates an array of realite-unique items
+    const realitesGsapArr = gsap.utils.toArray('.realite-unique');
+    // create a ScrollTrigger for each realite
+     realitesGsapArr.forEach( (element, realiteIndex) => {
       const elementYMargin = window.innerHeight * 0.05;
       const elementXMargin = window.innerWidth * 0.05;
       
@@ -476,6 +478,12 @@ const ConnaitrePage = () => {
         fastScrollEnd: true,
         onEnter: (self) => {
           setActiveRealite(realiteIndex);
+          if (realiteIndex < realitesGsapArr.length - 1) {
+            allRealitesHeight = self.end + window.innerHeight;
+          } else {
+            allRealitesHeight = self.end;
+          }
+          ScrollTrigger.refresh();
         },
         onEnterBack: (self) => {
           setActiveRealite(realiteIndex);
@@ -493,7 +501,12 @@ const ConnaitrePage = () => {
         //markers: true,
       });
       
-    });
+     });
+     
+     // const lastRealiteScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${realitesGsapArr.length - 1}`);
+     // const navPinEnd = lastRealiteScrollTrigger.end;
+     // console.log(navPinEnd);
+     
     
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
@@ -519,6 +532,7 @@ const ConnaitrePage = () => {
             <div className='titre'>
               <h2>Récits, mythes et réalités</h2>
             </div>
+            
             <nav id='realites-nav'>
               <ul>
                 {realitesDataArray.map( (realite, index) => { return (
