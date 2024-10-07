@@ -302,14 +302,18 @@ const Section4Cta = styled.section`
     
   .intro p {
     font-weight: 500;
-    max-width: 32ch;}
+    max-width: 32ch;
+    font-size: 1.2rem;}
+    
+  p {
+    font-size: 1rem;}
   
   .button {
     margin-top: var(--h-spacer);
     padding-inline: 3vw;}
   
   ${media.mediumUp`
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   `}
 `;
 
@@ -750,6 +754,25 @@ const ConnaitrePage = () => {
           <h2>S'impliquer davantage</h2>
           <div className='grid'>
           
+            <div className='sensibilsation'>
+              <div className='intro'>
+                <h3>Titre</h3>
+                <p>Texte Lorem ipsum, color sit amet consectetur adipisicing elit. </p>
+              </div>
+              <p>In incidunt tempora quas doloremque tempore fugit amet harum perspiciatis repudiandae dolore magni consequuntur non architecto cumque inventore, optio expedita!</p>
+              <StaticImage 
+                src='../images/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
+                alt='Illustration d’une famille portant des boîtes'
+                placeholder='blurred'
+                quality={100}
+                height={200}
+                style={{ marginInline: 'auto' }}
+              />
+              <a href='https://www.solutionsjustes.org/' className='button centered' target='_blank' rel='noreferrer'>
+                Bouton
+              </a>
+            </div>
+            
             <div className='benevolat'>
               <div className='intro'>
                 <h3>Je veux faire du bénévolat</h3>
@@ -765,6 +788,14 @@ const ConnaitrePage = () => {
                 <h3>Je souhaite signer des pétitions</h3>
                 <p>Signer des pétitions de nos allié.e.s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
               </div>
+              <StaticImage 
+                src='../images/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
+                alt='Illustration d’une famille portant des boîtes'
+                placeholder='blurred'
+                quality={100}
+                height={200}
+                style={{ marginInline: 'auto' }}
+              />
               <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
                 Agir
               </a>
