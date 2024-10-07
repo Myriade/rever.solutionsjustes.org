@@ -30,6 +30,7 @@ const Section1Hero = styled.div`
     position: relative;}
   
   h1 {
+    height: calc(40vh - var(--header-height));
     font-size: calc( (40vh - var(--header-height) - 10vh) / 3 );
     color: white;
     line-height: 1em;
