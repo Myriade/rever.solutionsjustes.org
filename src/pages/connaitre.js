@@ -347,6 +347,7 @@ const ConnaitrePage = () => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
     gsap.to( window, { 
       duration: 0, 
+      overwrite: 'true',
       scrollTo: {
         y: `#${clickedId}`,
         offsetY: 120
