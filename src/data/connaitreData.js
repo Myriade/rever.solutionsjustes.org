@@ -2,7 +2,7 @@ export default function connaitreData() { return [
 	{
 		idUnique: 'sans-statut',
 		nom: `Maria`,
-		titreCourt: 'sans statut d’immigration',
+		titreCourt: 'Sans statut d’immigration',
 		intro: `Bonjour, je suis Maria et je suis une personne`,
 		statut: 'sans statut d’immigration',
 		presentation: [
@@ -27,7 +27,7 @@ export default function connaitreData() { return [
 	{
 		idUnique: 'asile-refuse',
 		nom: `Hassan`,
-		titreCourt: 'demande d’asile refusée',
+		titreCourt: 'Demande d’asile refusée',
 		intro: `Bonjour, je m'appelle Hassan et j’ai un statut d’`,
 		statut: 'immigration demandeur d’asile refusé',
 		presentation: [
@@ -52,7 +52,7 @@ export default function connaitreData() { return [
 	{
 		idUnique: 'violence-conjugale',
 		nom: `Priya`,
-		titreCourt: 'violence conjugale',
+		titreCourt: 'Violence conjugale',
 		intro: `Bonjour, je m'appelle Priya et j’ai un statut`,
 		statut: 'permis séjour temporaire pour victimes de violence conjugale',
 		presentation: [
@@ -78,7 +78,7 @@ export default function connaitreData() { return [
 		nom: `Mohammed`,
 		titreCourt: 'Permis de travail fermé',
 		intro: `Bonjour, je m'appelle Mohammed et j’ai un `,
-		statut: 'permis de travail fermé',
+		statut: 'Permis de travail fermé',
 		presentation: [
 			`Cela signifie que j’ai un permis de travail temporaire qui me permet de travailler uniquement pour un employeur, me rendant ainsi entièrement dépendant de lui. Par conséquent, ma présence sur le territoire dépend entièrement de cette personne.`,
 		],

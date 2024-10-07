@@ -61,49 +61,94 @@ const Section1Hero = styled.div`
 
 const SectionRealites = styled.section`
   padding: 0.5rem;
-  display: grid;
-  grid-template-columns: 10% 90%;
-  grid-template-rows: auto auto;
   background: var(--color-bleu-tres-pale);
   
   > .titre {
-    grid-area: 1 / 1 / 2 / 3;
-    width: 100%;
     h2 {
       color: var(--color-bleu-tres-fonce);}}
 
   nav#realites-nav {
     ul {
+      height: 7rem;
       list-style-type: none;
       padding: 0;
       margin-top: 0;
-      display: grid;
-      gap: calc(var(--v-spacer) / 2);}
+      display: flex;
+      flex-wrap: wrap;
+      gap: calc(var(--v-spacer) / 2) 1rem;
+      align-items: stretch;}
     li.realite-nav-item {
       background: var(--color-bleu-clair);
       color: white;
-      border: 2px solid white;
-      border-radius: 17px;
-      border-bottom-left-radius: 0;
-      line-height: 1.25;
+      border-radius: 10px;
+      line-height: 1.4;
+      display: grid;
       a {
-        display: grid;;
+        display: grid;
+        align-content: center;
         font-weight: 400;
-        align-items: center;
-        padding: 0.75em 1em;
+        text-align: center;
+        max-width: 17ch;
+        padding-inline: 1rem;
+        padding-top: 15px;
+        position: relative;
         &:hover {
-          cursor: pointer;}}
+          cursor: pointer;}
+        .avatar {
+          position: absolute;
+          top: -20px;
+          width: 100%;
+          > * {
+            width: 45px;
+            height: 45px;
+            margin-inline: auto;}}}
+      
       &:hover, &.active {
-        background: var(--color-bleu-gris);}}}
+        background: var(--color-bleu-tres-fonce);}
+      
+      &.shortcut .avatar {
+        > div {
+          background-color: white;
+          color: var(--color-bleu-tres-fonce);
+          font-size: 1.5rem;
+          border-radius: 50%;
+          display: grid;
+          align-items: center;}}}
+    
+    .nom {
+      text-transform: uppercase;}}
   
   #realites-container {
-    margin-left: 2vw !important;}
+    margin-inline: 0 !important;}
+    
+  ${media.largeUp`
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 0 var(--h-spacer);
+    
+    > .titre {
+      grid-area: 1 / 1 / 2 / 3;
+      width: 100%;}
+      
+    nav#realites-nav ul {
+      height: 80vh;
+      display: grid;}
+  `}
+  
+  ${media.onlySmall`
+    nav#realites-nav li.realite-nav-item {
+      a {
+        padding-block: 0.5em;}
+      .avatar {
+        display: none;}}
+  `}
   
   .realite-unique {
     height: calc(100vh - var(--header-height) - var(--v-spacer));
     overflow: hidden;
     background: white;
-    border-radius: var(--border-radius);
+    border-radius: 10px;;
     margin-bottom: var(--v-spacer);
     display: grid;
     grid-template-rows: 1fr auto;}
@@ -245,24 +290,26 @@ const SectionRealites = styled.section`
         margin-block: 0 1em;
         max-width: 60ch;
         margin-inline: auto;
-        line-height: 1.6;}}
-  }
+        line-height: 1.6;}}}
       
   .progress {
     width: 100%;
     margin-inline: auto;
     grid-area: 2 / 1 / 3 / 2;
     padding: calc(var(--v-spacer) / 4) calc(var(--h-spacer) /2);
+    
     &__bar-background {
       background-color: var(--color-bleu-tres-pale);
       width: 50%;
       margin-inline: auto;
       height: 0.8rem;
       border-radius: 0.4rem;}
+      
     &__bar-animate {
       height: 100%;
       background-color: var(--color-bleu-clair);
       border-radius: 0.4rem;}
+      
     .shortcuts {
       width: 50%;
       margin-inline: auto;
@@ -273,12 +320,11 @@ const SectionRealites = styled.section`
         background: transparent;
         &:hover {
           cursor: pointer;
-          color: var(--color-bleu-clair);
+          color: var(--color-bleu-clair) !important;
           text-decoration: underline;
         }
       }
     }
-    
   }
 `;
 
@@ -647,13 +693,17 @@ const ConnaitrePage = () => {
                       onClick={() => navClickHandler(index)}
                       aria-label='Aller à la section'
                     >
-                      {realite.nom}, <br/>
-                      <em>{realite.titreCourt}</em>
+                      <div className='avatar'>
+                        <img src={`/images/connaitre/${realite.nom}.svg`}/>
+                      </div>
+                      <div className='nom'>{realite.nom}</div>
+                      <strong>{realite.titreCourt}</strong>
                     </a>
                   </li>
                 )})}
                 <li className='realite-nav-item shortcut'>
                   <a href='#s-impliquer'>
+                    <div className='avatar'><div>✓</div></div>
                     S'impliquer
                   </a>
                 </li>
@@ -762,7 +812,7 @@ const ConnaitrePage = () => {
               </div>
               <p>In incidunt tempora quas doloremque tempore fugit amet harum perspiciatis repudiandae dolore magni consequuntur non architecto cumque inventore, optio expedita!</p>
               <StaticImage 
-                src='../images/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
+                src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
                 alt='Illustration d’une famille portant des boîtes'
                 placeholder='blurred'
                 quality={100}
@@ -790,7 +840,7 @@ const ConnaitrePage = () => {
                 <p>Signer des pétitions de nos allié.e.s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
               </div>
               <StaticImage 
-                src='../images/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
+                src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
                 alt='Illustration d’une famille portant des boîtes'
                 placeholder='blurred'
                 quality={100}
