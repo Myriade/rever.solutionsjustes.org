@@ -400,7 +400,6 @@ const ConnaitrePage = () => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
     gsap.to( window, { 
       duration: 0, 
-      overwrite: 'true',
       scrollTo: {
         y: `#${clickedId}`,
         offsetY: 120
@@ -459,8 +458,8 @@ const ConnaitrePage = () => {
     // La zone des realités apparaît doucement
     gsap.from( '#realites-container', {
       autoAlpha: 0,
-      duration: 1.5,
-      delay: 1,
+      duration: 1,
+      delay: 0.5,
       scrollTrigger: {
         id: 'firstRealiteReveal',
         trigger: '#realites-nav',
@@ -638,6 +637,8 @@ const ConnaitrePage = () => {
         },
         onEnterBack: (self) => {
           setActiveRealite(realiteIndex);
+          allRealitesHeight = self.end;
+          ScrollTrigger.refresh();
         },
         //markers: true,
       });
