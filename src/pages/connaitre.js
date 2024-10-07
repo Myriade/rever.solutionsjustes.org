@@ -125,12 +125,16 @@ const SectionRealites = styled.section`
         font-weight: 400;
         text-transform: none;
         span {
-          font-weight: 800;}}}
+          font-weight: 800;
+        }
+      }
+    }
         
     &__narratif {
       background: white;
       position: relative;
       display: grid;
+      overflow: hidden;
       
       p {
         margin-block: 0 1em;}
@@ -192,7 +196,6 @@ const SectionRealites = styled.section`
       }
     }
   }
-}
   
   .mythe {
     grid-area: 1 / 1 / 2 / 2;
@@ -201,38 +204,48 @@ const SectionRealites = styled.section`
     padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
     color: white;
     display: grid;
-    align-content: center;
     overflow: hidden;
+    
     &__intro {
-      .mythe__titre {
-        position: relative;
-        display: inline-block;
-        .biffe {
-          text-decoration: line-through;
-          text-decoration-color: hsla(353, 90%, 61%, 0.7);
-          text-decoration-thickness: 5px;
-        }
-      }
-      .mythe__sous-titre {
-        display: grid;
-        grid-template-columns: 100px auto;
-        gap: 1rem;
-        margin-bottom: 1rem;
-        align-items: center;
-        h3 {
-          margin-bottom: 0;
-        }
-      }
-    }
+      position: relative;}
+      
+    &__titre {
+      position: relative;
+      display: inline-block;
+      transform-origin: left top;
+      .biffe {
+        background-color: var(--color-bleu-tres-fonce);
+        text-decoration: line-through;
+        text-decoration-color: hsla(353, 90%, 61%, 0.7);
+        text-decoration-thickness: 5px;}}
+          
+    &__sous-titre {
+      background-color: var(--color-bleu-tres-fonce);
+      display: grid;
+      grid-template-columns: 75px auto;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: center;
+      h3 {
+        font-size: clamp(18px, 1.6vw, 24px);
+        margin-bottom: 0;
+        line-height: 1.4;}}
+      
+    &__etiquette {
+      overflow: hidden;}
+      
+    &__instruction {
+      font-style: italic;
+      color: var(--color-bleu-tres-pale);
+      position: absolute;}
+      
     &__explications {
       overflow: hidden;
       p {
         margin-block: 0 1em;
         max-width: 60ch;
         margin-inline: auto;
-        line-height: 1.6;
-      }
-    }
+        line-height: 1.6;}}
   }
       
   .progress {
@@ -492,6 +505,11 @@ const ConnaitrePage = () => {
         color: 'white',
       }, '<');
       
+      // Mythe intro se place plus bas
+      contentTimeline.to( element.querySelector('.mythe__intro'), {
+        y: element.querySelector('.mythe').offsetHeight / 3,
+      }, '<');
+      
       // Mythe Titre se raye
       contentTimeline.to( element.querySelector('.mythe__titre .biffer'), {
         text: {
@@ -500,17 +518,41 @@ const ConnaitrePage = () => {
         },
       }, 'mythe-et-realite');
       
+      // Mythe instruction disparait en même temps
+      contentTimeline.to( element.querySelector('.mythe__instruction'), {
+        autoAlpha: 0,
+        height: 0
+      }, '<');
+      
       // Mythe sous-titre apparaît
       contentTimeline.from( element.querySelector('.mythe__sous-titre'), {
         autoAlpha: 0,
         height: 0
       });
       
-      // Mythe explications apparaît 
+      // Mythe explications tous les paragraphes apparaissent 
       contentTimeline.from( element.querySelector('.mythe__explications'), {
         autoAlpha: 0,
         height: 0,
       });
+      
+      // Mythe intro se place plus haut
+      contentTimeline.to( element.querySelector('.mythe__intro'), {
+        y: '0',
+      }, '<');
+      
+      // Mythe étiquette disparait en meme temps 
+      contentTimeline.to( element.querySelector('.mythe__etiquette'), {
+        autoAlpha: 0,
+        height: 0,
+      }, '<');
+      
+      // Mythe titre rapetisse en meme temps 
+      contentTimeline.to( element.querySelector('.mythe__titre'), {
+        scale: '0.8',
+        fontWeight: '400',
+        marginBottom: '0.25em'
+      }, '<');
       
       // Mythe textes défilent vers le haut 
       contentTimeline.to( element.querySelectorAll('.mythe__explications p'), {
@@ -656,9 +698,10 @@ const ConnaitrePage = () => {
                   <div className='mythe'>
                     <div className='mythe__intro'>
                       <h3 className='mythe__titre'>
-                        MYTHE&nbsp;:<br/>
+                        <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
                         «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
                       </h3>
+                      <p className='mythe__instruction'>Faites défiler</p>
                       <div className='mythe__sous-titre'>
                         <div>
                           <img
