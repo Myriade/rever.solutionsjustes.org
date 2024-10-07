@@ -157,7 +157,7 @@ const SectionRealites = styled.section`
       }
         
       .impact {
-        margin: 5vh 5vw;
+        margin: 3vh 4vw;
         grid-area: 1 / 1 / 2 / 2;
         color: white;
         border-radius: 6px;
@@ -175,7 +175,7 @@ const SectionRealites = styled.section`
         &:nth-of-type(5n) {
           background: var(--color-bleu-tres-fonce);}
         p {
-          padding: 1.5em 2.5em;
+          padding: 3vh 2vw;
           margin-bottom: 0;
           line-height: clamp(1.1em, 3vh, 1.6em);}
         
