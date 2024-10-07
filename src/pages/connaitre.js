@@ -230,18 +230,27 @@ const SectionRealites = styled.section`
   }
       
   .progress {
+    width: 100%;
+    margin-inline: auto;
     grid-area: 2 / 1 / 3 / 2;
     padding: calc(var(--v-spacer) / 4) calc(var(--h-spacer) /2);
     &__bar-background {
-      height: 0.8rem;
+      background-color: var(--color-bleu-tres-pale);
       width: 50%;
       margin-inline: auto;
-      background-color: var(--color-bleu-tres-pale);
+      height: 0.8rem;
       border-radius: 0.4rem;}
     &__bar-animate {
       height: 100%;
       background-color: var(--color-bleu-clair);
-      border-radius: 0.4rem;}}
+      border-radius: 0.4rem;}
+    .shortcuts {
+      width: 50%;
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;}
+    
+  }
 `;
 
 const Section4Cta = styled.section`
@@ -278,14 +287,13 @@ const Section4Cta = styled.section`
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, TextPlugin);
 
 const ConnaitrePage = () => {
+  // States, refs and variables
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(0);
-  
   const gsapContainerRef = useRef();
-  
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
-  
   const realitesDataArray = connaitreData();
+  const timelineRef = useRef([]);
   
   // event handlers
   function firstHoverTouchHandler() {
@@ -322,7 +330,14 @@ const ConnaitrePage = () => {
     
   });
   
-  // GSAP Animations pour la barre de navigation et les realite uniquess
+  const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
+    gsap.to( window, { 
+      scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
+      duration: 0,
+    });
+  });
+  
+  // GSAP Animations pour la barre de navigation et les realite uniques
   const gsapAnimations = contextSafe(() => {
     
     let allRealitesHeight = 1000;
@@ -371,7 +386,7 @@ const ConnaitrePage = () => {
     // creates an array of realite-unique items
     const realitesGsapArr = gsap.utils.toArray('.realite-unique');
     // create a ScrollTrigger for each realite
-     realitesGsapArr.forEach( (element, realiteIndex) => {
+    realitesGsapArr.forEach( (element, realiteIndex) => {
       const elementYMargin = window.innerHeight * 0.05;
       const elementXMargin = window.innerWidth * 0.05;
       
@@ -400,7 +415,7 @@ const ConnaitrePage = () => {
       contentTimeline.to( element.querySelector('.presentation'), {
         autoAlpha: 0,
         yPercent: -50,
-      });
+      }, 'mon-statut');
       
       // Impacts intro apparaît
       contentTimeline.from( element.querySelector('.impacts__intro'), {
@@ -414,7 +429,7 @@ const ConnaitrePage = () => {
         autoAlpha: 0,
         stagger: 1,
         ease: 'power1.inOut',
-      });
+      }, 'les-impacts');
       
       contentTimeline.to( element.querySelectorAll('.impacts .impact'), {
         x: `random(-${elementXMargin}, ${elementXMargin}, 3)`,
@@ -457,7 +472,7 @@ const ConnaitrePage = () => {
           value: mythTextToStrike,
           newClass: 'biffe',
         },
-      });
+      }, 'mythe-et-realite');
       
       // Mythe sous-titre apparaît
       contentTimeline.from( element.querySelector('.mythe__sous-titre'), {
@@ -511,12 +526,9 @@ const ConnaitrePage = () => {
         //markers: true,
       });
       
-     });
-     
-     // const lastRealiteScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${realitesGsapArr.length - 1}`);
-     // const navPinEnd = lastRealiteScrollTrigger.end;
-     // console.log(navPinEnd);
-     
+      timelineRef.current[realiteIndex] = contentTimeline;
+      
+    }); // end forEach
     
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
@@ -636,6 +648,17 @@ const ConnaitrePage = () => {
                   </div>
                   
                   <div className='progress'>
+                    <nav className='shortcuts'>
+                      <button
+                        onClick={ () => labelClickHandler(index, 'mon-statut') } 
+                      >Mon statut</button>
+                      <button
+                        onClick={ () => labelClickHandler(index, 'les-impacts') }
+                      >Les impacts</button>
+                      <button
+                        onClick={ () => labelClickHandler(index, 'mythe-et-realite') }
+                      >Mythe et réalité</button>
+                    </nav>
                     <div className='progress__bar-background'>
                       <div className='progress__bar-animate'></div>
                     </div>
