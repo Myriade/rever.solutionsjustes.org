@@ -141,6 +141,12 @@ const SectionRealites = styled.section`
         
       .presentation {
         grid-area: 1 / 1 / 2 / 2; }
+        
+      .instruction {
+        text-align: center;
+        grid-area: 1/1/2/2;
+        color: #aaa; 
+        font-style: italic;}
       
       .impacts {
         grid-area: 1 / 1 / 2 / 2; 
@@ -248,7 +254,17 @@ const SectionRealites = styled.section`
       width: 50%;
       margin-inline: auto;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;}
+      grid-template-columns: 1fr 1fr 1fr;
+      button {
+        border: 0;
+        background: transparent;
+        &:hover {
+          cursor: pointer;
+          color: var(--color-bleu-clair);
+          text-decoration: underline;
+        }
+      }
+    }
     
   }
 `;
@@ -333,7 +349,6 @@ const ConnaitrePage = () => {
   const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
     gsap.to( window, { 
       scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
-      duration: 0,
     });
   });
   
@@ -421,7 +436,13 @@ const ConnaitrePage = () => {
       contentTimeline.from( element.querySelector('.impacts__intro'), {
         yPercent: '100',
         autoAlpha: 0,
-      });      
+      });
+      
+      // Impacts instruction apparaît en meme temps]
+      contentTimeline.from( element.querySelector('.instruction'), {
+        yPercent: '100',
+        autoAlpha: 0,
+      },'<');
       
       // Les impacts apparaissent, placés en désordre
       contentTimeline.from( element.querySelectorAll('.impacts .impact'), {
@@ -464,6 +485,11 @@ const ConnaitrePage = () => {
       // La barre de progression devient bleu foncé tout de suite.
       contentTimeline.to( element.querySelector('.progress'), {
         backgroundColor: 'var(--color-bleu-tres-fonce)',
+      }, '<');
+      
+      // Les liens de labels pour la timeline deviennent blancs tout de suite
+      contentTimeline.to( element.querySelectorAll('.shortcuts button'), {
+        color: 'white',
       }, '<');
       
       // Mythe Titre se raye
@@ -612,6 +638,9 @@ const ConnaitrePage = () => {
                       <div className='impacts'>
                         <p className='impacts__intro' dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
                         <div className='impacts__content'>
+                          <p className='instruction'>
+                            Faite défiler pour voir les impacts
+                          </p>
                           {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
                             return (
                               <div key={pIndex} className='impact'>
@@ -651,13 +680,16 @@ const ConnaitrePage = () => {
                     <nav className='shortcuts'>
                       <button
                         onClick={ () => labelClickHandler(index, 'mon-statut') } 
-                      >Mon statut</button>
+                        aria-label='Aller à la section'
+                      >&#8250; Mon statut</button>
                       <button
                         onClick={ () => labelClickHandler(index, 'les-impacts') }
-                      >Les impacts</button>
+                        aria-label='Aller à la section'
+                      >&#8250; Les impacts</button>
                       <button
                         onClick={ () => labelClickHandler(index, 'mythe-et-realite') }
-                      >Mythe et réalité</button>
+                        aria-label='Aller à la section'
+                      >&#8250; Mythe et réalité</button>
                     </nav>
                     <div className='progress__bar-background'>
                       <div className='progress__bar-animate'></div>
