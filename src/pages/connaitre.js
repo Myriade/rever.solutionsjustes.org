@@ -290,7 +290,14 @@ const SectionRealites = styled.section`
         margin-block: 0 1em;
         max-width: 60ch;
         margin-inline: auto;
-        line-height: 1.6;}}}
+        line-height: 1.6;
+         a {
+          text-decoration: underline;
+          font-weight: normal;
+        }
+      }
+    }
+  }
       
   .progress {
     width: 100%;
@@ -722,14 +729,17 @@ const ConnaitrePage = () => {
                   <div className='recit'>
                     <div className='recit__personna'>
                       <h2>
-                        {realite.intro} <span>{realite.statut}</span>.
+                        {realite.intro}<span>{realite.statut}</span>.
                       </h2>
                     </div>
                     <div className='recit__narratif'>
                       <div className='presentation'>
                         {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
                           return (
-                          <p key={pIndex} className='paragr'>{paragraphe}</p>
+                          <p 
+                            key={pIndex} 
+                            className='paragr' 
+                            dangerouslySetInnerHTML={{ __html: paragraphe}}></p>
                         )})}
                       </div>
                       <div className='impacts'>
@@ -769,7 +779,10 @@ const ConnaitrePage = () => {
                     </div>
                     <div className='mythe__explications'>
                       {realite.mytheExplications.map( (paragraphe, pIndex) => { return (
-                        <p key={pIndex}>{paragraphe}</p>
+                        <p 
+                          key={pIndex}
+                          dangerouslySetInnerHTML={{ __html: paragraphe }}
+                        ></p>
                       )})}
                     </div>
                   </div>
@@ -807,10 +820,9 @@ const ConnaitrePage = () => {
           
             <div className='sensibilsation'>
               <div className='intro'>
-                <h3>Titre</h3>
-                <p>Texte Lorem ipsum, color sit amet consectetur adipisicing elit. </p>
+                <h3>Je souhaite accueillir un atelier</h3>
+                <p>Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école&nbsp;?</p>
               </div>
-              <p>In incidunt tempora quas doloremque tempore fugit amet harum perspiciatis repudiandae dolore magni consequuntur non architecto cumque inventore, optio expedita!</p>
               <StaticImage 
                 src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
                 alt='Illustration d’une famille portant des boîtes'
@@ -819,8 +831,13 @@ const ConnaitrePage = () => {
                 height={200}
                 style={{ marginInline: 'auto' }}
               />
-              <a href='https://www.solutionsjustes.org/' className='button centered' target='_blank' rel='noreferrer'>
-                Bouton
+              <a 
+                href={`mailto:atelier@montrealcitymission.org?subject=Je%20souhaite%20participer%20%C3%A0%20un%20atelier&body=Bonjour%2C%0A%0AJ'ai%20vu%20la%20campagne%20R%C3%AAver%20%C3%A0%20l'essentiel%20et%20j'aimerais%20organiser%20une%20activit%C3%A9%20de%20sensibilisation%20ou%20une%20formation%20dans%20mon%20entreprise%2C%20organisation%2C%20f%C3%AAte%20de%20quartier%20ou%20%C3%A9cole.`} 
+                className='button centered' 
+                target='_blank' 
+                rel='noreferrer'
+              >
+                Contactez-nous
               </a>
             </div>
             
@@ -837,7 +854,7 @@ const ConnaitrePage = () => {
             <div className='petitions'>
               <div className='intro'>
                 <h3>Je souhaite signer des pétitions</h3>
-                <p>Signer des pétitions de nos allié.e.s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
+                <p>Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
               </div>
               <StaticImage 
                 src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'

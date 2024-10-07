@@ -3,17 +3,17 @@ export default function connaitreData() { return [
 		idUnique: 'sans-statut',
 		nom: `Maria`,
 		titreCourt: 'Sans statut d’immigration',
-		intro: `Bonjour, je suis Maria et je suis une personne`,
+		intro: `Bonjour, je suis Maria et je suis une personne `,
 		statut: 'sans statut d’immigration',
 		presentation: [
-			`Cela signifie que je n'ai pas de statut d'immigration régulier au Canada. Les personnes im·migrantes peuvent se retrouver dans cette situation pour diverses raisons, comme avoir dépassé la durée de leur visa de résident temporaire, de permis d'études ou de travail, etc.`,
+			`Cela signifie que <strong>je n'ai pas de statut d'immigration régulier au Canada</strong>. Les personnes im·migrantes peuvent se retrouver dans cette situation pour diverses raisons, comme avoir dépassé la durée de leur visa de résident temporaire, de permis d'études ou de travail, etc.`,
 			`Il y a plusieurs raisons pour lesquelles nous, personnes sans statut d’immigration,  n'avons pas quitté le Canada malgré notre situation précaire. Parmi ces raisons : nous n'avons plus de liens avec notre pays d’origine, nous avons construit notre vie au Québec où nous résidons depuis des années et nous voulons rester ici, notre pays d’origine est marqué par la violence et l’insécurité, etc.`
 		],
 		impactIntro: `<strong>L'absence de statut</strong> d'immigration entraîne que ...`,
 		impacts: [
-			`On ne me donne pas accès aux services de santé et aux services sociaux. Cette situation impacte mon bien-être général et ma santé physique, car je n'ai pas accès aux soins dont j'ai besoin.`,
-			`J’ai la crainte de porter plainte si je suis victime d’un crime, par exemple, de violence sexuelle.`,
-			`<strong>Je vis constamment dans l'angoisse et l'invisibilité.</strong> J'appréhende de marcher dans la rue pour rendre visite à une amie ou d'ouvrir la porte au facteur, craignant d’être arrêtée par la police et de devoir m’identifier.`,
+			`On ne me donne pas <strong>accès aux services de santé et aux services sociaux</strong>. Cette situation impacte mon bien-être général et ma santé physique, car je n'ai pas accès aux soins dont j'ai besoin.`,
+			`J’ai la <strong>crainte de porter plainte</strong> si je suis victime d’un crime, par exemple, de violence sexuelle.`,
+			`<strong>Je vis constamment dans l'angoisse</strong> et l'invisibilité. J'appréhende de marcher dans la rue pour rendre visite à une amie ou d'ouvrir la porte au facteur, craignant d’être arrêtée par la police et de devoir m’identifier.`,
 			`Je n’ai pas accès aux services municipaux de Sherbrooke qui nécessitent une pièce d'identité, comme la bibliothèque ou la piscine.`,
 			`On ne me permet pas de me projeter dans l’avenir en raison de l'incertitude dans laquelle je vis. Mes aspirations sont restreintes par mon statut d’immigration, ce qui engendre un profond sentiment d’exclusion et de manque d’appartenance à la société où je vis depuis plus de 15 ans.`
 		],
@@ -44,16 +44,16 @@ export default function connaitreData() { return [
 		mytheTitre: `Les personnes dont la demande d'asile a été rejetée bénéficient des services sociaux et de santé sans y contribuer.`,
 		mytheSoustitre: `Cette affirmation est fausse. Le rejet de la demande d'asile arrive après plusieurs années passées sur le territoire canadien en attendant une décision. Pendant cette période, les personnes demandeuses d’asile bénéficient d'un permis de travail et apportent leur contribution à la société d'accueil. `,
 		mytheExplications: [
-			`Après le refus de la demande d'asile, bien que celle-ci ait été rejetée, la personne peut encore demeurer sur le territoire et bénéficie de certains droits, tels que l'accès aux services de santé de base. `,
+			`Après le refus de la demande d'asile, bien que celle-ci ait été rejetée, <strong>la personne peut encore demeurer sur le territoire</strong> et bénéficie de certains droits, tels que l'accès aux services de santé de base. `,
 			`Malheureusement, certaines personnes dont la demande d'asile a été refusée et qui peuvent encore rester sur le territoire ne disposent plus de permis de travail, malgré leur désir de continuer à subvenir à leurs propres besoins et ainsi à l’économie du Québec.`,
-			`Par exemple, la famille Rodriguez Flores a déposé une demande d’asile en 2019 et vivait à Sherbrooke en attendant une décision. Pendant cette période, la famille s’est bien intégrée, a travaillé dans les commerces locaux, et leur fils est allé à l’école. Après plusieurs années d’attente, la réponse reçue fut négative. En raison d'irrégularités dans leur dossier, ils devaient retourner au Mexique, leur pays d’origine, malgré les craintes pour leur vie là-bas. Pendant un an, en tant que demandeurs d’asile déboutés, ils ont vécu dans la peur et l’inquiétude de devoir rentrer.`
+			`Par exemple, <a href='https://ici.radio-canada.ca/nouvelle/1941293/rodriguez-flores-liberation-mandat-eglise' target='_blank' rel='noreferrer'>la famille Rodriguez Flores</a> a déposé une demande d’asile en 2019 et vivait à Sherbrooke en attendant une décision. Pendant cette période, la famille s’est bien intégrée, a travaillé dans les commerces locaux, et leur fils est allé à l’école. Après plusieurs années d’attente, la réponse reçue fut négative. En raison d'irrégularités dans leur dossier, ils devaient retourner au Mexique, leur pays d’origine, malgré les craintes pour leur vie là-bas. Pendant un an, en tant que demandeurs d’asile déboutés, ils ont vécu dans la peur et l’inquiétude de devoir rentrer.`
 		]
 	} ,
 	{
 		idUnique: 'violence-conjugale',
 		nom: `Priya`,
 		titreCourt: 'Violence conjugale',
-		intro: `Bonjour, je m'appelle Priya et j’ai un statut`,
+		intro: `Bonjour, je m'appelle Priya et j’ai un statut `,
 		statut: 'permis séjour temporaire pour victimes de violence conjugale',
 		presentation: [
 			`Cela signifie que j'ai dû fuir mon foyer pour échapper à la violence de mon conjoint. L'État canadien m'a accordé un Permis de séjour temporaire pour victimes de violence conjugale. Toutefois, ce permis doit être renouvelé chaque année, sans garantie de prolongation et avec un taux de succès relativement faible.`,
@@ -76,7 +76,7 @@ export default function connaitreData() { return [
 	{
 		idUnique: 'permis-travail-ferme',
 		nom: `Mohammed`,
-		titreCourt: 'Permis de travail fermé',
+		titreCourt: 'permis de travail fermé',
 		intro: `Bonjour, je m'appelle Mohammed et j’ai un `,
 		statut: 'Permis de travail fermé',
 		presentation: [

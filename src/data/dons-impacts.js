@@ -9,6 +9,6 @@ export default function donsImpactsData() { return [
 	} ,
 	{
 		montant: '2000\u00A0$',
-		impact: `Une personne im·migrante ou réfugiée en situation de vulnérabilité aura accès gratuitement à deux semaines de travail intensif, comprenant la recherche, la rédaction, la soumission et le suivi auprès des autorités gouvernementales concernant une demande humanitaire de résidence permanente.`,
+		impact: `Une personne im·migrante en situation de vulnérabilité aura accès gratuitement à deux semaines de travail, comprenant la recherche, la rédaction, la soumission et le suivi auprès des autorités concernant une demande humanitaire de résidence permanente.`,
 	}
 ]}
