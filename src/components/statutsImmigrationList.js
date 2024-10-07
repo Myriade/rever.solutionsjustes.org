@@ -54,8 +54,21 @@ const BulletsControls = styled.div`
 			border-color: black;}}
 `;
 
+const placeholderData = {
+	'data': {
+		'texteSimple': '...',
+		'title': 'Chargement',
+		'loading' : true
+	},
+	'_id': 'placeholder',
+}
+
 const StatutsImmigrationList = () => {
-	let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
+	let content = useWixData(
+		'TestsRever-Statutsmigratoires', 
+		'_manualSort_559b8e96-44f9-4841-a096-af53431ff141',
+		placeholderData
+	);
 	
 	useEffect(() => {
 		new Glide('.glide', {

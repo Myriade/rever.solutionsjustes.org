@@ -44,6 +44,39 @@ const Header = styled.header`
 const Main = styled.main`
   overflow: hidden;
   margin-top: var(--header-height);
+  position: relative;
+  
+  @keyframes placeholder-animation {
+    from { transform: rotate(0deg) }
+    to { transform: rotate(360deg) }
+  }
+  
+  .loading-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-top: 50px;
+    z-index: -1;
+    display: grid;
+    justify-items: center;
+    align-items: bottom;
+    
+    img {
+      width: 10vh;
+      height: 10vh;
+      animation-name: placeholder-animation;
+      animation-duration: 15s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+  
+  ${media.mediumUp`
+    .loading-placeholder {
+      height: calc(95vh - var(--header-height));}
+  `}
+  
 `;
 
 const Footer = styled.footer`
@@ -141,8 +174,11 @@ export default function PageLayout({ children }) {
         </div>
       </Header>
       
-      <Main> 
-        {children} 
+      <Main>
+        {children}
+        <div className='loading-placeholder'>
+          <img src='/logo.jpg' />
+        </div>
       </Main>
       
       <Footer>

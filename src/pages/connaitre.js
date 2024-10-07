@@ -1,6 +1,7 @@
 import React, { useState, useRef }  from 'react'
 import PageLayout from '../layouts/pageLayout'
 import { Link } from 'gatsby'
+import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 
@@ -12,17 +13,23 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { TextPlugin } from 'gsap/TextPlugin'
 
-const Section1Hero = styled.section`
-  background-color: var(--color-bleu-tres-pale);
-  background-image: url(/images/grand-portrait-Anabel.webp);
-  background-size: cover;
-  background-position: center center;
-  padding-block: 0;
-  height: calc(40vh - var(--header-height));
+const Section1Hero = styled.div`
   width: 100%;
   padding: initial !important;
-  h1 {
+  display: grid;
+  
+ .bg-image, .overlay-text {
     height: calc(40vh - var(--header-height));
+    grid-area: 1/1/2/2;
+    width: 100%;}
+    
+  .bg-image {
+    height: calc(40vh - var(--header-height));}
+    
+  .overlay-text {
+    position: relative;}
+  
+  h1 {
     font-size: calc( (40vh - var(--header-height) - 10vh) / 3 );
     color: white;
     line-height: 1em;
@@ -31,6 +38,7 @@ const Section1Hero = styled.section`
     display: grid;
     align-items: center;
     position: relative;
+    
     span.small {
       position: absolute;
       bottom: 1rem;
@@ -38,10 +46,11 @@ const Section1Hero = styled.section`
       line-height: 1;}}
   
   ${media.mediumUp`
-    height: calc(95vh - var(--header-height));
+    .bg-image {
+      height: calc(95vh - var(--header-height));}
     h1 {
       height: calc(95vh - var(--header-height));
-      font-size: clamp(25px, 12vw, 15ch);
+      font-size: clamp(25px, 12vw, 22vh); 
       span.right {
         text-align: right;
       }
@@ -518,6 +527,14 @@ const ConnaitrePage = () => {
     >
       <PageLayout>
         <Section1Hero>
+          <StaticImage 
+            className='bg-image'
+            src='../images/grand-portrait-Anabel.webp'
+            layout='fullWidth'
+            alt='portrait de Anabel'
+            placeholder='blurred'
+            quality={100}
+          />
           <div className='overlay-text'>
             <h1>
               <span className='right'>Connaître</span>

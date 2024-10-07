@@ -7,16 +7,38 @@ import { media } from '../styles/mixins.js'
 const SatutFiche = styled.div`
 	display: grid;
 	justify-items: center;
-	img {
-		width: auto;
+	
+	@keyframes placeholder-animation {
+		from { transform: rotate(0deg) }
+		to { transform: rotate(360deg) }
+	}
+	
+	img, .placeholder-img {
+		width: 200px;
 		height: 200px;}
+		
 	h3 {
 		margin-top: 0.5em;}
+	
+	.placeholder-img {
+		display: grid;
+		justify-items: center;
+		align-items: center;
+		img {
+			width: 150px;
+			height: auto;
+			animation-name: placeholder-animation;
+			animation-duration: 15s;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+		}
+	}
 	
 	${media.desktopUp`
 		grid-template-columns: 1fr 1.5fr;
 		justify-items: initial;
-		img {
+		img, .placeholder-img {
+			width: 500px;
 			height: 500px;}
 	`};
 	
@@ -32,7 +54,13 @@ const StatutImmigrationFiche = ({ ficheData }) => {
 	
 	return (
 		<SatutFiche>
-			<img src={imageSrc} alt="Illustration" />
+			{ ficheData.loading ? 
+				<div className='placeholder-img'>
+					<img src='logo.jpg' />
+				</div>
+				: 
+				<img src={imageSrc} alt="Illustration"/>
+			}
 			<div>
 				<h3>{ficheData.title}</h3>
 				<div>{ficheData.texteSimple}</div>
