@@ -167,6 +167,11 @@ const SectionRealites = styled.section`
         width: 100%;}
     `}
     
+    @media (max-height: 674px) {
+      ul {
+        gap: clamp(10px, 4vh,40px) 1rem;}
+    }
+    
   }
   
   #realites-container {
@@ -188,7 +193,7 @@ const SectionRealites = styled.section`
   .recit {
     position: relative;
     z-index: 2;
-    padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
+    padding: calc(var(--v-spacer) / 3) var(--h-spacer);
     background: white;
     display: grid;
     gap: var(--v-spacer);
@@ -260,11 +265,20 @@ const SectionRealites = styled.section`
         grid-template-rows: auto 1fr auto;
         gap: 1rem;
         &__intro {
-          max-width: 30ch;
-          background: white;}
+          max-width: 25ch;
+          font-size: 1.5rem;
+          margin-bottom: 0;}
         &__content {
           display: grid;
           align-items: center;
+        }
+        &__fin {
+          background-color: var(--color-bleu-clair);
+          color: white;
+          font-weight: 600;
+          padding: 1.5rem 2rem;
+          border-radius: 10px;
+          font-size: 1rem;
         }
       }
         
@@ -359,6 +373,7 @@ const SectionRealites = styled.section`
     &__instruction {
       font-style: italic;
       color: var(--color-bleu-tres-pale);
+      opacity: 0.5;
       position: absolute;}
       
     &__explications {
@@ -882,7 +897,7 @@ const ConnaitrePage = () => {
                         <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
                         «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
                       </h3>
-                      <p className='mythe__instruction instruction'>Faites défiler</p>
+                      <p className='mythe__instruction instruction'>Faites défiler pour lire la suite</p>
                       <div className='mythe__sous-titre'>
                         <div>
                           <img
