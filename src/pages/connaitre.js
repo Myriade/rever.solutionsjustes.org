@@ -1027,7 +1027,7 @@ export const Head = () => (
     <title>Connaître l’essentiel | Solutions justes</title>
     <meta name='title' property='og:title' content='Connaître l’essentiel | Solutions justes' />
     <meta name='description' content='Connaître l’essentiel de certains statuts d’immigration précaires et de l’absence de statut. Récits, mythes et réalités. Bonjour, je suis Maria et je suis une personne sans statut d’immigration.' />
-    <meta property='og:image' content='/rever-essentiel-solutions-justes-og.jpg' />
+    <meta property='og:image' content='https://rever.solutionsjustes.org/rever-essentiel-solutions-justes-og.jpg' />
     <meta property='og:image:width' content='919' />
     <meta property='og:image:height' content='400' />
   </>
