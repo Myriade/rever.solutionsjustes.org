@@ -734,7 +734,7 @@ const ConnaitrePage = () => {
       // Mythe explications apparait
       contentTimeline.from( element.querySelector('.mythe__explications'), {
         autoAlpha: 0,
-        height: 0,
+        yPercent: 50,
       });
       
       // Mythe textes défilent vers le haut 
@@ -804,8 +804,8 @@ const ConnaitrePage = () => {
           <div className='overlay-text'>
             <h1>
               <span className='right'>Connaître</span>
-              <span>l'essentiel&nbsp;...</span>
-              <span className='small'>... de certains statuts d'immigration précaires et de l'absence de statut</span>
+              <span>l’essentiel&nbsp;...</span>
+              <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
             </h1>
           </div>
         </Section1Hero>
@@ -1022,4 +1022,13 @@ const ConnaitrePage = () => {
 
 export default ConnaitrePage
 
-export const Head = () => <title>Pour connaître l'essentiel | Solutions justes</title>
+export const Head = () => (
+  <>
+    <title>Connaître l’essentiel | Solutions justes</title>
+    <meta name='title' property='og:title' content='Connaître l’essentiel' />
+    <meta name='description' content='Connaître l’essentiel de certains statuts d’immigration précaires et de l’absence de statut. Récits, mythes et réalités. Bonjour, je suis Maria et je suis une personne sans statut d’immigration.' />
+    <meta property='og:image' content='/rever-a-l-essentiel-solutions-justes-og.jpg' />
+    <meta property='og:image:width' content='1000' />
+    <meta property='og:image:height' content='286' />
+  </>
+);

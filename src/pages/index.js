@@ -468,8 +468,13 @@ export default IndexPage
 
 export const Head = () => (
   <>
-    <title>Rêver à l'essentiel | Solutions justes</title>
+    <title>Rêver à l’essentiel | Solutions justes</title>
     <link rel="stylesheet" href="/glide.core.min.css" />
     <link rel="stylesheet" href="/glide.theme.min.css" />
+    <meta name='title' property='og:title' content='Rêver à l’essentiel' />
+    <meta name='description' content='Chaque rêve mérite de ne pas être essentiel ! Ensemble, apprenons la réalité de l’immigration humanitaire et faisons entendre les histoires de ceux et celles qui aspirent à un avenir meilleur.' />
+    <meta property='og:image' content='/rever-a-l-essentiel-solutions-justes-og.jpg' />
+    <meta property='og:image:width' content='1000' />
+    <meta property='og:image:height' content='286' />
   </>
 );
