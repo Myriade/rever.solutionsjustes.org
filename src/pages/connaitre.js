@@ -31,7 +31,7 @@ const Section1Hero = styled.div`
   
   h1 {
     height: calc(40vh - var(--header-height));
-    font-size: calc( (40vh - var(--header-height) - 10vh) / 3 );
+    font-size: calc( (40vh - var(--header-height) - 10vh) / 3.5 );
     color: white;
     line-height: 1em;
     text-transform: uppercase;
@@ -39,22 +39,29 @@ const Section1Hero = styled.div`
     display: grid;
     align-items: center;
     position: relative;
-    
+    text-align: center;
     span.small {
+      text-transform: none;
+      font-size: 1rem;
+      line-height: 1;
       position: absolute;
-      bottom: 1rem;
-      font-size: 1.5rem;
-      line-height: 1;}}
+      bottom: 0.5rem;
+    }}
   
   ${media.mediumUp`
     .bg-image {
       height: calc(95vh - var(--header-height));}
     h1 {
+      text-align: unset;
       height: calc(95vh - var(--header-height));
       font-size: clamp(25px, 12vw, 22vh); 
       span.right {
-        text-align: right;
-      }
+        text-align: right;}
+      span.small {
+        right: 0;
+        text-align: center;
+        font-size: 1.5rem;
+        bottom: 6.5vh;}
     }
   `};
 `;
@@ -72,13 +79,13 @@ const SectionRealites = styled.section`
 
   nav#realites-nav {
     ul {
-      height: 7rem;
       list-style-type: none;
       padding: 0;
       margin-top: 0;
       display: flex;
       flex-wrap: wrap;
-      gap: calc(var(--v-spacer) / 2) 1rem;
+      justify-content: center;
+      gap: 1rem;
       align-items: stretch;}
     li.realite-nav-item {
       background: var(--color-bleu-clair);
@@ -93,18 +100,10 @@ const SectionRealites = styled.section`
         text-align: center;
         max-width: 17ch;
         padding-inline: 1rem;
-        padding-top: 15px;
+        padding-block: 0.5em;
         position: relative;
         &:hover {
-          cursor: pointer;}
-        .avatar {
-          position: absolute;
-          top: -20px;
-          width: 100%;
-          > * {
-            width: 45px;
-            height: 45px;
-            margin-inline: auto;}}}
+          cursor: pointer;}}
       
       &:hover, &.active {
         background: var(--color-bleu-tres-fonce);}
@@ -116,7 +115,11 @@ const SectionRealites = styled.section`
           font-size: 1.5rem;
           border-radius: 50%;
           display: grid;
-          align-items: center;}}}}
+          align-items: center;}}}
+          
+    .avatar {
+      display: none;}
+  }
   
   #realites-container {
     margin-inline: 0 !important;}
@@ -129,11 +132,25 @@ const SectionRealites = styled.section`
     
     > .titre {
       grid-area: 1 / 1 / 2 / 3;
+      max-width: unset !important;
       width: 100%;}
       
-    nav#realites-nav ul {
-      height: 80vh;
-      display: grid;}
+    nav#realites-nav {
+      ul {
+        gap: var(--v-spacer) 1rem;
+        height: 80vh;
+        display: grid;}
+      li.realite-nav-item a {
+        padding-top: clamp(12px, 3.5vh, 25px);}
+      .avatar {
+        display: block;
+        position: absolute;
+        top: -3vh;
+        width: 100%;
+        > * {
+          width: clamp(30px, 6vh, 45px);
+          height: clamp(30px, 6vh, 45px);
+          margin-inline: auto;}}}
   `}
   
   ${media.onlySmall`
@@ -197,8 +214,11 @@ const SectionRealites = styled.section`
           font-weight: 800;}}
       .identification {
         img {
-          width: 75px;
-          height: 75px;}
+          width: 10vh;
+          height: 10vh;
+          margin-bottom: calc(var(--v-spacer) / 4);
+          border: 0.75px solid black;
+          border-radius: 50%;}
         p {
           margin-block: 0;
         }
@@ -771,7 +791,7 @@ const ConnaitrePage = () => {
                       </div>
                       <div className='identification'>
                         <img src={`/images/connaitre/${realite.nom}.svg`}/>
-                        <div className='nom'>{realite.nom}</div>
+                        <p className='nom'>{realite.nom}</p>
                         <p>{realite.titreCourt}</p>
                       </div>
                     </div>
