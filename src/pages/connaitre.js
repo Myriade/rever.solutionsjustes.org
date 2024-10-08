@@ -107,12 +107,10 @@ const SectionRealites = styled.section`
       visibility: visible;}
     
     .recit, .mythe {
-      padding: var(--v-spacer) var(--h-spacer);
+      padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 2);
     }
     
   `}
-  
-  
 
   nav#realites-nav {
     ul {
@@ -505,8 +503,14 @@ const ConnaitrePage = () => {
     if (!screenType) {
       if (window.matchMedia('(hover: hover)').matches) {
         console.log('Device has a mouse or touchpad events');
-        setScreenType('mouse');
-        gsapAnimations();
+        if (window.matchMedia('(min-width: 1200px)').matches) {
+          console.log('Screen is more than 1200px wide. GSAP ok');
+          setScreenType('mouse');
+          gsapAnimations();
+        } else {
+          setScreenType('mouse-narrow');
+          console.log('Screen is less than 1200px wide. No GSAP');
+        }
       } else {
         console.log('Device has no mouse, so has touch events');
         setScreenType('touch');
@@ -674,11 +678,6 @@ const ConnaitrePage = () => {
         yPercent: '-100',
       });
       
-      // Le conteneur du mythe devient bleu foncé tout de suite.
-      contentTimeline.to( element.querySelector('.mythe'), {
-        //backgroundColor: 'var(--color-bleu-tres-fonce)',
-      }, '<');
-      
       // La barre de progression devient bleu foncé tout de suite.
       contentTimeline.to( element.querySelector('.progress'), {
         backgroundColor: 'var(--color-bleu-tres-fonce)',
@@ -714,13 +713,7 @@ const ConnaitrePage = () => {
         height: 0
       });
       
-      // Mythe explications tous les paragraphes apparaissent 
-      contentTimeline.from( element.querySelector('.mythe__explications'), {
-        autoAlpha: 0,
-        height: 0,
-      });
-      
-      // Mythe intro se place plus haut
+      // Mythe intro se place plus haut en meme temps
       contentTimeline.to( element.querySelector('.mythe__intro'), {
         y: '0',
       }, '<');
@@ -737,6 +730,12 @@ const ConnaitrePage = () => {
         fontWeight: '400',
         marginBottom: '0.25em'
       }, '<');
+      
+      // Mythe explications apparait
+      contentTimeline.from( element.querySelector('.mythe__explications'), {
+        autoAlpha: 0,
+        height: 0,
+      });
       
       // Mythe textes défilent vers le haut 
       contentTimeline.to( element.querySelectorAll('.mythe__explications p'), {
@@ -860,6 +859,7 @@ const ConnaitrePage = () => {
                         <StaticImage 
                           src='../images/connaitre/philactere.svg'
                           format='svg'
+                          alt=''
                           placeholder='none'
                         />
                         <h2>
@@ -1002,7 +1002,7 @@ const ConnaitrePage = () => {
               </div>
               <StaticImage 
                 src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
-                alt='Illustration d’une famille portant des boîtes'
+                alt='Illustration d’une famille'
                 placeholder='blurred'
                 quality={100}
                 height={200}

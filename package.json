@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-minimal",
-  "version": "1.0.1",
+  "name": "Rêver à l'essentiel",
+  "version": "1.1",
   "private": true,
-  "description": "A Gatsby starter with no plugins and a single welcome page.",
-  "author": "Laurie Barth",
+  "description": "Microsite de campagne pour Solutions Justes / MCM",
+  "author": "Myriam Bizier / Myriade Web",
   "keywords": [
     "gatsby"
   ],
