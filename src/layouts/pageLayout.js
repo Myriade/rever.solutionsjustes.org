@@ -154,7 +154,7 @@ export default function PageLayout({ children }) {
   }, [isConsentOk]);
   
   return (
-    <TempProtectLayout>
+    <>
       <Header>
         <a 
           href='https://www.solutionsjustes.org/'
@@ -199,8 +199,7 @@ export default function PageLayout({ children }) {
         </Consentement>
         : ''
       }
-        
-    </TempProtectLayout>
+    </>
   )
 }
 
