@@ -82,7 +82,13 @@ const SectionRealites = styled.section`
     
   .instruction {
     display: none;
-    visibility: hidden;
+    visibility: hidden;}
+  
+  .recit, .mythe {
+    padding: calc(var(--v-spacer) / 2) var(--h-spacer);
+    @media (max-height: 755px) {
+      padding: calc(var(--v-spacer) / 3) var(--h-spacer);
+    }
   }
       
   ${media.largeUp`
@@ -98,9 +104,15 @@ const SectionRealites = styled.section`
       
     .instruction {
       display: block;
-      visibility: visible;
+      visibility: visible;}
+    
+    .recit, .mythe {
+      padding: var(--v-spacer) var(--h-spacer);
     }
+    
   `}
+  
+  
 
   nav#realites-nav {
     ul {
@@ -167,7 +179,7 @@ const SectionRealites = styled.section`
         width: 100%;}
     `}
     
-    @media (max-height: 674px) {
+    @media (max-height: 755px) {
       ul {
         gap: clamp(10px, 4vh,40px) 1rem;}
     }
@@ -175,25 +187,28 @@ const SectionRealites = styled.section`
   }
   
   #realites-container {
-    margin-inline: 0 !important;}
+    margin-inline: 0 !important;
+    margin-top: calc(var(--v-spacer) / 2);
   
-  .realite-unique {
-    background: white;
-    border-radius: 10px;;
-    margin-bottom: var(--v-spacer);
-    display: grid;
-    grid-template-rows: 1fr auto;
+    .realite-unique {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: var(--v-spacer);
+      display: grid;
+      grid-template-rows: 1fr auto;}
   
     ${media.largeUp`
-      height: calc(100vh - var(--header-height) - var(--v-spacer));
-      overflow: hidden;
-    `}  
+      margin-top: 0;
+      .realite-unique {
+        height: calc(100vh - var(--header-height) - var(--v-spacer));}
+    `}
+    
   }
       
   .recit {
     position: relative;
     z-index: 2;
-    padding: calc(var(--v-spacer) / 3) var(--h-spacer);
     background: white;
     display: grid;
     gap: var(--v-spacer);
@@ -248,6 +263,7 @@ const SectionRealites = styled.section`
       background: white;
       position: relative;
       display: grid;
+      gap: var(--v-spacer);
       overflow: hidden;
       
       p {
@@ -257,8 +273,7 @@ const SectionRealites = styled.section`
         grid-area: 1 / 1 / 2 / 2; 
         p {
           max-width: 40ch;
-          margin-inline: auto;
-        }}
+          margin-inline: auto;}}
       
       .impacts {
         display: grid;
@@ -278,16 +293,17 @@ const SectionRealites = styled.section`
           font-weight: 600;
           padding: 1.5rem 2rem;
           border-radius: 10px;
-          font-size: 1rem;
-        }
-      }
+          font-size: 1rem;}}
         
       .impact {
         margin: 3vh 4vw;
         border-radius: 6px;
         transform-origin: center center;
         p {
-          color: white;}
+          color: white;
+          padding: 3vh 1.5em;
+          margin-bottom: 0;
+          line-height: clamp(1.1em, 3vh, 1.6em);}
         
         &:first-of-type {
           background: var(--color-bleu-tres-pale);
@@ -300,42 +316,34 @@ const SectionRealites = styled.section`
           background: var(--color-bleu-gris);}
         &:nth-of-type(5n) {
           background: var(--color-bleu-tres-fonce);}
-        p {
-          padding: 3vh 2vw;
-          margin-bottom: 0;
-          line-height: clamp(1.1em, 3vh, 1.6em);}
         
         &:first-child p {
           visibility: visible !important;
-          opacity: 1 !important;
+          opacity: 1 !important;}}}
+    
+    ${media.largeUp` 
+      grid-area: 1 / 1 / 2 / 2; 
+      grid-template-columns: 1fr 2fr;
+      gap: calc(var(--h-spacer) * 2) var(--v-spacer);
+      
+      &__narratif {
+        .instruction {
+          text-align: center;
+          grid-area: 1/1/2/2;
+          color: #aaa; 
+          font-style: italic;}
+        .impacts {
+          grid-area: 1 / 1 / 2 / 2;}
+        .impact {
+          grid-area: 1 / 1 / 2 / 2;
         }
       }
-    }
-    
-  ${media.largeUp` 
-    grid-area: 1 / 1 / 2 / 2; 
-    grid-template-columns: 1fr 2fr;
-    gap: calc(var(--h-spacer) * 2) var(--v-spacer);
-    
-    &__narratif {
-      .instruction {
-        text-align: center;
-        grid-area: 1/1/2/2;
-        color: #aaa; 
-        font-style: italic;}
-      .impacts {
-        grid-area: 1 / 1 / 2 / 2;}
-      .impact {
-        grid-area: 1 / 1 / 2 / 2;
-      }
-    }
-  `}
+    `}
     
   }
   
   .mythe {
     position: relative;
-    padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
     display: grid;
     overflow: hidden;
     background-color: var(--color-bleu-tres-fonce);
@@ -364,8 +372,9 @@ const SectionRealites = styled.section`
       align-items: center;
       h3 {
         font-size: clamp(18px, 1.6vw, 24px);
+        font-weight: 400;
         margin-bottom: 0;
-        line-height: 1.4;}}
+        line-height: 1.25;}}
       
     &__etiquette {
       overflow: hidden;}
@@ -514,21 +523,25 @@ const ConnaitrePage = () => {
         offsetY: 120
       }
     });
-    gsap.from( '#realites-container' , {
-      autoAlpha: 0,
-      duration: 1
-    });
-    setActiveRealite(clickedIndex);
-    // reset scroll progress to its start
-    const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
-    associateScrollTrigger.scroll(associateScrollTrigger.start);
     
+    if (screenType === 'mouse') {
+      gsap.from( '#realites-container' , {
+        autoAlpha: 0,
+        duration: 1
+      });
+      setActiveRealite(clickedIndex);
+      // reset scroll progress to its start
+      const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
+      associateScrollTrigger.scroll(associateScrollTrigger.start);
+    }
   });
   
   const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
-    gsap.to( window, { 
-      scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
-    });
+    if (screenType === 'mouse') {
+      gsap.to( window, { 
+        scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
+      });
+    }
   });
   
   // GSAP Animations pour la barre de navigation et les realite uniques
@@ -720,7 +733,7 @@ const ConnaitrePage = () => {
       
       // Mythe titre rapetisse en meme temps 
       contentTimeline.to( element.querySelector('.mythe__titre'), {
-        scale: '0.8',
+        scale: '0.7',
         fontWeight: '400',
         marginBottom: '0.25em'
       }, '<');
