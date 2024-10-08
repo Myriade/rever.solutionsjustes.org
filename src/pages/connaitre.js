@@ -66,6 +66,9 @@ const SectionRealites = styled.section`
   > .titre {
     h2 {
       color: var(--color-bleu-tres-fonce);}}
+      
+  .nom {
+    text-transform: uppercase;}
 
   nav#realites-nav {
     ul {
@@ -113,10 +116,7 @@ const SectionRealites = styled.section`
           font-size: 1.5rem;
           border-radius: 50%;
           display: grid;
-          align-items: center;}}}
-    
-    .nom {
-      text-transform: uppercase;}}
+          align-items: center;}}}}
   
   #realites-container {
     margin-inline: 0 !important;}
@@ -165,12 +165,42 @@ const SectionRealites = styled.section`
         
     &__personna {
       background: white;
+      display: grid;
+      align-items: center;
+      grid-template-rows: auto 1fr;
+      text-align: center;
+      .philactere {
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        > * {
+          grid-area: 1/1/2/2;
+          position: relative;
+        }}
       h2 {
-        font-size: 1.5rem;
+        color: white;
+        font-size: 1rem;
         font-weight: 400;
         text-transform: none;
+        max-width: 23ch;
+        line-height: 1.6;
+        &::before {
+          content: '';
+          display: block;
+          background-image: url(/images/connaitre/guillemet.svg);
+          background-repeat: no-repeat;
+          height: 2rem;
+          width: 3rem;
+          margin-inline: auto;
+          margin-bottom: 1rem;}
         span {
-          font-weight: 800;
+          font-weight: 800;}}
+      .identification {
+        img {
+          width: 75px;
+          height: 75px;}
+        p {
+          margin-block: 0;
         }
       }
     }
@@ -729,10 +759,23 @@ const ConnaitrePage = () => {
                 
                   <div className='recit'>
                     <div className='recit__personna'>
-                      <h2>
-                        {realite.intro}<span>{realite.statut}</span>.
-                      </h2>
+                      <div className='philactere'>
+                        <StaticImage 
+                          src='../images/connaitre/philactere.svg'
+                          format='svg'
+                          placeholder='none'
+                        />
+                        <h2>
+                          {realite.intro}<span>{realite.statut}</span>.
+                        </h2>
+                      </div>
+                      <div className='identification'>
+                        <img src={`/images/connaitre/${realite.nom}.svg`}/>
+                        <div className='nom'>{realite.nom}</div>
+                        <p>{realite.titreCourt}</p>
+                      </div>
                     </div>
+                    
                     <div className='recit__narratif'>
                       <div className='presentation'>
                         {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
