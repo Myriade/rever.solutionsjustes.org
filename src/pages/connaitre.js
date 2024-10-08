@@ -73,9 +73,34 @@ const SectionRealites = styled.section`
   > .titre {
     h2 {
       color: var(--color-bleu-tres-fonce);}}
-      
+  
   .nom {
     text-transform: uppercase;}
+    
+  p {
+    color: var(--color-bleu-tres-fonce);}
+    
+  .instruction {
+    display: none;
+    visibility: hidden;
+  }
+      
+  ${media.largeUp`
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 0 var(--h-spacer);
+    
+    > .titre {
+      grid-area: 1 / 1 / 2 / 3;
+      max-width: unset !important;
+      width: 100%;}
+      
+    .instruction {
+      display: block;
+      visibility: visible;
+    }
+  `}
 
   nav#realites-nav {
     ul {
@@ -108,7 +133,18 @@ const SectionRealites = styled.section`
       &:hover, &.active {
         background: var(--color-bleu-tres-fonce);}
       
+      .avatar {
+        display: none;
+        position: absolute;
+        right: -4vh;
+        top: -0.5vh;
+        > * {
+          width: clamp(30px, 6vh, 45px);
+          height: clamp(30px, 6vh, 45px);
+          margin-inline: auto;}}
+      
       &.shortcut .avatar {
+        display: block;
         > div {
           background-color: white;
           color: var(--color-bleu-tres-fonce);
@@ -117,68 +153,45 @@ const SectionRealites = styled.section`
           display: grid;
           align-items: center;}}}
           
-    .avatar {
-      display: none;}
-  }
-  
-  #realites-container {
-    margin-inline: 0 !important;}
-    
-  ${media.largeUp`
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
-    gap: 0 var(--h-spacer);
-    
-    > .titre {
-      grid-area: 1 / 1 / 2 / 3;
-      max-width: unset !important;
-      width: 100%;}
-      
-    nav#realites-nav {
+    ${media.largeUp`
       ul {
         gap: var(--v-spacer) 1rem;
         height: 80vh;
         display: grid;}
       li.realite-nav-item a {
         padding-top: clamp(12px, 3.5vh, 25px);}
-      .avatar {
+      li.realite-nav-item .avatar {
         display: block;
-        position: absolute;
         top: -3vh;
-        width: 100%;
-        > * {
-          width: clamp(30px, 6vh, 45px);
-          height: clamp(30px, 6vh, 45px);
-          margin-inline: auto;}}}
-  `}
+        right: unset;
+        width: 100%;}
+    `}
+    
+  }
   
-  ${media.onlySmall`
-    nav#realites-nav li.realite-nav-item {
-      a {
-        padding-block: 0.5em;}
-      .avatar {
-        display: none;}}
-  `}
+  #realites-container {
+    margin-inline: 0 !important;}
   
   .realite-unique {
-    height: calc(100vh - var(--header-height) - var(--v-spacer));
-    overflow: hidden;
     background: white;
     border-radius: 10px;;
     margin-bottom: var(--v-spacer);
     display: grid;
-    grid-template-rows: 1fr auto;}
+    grid-template-rows: 1fr auto;
+  
+    ${media.largeUp`
+      height: calc(100vh - var(--header-height) - var(--v-spacer));
+      overflow: hidden;
+    `}  
+  }
       
   .recit {
-    grid-area: 1 / 1 / 2 / 2;
     position: relative;
     z-index: 2;
     padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
     background: white;
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: var(--h-spacer);
+    gap: var(--v-spacer);
         
     &__personna {
       background: white;
@@ -211,7 +224,8 @@ const SectionRealites = styled.section`
           margin-inline: auto;
           margin-bottom: 1rem;}
         span {
-          font-weight: 800;}}
+          font-weight: 700;}}
+          
       .identification {
         img {
           width: 10vh;
@@ -234,21 +248,14 @@ const SectionRealites = styled.section`
       p {
         margin-block: 0 1em;}
         
-      p.paragr {
-        background: white;
-        overflow: hidden;}
-        
       .presentation {
-        grid-area: 1 / 1 / 2 / 2; }
-        
-      .instruction {
-        text-align: center;
-        grid-area: 1/1/2/2;
-        color: #aaa; 
-        font-style: italic;}
+        grid-area: 1 / 1 / 2 / 2; 
+        p {
+          max-width: 40ch;
+          margin-inline: auto;
+        }}
       
       .impacts {
-        grid-area: 1 / 1 / 2 / 2; 
         display: grid;
         grid-template-rows: auto 1fr auto;
         gap: 1rem;
@@ -263,14 +270,14 @@ const SectionRealites = styled.section`
         
       .impact {
         margin: 3vh 4vw;
-        grid-area: 1 / 1 / 2 / 2;
-        color: white;
         border-radius: 6px;
         transform-origin: center center;
+        p {
+          color: white;}
         
         &:first-of-type {
           background: var(--color-bleu-tres-pale);
-          color: var(--bleu-tres-fonce);}
+          p {color: var(--color-bleu-tres-fonce);}}
         &:nth-of-type(2n) {
           background: var(--color-bleu-clair);}
         &:nth-of-type(3n) {
@@ -290,16 +297,36 @@ const SectionRealites = styled.section`
         }
       }
     }
+    
+  ${media.largeUp` 
+    grid-area: 1 / 1 / 2 / 2; 
+    grid-template-columns: 1fr 2fr;
+    gap: calc(var(--h-spacer) * 2) var(--v-spacer);
+    
+    &__narratif {
+      .instruction {
+        text-align: center;
+        grid-area: 1/1/2/2;
+        color: #aaa; 
+        font-style: italic;}
+      .impacts {
+        grid-area: 1 / 1 / 2 / 2;}
+      .impact {
+        grid-area: 1 / 1 / 2 / 2;
+      }
+    }
+  `}
+    
   }
   
   .mythe {
-    grid-area: 1 / 1 / 2 / 2;
     position: relative;
-    z-index: 1;
     padding: var(--v-spacer) var(--h-spacer) calc(var(--v-spacer) / 3);
-    color: white;
     display: grid;
     overflow: hidden;
+    background-color: var(--color-bleu-tres-fonce);
+    
+    * {color: white;}
     
     &__intro {
       position: relative;}
@@ -347,17 +374,23 @@ const SectionRealites = styled.section`
         }
       }
     }
+    
+    ${media.largeUp`
+      grid-area: 1 / 1 / 2 / 2;
+      z-index: 1;
+    `}
+    
   }
-      
+    
   .progress {
+    display: none;
+    visibility: hidden;
     width: 100%;
     margin-inline: auto;
-    grid-area: 2 / 1 / 3 / 2;
     padding: calc(var(--v-spacer) / 4) calc(var(--h-spacer) /2);
     
     &__bar-background {
       background-color: var(--color-bleu-tres-pale);
-      width: 50%;
       margin-inline: auto;
       height: 0.8rem;
       border-radius: 0.4rem;}
@@ -368,7 +401,6 @@ const SectionRealites = styled.section`
       border-radius: 0.4rem;}
       
     .shortcuts {
-      width: 50%;
       margin-inline: auto;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -382,6 +414,18 @@ const SectionRealites = styled.section`
         }
       }
     }
+    
+    ${media.largeUp`
+      display: block;
+      visibility: visible;
+      grid-area: 2 / 1 / 3 / 2;
+      &__bar-background {
+        width: 50%;
+      }
+      .shortcuts {
+        width: 50%;}
+    `}
+    
   }
 `;
 
@@ -540,16 +584,21 @@ const ConnaitrePage = () => {
       // Content timeline
       let contentTimeline = gsap.timeline();
       
-      // Présentation
+      // Présentation apparait par le bas
       contentTimeline.from( element.querySelector('.presentation'), {
-        autoAlpha: 0,
-        yPercent: 50,
+        y: element.querySelector('.presentation').scrollHeight,
       });
+      
+      // Présentation instruction disparait en même temps
+      contentTimeline.to( element.querySelector('.recit__instruction'), {
+        autoAlpha: 0,
+        height: 0
+      }, '<');
       
       // Présentation disparait
       contentTimeline.to( element.querySelector('.presentation'), {
         autoAlpha: 0,
-        yPercent: -50,
+        y: element.querySelector('.presentation').scrollHeight * - 0.5,
       }, 'mon-statut');
       
       // Impacts intro apparaît
@@ -559,7 +608,7 @@ const ConnaitrePage = () => {
       });
       
       // Impacts instruction apparaît en meme temps]
-      contentTimeline.from( element.querySelector('.instruction'), {
+      contentTimeline.from( element.querySelector('.impacts__instruction'), {
         yPercent: '100',
         autoAlpha: 0,
       },'<');
@@ -599,7 +648,7 @@ const ConnaitrePage = () => {
       
       // Le conteneur du mythe devient bleu foncé tout de suite.
       contentTimeline.to( element.querySelector('.mythe'), {
-        backgroundColor: 'var(--color-bleu-tres-fonce)',
+        //backgroundColor: 'var(--color-bleu-tres-fonce)',
       }, '<');
       
       // La barre de progression devient bleu foncé tout de suite.
@@ -797,6 +846,9 @@ const ConnaitrePage = () => {
                     </div>
                     
                     <div className='recit__narratif'>
+                      <p className='recit__instruction instruction'>
+                        Faites défiler pour lire mon histoire
+                      </p>
                       <div className='presentation'>
                         {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
                           return (
@@ -809,8 +861,8 @@ const ConnaitrePage = () => {
                       <div className='impacts'>
                         <p className='impacts__intro' dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
                         <div className='impacts__content'>
-                          <p className='instruction'>
-                            Faite défiler pour voir les impacts
+                          <p className='impacts__instruction instruction'>
+                            Faites défiler pour voir les impacts
                           </p>
                           {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
                             return (
@@ -830,7 +882,7 @@ const ConnaitrePage = () => {
                         <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
                         «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
                       </h3>
-                      <p className='mythe__instruction'>Faites défiler</p>
+                      <p className='mythe__instruction instruction'>Faites défiler</p>
                       <div className='mythe__sous-titre'>
                         <div>
                           <img
