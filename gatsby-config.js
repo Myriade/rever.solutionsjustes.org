@@ -29,14 +29,11 @@ module.exports = {
     } ,
     `gatsby-plugin-image`,
     {
-      resolve: `gatsby-plugin-google-gtag`,
+      resolve: "gatsby-plugin-google-tagmanager",
       options: {
-        trackingIds: [
-          'GTM-59WRR2G6',
-        ],
-        pluginConfig: {
-          respectDNT: true, // Google Global Site Tag will not be loaded at all for visitors that have “Do Not Track” enabled
-        },
+        id: "GTM-59WRR2G6",
+        includeInDevelopment: false,
+        enableWebVitalsTracking: true,
       },
     },
   ]
