@@ -221,6 +221,7 @@ const SectionRealites = styled.section`
         display: grid;
         justify-items: center;
         align-items: center;
+        padding-inline: 4vh;
         > * {
           grid-area: 1/1/2/2;
           position: relative;
@@ -337,10 +338,17 @@ const SectionRealites = styled.section`
           &__instructions {
             opacity: 0;}}
         .impact {
-          grid-area: 1 / 1 / 2 / 2;
-        }
-      }
+          grid-area: 1 / 1 / 2 / 2;}}
+      
+      &__personna .philactere {
+        padding-inline: unset;}
+      
     `}
+    
+    @media (max-height: 680px) {
+      &__personna .philactere {
+        padding-inline: 4vh;}
+    }
     
   }
   
@@ -456,6 +464,7 @@ const SectionRealites = styled.section`
 `;
 
 const Section4Cta = styled.section`
+  background-color: white;
   .grid {
     display: grid;
     gap: calc(var(--v-spacer) / 2) var(--h-spacer);
@@ -828,7 +837,11 @@ const ConnaitrePage = () => {
           </div>
         </Section1Hero>
           
-        <div ref={gsapContainerRef} id='gsap-container'>
+        <div
+          ref={gsapContainerRef} 
+          id='gsap-container'
+          style={!screenType ? {opacity: '0'} : {} }
+        >
           <SectionRealites>
             <div className='titre'>
               <h2>Récits, mythes et réalités</h2>
@@ -1033,6 +1046,20 @@ const ConnaitrePage = () => {
           </div>
         </Section4Cta>
         
+        <div 
+          id='relaod-blank-page-message'
+          style={{
+            position: 'fixed',
+            top: '50vh',
+            left: '10vw',
+            zIndex: '-1',
+            color: '#aaa',
+            fontSize: '1rem',
+            textStyle: 'italic'
+          }}
+        >
+          <p>Passez la souris ou touchez ici pour revenir au début</p>
+        </div>
       </PageLayout>
     </div>
   )
