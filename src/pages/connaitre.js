@@ -269,6 +269,7 @@ const SectionRealites = styled.section`
         
       .presentation {
         grid-area: 1 / 1 / 2 / 2; 
+        background-color: white;
         p {
           max-width: 40ch;
           margin-inline: auto;}}
@@ -331,7 +332,10 @@ const SectionRealites = styled.section`
           color: #aaa; 
           font-style: italic;}
         .impacts {
-          grid-area: 1 / 1 / 2 / 2;}
+          opacity: 0;
+          grid-area: 1 / 1 / 2 / 2;
+          &__instructions {
+            opacity: 0;}}
         .impact {
           grid-area: 1 / 1 / 2 / 2;
         }
@@ -553,6 +557,15 @@ const ConnaitrePage = () => {
     
     let allRealitesHeight = 1000;
     
+    // Ramene le  scroll tout en haut
+    gsap.to( window, { 
+      duration: 0, 
+      scrollTo: {
+        y: '0',
+        offsetY: 120
+      }
+    });
+    
     // NAVIGATION 
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
@@ -633,13 +646,18 @@ const ConnaitrePage = () => {
         y: element.querySelector('.presentation').scrollHeight * - 0.5,
       }, 'mon-statut');
       
-      // Impacts intro apparaît
+      // Impacts la zone apparait
+      contentTimeline.to( element.querySelector('.impacts'), {
+        opacity: 1,
+      });
+      
+      // Impacts intro apparaît en meme temps
       contentTimeline.from( element.querySelector('.impacts__intro'), {
         yPercent: '100',
         autoAlpha: 0,
-      });
+      },'<');
       
-      // Impacts instruction apparaît en meme temps]
+      // Impacts instruction apparaît en meme temps
       contentTimeline.from( element.querySelector('.impacts__instruction'), {
         yPercent: '100',
         autoAlpha: 0,
