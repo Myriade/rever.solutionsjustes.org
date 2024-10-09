@@ -840,7 +840,6 @@ const ConnaitrePage = () => {
         <div
           ref={gsapContainerRef} 
           id='gsap-container'
-          style={!screenType ? {opacity: '0'} : {} }
         >
           <SectionRealites>
             <div className='titre'>
@@ -1045,21 +1044,7 @@ const ConnaitrePage = () => {
             </div>
           </div>
         </Section4Cta>
-        
-        <div 
-          id='relaod-blank-page-message'
-          style={{
-            position: 'fixed',
-            top: '50vh',
-            left: '10vw',
-            zIndex: '-1',
-            color: '#aaa',
-            fontSize: '1rem',
-            textStyle: 'italic'
-          }}
-        >
-          <p>Passez la souris ou touchez ici pour revenir au début</p>
-        </div>
+      
       </PageLayout>
     </div>
   )
