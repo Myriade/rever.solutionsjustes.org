@@ -566,15 +566,6 @@ const ConnaitrePage = () => {
     
     let allRealitesHeight = 1000;
     
-    // Ramene le  scroll tout en haut
-    gsap.to( window, { 
-      duration: 0, 
-      scrollTo: {
-        y: '0',
-        offsetY: 120
-      }
-    });
-    
     // NAVIGATION 
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {

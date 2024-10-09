@@ -15,6 +15,11 @@
 	--color-bleu-gris: #3D728D; // rgba(61, 114, 141, 0.75)
 	
 	--border-radius: 30px;
+	
+	@include onlySmall {
+		--v-spacer: 45px;
+	}
+	
 }
 
 // Typography
