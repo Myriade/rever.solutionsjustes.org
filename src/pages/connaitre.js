@@ -151,19 +151,10 @@ const SectionRealites = styled.section`
         > * {
           width: clamp(30px, 6vh, 45px);
           height: clamp(30px, 6vh, 45px);
-          margin-inline: auto;}}
-      
-      &.shortcut .avatar {
-        display: block;
-        > div {
-          background-color: white;
-          color: var(--color-bleu-tres-fonce);
-          font-size: 1.5rem;
-          border-radius: 50%;
-          display: grid;
-          align-items: center;}}}
+          margin-inline: auto;}}}
           
     ${media.largeUp`
+      z-index: 55;
       ul {
         gap: var(--v-spacer) 1rem;
         height: 80vh;
@@ -247,8 +238,8 @@ const SectionRealites = styled.section`
           
       .identification {
         img {
-          width: 10vh;
-          height: 10vh;
+          width: 13vh;
+          height: 13vh;
           margin-bottom: calc(var(--v-spacer) / 4);
           border: 0.75px solid black;
           border-radius: 50%;}
@@ -597,7 +588,7 @@ const ConnaitrePage = () => {
         trigger: '#realites-nav',
         pin: true,
         pinSpacing: false,
-        start: 'top 120px',
+        start: 'top 115px',
         end: () => allRealitesHeight,
       }
     });
@@ -773,7 +764,7 @@ const ConnaitrePage = () => {
         id: `realiteContent-index-${realiteIndex}`,
         trigger: element,
         animation: contentTimeline,
-        start: 'top 120px',
+        start: 'top 115px',
         end: "+=" + (window.innerHeight * 5),
         scrub: 1.5,
         pin: element,
@@ -800,7 +791,7 @@ const ConnaitrePage = () => {
         id: `realiteProgressBar-index-${realiteIndex}`,
         trigger: element,
         animation: ProgressBarTimeline,
-        start: 'top 120px',
+        start: 'top 115px',
         end: "+=" + (window.innerHeight * 5),
         scrub: 1.5,
         //markers: true,

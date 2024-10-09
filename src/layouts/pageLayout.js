@@ -29,6 +29,7 @@ const Header = styled.header`
   a {
     color: white;
     text-decoration: none;
+    text-transform: uppercase;
     &:hover {
       text-decoration: underline;}
     &.active {

@@ -7,7 +7,7 @@ export default function connaitreData() { return [
 		statut: 'sans statut d’immigration',
 		presentation: [
 			`Cela signifie que <strong>je n'ai pas de statut d'immigration régulier au Canada</strong>. Les personnes im·migrantes peuvent se retrouver dans cette situation pour diverses raisons, comme avoir dépassé la durée de leur visa de résident temporaire, de permis d'études ou de travail, etc.`,
-			`Il y a plusieurs raisons pour lesquelles nous, personnes sans statut d’immigration,  n'avons pas quitté le Canada malgré notre situation précaire. Parmi ces raisons : nous n'avons plus de liens avec notre pays d’origine, nous avons construit notre vie au Québec où nous résidons depuis des années et nous voulons rester ici, notre pays d’origine est marqué par la violence et l’insécurité, etc.`
+			`Il y a plusieurs raisons pour lesquelles nous, personnes sans statut d’immigration,  n'avons pas quitté le Canada malgré notre situation précaire. Parmi ces raisons\u00A0: nous n'avons plus de liens avec notre pays d’origine, nous avons construit notre vie au Québec où nous résidons depuis des années et nous voulons rester ici, notre pays d’origine est marqué par la violence et l’insécurité, etc.`
 		],
 		impactIntro: `<strong>L'absence de statut</strong> d'immigration entraîne que ...`,
 		impacts: [
@@ -18,7 +18,7 @@ export default function connaitreData() { return [
 			`On ne me permet pas de me projeter dans l’avenir en raison de l'incertitude dans laquelle je vis. Mes aspirations sont restreintes par mon statut d’immigration, ce qui engendre un profond sentiment d’exclusion et de manque d’appartenance à la société où je vis depuis plus de 15 ans.`
 		],
 		mytheTitre: `Les personnes sans statut sont des ‘illégaux’.`,
-		mytheSoustitre: `On ne dit pas que les personnes sont illégales : personne n'est illégal. Certaines personnes peuvent se retrouver sans statut d'immigration régulier en raison de circonstances échappant à leur contrôle.`,
+		mytheSoustitre: `On ne dit pas que les personnes sont illégales\u00A0: personne n'est illégal. Certaines personnes peuvent se retrouver sans statut d'immigration régulier en raison de circonstances échappant à leur contrôle.`,
 		mytheExplications: [
 			`Par exemple, une personne provenant du Mexique a déposé une demande d’asile pour échapper à la violence domestique et conjugale, mais cette demande a été rejetée quatre ans plus tard à cause des mauvais conseils et du manque de connaissance du système. Pendant cette période, la personne a reconstruit sa vie au Québec, créant un réseau de soutien et d’ami·e·s sur lesquels elle compte désormais. Elle craint de retourner au Mexique , où elle risquerait de se retrouver dans le même cercle de violence qu’auparavant. Elle a été convoquée pour être déportée du Canada, mais elle ne s'est pas présentée au rendez-vous. Elle a donc choisi de rester sans statut d’immigration au Québec, malgré les défis liés à l’accès aux services, la peur, la vulnérabilité et l’invisibilité.`,
 			`Un étudiant international en génie civil doit renouveler son permis d’études deux ans après le début de ses études, mais il oublie de le faire à temps. En conséquence, il se retrouve sans statut d’immigration valide, son permis d’études étant expiré.`,
@@ -68,7 +68,7 @@ export default function connaitreData() { return [
 		mytheSoustitre: `Au contraire, en dénonçant la violence de leur conjoint, elles risquent de compromettre leur accès au statut permanent.`,
 		mytheExplications: [
 			`En fait, ces femmes im·migrantes se trouvent souvent dans un processus de parrainage, où leur conjoint canadien dépose une demande pour les parrainer et leur permettre d’obtenir un statut légal et permanent au Canada grâce à lui.`,
-			`<strong>Cette situation de dépendance est un terreau fertile pour les abus</strong> : le processus de parrainage crée une dépendance où la personne im·migrante dépend de son partenaire pour régulariser son statut d’immigration. Étant donné l'importance cruciale du statut d’immigration pour stabiliser et régulariser leur situation au Canada, le partenaire peut exploiter cette position de pouvoir pour exercer des violences.`,
+			`<strong>Cette situation de dépendance est un terreau fertile pour les abus</strong>\u00A0: le processus de parrainage crée une dépendance où la personne im·migrante dépend de son partenaire pour régulariser son statut d’immigration. Étant donné l'importance cruciale du statut d’immigration pour stabiliser et régulariser leur situation au Canada, le partenaire peut exploiter cette position de pouvoir pour exercer des violences.`,
 			`En dénonçant une situation de violence conjugale, les personnes im·migrantes mettent fin à leur demande de résidence permanente initiée par le parrainage et se retrouvent souvent sans statut d’immigration, dans une situation particulièrement précaire.`,
 			`Par exemple, je suis arrivée au Québec en provenance d’Inde pour rejoindre mon amoureux. Cependant, après quelques années de vie commune, il a commencé à m'isoler de ma famille et de mon réseau social, et, progressivement, à m'exploiter sexuellement. J'ai finalement dû tout abandonner pour me réfugier dans un centre d'hébergement pour femmes, sans statut d'immigration, sans soutien, sans plus de liens avec mon pays d’origine, et avec une incertitude quant à la possibilité de rester au Canada. J'ai obtenu un Permis de séjour temporaire pour victimes de violence conjugale il y a 9 mois, mais je me demande ce qu'il adviendra dans 3 mois, car je ne suis pas certaine de pouvoir obtenir un renouvellement et je ne peux pas rentrer en Inde. `
 		]
@@ -76,9 +76,9 @@ export default function connaitreData() { return [
 	{
 		idUnique: 'permis-travail-ferme',
 		nom: `Mohammed`,
-		titreCourt: 'permis de travail fermé',
+		titreCourt: 'Permis de travail fermé',
 		intro: `Bonjour, je m'appelle Mohammed et j’ai un `,
-		statut: 'Permis de travail fermé',
+		statut: 'permis de travail fermé',
 		presentation: [
 			`Cela signifie que j’ai <strong>un permis de travail temporaire qui me permet de travailler uniquement pour un employeur</strong>, me rendant ainsi entièrement dépendant de lui. Par conséquent, <strong>ma présence sur le territoire dépend entièrement de cette personne</strong>.`,
 		],

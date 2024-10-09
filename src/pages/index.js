@@ -342,6 +342,7 @@ const IndexPage = () => {
               <iframe
                 src='https://www.youtube-nocookie.com/embed/yL-fwv2Z3rE?si=HFvBzDUZJMr3zBiu&rel=0' 
                 title='De toi à moi: témoignage d’une personne sans statut d’immigration.'
+                width="1120" height="630" 
                 allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
                 frameBorder="0"
                 webkitallowfullscreen="true"
