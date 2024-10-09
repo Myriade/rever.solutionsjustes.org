@@ -320,6 +320,21 @@ const SectionRealites = styled.section`
         &:first-child p {
           visibility: visible !important;
           opacity: 1 !important;}}}
+          
+    ${media.onlySmall`
+      .identification {
+        img {
+          width: 105px;
+          height: 105px;}}
+     .impact {
+        margin-block: 25px;
+        p {
+          padding-block: 1.5em;
+          line-height: 1.4em;
+        }
+      }
+      
+    `}
     
     ${media.largeUp` 
       grid-area: 1 / 1 / 2 / 2; 
