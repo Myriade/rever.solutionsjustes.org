@@ -4,8 +4,8 @@
 module.exports = {
   siteMetadata: {
     title: `Rêver à l'essentiel - Soutions Justes`,
-    siteUrl: `https://rever.myriadeweb.com`,
-    description: `Les personnes im·migrantes sans statut ou à statut précaire sont souvent contraintes de mettre de côté leurs plus grandes aspirations pour ne rêver qu'à l'essentiel.`
+    siteUrl: `https://rever.solutionsjustes.org`,
+    description: `Chaque rêve mérite de ne pas être essentiel ! Ensemble, apprenons la réalité de l’immigration humanitaire et faisons entendre les histoires de ceux et celles qui aspirent à un avenir meilleur.`
   },
   plugins: [
     "gatsby-plugin-image", 
@@ -24,10 +24,22 @@ module.exports = {
     } , {
       resolve: `gatsby-plugin-canonical-urls`,
       options: {
-        siteUrl: `https://rever.myriadeweb.com`,
+        siteUrl: `https://rever.solutionsjustes.org`,
       },
     } ,
     `gatsby-plugin-image`,
+    {
+      resolve: `gatsby-plugin-google-gtag`,
+      options: {
+        trackingIds: [
+          "GTM-59WRR2G6"", // Google Analytics / GA
+          //"AW-CONVERSION_ID", // Google Ads / Adwords / AW
+        ],
+        pluginConfig: {
+          respectDNT: true,  // Avoids sending pageview hits from custom paths
+        },
+      },
+    },
   ]
 };
 
