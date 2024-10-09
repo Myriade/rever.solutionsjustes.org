@@ -151,7 +151,16 @@ const SectionRealites = styled.section`
         > * {
           width: clamp(30px, 6vh, 45px);
           height: clamp(30px, 6vh, 45px);
-          margin-inline: auto;}}}
+          margin-inline: auto;}}
+        
+      &.shortcut .avatar {
+        > div {
+          background-color: white;
+          color: var(--color-bleu-tres-fonce);
+          font-size: 1.5rem;
+          border-radius: 50%;
+          display: grid;
+          align-items: center;}}}
           
     ${media.largeUp`
       z-index: 55;
