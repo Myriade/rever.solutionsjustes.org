@@ -32,11 +32,10 @@ module.exports = {
       resolve: `gatsby-plugin-google-gtag`,
       options: {
         trackingIds: [
-          "GTM-59WRR2G6"", // Google Analytics / GA
-          //"AW-CONVERSION_ID", // Google Ads / Adwords / AW
+          'GTM-59WRR2G6',
         ],
         pluginConfig: {
-          respectDNT: true,  // Avoids sending pageview hits from custom paths
+          respectDNT: true, // Google Global Site Tag will not be loaded at all for visitors that have “Do Not Track” enabled
         },
       },
     },
