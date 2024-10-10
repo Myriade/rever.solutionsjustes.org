@@ -113,6 +113,9 @@ const SectionRealites = styled.section`
   `}
 
   nav#realites-nav {
+    background: var(--color-bleu-tres-pale);
+    z-index: 30;
+    padding-block: 1rem;
     ul {
       list-style-type: none;
       padding: 0;
@@ -121,7 +124,8 @@ const SectionRealites = styled.section`
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
-      align-items: stretch;}
+      align-items: stretch;
+      margin-bottom: 0;}
     li.realite-nav-item {
       background: var(--color-bleu-clair);
       color: white;
@@ -164,6 +168,8 @@ const SectionRealites = styled.section`
           
     ${media.largeUp`
       z-index: 55;
+      background-color: unset;
+      padding-block: 0;
       ul {
         gap: var(--v-spacer) 1rem;
         height: 80vh;
@@ -224,8 +230,8 @@ const SectionRealites = styled.section`
         padding-inline: 4vh;
         > * {
           grid-area: 1/1/2/2;
-          position: relative;
-        }}
+          position: relative;}}
+          
       h2 {
         color: white;
         font-size: 1rem;
@@ -253,10 +259,7 @@ const SectionRealites = styled.section`
           border: 0.75px solid black;
           border-radius: 50%;}
         p {
-          margin-block: 0;
-        }
-      }
-    }
+          margin-block: 0;}}}
         
     &__narratif {
       background: white;
@@ -537,11 +540,13 @@ const ConnaitrePage = () => {
           gsapAnimations();
         } else {
           setScreenType('mouse-narrow');
-          console.log('Screen is less than 1200px wide. No GSAP');
+          console.log('Screen is less than 1200px wide. No ScrollTrigger');
+          sobreGsapAnimations();
         }
       } else {
         console.log('Device has no mouse, so has touch events');
         setScreenType('touch');
+        sobreGsapAnimations();
       }
     }
   }
@@ -576,7 +581,7 @@ const ConnaitrePage = () => {
     }
   });
   
-  // GSAP Animations pour la barre de navigation et les realite uniques
+  // GSAP Animations pour laptop et desktop
   const gsapAnimations = contextSafe(() => {
     
     let allRealitesHeight = 1000;
@@ -816,6 +821,51 @@ const ConnaitrePage = () => {
       
     }); // end forEach
     
+  }, { dependencies: [screenType], scope: gsapContainerRef } );
+  
+  // GSAP Animations sobres pour mobiles touch
+  const sobreGsapAnimations = contextSafe(() => {
+    const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
+    
+    // NAVIGATION 
+    // nav items appears smoothly
+    gsap.from('.realite-nav-item', {
+      opacity: 0, 
+      scale: 0, 
+      duration: 0.3, 
+      stagger: 0.5,
+      scrollTrigger: {
+        id: 'touchRealitesNavReveal',
+        trigger: '#realites-nav',
+        start: 'top 70%',
+      },
+    });
+    
+    // nav bar pins 
+    gsap.to('#realites-nav', {
+      scrollTrigger: {
+        id: 'touchRealitesNavPin',
+        trigger: '#realites-nav',
+        pin: true,
+        pinSpacing: false,
+        start: 'top 78px',
+        end: () => `+=${allRealitesElement.offsetHeight}`,
+        //markers: true,
+      }
+    });
+    
+    // REALITE UNIQUE
+    // La zone des realités apparaît doucement
+    gsap.from( '#realites-container', {
+      autoAlpha: 0,
+      duration: 1,
+      delay: 0.5,
+      scrollTrigger: {
+        id: 'touchFirstRealiteReveal',
+        trigger: '#realites-nav',
+        start: 'top 70%'
+      }
+    });
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
   return (
