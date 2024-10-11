@@ -205,15 +205,16 @@ const SectionRealites = styled.section`
       background: white;
       border-radius: 10px;
       overflow: hidden;
-      overflow-y: scroll;
       margin-bottom: var(--v-spacer);
       display: grid;
-      grid-template-rows: 1fr auto;}
+      grid-template-rows: 1fr auto;
+      &.is-scrollable {
+        overflow-y: scroll;
+      }}
   
     ${media.largeUp`
       margin-top: 0;
       .realite-unique {
-        overflow-y: unset;
         height: calc(100vh - var(--header-height) - var(--v-spacer));}
     `}
     
@@ -839,8 +840,10 @@ const ConnaitrePage = () => {
   
   // Mobiles touch GSAP Animations sobres 
   const sobreGsapAnimations = contextSafe(() => {
-    const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
+    const headerBottomInViewport = document.querySelector('#firstHoverTouchCheck header').getBoundingClientRect().bottom;
     const navElement = gsapContainerRef.current.querySelector('#realites-nav');
+    const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
+    const realitesUniquesArr = gsap.utils.toArray('.realite-unique');
      
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
@@ -868,13 +871,13 @@ const ConnaitrePage = () => {
     });
     
     // Nav bar pins 
-    gsap.to('#realites-nav', {
+    gsap.to('#realites-nav', { 
       scrollTrigger: {
         id: 'touchRealitesNavPin',
         trigger: '#realites-nav',
         pin: true,
         pinSpacing: false,
-        start: 'top 78px',
+        start: 'top ' + headerBottomInViewport,
         end: () => `+=${allRealitesElement.offsetHeight}`,
         //markers: true,
       }
@@ -883,6 +886,7 @@ const ConnaitrePage = () => {
     // Nav bar sub-titles disapear after 40px of scroll
     gsap.to( navElement.querySelectorAll('strong'), {
       height: 0,
+      autoAlpha: 0,
       scrollTrigger: {
         id: 'touchNavHidesSubtitles',
         trigger: '#realites-container',
@@ -890,20 +894,19 @@ const ConnaitrePage = () => {
         end: '+=40px',
         scrub: true,
         onUpdate: (self) => {
-          navElement.style.height = navElement.querySelector('ul').offsetHeight + 5 + 'px';
           navElement.querySelector('ul').style.gap = 1 - (self.progress * 0.8) + 'rem 1rem';
           navElement.style.paddingTop = 1 - (self.progress * 0.8) + 'rem';
+          self.previous().refresh();
         },
-        onToggle: self => {
+        onLeave: () => {
           const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
-          const realitesUniquesArr = gsap.utils.toArray('.realite-unique');
-          
           gsap.to( realitesUniquesArr, {
-            height: '500px',//window.innerHeight - navBottomInViewport - 80,
+            height: window.innerHeight - navBottomInViewport - 80 + 'px',
             duration: 0.5,
           });
-        }
-        
+          realitesUniquesArr.forEach( el => el.classList.add('is-scrollable'));
+        },
+        toggleClass: 'is-scrollable',
       }
     });
     
