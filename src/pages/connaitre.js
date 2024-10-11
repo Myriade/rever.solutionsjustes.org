@@ -205,6 +205,7 @@ const SectionRealites = styled.section`
       background: white;
       border-radius: 10px;
       overflow: hidden;
+      overflow-y: scroll;
       margin-bottom: var(--v-spacer);
       display: grid;
       grid-template-rows: 1fr auto;}
@@ -212,6 +213,7 @@ const SectionRealites = styled.section`
     ${media.largeUp`
       margin-top: 0;
       .realite-unique {
+        overflow-y: unset;
         height: calc(100vh - var(--header-height) - var(--v-spacer));}
     `}
     
@@ -380,7 +382,6 @@ const SectionRealites = styled.section`
   .mythe {
     position: relative;
     display: grid;
-    overflow: hidden;
     background-color: var(--color-bleu-tres-fonce);
     
     * {color: white;}
@@ -437,6 +438,7 @@ const SectionRealites = styled.section`
     ${media.largeUp`
       grid-area: 1 / 1 / 2 / 2;
       z-index: 1;
+      overflow: hidden;
     `}
     
   }
@@ -891,7 +893,17 @@ const ConnaitrePage = () => {
           navElement.style.height = navElement.querySelector('ul').offsetHeight + 5 + 'px';
           navElement.querySelector('ul').style.gap = 1 - (self.progress * 0.8) + 'rem 1rem';
           navElement.style.paddingTop = 1 - (self.progress * 0.8) + 'rem';
+        },
+        onToggle: self => {
+          const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+          const realitesUniquesArr = gsap.utils.toArray('.realite-unique');
+          
+          gsap.to( realitesUniquesArr, {
+            height: '500px',//window.innerHeight - navBottomInViewport - 80,
+            duration: 0.5,
+          });
         }
+        
       }
     });
     
