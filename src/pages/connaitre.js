@@ -35,33 +35,37 @@ const Section1Hero = styled.div`
     color: white;
     line-height: 1em;
     text-transform: uppercase;
+    text-align: center;
     margin: 0 var(--h-spacer);
     display: grid;
-    align-items: center;
+    align-content: space-evenly;
     position: relative;
-    text-align: center;
     span.small {
       text-transform: none;
       font-size: 1rem;
       line-height: 1;
-      position: absolute;
-      bottom: 0.5rem;
+      max-width: 35ch;
+      justify-self: center;
     }}
   
   ${media.mediumUp`
     .bg-image {
       height: calc(95vh - var(--header-height));}
     h1 {
+      align-content: stretch;
+      align-items: center;
       text-align: unset;
       height: calc(95vh - var(--header-height));
       font-size: clamp(25px, 12vw, 22vh); 
       span.right {
         text-align: right;}
       span.small {
+        position: absolute;
+        bottom: 6.5vh;
         right: 0;
         text-align: center;
         font-size: 1.5rem;
-        bottom: 6.5vh;}
+        max-width: unset;}
     }
   `};
 `;
@@ -113,8 +117,6 @@ const SectionRealites = styled.section`
   `}
 
   nav#realites-nav {
-    background: var(--color-bleu-tres-pale);
-    z-index: 30;
     padding-block: 1rem;
     ul {
       list-style-type: none;
@@ -142,7 +144,10 @@ const SectionRealites = styled.section`
         padding-block: 0.5em;
         position: relative;
         &:hover {
-          cursor: pointer;}}
+          cursor: pointer;}
+        strong {
+          display: block;
+          overflow: hidden;}}
       
       &:hover, &.active {
         background: var(--color-bleu-tres-fonce);}
@@ -581,7 +586,7 @@ const ConnaitrePage = () => {
     }
   });
   
-  // GSAP Animations pour laptop et desktop
+  // Laptop et desktop GSAP Animations 
   const gsapAnimations = contextSafe(() => {
     
     let allRealitesHeight = 1000;
@@ -823,11 +828,11 @@ const ConnaitrePage = () => {
     
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
-  // GSAP Animations sobres pour mobiles touch
+  // Mobiles touch GSAP Animations sobres 
   const sobreGsapAnimations = contextSafe(() => {
     const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
-    
-    // NAVIGATION 
+    const navElement = gsapContainerRef.current.querySelector('#realites-nav');
+     
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
       opacity: 0, 
@@ -854,6 +859,18 @@ const ConnaitrePage = () => {
       }
     });
     
+    // nav bar sub-titles disapear when a realite is scrolled
+    gsap.to( navElement.querySelectorAll('strong'), {
+      height: 0,
+      scrollTrigger: {
+        id: 'touchNavHidesSubtitles',
+        trigger: '#realites-container',
+        start: 'top 40%',
+        end: '+=40px',
+        scrub: true,
+      }
+    });
+    
     // REALITE UNIQUE
     // La zone des realités apparaît doucement
     gsap.from( '#realites-container', {
@@ -866,6 +883,9 @@ const ConnaitrePage = () => {
         start: 'top 70%'
       }
     });
+    
+    
+    
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
   return (
