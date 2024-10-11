@@ -118,6 +118,8 @@ const SectionRealites = styled.section`
 
   nav#realites-nav {
     padding-block: 1rem;
+    z-index: 30;
+    background-color: var(--color-bleu-tres-pale);
     ul {
       list-style-type: none;
       padding: 0;
@@ -558,20 +560,25 @@ const ConnaitrePage = () => {
   
   const navClickHandler = contextSafe( (clickedIndex) => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
+    const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+    const topOffset = screenType === 'mouse' ? 120 : navBottomInViewport + 5;
+    
     gsap.to( window, { 
       duration: 0, 
       scrollTo: {
         y: `#${clickedId}`,
-        offsetY: 120
+        offsetY: topOffset
       }
     });
     
+    gsap.from( '#realites-container' , {
+      autoAlpha: 0,
+      duration: 1
+    });
+    
+    setActiveRealite(clickedIndex);
+    
     if (screenType === 'mouse') {
-      gsap.from( '#realites-container' , {
-        autoAlpha: 0,
-        duration: 1
-      });
-      setActiveRealite(clickedIndex);
       // reset scroll progress to its start
       const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
       associateScrollTrigger.scroll(associateScrollTrigger.start);
@@ -845,33 +852,7 @@ const ConnaitrePage = () => {
         start: 'top 70%',
       },
     });
-    
-    // nav bar pins 
-    gsap.to('#realites-nav', {
-      scrollTrigger: {
-        id: 'touchRealitesNavPin',
-        trigger: '#realites-nav',
-        pin: true,
-        pinSpacing: false,
-        start: 'top 78px',
-        end: () => `+=${allRealitesElement.offsetHeight}`,
-        //markers: true,
-      }
-    });
-    
-    // nav bar sub-titles disapear when a realite is scrolled
-    gsap.to( navElement.querySelectorAll('strong'), {
-      height: 0,
-      scrollTrigger: {
-        id: 'touchNavHidesSubtitles',
-        trigger: '#realites-container',
-        start: 'top 40%',
-        end: '+=40px',
-        scrub: true,
-      }
-    });
-    
-    // REALITE UNIQUE
+  
     // La zone des realités apparaît doucement
     gsap.from( '#realites-container', {
       autoAlpha: 0,
@@ -884,7 +865,35 @@ const ConnaitrePage = () => {
       }
     });
     
+    // Nav bar pins 
+    gsap.to('#realites-nav', {
+      scrollTrigger: {
+        id: 'touchRealitesNavPin',
+        trigger: '#realites-nav',
+        pin: true,
+        pinSpacing: false,
+        start: 'top 78px',
+        end: () => `+=${allRealitesElement.offsetHeight}`,
+        //markers: true,
+      }
+    });
     
+    // Nav bar sub-titles disapear after 40px of scroll
+    gsap.to( navElement.querySelectorAll('strong'), {
+      height: 0,
+      scrollTrigger: {
+        id: 'touchNavHidesSubtitles',
+        trigger: '#realites-container',
+        start: 'top 40%',
+        end: '+=40px',
+        scrub: true,
+        onUpdate: (self) => {
+          navElement.style.height = navElement.querySelector('ul').offsetHeight + 5 + 'px';
+          navElement.querySelector('ul').style.gap = 1 - (self.progress * 0.8) + 'rem 1rem';
+          navElement.style.paddingTop = 1 - (self.progress * 0.8) + 'rem';
+        }
+      }
+    });
     
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
