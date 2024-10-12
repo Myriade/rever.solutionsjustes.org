@@ -533,6 +533,7 @@ const ConnaitrePage = () => {
   // States, refs and variables
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(0);
+  const [menuIsCollapsed, setMenuIsCollapsed] = useState(false);
   const gsapContainerRef = useRef();
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
@@ -897,20 +898,23 @@ const ConnaitrePage = () => {
           navElement.querySelector('ul').style.gap = 1 - (self.progress * 0.8) + 'rem 1rem';
           navElement.style.paddingTop = 1 - (self.progress * 0.8) + 'rem';
           self.previous().refresh();
+          if (self.progress === 1 ) {
+            setMenuIsCollapsed(true);
+          } else {
+            setMenuIsCollapsed(false);
+          }
         },
         onLeave: () => {
           const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
           gsap.to( realitesUniquesArr, {
-            height: window.innerHeight - navBottomInViewport - 80 + 'px',
+            height: (window.innerHeight * 0.8) - navBottomInViewport + 'px',
             duration: 0.5,
           });
-          realitesUniquesArr.forEach( el => el.classList.add('is-scrollable'));
         },
-        toggleClass: 'is-scrollable',
       }
     });
     
-  }, { dependencies: [screenType], scope: gsapContainerRef } );
+  }, { dependencies: [screenType, menuIsCollapsed], scope: gsapContainerRef } );
   
   return (
     <div 
@@ -977,7 +981,7 @@ const ConnaitrePage = () => {
             <div id='realites-container'>
               {realitesDataArray.map( (realite, index) => { return (
                 <div
-                  className='realite-unique' 
+                  className={menuIsCollapsed ? 'realite-unique is-scrollable' : 'realite-unique'}
                   id={realite.idUnique} 
                   key={index}
                   rel='noreferrer'
