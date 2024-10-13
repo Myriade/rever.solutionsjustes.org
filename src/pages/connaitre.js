@@ -1,4 +1,4 @@
-import React, { useState, useRef }  from 'react'
+import React, { useState, useRef, useEffect }  from 'react'
 import PageLayout from '../layouts/pageLayout'
 import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
@@ -12,6 +12,7 @@ import { useGSAP } from '@gsap/react'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { TextPlugin } from 'gsap/TextPlugin'
+import Glide from '@glidejs/glide'
 
 const Section1Hero = styled.div`
   width: 100%;
@@ -205,9 +206,6 @@ const SectionRealites = styled.section`
       background: white;
       border-radius: 10px;
       overflow: hidden;
-      margin-bottom: var(--v-spacer);
-      display: grid;
-      grid-template-rows: 1fr auto;
       &.is-scrollable {
         overflow-y: scroll;
       }}
@@ -215,6 +213,9 @@ const SectionRealites = styled.section`
     ${media.largeUp`
       margin-top: 0;
       .realite-unique {
+        margin-bottom: var(--v-spacer);
+        display: grid;
+        grid-template-rows: 1fr auto;
         height: calc(100vh - var(--header-height) - var(--v-spacer));}
     `}
     
@@ -491,6 +492,24 @@ const SectionRealites = styled.section`
   }
 `;
 
+const BulletsControls = styled.div`
+  display: grid;
+  justify-items: center;
+  padding-top: calc(var(--v-spacer) / 2);	
+  position: relative;
+  
+  .glide__bullets {
+    position: initial;}
+
+  .glide__bullet {
+    width: 15px;
+    height: 15px;
+    box-shadow: none;
+    &--active, &:focus {
+      background: black;
+      border-color: black;}}
+`;
+
 const Section4Cta = styled.section`
   background-color: white;
   .grid {
@@ -564,29 +583,33 @@ const ConnaitrePage = () => {
   
   const navClickHandler = contextSafe( (clickedIndex) => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
-    const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
-    const topOffset = screenType === 'mouse' ? 120 : navBottomInViewport + 5;
-    
-    gsap.to( window, { 
-      duration: 0, 
-      scrollTo: {
-        y: `#${clickedId}`,
-        offsetY: topOffset
-      }
-    });
-    
-    gsap.from( '#realites-container' , {
-      autoAlpha: 0,
-      duration: 1
-    });
-    
     setActiveRealite(clickedIndex);
     
     if (screenType === 'mouse') {
+      gsap.to( window, { 
+        duration: 0, 
+        scrollTo: {
+          y: `#${clickedId}`,
+          offsetY: 120
+        }
+      });
+      
+      gsap.from( '#realites-container' , {
+        autoAlpha: 0,
+        duration: 1
+      });
+      
       // reset scroll progress to its start
       const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
       associateScrollTrigger.scroll(associateScrollTrigger.start);
+      
+    } else if (screenType === 'touch') {
+      console.log('Touch Label', clickedId)
     }
+    
+    // const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+    // const topOffset = screenType === 'mouse' ? 120 : navBottomInViewport + 5;
+    
   });
   
   const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
@@ -907,7 +930,8 @@ const ConnaitrePage = () => {
         onLeave: () => {
           const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
           gsap.to( realitesUniquesArr, {
-            height: (window.innerHeight * 0.8) - navBottomInViewport + 'px',
+            height: (window.innerHeight * 0.85) - navBottomInViewport + 'px',
+            marginTop: '1.5rem',
             duration: 0.5,
           });
         },
@@ -915,6 +939,20 @@ const ConnaitrePage = () => {
     });
     
   }, { dependencies: [screenType, menuIsCollapsed], scope: gsapContainerRef } );
+  
+  // Mobile Glide Carrousel init
+  useEffect( () => {
+    if (screenType === 'touch') {
+      new Glide('.glide', {
+        type: 'slider',
+        perView: 1,
+        gap: 20,
+        bound: true,
+        swipeThreshold: 50,
+        rewind: false,
+      }).mount()
+    }
+  }, [screenType]);
   
   return (
     <div 
@@ -978,115 +1016,138 @@ const ConnaitrePage = () => {
               </ul>
             </nav>
             
-            <div id='realites-container'>
-              {realitesDataArray.map( (realite, index) => { return (
-                <div
-                  className={menuIsCollapsed ? 'realite-unique is-scrollable' : 'realite-unique'}
-                  id={realite.idUnique} 
-                  key={index}
-                  rel='noreferrer'
-                > 
-                
-                  <div className='recit'>
-                    <div className='recit__personna'>
-                      <div className='philactere'>
-                        <StaticImage 
-                          src='../images/connaitre/philactere.svg'
-                          format='svg'
-                          alt=''
-                          placeholder='none'
-                        />
-                        <h2>
-                          {realite.intro}<span>{realite.statut}</span>.
-                        </h2>
-                      </div>
-                      <div className='identification'>
-                        <img src={`/images/connaitre/${realite.nom}.svg`}/>
-                        <p className='nom'>{realite.nom}</p>
-                        <p>{realite.titreCourt}</p>
-                      </div>
-                    </div>
+            <div id='realites-container' className={screenType === 'touch' ? 'glide' : ''}>
+              
+              <div className={screenType === 'touch' ? 'glide__track' : ''} data-glide-el='track'>
+                <div className={screenType === 'touch' ? 'glide__slides' : ''}>
+                  
+                  {realitesDataArray.map( (realite, index) => { return (
+                    <div
+                      className={menuIsCollapsed ? 'realite-unique glide__slide is-scrollable' : 'realite-unique glide__slide'}
+                      id={realite.idUnique} 
+                      key={index}
+                      rel='noreferrer'
+                    > 
                     
-                    <div className='recit__narratif'>
-                      <p className='recit__instruction instruction'>
-                        Faites défiler pour lire mon histoire
-                      </p>
-                      <div className='presentation'>
-                        {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
-                          return (
-                          <p 
-                            key={pIndex} 
-                            className='paragr' 
-                            dangerouslySetInnerHTML={{ __html: paragraphe}}></p>
-                        )})}
-                      </div>
-                      <div className='impacts'>
-                        <p className='impacts__intro' dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
-                        <div className='impacts__content'>
-                          <p className='impacts__instruction instruction'>
-                            Faites défiler pour voir les impacts
+                      <div className='recit'>
+                        <div className='recit__personna'>
+                          <div className='philactere'>
+                            <StaticImage 
+                              src='../images/connaitre/philactere.svg'
+                              format='svg'
+                              alt=''
+                              placeholder='none'
+                            />
+                            <h2>
+                              {realite.intro}<span>{realite.statut}</span>.
+                            </h2>
+                          </div>
+                          <div className='identification'>
+                            <img src={`/images/connaitre/${realite.nom}.svg`}/>
+                            <p className='nom'>{realite.nom}</p>
+                            <p>{realite.titreCourt}</p>
+                          </div>
+                        </div>
+                        
+                        <div className='recit__narratif'>
+                          <p className='recit__instruction instruction'>
+                            Faites défiler pour lire mon histoire
                           </p>
-                          {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
-                            return (
-                              <div key={pIndex} className='impact'>
-                                <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
-                              </div>
+                          <div className='presentation'>
+                            {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
+                              return (
+                              <p 
+                                key={pIndex} 
+                                className='paragr' 
+                                dangerouslySetInnerHTML={{ __html: paragraphe}}></p>
+                            )})}
+                          </div>
+                          <div className='impacts'>
+                            <p className='impacts__intro' dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
+                            <div className='impacts__content'>
+                              <p className='impacts__instruction instruction'>
+                                Faites défiler pour voir les impacts
+                              </p>
+                              {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
+                                return (
+                                  <div key={pIndex} className='impact'>
+                                    <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
+                                  </div>
+                              )})}
+                            </div>
+                            <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className='mythe'>
+                        <div className='mythe__intro'>
+                          <h3 className='mythe__titre'>
+                            <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
+                            «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
+                          </h3>
+                          <p className='mythe__instruction instruction'>Faites défiler pour lire la suite</p>
+                          <div className='mythe__sous-titre'>
+                            <div>
+                              <img
+                                src='/images/logo-sans-texte.svg'
+                                alt='Solutions Justes'
+                              />
+                            </div>
+                            <h3>{realite.mytheSoustitre}</h3>
+                          </div>
+                        </div>
+                        <div className='mythe__explications'>
+                          {realite.mytheExplications.map( (paragraphe, pIndex) => { return (
+                            <p 
+                              key={pIndex}
+                              dangerouslySetInnerHTML={{ __html: paragraphe }}
+                            ></p>
                           )})}
                         </div>
-                        <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
                       </div>
-                    </div>
-                  </div>
-                  
-                  <div className='mythe'>
-                    <div className='mythe__intro'>
-                      <h3 className='mythe__titre'>
-                        <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
-                        «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
-                      </h3>
-                      <p className='mythe__instruction instruction'>Faites défiler pour lire la suite</p>
-                      <div className='mythe__sous-titre'>
-                        <div>
-                          <img
-                            src='/images/logo-sans-texte.svg'
-                            alt='Solutions Justes'
-                          />
+                      
+                      <div className='progress'>
+                        <nav className='shortcuts'>
+                          <button
+                            onClick={ () => labelClickHandler(index, 'mon-statut') } 
+                            aria-label='Aller à la section'
+                          >&#8250; Mon statut</button>
+                          <button
+                            onClick={ () => labelClickHandler(index, 'les-impacts') }
+                            aria-label='Aller à la section'
+                          >&#8250; Les impacts</button>
+                          <button
+                            onClick={ () => labelClickHandler(index, 'mythe-et-realite') }
+                            aria-label='Aller à la section'
+                          >&#8250; Mythe et réalité</button>
+                        </nav>
+                        <div className='progress__bar-background'>
+                          <div className='progress__bar-animate'></div>
                         </div>
-                        <h3>{realite.mytheSoustitre}</h3>
                       </div>
+                      
                     </div>
-                    <div className='mythe__explications'>
-                      {realite.mytheExplications.map( (paragraphe, pIndex) => { return (
-                        <p 
-                          key={pIndex}
-                          dangerouslySetInnerHTML={{ __html: paragraphe }}
-                        ></p>
-                      )})}
-                    </div>
-                  </div>
-                  
-                  <div className='progress'>
-                    <nav className='shortcuts'>
-                      <button
-                        onClick={ () => labelClickHandler(index, 'mon-statut') } 
-                        aria-label='Aller à la section'
-                      >&#8250; Mon statut</button>
-                      <button
-                        onClick={ () => labelClickHandler(index, 'les-impacts') }
-                        aria-label='Aller à la section'
-                      >&#8250; Les impacts</button>
-                      <button
-                        onClick={ () => labelClickHandler(index, 'mythe-et-realite') }
-                        aria-label='Aller à la section'
-                      >&#8250; Mythe et réalité</button>
-                    </nav>
-                    <div className='progress__bar-background'>
-                      <div className='progress__bar-animate'></div>
-                    </div>
-                  </div>
+                  )})}
                   
                 </div>
-              )})}
+              </div>
+              
+              <BulletsControls>
+                <div className="glide__bullets" data-glide-el="controls[nav]">
+                  { realitesDataArray.map( (item, index) => {
+                    return (
+                      <button 
+                        className='glide__bullet' 
+                        data-glide-dir={`=${index}`} 
+                        key={`point-${index}`}
+                        aria-label={`Aller à la fiche ${index + 1}`}
+                      ></button>
+                    )
+                  })}
+                </div>
+              </BulletsControls>
+              
             </div>
             
           </SectionRealites>  
@@ -1168,5 +1229,8 @@ export const Head = () => (
     <meta property='og:image:alt' content='Je rêvais d’une meilleure vie au Québec. Je rêve maintenant de ne plus vivre dans l’angoisse de devoir quitter. - Personne en attente de sa résidence permanente depuis 7 ans. Informez-vous sur les réalités migratoires au Québec. Solutions Justes, MCM' />
     <meta property='og:url' content='https://rever.solutionsjustes.org/connaitre' />
     <meta property='og:type' content='website' />
+    
+    <link rel='stylesheet' href='/glide.core.min.css' />
+    <link rel='stylesheet' href='/glide.theme.min.css' />
   </>
 );
