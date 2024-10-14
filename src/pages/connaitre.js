@@ -292,6 +292,12 @@ const SectionRealites = styled.section`
         display: grid;
         grid-template-rows: auto 1fr auto;
         gap: 1rem;
+        &__avatar {
+          float: left;
+          margin-right: 1rem;
+          width: 55px;
+          height: 55px;
+        }
         &__intro {
           max-width: 25ch;
           font-size: 1.5rem;
@@ -363,6 +369,8 @@ const SectionRealites = styled.section`
         .impacts {
           opacity: 0;
           grid-area: 1 / 1 / 2 / 2;
+          &__avatar {
+            display: none;}
           &__instructions {
             opacity: 0;}}
         .impact {
@@ -1120,7 +1128,10 @@ const ConnaitrePage = () => {
                             )})}
                           </div>
                           <div className='impacts'>
-                            <p className='impacts__intro' dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
+                            <div className='impacts__intro'>
+                              <img className='impacts__avatar' src={`/images/connaitre/${realite.nom}.svg`} />
+                              <p dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
+                            </div>
                             <div className='impacts__content'>
                               <p className='impacts__instruction instruction'>
                                 Faites défiler pour voir les impacts
