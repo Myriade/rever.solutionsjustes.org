@@ -1010,6 +1010,11 @@ const ConnaitrePage = () => {
     if (screenType === 'touch') {
       glideCarrousel.current = new Glide('.glide', {
         type: 'slider',
+        swipeThreshold: false,
+        touchAngle: 0,
+        dragThreshold: false,
+        keyboard: false,
+        hoverpause: true,
         perView: 1,
         gap: 20,
         bound: true,
