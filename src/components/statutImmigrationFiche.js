@@ -39,7 +39,8 @@ const SatutFiche = styled.div`
 		justify-items: initial;
 		img, .placeholder-img {
 			width: 500px;
-			height: 500px;}
+			height: auto;
+			max-width: 30vw;}
 	`};
 	
 `;
