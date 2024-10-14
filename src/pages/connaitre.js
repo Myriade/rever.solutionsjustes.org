@@ -557,7 +557,7 @@ const ConnaitrePage = () => {
   // States, refs and variables
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(0);
-  const [menuIsCollapsed, setMenuIsCollapsed] = useState(false);
+  //const [menuIsCollapsed, setMenuIsCollapsed] = useState(false);
   const gsapContainerRef = useRef();
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
@@ -940,11 +940,11 @@ const ConnaitrePage = () => {
           navElement.querySelector('ul').style.gap = 1 - (self.progress * 0.8) + 'rem 1rem';
           navElement.style.paddingTop = 1 - (self.progress * 0.8) + 'rem';
           self.previous().refresh();
-          if (self.progress === 1 ) {
-            setMenuIsCollapsed(true);
-          } else {
-            setMenuIsCollapsed(false);
-          }
+          // if (self.progress === 1 ) {
+          //   setMenuIsCollapsed(true);
+          // } else {
+          //   setMenuIsCollapsed(false);
+          // }
         },
         onLeave: () => {
           // const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
@@ -964,9 +964,19 @@ const ConnaitrePage = () => {
     // create a ScrollTrigger for each realite
     realitesGsapArr.forEach( (element, realiteIndex) => {
       
-      const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
+      // Impacts apparaissent progressivement de chaque cotes
+      // gsap.from( element.querySelectorAll('.impact'), {
+      //   xPercent: -75,
+      //   autoAlpha: 0,
+      //   scrollTrigger: {
+      //     start: 'top 30%',
+      //     scrub: true,
+      //     markers: true 
+      //   },
+      // });
       
       // Mythe Titre se raye
+      const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
       gsap.to( element.querySelector('.mythe__titre .biffer'), {
         text: {
           value: mythTextToStrike,
@@ -975,15 +985,17 @@ const ConnaitrePage = () => {
         scrollTrigger: {
           id: 'touchMytheTextBiffe',
           trigger: element.querySelector('.mythe__titre'),
-          start: 'top 60%',
-          //markers: true,
+          start: 'top 70%',
+          end: 'bottom 30%', 
+          scrub: 0.5,
+         // markers: true,
         },
         duration: 2.5,
       });
       
     });
     
-  }, { dependencies: [screenType, menuIsCollapsed], scope: gsapContainerRef } );
+  }, { dependencies: [screenType], scope: gsapContainerRef } );
   
   // Mobile Glide Carrousel init
   useEffect( () => {
@@ -1068,7 +1080,7 @@ const ConnaitrePage = () => {
                   
                   {realitesDataArray.map( (realite, index) => { return (
                     <div
-                      className={menuIsCollapsed ? 'realite-unique glide__slide is-scrollable' : 'realite-unique glide__slide'}
+                      className='realite-unique glide__slide'
                       id={realite.idUnique} 
                       key={index}
                       rel='noreferrer'
