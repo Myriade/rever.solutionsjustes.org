@@ -542,6 +542,10 @@ const Section4Cta = styled.section`
     padding-inline: 3vw;}
   
   ${media.mediumUp`
+    grid-template-columns: 1fr 1fr;
+  `}
+  
+  ${media.largeUp`
     grid-template-columns: 1fr 1fr 1fr;
   `}
 `;
@@ -557,6 +561,7 @@ const ConnaitrePage = () => {
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
   const timelineRef = useRef([]);
+  const glideCarrousel = useRef();
   
   // event handlers
   function firstHoverTouchHandler() {
@@ -604,11 +609,8 @@ const ConnaitrePage = () => {
       associateScrollTrigger.scroll(associateScrollTrigger.start);
       
     } else if (screenType === 'touch') {
-      console.log('Touch Label', clickedId)
+      glideCarrousel.current.go(`=${clickedIndex}`)
     }
-    
-    // const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
-    // const topOffset = screenType === 'mouse' ? 120 : navBottomInViewport + 5;
     
   });
   
@@ -943,7 +945,7 @@ const ConnaitrePage = () => {
   // Mobile Glide Carrousel init
   useEffect( () => {
     if (screenType === 'touch') {
-      new Glide('.glide', {
+      glideCarrousel.current = new Glide('.glide', {
         type: 'slider',
         perView: 1,
         gap: 20,
@@ -1133,20 +1135,22 @@ const ConnaitrePage = () => {
                 </div>
               </div>
               
-              <BulletsControls>
-                <div className="glide__bullets" data-glide-el="controls[nav]">
-                  { realitesDataArray.map( (item, index) => {
-                    return (
-                      <button 
-                        className='glide__bullet' 
-                        data-glide-dir={`=${index}`} 
-                        key={`point-${index}`}
-                        aria-label={`Aller à la fiche ${index + 1}`}
-                      ></button>
-                    )
-                  })}
-                </div>
-              </BulletsControls>
+              { screenType === 'touch' ? 
+                <BulletsControls>
+                  <div className="glide__bullets" data-glide-el="controls[nav]">
+                    { realitesDataArray.map( (item, index) => {
+                      return (
+                        <button 
+                          className='glide__bullet' 
+                          data-glide-dir={`=${index}`} 
+                          key={`point-${index}`}
+                          aria-label={`Aller à la fiche ${index + 1}`}
+                        ></button>
+                      )
+                    })}
+                  </div>
+                </BulletsControls>
+              : ''}
               
             </div>
             
