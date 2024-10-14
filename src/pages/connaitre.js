@@ -90,7 +90,7 @@ const SectionRealites = styled.section`
     visibility: hidden;}
   
   .recit, .mythe {
-    padding: calc(var(--v-spacer) / 2) var(--h-spacer);
+    padding: calc(var(--v-spacer) / 2) calc(var(--h-spacer) * 2);
     @media (max-height: 755px) {
       padding: calc(var(--v-spacer) / 3) var(--h-spacer);
     }
@@ -206,6 +206,7 @@ const SectionRealites = styled.section`
       background: white;
       border-radius: 10px;
       overflow: hidden;
+      height: 75vh;
       &.is-scrollable {
         overflow-y: scroll;
       }}
@@ -213,6 +214,7 @@ const SectionRealites = styled.section`
     ${media.largeUp`
       margin-top: 0;
       .realite-unique {
+        height: unset;
         margin-bottom: var(--v-spacer);
         display: grid;
         grid-template-rows: 1fr auto;
@@ -404,10 +406,10 @@ const SectionRealites = styled.section`
     &__sous-titre {
       background-color: var(--color-bleu-tres-fonce);
       display: grid;
-      grid-template-columns: 75px auto;
+      grid-template-columns: 2rem auto;
       gap: 1rem;
       margin-bottom: 1rem;
-      align-items: center;
+      align-items: start;
       h3 {
         font-size: clamp(18px, 1.6vw, 24px);
         font-weight: 400;
@@ -441,6 +443,8 @@ const SectionRealites = styled.section`
       grid-area: 1 / 1 / 2 / 2;
       z-index: 1;
       overflow: hidden;
+      &__sous-titre {
+        grid-template-columns: 75px auto;}
     `}
     
   }
@@ -638,7 +642,6 @@ const ConnaitrePage = () => {
         id: 'realitesNavReveal',
         trigger: '#realites-nav',
         start: 'top 70%',
-        //markers: true,
       },
     });
     
@@ -707,22 +710,22 @@ const ConnaitrePage = () => {
         y: element.querySelector('.presentation').scrollHeight * - 0.5,
       }, 'mon-statut');
       
-      // Impacts la zone apparait
+      // Impacts la zone apparait, en meme temps
       contentTimeline.to( element.querySelector('.impacts'), {
         opacity: 1,
-      });
+      }, '<');
       
       // Impacts intro apparaît en meme temps
       contentTimeline.from( element.querySelector('.impacts__intro'), {
         yPercent: '100',
         autoAlpha: 0,
-      },'<');
+      }, '<');
       
       // Impacts instruction apparaît en meme temps
       contentTimeline.from( element.querySelector('.impacts__instruction'), {
         yPercent: '100',
         autoAlpha: 0,
-      },'<');
+      }, '<');
       
       // Les impacts apparaissent, placés en désordre
       contentTimeline.from( element.querySelectorAll('.impacts .impact'), {
@@ -936,8 +939,34 @@ const ConnaitrePage = () => {
             marginTop: '1.5rem',
             duration: 0.5,
           });
+
         },
       }
+    });
+    
+    // Animations au scroll dans chacune des fiches de réalité
+    // creates an array of realite-unique items
+    const realitesGsapArr = gsap.utils.toArray('.realite-unique');
+    // create a ScrollTrigger for each realite
+    realitesGsapArr.forEach( (element, realiteIndex) => {
+      
+      const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
+      
+      // Mythe Titre se raye
+      gsap.to( element.querySelector('.mythe__titre .biffer'), {
+        text: {
+          value: mythTextToStrike,
+          newClass: 'biffe',
+        },
+        scrollTrigger: {
+          id: 'touchMytheTextBiffe',
+          trigger: element.querySelector('.mythe__titre'),
+          scroller: element,
+          start: 'top 40%',
+        },
+        duration: 2.5,
+      });
+      
     });
     
   }, { dependencies: [screenType, menuIsCollapsed], scope: gsapContainerRef } );
