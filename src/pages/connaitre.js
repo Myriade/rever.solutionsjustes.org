@@ -206,10 +206,7 @@ const SectionRealites = styled.section`
       background: white;
       border-radius: 10px;
       overflow: hidden;
-      height: 75vh;
-      &.is-scrollable {
-        overflow-y: scroll;
-      }}
+    }
   
     ${media.largeUp`
       margin-top: 0;
@@ -613,7 +610,14 @@ const ConnaitrePage = () => {
       associateScrollTrigger.scroll(associateScrollTrigger.start);
       
     } else if (screenType === 'touch') {
-      glideCarrousel.current.go(`=${clickedIndex}`)
+      glideCarrousel.current.go(`=${clickedIndex}`);
+      const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+      gsap.to( window, { 
+        scrollTo: {
+          y: '#realites-container',
+          offsetY: navBottomInViewport,
+        },
+      });
     }
     
   });
@@ -624,6 +628,16 @@ const ConnaitrePage = () => {
         scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
       });
     }
+  });
+  
+  const glideControlClickHandler = contextSafe( () => {
+    const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+    gsap.to( window, { 
+      scrollTo: {
+        y: '#realites-container',
+        offsetY: navBottomInViewport,
+      },
+    });
   });
   
   // Laptop et desktop GSAP Animations 
@@ -933,12 +947,12 @@ const ConnaitrePage = () => {
           }
         },
         onLeave: () => {
-          const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
-          gsap.to( realitesUniquesArr, {
-            height: (window.innerHeight * 0.85) - navBottomInViewport + 'px',
-            marginTop: '1.5rem',
-            duration: 0.5,
-          });
+          // const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+          // gsap.to( realitesUniquesArr, {
+          //   height: (window.innerHeight * 0.85) - navBottomInViewport + 'px',
+          //   marginTop: '1.5rem',
+          //   duration: 0.5,
+          // });
 
         },
       }
@@ -961,8 +975,8 @@ const ConnaitrePage = () => {
         scrollTrigger: {
           id: 'touchMytheTextBiffe',
           trigger: element.querySelector('.mythe__titre'),
-          scroller: element,
-          start: 'top 40%',
+          start: 'top 60%',
+          //markers: true,
         },
         duration: 2.5,
       });
@@ -1174,6 +1188,7 @@ const ConnaitrePage = () => {
                           data-glide-dir={`=${index}`} 
                           key={`point-${index}`}
                           aria-label={`Aller à la fiche ${index + 1}`}
+                          onClick={ () => glideControlClickHandler()}
                         ></button>
                       )
                     })}
