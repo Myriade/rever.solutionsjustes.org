@@ -4,6 +4,11 @@ import styled from 'styled-components'
 import { StaticImage } from 'gatsby-plugin-image'
 import { media } from '../styles/mixins.js'
 
+import QuizItem from '../components/quizItem'
+import data from '../data/quizData'
+
+const quizData = data();
+
 const Section1Hero = styled.div`
   width: 100%;
   padding: initial !important;
@@ -96,7 +101,8 @@ const QuizPage = () => {
       <Section2Intro>
         <div className='grid'>
           <div>
-            <h2>Testez vos connaissances avec le quiz Au delà les statuts</h2>
+            <h2>Testez vos connaissances avec le quiz <br/>
+             Au delà des statuts</h2>
           </div>
           <div>
             <p><strong>Vous vous demandez comment les différents statuts d'immigration influencent la vie quotidienne des personnes migrantes ? Testez vos connaissances avec notre quiz interactif&nbsp;!</strong> 🧠💡</p>
@@ -109,6 +115,10 @@ const QuizPage = () => {
           </div>
         </div>
       </Section2Intro>
+      
+      { quizData.map( item => { return (
+        <QuizItem itemData={item} key={item.id} />
+      )})}
       
     </PageLayout>
   )
