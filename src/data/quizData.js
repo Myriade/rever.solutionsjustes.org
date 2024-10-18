@@ -8,49 +8,49 @@ export default function quizData() { return [
 		question: 'Selon vous, cette personne est ...',
 		choix: [
 			{
-				text: '... en permis de séjour temporaire',
+				text: 'en permis de séjour temporaire',
 				isRightAnswer: false
 			},
 			{
-				text: '... sans statut d’immigration',
+				text: 'sans statut d’immigration',
 				isRightAnswer: true
 			},
 			{
-				text: '... étudiant·e international·e',
+				text: 'étudiant·e international·e',
 				isRightAnswer: false
 			},
 			{
-				text: '... liée à un permis de travail fermé',
+				text: 'liée à un permis de travail fermé',
 				isRightAnswer: false
 			}
 		],
-		explications: [`Le texte d'explications s'affiche ici ... ... `]
+		explications: [`Le texte d'explications s'affiche ici `]
 	} , {
 		id: 'naissance',
-		title: `Une naissance très chère`,
+		title: `Une naissance compliquée`,
 		situation: [`Une femme se présente à l'hôpital car elle est à 41 semaine de grossesse et doit se faire "déclencher", tel que l'indique le médecin qui a fait son suivi de grossesse dans une clinique privée. Comme il faut planifier la césarienne, ce soin n'est pas consideré comme une "urgence" aux yeux de l'hôpital et l'équipe refuse de planifier ce soin si la femme ne peut pas payer d'avance.`,
 		`En plus du stress de savoir si elle et son bébé vont pouvoir se rendre à terme sain et sauf, elle subit des violences verbales de la part du personnel hospitalier (par exemple : "no money, no baby"). Après avoir fait plusieurs hôpitaux et passer des heures et des heures aux urgences et dans les services administratifs à expliquer sa situation, muni de son dossier médical, elle trouve enfin un médecin qui accepte de programmer sa césarienne et de prendre une entente de paiement avec elle. Comme les personnes im·migrantes sans couverture sont facturées à 200% du prix, elle sera facturée 18 000$, facture qu'elle mettra 10 ans à rembourser (sur une base de 200$ par mois).`
 		],
 		question: 'Selon vous, cette personne est ...',
 		choix: [
 			{
-				text: '... en permis de séjour temporaire',
+				text: 'en permis de séjour temporaire',
 				isRightAnswer: false
 			},
 			{
-				text: '... sans statut d’immigration',
+				text: 'sans statut d’immigration',
 				isRightAnswer: true
 			},
 			{
-				text: '... étudiant·e international·e',
+				text: 'étudiant·e international·e',
 				isRightAnswer: false
 			},
 			{
-				text: '... liée à un permis de travail fermé',
+				text: 'liée à un permis de travail fermé',
 				isRightAnswer: false
 			}
 		],
-		explications: [`Le texte d'explications s'affiche ici ... ... `]
+		explications: [`Le texte d'explications s'affiche ici `]
 	} , {
 		id: 'itinérance',
 		title: 'Itinérance et violence',
@@ -58,22 +58,22 @@ export default function quizData() { return [
 		question: 'Selon vous, cette personne est ...',
 		choix: [
 			{
-				text: '... en permis de séjour temporaire',
+				text: 'en permis de séjour temporaire',
 				isRightAnswer: true
 			},
 			{
-				text: '... sans statut d’immigration',
+				text: 'sans statut d’immigration',
 				isRightAnswer: false
 			},
 			{
-				text: '... étudiant·e international·e',
+				text: 'étudiant·e international·e',
 				isRightAnswer: false
 			},
 			{
-				text: '... liée à un permis de travail fermé',
+				text: 'liée à un permis de travail fermé',
 				isRightAnswer: false
 			}
 		],
-		explications: [`Le texte d'explications s'affiche ici ... ... `]
+		explications: [`Le texte d'explications s'affiche ici `]
 	}
 ]}
