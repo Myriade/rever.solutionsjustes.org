@@ -76,7 +76,7 @@ const Section2Intro = styled.section`
     margin-top: calc(var(--v-spacer) / 2);}
 `;
 
-const QuizPage = () => {
+const QuizDevPage = () => {
   return (
     <PageLayout>
     
@@ -116,10 +116,14 @@ const QuizPage = () => {
         </div>
       </Section2Intro>
       
+      { quizData.map( item => { return (
+        <QuizItem itemData={item} key={item.id} />
+      )})}
+      
     </PageLayout>
   )
 }
 
-export default QuizPage
+export default QuizDevPage
 
 export const Head = () => <title>Quiz | Au delà les statuts</title>
