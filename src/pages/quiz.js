@@ -4,10 +4,9 @@ import styled from 'styled-components'
 import { StaticImage } from 'gatsby-plugin-image'
 import { media } from '../styles/mixins.js'
 
-import QuizItem from '../components/quizItem'
-import data from '../data/quizData'
-
-const quizData = data();
+// import QuizItem from '../components/quizItem'
+// import data from '../data/quizData'
+// const quizData = data();
 
 const Section1Hero = styled.div`
   width: 100%;
