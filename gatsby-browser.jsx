@@ -1,5 +1,7 @@
-const React = require("react")
+const React = require("react");
 
-exports.onInitialClientRender = () => {
+exports.shouldUpdateScroll = () => {
 	window.scrollTo(0, 0);
+	return false;
 };
+

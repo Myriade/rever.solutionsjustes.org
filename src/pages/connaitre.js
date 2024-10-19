@@ -5,14 +5,14 @@ import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 
-import connaitreData from '../data/connaitreData'
-
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { TextPlugin } from 'gsap/TextPlugin'
 import Glide from '@glidejs/glide'
+
+import connaitreData from '../data/connaitreData'
 
 const Section1Hero = styled.div`
   width: 100%;
@@ -562,39 +562,40 @@ const Section4Cta = styled.section`
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, TextPlugin);
 
 const ConnaitrePage = () => {
-  // States, refs and variables
+  // States, refs, context and data variables
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(0);
-  //const [menuIsCollapsed, setMenuIsCollapsed] = useState(false);
+  
   const gsapContainerRef = useRef();
-  const { contextSafe } = useGSAP({ scope: gsapContainerRef });
-  const realitesDataArray = connaitreData();
   const timelineRef = useRef([]);
   const glideCarrousel = useRef();
   
-  // event handlers
-  function firstHoverTouchHandler() {
-    // Detect computer mouse or touch screen 
+  const { contextSafe } = useGSAP({ scope: gsapContainerRef });
+  const realitesDataArray = connaitreData();
+  
+  // Screen type check and proper animations trigger
+  useEffect( () => {
     if (!screenType) {
       if (window.matchMedia('(hover: hover)').matches) {
         console.log('Device has a mouse or touchpad events');
         if (window.matchMedia('(min-width: 1200px)').matches) {
-          console.log('Screen is more than 1200px wide. GSAP ok');
+          console.log('Screen is more than 1200px wide.  Full Animations ok.');
           setScreenType('mouse');
           gsapAnimations();
         } else {
           setScreenType('mouse-narrow');
-          console.log('Screen is less than 1200px wide. No ScrollTrigger');
+          console.log('Screen is less than 1200px wide. Animations sobres.');
           sobreGsapAnimations();
         }
       } else {
-        console.log('Device has no mouse, so has touch events');
+        console.log('Device has no mouse, so has touch events. Animations sobres.');
         setScreenType('touch');
         sobreGsapAnimations();
       }
     }
-  }
+  }, []);
   
+  // event handlers
   const navClickHandler = contextSafe( (clickedIndex) => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
     setActiveRealite(clickedIndex);
@@ -891,7 +892,7 @@ const ConnaitrePage = () => {
   
   // Mobiles touch GSAP Animations sobres 
   const sobreGsapAnimations = contextSafe(() => {
-    const headerBottomInViewport = document.querySelector('#firstHoverTouchCheck header').getBoundingClientRect().bottom;
+    const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom;
     const navElement = gsapContainerRef.current.querySelector('#realites-nav');
     const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
     const realitesUniquesArr = gsap.utils.toArray('.realite-unique');
@@ -1025,11 +1026,7 @@ const ConnaitrePage = () => {
   }, [screenType]);
   
   return (
-    <div 
-      id='firstHoverTouchCheck' 
-      onMouseEnter={firstHoverTouchHandler} 
-      onTouchStart={firstHoverTouchHandler}
-    >
+    <div id='page-wrapper'>
       <PageLayout>
         <Section1Hero>
           <StaticImage 
@@ -1048,11 +1045,8 @@ const ConnaitrePage = () => {
             </h1>
           </div>
         </Section1Hero>
-          
-        <div
-          ref={gsapContainerRef} 
-          id='gsap-container'
-        >
+        
+        <div ref={gsapContainerRef}  id='gsap-container'>
           <SectionRealites>
             <div className='titre'>
               <h2>Récits, mythes et réalités</h2>
