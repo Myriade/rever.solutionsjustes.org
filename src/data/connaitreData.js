@@ -14,8 +14,8 @@ export default function connaitreData() { return [
 			`On ne me donne pas <strong>accès aux services de santé et aux services sociaux</strong>. Cette situation impacte mon bien-être général et ma santé physique, car je n'ai pas accès aux soins dont j'ai besoin.`,
 			`J’ai la <strong>crainte de porter plainte</strong> si je suis victime d’un crime, par exemple, de violence sexuelle.`,
 			`<strong>Je vis constamment dans l'angoisse</strong> et l'invisibilité. J'appréhende de marcher dans la rue pour rendre visite à une amie ou d'ouvrir la porte au facteur, craignant d’être arrêtée par la police et de devoir m’identifier.`,
-			`Je n’ai pas accès aux services municipaux de Sherbrooke qui nécessitent une pièce d'identité, comme la bibliothèque ou la piscine.`,
-			`On ne me permet pas de me projeter dans l’avenir en raison de l'incertitude dans laquelle je vis. Mes aspirations sont restreintes par mon statut d’immigration, ce qui engendre un profond sentiment d’exclusion et de manque d’appartenance à la société où je vis depuis plus de 15 ans.`
+			`Je n’ai <strong>pas accès aux services municipaux de Sherbrooke</strong> qui nécessitent une pièce d'identité, comme la bibliothèque ou la piscine.`,
+			`On <strong>ne me permet pas de me projeter dans l’avenir</strong> en raison de l'incertitude dans laquelle je vis. Mes aspirations sont restreintes par mon statut d’immigration, ce qui engendre un profond sentiment d’exclusion et de manque d’appartenance à la société où je vis depuis plus de 15 ans.`
 		],
 		mytheTitre: `Les personnes sans statut sont des ‘illégaux’.`,
 		mytheSoustitre: `On ne dit pas que les personnes sont illégales\u00A0: personne n'est illégal. Certaines personnes peuvent se retrouver sans statut d'immigration régulier en raison de circonstances échappant à leur contrôle.`,
