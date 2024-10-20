@@ -627,6 +627,7 @@ const ConnaitrePage = () => {
           offsetY: navBottomInViewport,
         },
       });
+      ScrollTrigger.refresh();
     }
     
   });
@@ -968,21 +969,24 @@ const ConnaitrePage = () => {
     });
     
     // Animations au scroll dans chacune des fiches de réalité
-    // creates an array of realite-unique items
-    const realitesGsapArr = gsap.utils.toArray('.realite-unique');
-    // create a ScrollTrigger for each realite
+    const realitesGsapArr = gsap.utils.toArray('.realite-unique'); // creates an array of realite-unique items
+    
     realitesGsapArr.forEach( (element, realiteIndex) => {
       
       // Impacts apparaissent progressivement de chaque cotes
-      // gsap.from( element.querySelectorAll('.impact'), {
-      //   xPercent: -75,
-      //   autoAlpha: 0,
-      //   scrollTrigger: {
-      //     start: 'top 30%',
-      //     scrub: true,
-      //     markers: true 
-      //   },
-      // });
+      const impactsGsapArr = gsap.utils.toArray(element.querySelectorAll('.impact') ); // creates an array of impact items
+      impactsGsapArr.forEach( (impact, impactIndex) => {
+        gsap.from( impact, {
+          autoAlpha: 0,
+          xPercent: -50,
+          scrollTrigger: {
+            trigger: impact,
+            id: `test`,
+            start: 'top 70%',
+            toggleActions: 'play none none reset',
+          }
+        });
+      });
       
       // Mythe Titre se raye
       const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
