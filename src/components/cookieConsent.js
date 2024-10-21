@@ -57,21 +57,16 @@ export default function CookieConsent() {
 	
 	// The isConsentOk state is assumed to be true up until the local storage is set to false
 	useEffect( () => {
-		// verify if there is a local consent already, and store its value in the localConsent state
-		const localConsentValue = localStorage.getItem('cookiesConsent');
-		
-		// function to set consent false in local storage and state
-		const setConsentFalse = () => {
-			localStorage.setItem('cookiesConsent', 'false');
-			setIsConsentOk(false);
-		}
-		
-		// Logic
-		if ( !localConsentValue || localConsentValue === 'false' ) {
-			// if there is no local value or the local value is false (string), 
-			// wait a few seconds and call setConsentFalse function
-			setTimeout( setConsentFalse, 3500 );
-		}
+		// wait a few seconds to update the state and show the banner
+		setTimeout( () => { 
+			// verify if there is a local consent already, and store its value in the localConsent state
+			const localConsentValue = localStorage.getItem('cookiesConsent');
+			// if there is no local value or the local value is false (string) 
+			if ( !localConsentValue || localConsentValue === 'false' ) {
+				localStorage.setItem('cookiesConsent', 'false');
+				setIsConsentOk(false);
+			}
+		}, 3500 );
 		
 	}, [isConsentOk]);
 	
