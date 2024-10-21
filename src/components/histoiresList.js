@@ -6,7 +6,8 @@ import { media } from '../styles/mixins.js'
 import histoiresData from '../data/histoires'
 import HistoireLigneTemps from './histoireLigneTemps'
 
-import { gsap } from 'gsap';
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react';
 import Glide from '@glidejs/glide'
 
@@ -87,15 +88,26 @@ const Histoire = styled.div`
 			margin-bottom: 0.5em;}
 		&__resume {
 			margin-top: 0.5em;}}
+			
+	.glide__track {
+		max-width: 85vw;
+		&:hover {
+			cursor: grab;}}
+			
+	.all-controls {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: 1rem;
+		align-items: center;
+		margin-bottom: 5vh;}
 		
 	.glide__bullets.points-list {
 		display: flex;
 		justify-content: stretch;
-		margin-block: 1vh 5vh;
+		margin-bottom: 1.25rem;
 		position: unset;
 		transform: unset;
 		border-bottom: 3px solid var(--color-bleu-tres-fonce);
-		width: calc(80% - 3vh);
 		
 		button.list-item {
 			display: block;
@@ -123,7 +135,7 @@ const Histoire = styled.div`
 			&:first-child {
 				padding-inline: 0 3vw;}
 			&:last-child {
-				padding-inline: 3vw 0;
+				padding-inline: 3vw 1.5rem;
 				flex-grow: initial;}}
 				
 		.point {
@@ -133,19 +145,8 @@ const Histoire = styled.div`
 			width: 1.5rem;
 			height: 1.5rem;}}
 			
-	.glide__track {
-		max-width: 85vw;
-		&:hover {
-			cursor: grab;}}
-			
 	.control-arrows {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		margin-right: 1rem;
 		button {
-			position: relative;
-			bottom: 0.25rem;
 			color: var(--color-bleu-tres-fonce);
 			border-radius: 4px;
 			background: white;
@@ -180,16 +181,13 @@ const Histoire = styled.div`
 				&::before, &::after {
 					cursor: initial;}}}
 		
-		.glide__bullets.points-list {
-			width: calc(94% - 3vh);}
-		
 		.glide__slides {
 			position: relative;
 			left: 5ch;}
 	`}
 `;
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const HistoiresList = () => {
 	// States
@@ -206,39 +204,49 @@ const HistoiresList = () => {
 	
 	// GSAP first animation
 	const gsapFirstAnimations = contextSafe(() => {
+		
+		const scrollTriggerObj = {
+			trigger: '.histoires',
+			scroller: window,
+			start: 'top 35%',
+		}
+		
 		// Cache les histoires qui ne sont pas la premiere
 		gsap.to( '.histoire:not(:first-child)', {
 			autoAlpha: 0,
-			duration: 0
+			duration: 0,
 		})
 		
 		// Active la 1ere carte
 		gsap.to( '.histoire-card:first-child .bg-img', { 
 			filter: 'grayscale(0%)',
-			duration: 0.5
+			duration: 0.5,
+			scrollTrigger: scrollTriggerObj,
 		});
 		
 		// Désactive le 1er bouton
 		gsap.to( '.histoire-card:first-child .button', {
 			autoAlpha: 0,
-			duration: 0.5
+			duration: 0.5,
+			scrollTrigger: scrollTriggerObj,
 		})
 		
 		// Active la 1ere histoire
 		gsap.to( '.histoire:first-child', {
 			autoAlpha: 1,
-			duration: 0.5
+			duration: 0.5,
+			scrollTrigger: scrollTriggerObj,
 		})
 		
 		gsap.from( '.histoire:first-child', {
 			xPercent: -20,
-			duration: 0.5
+			duration: 0.5,
+			scrollTrigger: scrollTriggerObj,
 		})
 	}, { dependencies: [screenType], scope: gsapScopeRef });
 	
-	// event handlers
-	function firstHoverTouchHandler() {
-		// Detect computer mouse or touch screen 
+	// Screen type check and proper animations trigger
+	useEffect( () => {
 		if (!screenType) {
 			if (window.matchMedia('(hover: hover)').matches) {
 				console.log('Device has a mouse or touchpad events (firstHoverTouchHandler)');
@@ -249,8 +257,9 @@ const HistoiresList = () => {
 			}
 			gsapFirstAnimations();
 		}
-	}
+	}, []);
 	
+	// event handlers
 	const histoireSwitchClickHandler = contextSafe( (clickedIndex) => {
 		const clickedId = histoiresArray[clickedIndex].idUnique;
 		const activeCard = gsapScopeElem.querySelector(`#card-${clickedId}`);
@@ -324,11 +333,7 @@ const HistoiresList = () => {
 	}, [screenType, gsapScopeElem]);
 
 	return (
-		<section 
-			id='consequences' 
-			onMouseEnter={firstHoverTouchHandler} 
-			onTouchStart={firstHoverTouchHandler}
-		>
+		<section id='consequences'>
 			<Intro className='grid'>
 				<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
 				<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
@@ -368,17 +373,24 @@ const HistoiresList = () => {
 							<h3 className='histoire__titre'>L'histoire de {histoireItem.nom}</h3>
 							<p className='histoire__resume'>{histoireItem.titre}</p>
 							
-							<div className='flex'>
-								<div className='control-arrows' data-glide-el='controls'>
+							<div className='all-controls'>
+								<div className='control-arrows' data-glide-el='controls[nav]'>
 									<button data-glide-dir="<" title='Précédent'> &#8249; </button>
-									<button data-glide-dir=">" title='Suivant'> &#8250; </button>
 								</div>
 								<div className='glide__bullets points-list' data-glide-el='controls[nav]'>
 									{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => { return (
-										<button key={index} className='glide__bullet list-item' data-glide-dir={`=${index}`}>
+										<button 
+											className='glide__bullet list-item' 
+											key={index} 
+											data-glide-dir={`=${index}`}
+											aria-label={`Aller à la fiche ${index + 1}`}
+										>
 											<div className='point'></div>
 										</button>
 									)})}
+								</div>
+								<div className='control-arrows' data-glide-el='controls[nav]'>
+									<button data-glide-dir=">" title='Suivant'> &#8250; </button>
 								</div>
 							</div>
 							

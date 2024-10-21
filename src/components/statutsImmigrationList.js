@@ -43,6 +43,7 @@ const BulletsControls = styled.div`
 	position: relative;
 	
 	.glide__bullets {
+		transform: unset;
 		position: initial;}
 
 	.glide__bullet {
@@ -106,8 +107,8 @@ const StatutsImmigrationList = () => {
 							return (
 								<button 
 									className='glide__bullet' 
-									data-glide-dir={`=${index}`} 
 									key={`point-${index}`}
+									data-glide-dir={`=${index}`} 
 									aria-label={`Aller à la fiche ${index + 1}`}
 								></button>
 							)
