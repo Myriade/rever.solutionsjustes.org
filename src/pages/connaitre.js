@@ -503,20 +503,40 @@ const SectionRealites = styled.section`
 
 const BulletsControls = styled.div`
   display: grid;
+  grid-template-columns: repeat(3, auto);
   justify-items: center;
   padding-top: calc(var(--v-spacer) / 2);	
   position: relative;
   
+  button {
+    border: 0;
+    background: transparent;
+    box-shadow: none;}
+  
   .glide__bullets {
-    position: initial;}
-
-  .glide__bullet {
-    width: 15px;
-    height: 15px;
-    box-shadow: none;
-    &--active, &:focus {
-      background: black;
-      border-color: black;}}
+    position: initial;
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    transform: unset;
+    
+    button {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      &.glide__bullet--active, &:focus {
+        .glide__bullet {
+          background: black;
+          border-color: black;}}}
+  
+    .glide__bullet {
+      width: 15px;
+      height: 15px;}}
+      
+  button.arrow {
+    font-size: 2rem;
+    font-family: sans;
+  }
 `;
 
 const Section4Cta = styled.section`
@@ -621,6 +641,7 @@ const ConnaitrePage = () => {
     } else if (screenType === 'touch') {
       glideCarrousel.current.go(`=${clickedIndex}`);
       const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+      // scroll to top under the nav, and recalculate the scrolltriggers
       gsap.to( window, { 
         scrollTo: {
           y: '#realites-container',
@@ -628,6 +649,13 @@ const ConnaitrePage = () => {
         },
       });
       ScrollTrigger.refresh();
+      // update the glidetrack elem height
+      const glideTrackElem =  gsapContainerRef.current.querySelector('.glide__track ')
+      const activeElemHeight = gsapContainerRef.current.querySelectorAll('.glide__slide')[clickedIndex].offsetHeight;
+      gsap.to( glideTrackElem, {
+        height: activeElemHeight,
+        duration: 0.5,
+      });
     }
     
   });
@@ -640,7 +668,9 @@ const ConnaitrePage = () => {
     }
   });
   
-  const glideControlClickHandler = contextSafe( () => {
+  const glideControlClickHandler = contextSafe( (clickedIndex) => {
+    setActiveRealite(clickedIndex);
+    // scroll to top
     const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
     gsap.to( window, { 
       scrollTo: {
@@ -648,6 +678,14 @@ const ConnaitrePage = () => {
         offsetY: navBottomInViewport,
       },
     });
+    // update the glidetrack elem height
+    const glideTrackElem =  gsapContainerRef.current.querySelector('.glide__track ')
+    const activeElemHeight = gsapContainerRef.current.querySelectorAll('.glide__slide')[clickedIndex].offsetHeight;
+    gsap.to( glideTrackElem, {
+      height: activeElemHeight,
+      duration: 0.5,
+    });
+    ScrollTrigger.refresh();
   });
   
   // Laptop et desktop GSAP Animations 
@@ -1206,18 +1244,39 @@ const ConnaitrePage = () => {
               
               { screenType === 'touch' ? 
                 <BulletsControls>
+                  <div data-glide-el="controls[nav]">
+                    <button 
+                      className='arrow' 
+                      data-glide-dir="<"
+                      onClick={ () => glideControlClickHandler( activeRealite - 1 )}
+                    > 
+                     ‹ 
+                    </button>
+                  </div>
                   <div className="glide__bullets" data-glide-el="controls[nav]">
                     { realitesDataArray.map( (item, index) => {
                       return (
                         <button 
-                          className='glide__bullet' 
+                          title={`voir l'histoire de ${item.nom}`}
                           data-glide-dir={`=${index}`} 
                           key={`point-${index}`}
                           aria-label={`Aller à la fiche ${index + 1}`}
-                          onClick={ () => glideControlClickHandler()}
-                        ></button>
+                          onClick={ () => glideControlClickHandler(index)}
+                        >
+                          <div className='glide__bullet' ></div>
+                          {item.nom}
+                        </button>
                       )
                     })}
+                  </div>
+                  <div data-glide-el="controls[nav]">
+                    <button 
+                      className='arrow' 
+                      data-glide-dir=">"
+                      onClick={ () => glideControlClickHandler( activeRealite + 1)}
+                    >
+                     › 
+                    </button>
                   </div>
                 </BulletsControls>
               : ''}
