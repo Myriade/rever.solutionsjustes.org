@@ -103,10 +103,9 @@ const Choix = styled.div`
 
 gsap.registerPlugin(useGSAP);
 
-const QuizItem = ({ itemData, itemIndex, itemsCount }) => {
+const QuizItem = ({ itemData, onChange }) => {
 	const [selectedChoice, setSelectedChoice] = useState(null);
 	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
-	const [goodAnswerCount, setGoodAnswerCount] = useState(0);
 	
 	const shuffledChoiceArray = useRef();
 	const choixRef = useRef();
@@ -130,7 +129,9 @@ const QuizItem = ({ itemData, itemIndex, itemsCount }) => {
 		setSelectedChoice(clickedChoiceId);
 		
 		if (clickedChoiceId === rightAnswerId ) {
-			setGoodAnswerCount( goodAnswerCount + 1 )
+			onChange(true);
+		} else {
+			onChange(false);
 		}
 		
 		const choixRefElem = choixRef.current;
@@ -215,15 +216,6 @@ const QuizItem = ({ itemData, itemIndex, itemsCount }) => {
 							{ selectedChoice !== null ? 
 								itemData.explications
 								: <span>&nbsp;</span> }
-						</p>
-						
-						<p className='good-answers-count'>
-							{ selectedChoice !== null ? ( <span>
-								Vous avez jusqu'ici {goodAnswerCount} bonne{goodAnswerCount > 1 ? 's' : ''} réponse{goodAnswerCount > 1 ? 's' : ''} sur {itemIndex + 1}. 
-								<br/>
-								Continuez! Il y a {itemsCount} questions en tout.
-							</span>) : '' }
-							
 						</p>
 					</div>
 				</Interaction>

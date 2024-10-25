@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {useState, useRef} from 'react'
 import PageLayout from '../layouts/pageLayout'
 import styled from 'styled-components'
 import { StaticImage } from 'gatsby-plugin-image'
@@ -54,7 +54,12 @@ const Section1Hero = styled.div`
   `};
 `;
 
+const SectionProgression = styled.section`
+  
+`;
+
 const Section2Intro = styled.section`
+  height: calc(100vh - var(--header-height));
   .grid {
     gap: var(--v-h2-spacer);}
     
@@ -124,14 +129,34 @@ gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollToPlugin);
 
 const QuizDevPage = () => {
+  const [answersProgression, setAnswersProgression] = useState(null);
   const gsapPageContainerRef = useRef();
   const { contextSafe } = useGSAP({ scope: gsapPageContainerRef });
   
+  if ( answersProgression === null ) {
+    const initialAnswersProgression = quizData.map( (item, index) => { 
+      return {
+        questionNumber: index + 1,
+        answerState: null
+      }
+    });
+    setAnswersProgression(initialAnswersProgression);
+  }
+  
+  // Event handlers
   const shortcutClickHandler = contextSafe(() => {
     gsap.to( window, { 
       duration: 1, 
       scrollTo: {y: '#quiz', offsetY: 120} });
   });
+  
+  const updateProgressionItem = (index, newValue) => {
+    setAnswersProgression( prevState => {
+      return prevState.map((item, i) => 
+        i === index ? { ...item, answerState: newValue } : item
+      );
+    });
+  };
   
   return (
     <PageLayout>
@@ -154,6 +179,17 @@ const QuizDevPage = () => {
             </h1>
           </div>
         </Section1Hero>
+        
+        <SectionProgression>
+          { answersProgression ? 
+            answersProgression.map( (question, index) => { return (
+              <div key={index}>
+                {question.questionNumber} <br/>
+                {question.answerState === true ? 'bon' : 'pas bon'}
+              </div>
+            )})
+          : ''}
+        </SectionProgression>
         
         <Section2Intro>
           <div className='grid'>
@@ -180,7 +216,7 @@ const QuizDevPage = () => {
               key={item.id} 
               itemData={item} 
               itemIndex={index}
-              itemsCount={quizData.length}
+              onChange={ (newValue) => updateProgressionItem(index, newValue) } 
             />
           )})}
         </section>
