@@ -315,7 +315,7 @@ const HistoiresList = () => {
 			
 			// Glide.js initialisation
 			histoiresElems.forEach( (item) => {
-				const thisGlide = new Glide( item, {
+				const histoiresGlide = new Glide( item, {
 					type: 'slider',
 					perView: 1.25,
 					gap: 50,

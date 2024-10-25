@@ -72,7 +72,7 @@ const StatutsImmigrationList = () => {
 	);
 	
 	useEffect(() => {
-		new Glide('.glide', {
+		const statutsGlide = new Glide('.glide', {
 			type: 'slider',
 			perView: 1.2,
 			gap: 20,
