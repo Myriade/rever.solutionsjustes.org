@@ -5,6 +5,7 @@
 	--header-height: 6rem;	
 	--v-spacer: 7vh;
 	--h-spacer: 2.5vw;
+	--h2-spacer: calc( var(--h-spacer) * 2);
 	--v-h-spacer: var(--v-spacer) var(--h-spacer);
 	--v-h2-spacer: var(--v-spacer) calc(var(--h-spacer) * 2 );
 	
@@ -138,9 +139,9 @@ button {
 	background: rgba(255,255,255,0.5);
 }
 
-// MISC
-main > section,
-#gsap-container > section {
+// Layout
+main > section:not(.full-width),
+#gsap-container > section:not(.full-width) {
 	padding: var(--v-h2-spacer);
 	> * {
 		max-width: 1350px;
