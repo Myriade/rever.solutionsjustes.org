@@ -175,8 +175,13 @@ const QuizDevPage = () => {
         </Section2Intro>
         
         <section className='full-width' id='quiz'>
-          { quizData.map( item => { return (
-            <QuizItem itemData={item} key={item.id} />
+          { quizData.map( (item, index) => { return (
+            <QuizItem  
+              key={item.id} 
+              itemData={item} 
+              itemIndex={index}
+              itemsCount={quizData.length}
+            />
           )})}
         </section>
         

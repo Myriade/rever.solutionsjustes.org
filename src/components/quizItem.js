@@ -37,6 +37,9 @@ const Presentation = styled.div`
 	${media.desktopUp`
 	`};
 	
+	p:not(:first-child) {
+		font-size: 1rem;
+	}	
 `;
 
 const Interaction = styled.div`
@@ -50,7 +53,7 @@ const Interaction = styled.div`
 		
 	.resultat {
 		display: grid;
-		grid-template-rows: 1fr 1fr; 
+		grid-template-rows: 1fr 1fr 1fr; 
 	}
 	
 	${media.desktopUp`
@@ -97,15 +100,18 @@ const Choix = styled.div`
 
 gsap.registerPlugin(useGSAP);
 
-const QuizItem = ({ itemData }) => {
-	const [selectedChoice, setSelectedChoice] = useState(null)
+const QuizItem = ({ itemData, itemIndex, itemsCount }) => {
+	const [selectedChoice, setSelectedChoice] = useState(null);
+	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
+	const [goodAnswerCount, setGoodAnswerCount] = useState(0);
+	
+	const shuffledChoiceArray = useRef();
+	const choixRef = useRef();
+	const itemRef = useRef();
+	
 	const rightAnswerIndex = itemData.choix.findIndex( choix => choix.isRightAnswer === true );
 	const rightAnswerId = `${itemData.id}-${rightAnswerIndex}`;
 	const rightAnswerText = itemData.choix.filter( choix => choix.isRightAnswer === true )[0].text;
-	const shuffledChoiceArray = useRef();
-	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
-	const choixRef = useRef();
-	const itemRef = useRef();
 	
 	if ( !arrayIsShuffled ) {
 		shuffledChoiceArray.current = itemData.choix.sort((a, b) => 0.5 - Math.random());
@@ -119,6 +125,11 @@ const QuizItem = ({ itemData }) => {
 	// event handlers
 	const onOptionChange = contextSafe( (clickedChoiceId) => {
 		setSelectedChoice(clickedChoiceId);
+		
+		if (clickedChoiceId === rightAnswerId ) {
+			setGoodAnswerCount( goodAnswerCount + 1 )
+		}
+		
 		const choixRefElem = choixRef.current;
 		const itemRefElem = itemRef.current;
 		
@@ -201,6 +212,15 @@ const QuizItem = ({ itemData }) => {
 							{ selectedChoice !== null ? 
 								itemData.explications
 								: <span>&nbsp;</span> }
+						</p>
+						
+						<p className='good-answers-count'>
+							{ selectedChoice !== null ? ( <span>
+								Vous avez jusqu'ici {goodAnswerCount} bonne{goodAnswerCount > 1 ? 's' : ''} réponse{goodAnswerCount > 1 ? 's' : ''} sur {itemIndex + 1}. 
+								<br/>
+								Continuez! Il y a {itemsCount} questions en tout.
+							</span>) : '' }
+							
 						</p>
 					</div>
 				</Interaction>
