@@ -57,6 +57,9 @@ const Interaction = styled.div`
 	}
 	
 	${media.desktopUp`
+		.good-answers-count {
+			height: 3rem;
+		}
 	`};
 	
 `;
