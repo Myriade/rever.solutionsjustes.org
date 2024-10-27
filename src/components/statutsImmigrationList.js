@@ -71,8 +71,6 @@ const StatutsImmigrationList = () => {
 		placeholderData
 	);
 	
-	console.log(content);
-	
 	useEffect(() => {
 		const statutsGlide = new Glide('.glide', {
 			type: 'slider',

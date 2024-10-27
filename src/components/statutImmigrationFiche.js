@@ -46,7 +46,6 @@ const SatutFiche = styled.div`
 `;
 
 const StatutImmigrationFiche = ({ ficheData }) => {
-	//console.log(ficheData);
 	
 	let imageSrc = '/logo.jpg';
 	if (ficheData.ilustration) {
@@ -64,7 +63,7 @@ const StatutImmigrationFiche = ({ ficheData }) => {
 			}
 			<div>
 				<h3>{ficheData.title}</h3>
-				<div>{ficheData.texteSimple}</div>
+				<p>{ficheData.texteSimple}</p>
 			</div>
 		</SatutFiche>
 	);
