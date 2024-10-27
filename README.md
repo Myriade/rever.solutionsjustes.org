@@ -2,7 +2,7 @@
 ## Un microsite de campagne pour la clinique Solutions justes
 Code author : Myriam Bizier / Myriade web
 Design : Republik & Manon Lecante
-Front-end : Généré par Gatsby/React
+Front-end framework : Gatsby/React
 
 ## Installation
 - Récupérer le code source dans le repo GIT nommé DEV sur le serveur d'hébergement
@@ -19,3 +19,8 @@ Le variables d'environnement doivent être préfixées de GATSBY_ pour les prot�
 
 ## Déploiement
 Push master branch to GitHub repo. It triggers a deployment script on Netlify
+
+## Refactor todo
+- Page Connaitre, ce fichier est beaucoup trop long : séparer en composants
+- Nomenclature des composants plus logique
+- Faire un composant Header, et mettre un placeholder data en attendant le chargement de l'image (au lieu du fond animé dans layout)

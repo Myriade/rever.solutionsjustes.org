@@ -66,10 +66,12 @@ const placeholderData = {
 
 const StatutsImmigrationList = () => {
 	let content = useWixData(
-		'TestsRever-Statutsmigratoires', 
-		'_manualSort_559b8e96-44f9-4841-a096-af53431ff141',
+		'Import691', 
+		'_manualSort_a4b23ee5-c1a8-41bc-a4e2-0ff853a347ec',
 		placeholderData
 	);
+	
+	console.log(content);
 	
 	useEffect(() => {
 		const statutsGlide = new Glide('.glide', {

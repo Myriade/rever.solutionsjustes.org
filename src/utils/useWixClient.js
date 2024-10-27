@@ -10,7 +10,7 @@ export function useWixClient() {
 		const newClient = createClient({
 			modules: { items },
 			auth: OAuthStrategy({
-				clientId: `a488964d-d895-421a-97fd-0ed47d914738`,
+				clientId: process.env.GATSBY_WIX_API_KEY,
 				tokens: JSON.parse(Cookies.get("session") || null),
 			}),
 		});

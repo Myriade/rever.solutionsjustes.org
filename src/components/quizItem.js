@@ -122,16 +122,14 @@ const QuizItem = ({ itemData, onChange }) => {
 	
 	const { contextSafe } = useGSAP({ scope: itemRef });
 	
-	// lazy load scrollTrigger TODO
-	
 	// event handlers
 	const onOptionChange = contextSafe( (clickedChoiceId) => {
 		setSelectedChoice(clickedChoiceId);
 		
 		if (clickedChoiceId === rightAnswerId ) {
-			onChange(true);
+			onChange('bon');
 		} else {
-			onChange(false);
+			onChange('pas bon');
 		}
 		
 		const choixRefElem = choixRef.current;

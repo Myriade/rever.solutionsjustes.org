@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import PageLayout from '../layouts/pageLayout'
 import styled from 'styled-components'
 import { StaticImage } from 'gatsby-plugin-image'
@@ -8,8 +8,9 @@ import QuizItem from '../components/quizItem'
 import data from '../data/quizData'
 
 import { gsap } from 'gsap'
-import { useGSAP } from '@gsap/react';
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { useGSAP } from '@gsap/react'
+import { ScrollToPlugin } from "gsap/ScrollToPlugin"
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const quizData = data();
 
@@ -55,7 +56,38 @@ const Section1Hero = styled.div`
 `;
 
 const SectionProgression = styled.section`
+  display: flex;
+  justify-content: stretch;
+  margin-bottom: 1.25rem;
+  background: white;
+  padding-block: 2rem 1.5rem !important;
+  z-index: 30;
   
+  .question {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    justify-items: center;
+    border-bottom: 3px solid var(--color-bleu-tres-fonce);
+    border-radius: 0;
+    background-color: transparent;
+    margin: 0;
+    height: 1.5rem;
+    flex-grow: 1;
+    padding-inline: 3vw;
+    &__reponse {
+      position: relative;
+      bottom: 0.75rem;}
+    &__point {
+      display: grid;
+      justify-content: center;
+      position: relative;
+      bottom: 1rem;
+      background: var(--color-bleu-tres-pale);
+      border-radius: 50%;
+      width: 1.75rem;
+      height: 1.75rem;
+      line-height: 1.75;
+      font-weight: 700;}}
 `;
 
 const Section2Intro = styled.section`
@@ -125,23 +157,67 @@ const Section4Cta = styled.section`
   `}
 `;
 
-gsap.registerPlugin(useGSAP);
-gsap.registerPlugin(ScrollToPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const QuizDevPage = () => {
+  const [screenType, setScreenType] = useState(''); 
   const [answersProgression, setAnswersProgression] = useState(null);
   const gsapPageContainerRef = useRef();
   const { contextSafe } = useGSAP({ scope: gsapPageContainerRef });
   
+  // Screen type check and animations trigger
+  useEffect( () => {
+    if (!screenType) {
+      if (window.matchMedia('(hover: hover)').matches) {
+        console.log('Device has a mouse or touchpad events');
+        if (window.matchMedia('(min-width: 1200px)').matches) {
+          console.log('Screen is more than 1200px wide.  Full Animations ok.');
+          setScreenType('mouse');
+        } else {
+          setScreenType('mouse-narrow');
+          console.log('Screen is less than 1200px wide. Animations sobres.');
+        }
+      } else {
+        console.log('Device has no mouse, so has touch events. Animations sobres.');
+        setScreenType('touch');
+      }
+    }
+    
+    if (screenType) {
+      gsapAnimations();
+    }  
+  }, [screenType]);
+  
+  // Initiate the progression array
   if ( answersProgression === null ) {
     const initialAnswersProgression = quizData.map( (item, index) => { 
       return {
         questionNumber: index + 1,
-        answerState: null
+        answerState: '\u00A0'
       }
     });
     setAnswersProgression(initialAnswersProgression);
   }
+  
+  // Gsap animations 
+  const gsapAnimations = contextSafe(() => {
+    
+    //console.log(document);
+    
+    // progression bar pins 
+    gsap.to('#progression-bar', {
+      scrollTrigger: {
+        id: 'progressionBarPin',
+        trigger: '#progression-bar',
+        pin: true,
+        pinSpacing: false,
+        start: `top 85`,
+        endTrigger: '#s-impliquer',
+        end: 'top 150'
+      }
+    });
+    
+  }, { dependencies: [screenType], scope: gsapPageContainerRef } );
   
   // Event handlers
   const shortcutClickHandler = contextSafe(() => {
@@ -180,12 +256,12 @@ const QuizDevPage = () => {
           </div>
         </Section1Hero>
         
-        <SectionProgression>
+        <SectionProgression id='progression-bar'>
           { answersProgression ? 
             answersProgression.map( (question, index) => { return (
-              <div key={index}>
-                {question.questionNumber} <br/>
-                {question.answerState === true ? 'bon' : 'pas bon'}
+              <div className='question' key={index}>
+                <div className='question__reponse'>{question.answerState}</div>
+                <div className='question__point'>{question.questionNumber}</div>
               </div>
             )})
           : ''}
