@@ -223,24 +223,50 @@ const HistoiresList = () => {
 		'_manualSort_adbe7ddc-ef0d-4bb5-94b7-deac5047fa94',
 		placeholderPersonne
 	);
+	useEffect(() => {
+		if (wixPersonnesData) {
+			setContentPersonnes(wixPersonnesData);
+			console.log('wixPersonnesData = ', wixPersonnesData);
+		}
+	}, [wixPersonnesData]);
 	
 	const wixLigneTempsData = useWixData(
 		'PageReverLignesdutemps', 
 		'_manualSort_660ea147-5f5d-41b4-a4a9-61a8ef2634e5',
 		placeholderLigneTemps
 	);
-	
 	useEffect(() => {
-		if (wixPersonnesData) {
-			setContentPersonnes(wixPersonnesData);
-			console.log(contentPersonnes);
-		}
-		
 		if (wixLigneTempsData) {
 			setContentLignesTemps(wixLigneTempsData);
-			console.log(contentLignesTemps);
+			console.log('wixLigneTempsData = ', wixLigneTempsData);
 		}
-	}, [wixPersonnesData, wixLigneTempsData]);
+	}, [wixLigneTempsData]);
+	
+	// Tranform data
+	if ( wixLigneTempsData && wixPersonnesData ) {
+		function transformData(inputArray) {
+			const resultObject = {};
+		
+			inputArray.forEach( (item, index) => {
+				const date = item.data.title;
+				const text = item.data.texte;
+		
+				if (!resultObject[index]) {
+					resultObject[index] = {
+						data: []
+					};
+				}
+		
+				resultObject[index].data.push({ date, text });
+			});
+		
+			return Object.values(resultObject);
+		}
+		
+		// Usage
+		const transformedData = transformData(wixLigneTempsData);
+		console.log(transformedData);
+	}
 		
 	// Screen type check
 	useEffect( () => {

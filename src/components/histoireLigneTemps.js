@@ -16,14 +16,14 @@ const LigneTempsItemLi = styled.li`
 `;
 
 const HistoireLigneTemps = ({ data }) => {
+	//console.log('ligne data = ', data);
 	
 	return (
 		<>
 			{data.map( (item, index) => {
 				return (
 					<LigneTempsItemLi className='glide__slide' key={index}>
-						<h3>{item.date}</h3>
-						<p>{item.texte}</p>
+						
 					</LigneTempsItemLi>
 			)})}
 		</>
