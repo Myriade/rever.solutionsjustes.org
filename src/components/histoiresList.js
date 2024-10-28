@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 
-//import useWixData from '../utils/useWixData'
-import histoiresData from '../data/histoires'
+import useWixData from '../utils/useWixData'
+import histoiresImgData from '../data/histoires-img-data'
 import HistoireLigneTemps from './histoireLigneTemps'
 
 import { gsap } from 'gsap'
@@ -189,79 +189,189 @@ const Histoire = styled.div`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
+// Loading placeholder data
+const placeholderPersonne = {
+	'data': {
+		'idUnique': 'placeholder',
+		'title': '...',
+		'titre': '(chargement)',
+	},
+	'_id': 'placeholdercard',
+}
+
+const placeholderLigneTemps = [
+	[
+		{
+			date: '...',
+			texte: 'chargement'
+		}, 
+	]
+]
+
+// Function to create array of target associated data grouped by associated Id
+const transformData = ( (inputArray, targetArray, associatedId) => {
+		
+		let associatedInputItems = [];
+		
+		targetArray.forEach( (personne, pIndex) => {
+			associatedInputItems = inputArray.filter( ligneTempsItem => ligneTempsItem.data.histoireAssocie === associatedId);
+		});
+		
+		//console.log('associatedInputItems = ', associatedInputItems);
+		
+		const purifiedInputItems = associatedInputItems.map( item => {
+			return {'date': item.data.title, 'texte': item.data.texte}
+		});
+		//console.log('purifiedInputItems = ', purifiedInputItems);
+		
+		return purifiedInputItems;
+		
+});
+
 const HistoiresList = () => {
-	// States
-	const [histoiresArray, setHistoiresArray] = useState(histoiresData);
+	// State
+	const [contentPersonnes, setContentPersonnes] = useState([placeholderPersonne]);
+	const [contentLignesTemps, setContentLignesTemps] = useState([placeholderLigneTemps]);
+	const [isDataReady, setIsDataReady] = useState(false);
 	const [screenType, setScreenType] = useState(null);
-	
-	// Data fetch
-	//let content = useWixData('TestsRever-Statutsmigratoires', '_manualSort_559b8e96-44f9-4841-a096-af53431ff141');
 	
 	// Dom references and variables
 	const gsapScopeRef = useRef();
 	const gsapScopeElem = gsapScopeRef.current;
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
-	// GSAP first animation
+	// Data fetch
+	const histoiresImgArray = histoiresImgData(); // Temp hardcoded 
+	const wixPersonnesData = useWixData(
+		'PageRever-Histoireconsequence', 
+		'_manualSort_adbe7ddc-ef0d-4bb5-94b7-deac5047fa94',
+		placeholderPersonne
+	);
+	useEffect(() => {
+		if (wixPersonnesData) {
+			setContentPersonnes(wixPersonnesData);
+			//console.log('wixPersonnesData = ', wixPersonnesData);
+		}
+	}, [wixPersonnesData]);
+	
+	const wixLigneTempsData = useWixData(
+		'PageReverLignesdutemps', 
+		'_manualSort_660ea147-5f5d-41b4-a4a9-61a8ef2634e5',
+		placeholderLigneTemps
+	);
+	
+	// Data concatenation from 2 Wix data collections
+	useEffect(() => {
+		//console.log('contentLignesTemps = ', contentLignesTemps);
+		if (wixLigneTempsData.length > 1 && contentPersonnes.length > 1 ) {
+				
+			contentPersonnes.forEach( (personne, i) => {
+				
+				const transformedData = transformData(wixLigneTempsData, wixPersonnesData, personne._id);
+				//console.log('transformedData ', personne.data.idUnique, ', = ', transformedData);
+				setContentLignesTemps(prevState => {
+					const newState = [...prevState];
+					newState[i] = { ...newState[i], transformedData };
+					return newState;
+				});
+				setIsDataReady(true);
+				
+			});
+			
+			//console.log('contentLignesTemps = ', contentLignesTemps);
+			
+		}
+	}, [wixLigneTempsData, wixPersonnesData, contentPersonnes]);
+		
+	// Screen type check
+	useEffect( () => {
+		if (!screenType) {
+			if (window.matchMedia('(hover: hover)').matches) {
+				console.log('Device has a mouse or touchpad events');
+				setScreenType('mouse');
+			} else {
+				console.log('Device has no mouse, so has touch events');
+				setScreenType('touch');
+			}
+		}
+	}, []);
+	
+	// GSAP First animations
 	const gsapFirstAnimations = contextSafe(() => {
 		
-		const scrollTriggerObj = {
+		const scrollTriggerObj = (stId) => { return {
+			id: stId,
 			trigger: '.histoires',
 			scroller: window,
-			start: 'top 35%',
-		}
+			start: 'top 60%',
+			//markers: true,
+		}}
 		
 		// Cache les histoires qui ne sont pas la premiere
-		gsap.to( '.histoire:not(:first-child)', {
-			autoAlpha: 0,
-			duration: 0,
-		})
+		if (contentPersonnes.lenght > 1 ) {
+			gsap.to( '.histoire:not(:first-child)', {
+				autoAlpha: 0,
+				duration: 0,
+			})
+		}
 		
 		// Active la 1ere carte
 		gsap.to( '.histoire-card:first-child .bg-img', { 
 			filter: 'grayscale(0%)',
 			duration: 0.5,
-			scrollTrigger: scrollTriggerObj,
+			scrollTrigger: scrollTriggerObj(1),
 		});
 		
 		// Désactive le 1er bouton
 		gsap.to( '.histoire-card:first-child .button', {
 			autoAlpha: 0,
 			duration: 0.5,
-			scrollTrigger: scrollTriggerObj,
+			scrollTrigger: scrollTriggerObj(2),
 		})
 		
 		// Active la 1ere histoire
-		gsap.to( '.histoire:first-child', {
-			autoAlpha: 1,
-			duration: 0.5,
-			scrollTrigger: scrollTriggerObj,
-		})
-		
 		gsap.from( '.histoire:first-child', {
+			autoAlpha: 0,
 			xPercent: -20,
 			duration: 0.5,
-			scrollTrigger: scrollTriggerObj,
+			scrollTrigger: scrollTriggerObj(3),
 		})
-	}, { dependencies: [screenType], scope: gsapScopeRef });
+		
+	}, { dependencies: [screenType, contentPersonnes], scope: gsapScopeRef });
 	
-	// Screen type check and proper animations trigger
 	useEffect( () => {
-		if (!screenType) {
-			if (window.matchMedia('(hover: hover)').matches) {
-				console.log('Device has a mouse or touchpad events (firstHoverTouchHandler)');
-				setScreenType('mouse');
-			} else {
-				console.log('Device has no mouse, so has touch events (firstHoverTouchHandler)');
-				setScreenType('touch');
-			}
-			gsapFirstAnimations();
+		if ( screenType ) {
+			gsapFirstAnimations()
 		}
-	}, []);
-	
+	}, [screenType]);
+		
+	// Slider Glide configs
+	useEffect(() => {
+		if (screenType && isDataReady) {
+			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire--glide');
+			
+			// Glide.js initialisation
+			histoiresElems.forEach( (item) => {
+				const histoiresGlide = new Glide( item, {
+					type: 'slider',
+					perView: 1.25,
+					gap: 50,
+					bound: true,
+					swipeThreshold: 50,
+					rewind: false,
+					breakpoints: {
+						768: {
+							perView: 1,
+						},
+					}
+				}).mount() 
+			});
+		}
+	}, [screenType, isDataReady, gsapScopeElem]);
+
 	// event handlers
 	const histoireSwitchClickHandler = contextSafe( (clickedIndex) => {
-		const clickedId = histoiresArray[clickedIndex].idUnique;
+		const clickedId = contentPersonnes[clickedIndex].data.idUnique;
 		const activeCard = gsapScopeElem.querySelector(`#card-${clickedId}`);
 		const nonActiveCardsImg = gsap.utils.toArray(`.histoire-card:not(#card-${clickedId}) .bg-img`);
 		const nonActiveCardsBtn = gsap.utils.toArray(`.histoire-card:not(#card-${clickedId}) .button`);
@@ -307,30 +417,6 @@ const HistoiresList = () => {
 			duration: 0.5
 		});
 	})
-	
-	// Lignes du temps : Slider Glide configs pour défilement mouse drag ou slide touch
-	useEffect(() => {
-		if (screenType) {
-			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire--glide');
-			
-			// Glide.js initialisation
-			histoiresElems.forEach( (item) => {
-				const histoiresGlide = new Glide( item, {
-					type: 'slider',
-					perView: 1.25,
-					gap: 50,
-					bound: true,
-					swipeThreshold: 50,
-					rewind: false,
-					breakpoints: {
-						768: {
-							perView: 1,
-						},
-					}
-				}).mount() 
-			});
-		}
-	}, [screenType, gsapScopeElem]);
 
 	return (
 		<section id='consequences'>
@@ -341,17 +427,17 @@ const HistoiresList = () => {
 			
 			<div ref={gsapScopeRef} style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}>
 				<Cards className='cards' >
-					{ histoiresArray.map( (cardItem, cardIndex) => { return (
+					{ contentPersonnes.map( (cardItem, cardIndex) => { return (
 						<div 
-							id={`card-${cardItem.idUnique}`}
+							id={`card-${cardItem.data.idUnique}`}
 							className='histoire-card'
 							key={cardIndex}
 						>
 							<div 
 								className='bg-img'
-								style={{ backgroundImage: `url(/images/${cardItem.fichierImage}.webp)` }} 
+								style={{ backgroundImage: `url(/images/${histoiresImgArray[cardIndex].fichierImage}.webp)` }} 
 								></div>
-							<p className='nom'>{cardItem.nom}</p>
+							<p className='nom'>{cardItem.data.title}</p>
 							<button
 								onClick={() => histoireSwitchClickHandler(cardIndex)} 
 								className='button' 
@@ -364,21 +450,22 @@ const HistoiresList = () => {
 				
 				<Histoire className='histoires'>
 				
-					{ histoiresArray.map( (histoireItem, histoireIndex) => { return (
+					{ contentPersonnes.map( (histoireItem, histoireIndex) => { return (
 						<div 
 							className='histoire histoire--glide' 
-							id={`histoire-${histoireItem.idUnique}`} 
+							id={`histoire-${histoireItem.data.idUnique}`} 
 							key={histoireIndex}
 						>
-							<h3 className='histoire__titre'>L'histoire de {histoireItem.nom}</h3>
-							<p className='histoire__resume'>{histoireItem.titre}</p>
+							<h3 className='histoire__titre'>L'histoire de {histoireItem.data.title}</h3>
+							<p className='histoire__resume'>{histoireItem.data.titre}</p>
 							
 							<div className='all-controls'>
 								<div className='control-arrows' data-glide-el='controls[nav]'>
 									<button data-glide-dir="<" title='Précédent'> &#8249; </button>
 								</div>
 								<div className='glide__bullets points-list' data-glide-el='controls[nav]'>
-									{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => { return (
+									
+									{ isDataReady === true ? contentLignesTemps[histoireIndex].transformedData.map( (item, index) => { return (
 										<button 
 											className='glide__bullet list-item' 
 											key={index} 
@@ -387,7 +474,8 @@ const HistoiresList = () => {
 										>
 											<div className='point'></div>
 										</button>
-									)})}
+									)}) : '...'}
+									
 								</div>
 								<div className='control-arrows' data-glide-el='controls[nav]'>
 									<button data-glide-dir=">" title='Suivant'> &#8250; </button>
@@ -396,9 +484,11 @@ const HistoiresList = () => {
 							
 							<div className='glide__track' data-glide-el='track'>
 								<ul className='glide__slides'>
+									
 									<HistoireLigneTemps 
-										data={ histoireItem.ligneTemps }
+										data={ isDataReady === true ? contentLignesTemps[histoireIndex].transformedData : null }
 									/>
+									
 								</ul>
 							</div>
 						</div>
