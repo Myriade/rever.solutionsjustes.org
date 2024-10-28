@@ -200,11 +200,9 @@ const placeholderPersonne = {
 
 const placeholderLigneTemps = {
 	'data': {
-		'texteSimple': '...',
-		'title': 'Chargement',
 		'loading' : true
 	},
-	'_id': 'placeholdercard',
+	'_id': 'placeholderligne',
 }
 
 const HistoiresList = () => {
@@ -235,12 +233,12 @@ const HistoiresList = () => {
 	useEffect(() => {
 		if (wixPersonnesData) {
 			setContentPersonnes(wixPersonnesData);
-			//console.log(contentPersonnes);
+			console.log(contentPersonnes);
 		}
 		
 		if (wixLigneTempsData) {
 			setContentLignesTemps(wixLigneTempsData);
-			//console.log(contentLignesTemps);
+			console.log(contentLignesTemps);
 		}
 	}, [wixPersonnesData, wixLigneTempsData]);
 		
@@ -259,52 +257,52 @@ const HistoiresList = () => {
 	
 	// GSAP First animations
 	const gsapFirstAnimations = contextSafe(() => {
-		console.log(gsapFirstAnimations);
 		
-		const scrollTriggerObj = {
-				trigger: '.histoires',
-				scroller: window,
-				start: 'top 35%',
-			}
+		const scrollTriggerObj = (stId) => { return {
+			id: stId,
+			trigger: '.histoires',
+			scroller: window,
+			start: 'top 60%',
+			//markers: true,
+		}}
 		
 		// Cache les histoires qui ne sont pas la premiere
-		gsap.to( '.histoire:not(:first-child)', {
-			autoAlpha: 0,
-			duration: 0,
-		})
+		if (contentPersonnes.lenght > 1 ) {
+			gsap.to( '.histoire:not(:first-child)', {
+				autoAlpha: 0,
+				duration: 0,
+			})
+		}
 		
 		// Active la 1ere carte
 		gsap.to( '.histoire-card:first-child .bg-img', { 
 			filter: 'grayscale(0%)',
 			duration: 0.5,
-			scrollTrigger: scrollTriggerObj,
+			scrollTrigger: scrollTriggerObj(1),
 		});
 		
 		// Désactive le 1er bouton
 		gsap.to( '.histoire-card:first-child .button', {
 			autoAlpha: 0,
 			duration: 0.5,
-			scrollTrigger: scrollTriggerObj,
+			scrollTrigger: scrollTriggerObj(2),
 		})
 		
 		// Active la 1ere histoire
-		gsap.to( '.histoire:first-child', {
-			autoAlpha: 1,
-			duration: 0.5,
-			scrollTrigger: scrollTriggerObj,
-		})
-		
 		gsap.from( '.histoire:first-child', {
+			autoAlpha: 0,
 			xPercent: -20,
 			duration: 0.5,
-			scrollTrigger: scrollTriggerObj,
+			scrollTrigger: scrollTriggerObj(3),
 		})
 		
-	}, { dependencies: [screenType, wixPersonnesData, wixLigneTempsData], scope: gsapScopeRef });
+	}, { dependencies: [screenType, contentPersonnes, contentLignesTemps], scope: gsapScopeRef });
 	
-	if ( screenType ) {
-		gsapFirstAnimations()
-	}
+	useEffect( () => {
+		if ( screenType ) {
+			gsapFirstAnimations()
+		}
+	}, [screenType]);
 		
 	// Slider Glide configs
 	useEffect(() => {
