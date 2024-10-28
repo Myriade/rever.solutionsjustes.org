@@ -193,7 +193,7 @@ const placeholderPersonne = {
 	'data': {
 		'idUnique': 'placeholder',
 		'title': '...',
-		'titre': 'chargement',
+		'titre': '(chargement)',
 	},
 	'_id': 'placeholdercard',
 }
@@ -210,44 +210,62 @@ const placeholderLigneTemps = {
 const HistoiresList = () => {
 	// State
 	const [contentPersonnes, setContentPersonnes] = useState([placeholderPersonne]);
+	const [contentLignesTemps, setContentLignesTemps] = useState([placeholderLigneTemps]);
 	const [screenType, setScreenType] = useState(null);
-	
-	// Data fetch
-	const wixPersonnesData = useWixData(
-		'PageRever-Histoireconsequence', 
-		'_manualSort_adbe7ddc-ef0d-4bb5-94b7-deac5047fa94',
-		placeholderPersonne
-	)
-	
-	useEffect(() => {
-		if (wixPersonnesData) {
-			setContentPersonnes(wixPersonnesData);
-			console.log(contentPersonnes);
-		}
-	}, [wixPersonnesData]);
-	
-	let contentLignesTemps = useWixData(
-		'PageReverLignesdutemps', 
-		'_manualSort_660ea147-5f5d-41b4-a4a9-61a8ef2634e5',
-		placeholderLigneTemps
-	);
-	console.log(contentLignesTemps)
-	
-	const histoiresArray = histoiresData();
 	
 	// Dom references and variables
 	const gsapScopeRef = useRef();
 	const gsapScopeElem = gsapScopeRef.current;
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
-	// GSAP first animation
+	// Data fetch
+	const histoiresArray = histoiresData(); // Temp hardcoded 
+	const wixPersonnesData = useWixData(
+		'PageRever-Histoireconsequence', 
+		'_manualSort_adbe7ddc-ef0d-4bb5-94b7-deac5047fa94',
+		placeholderPersonne
+	);
+	
+	const wixLigneTempsData = useWixData(
+		'PageReverLignesdutemps', 
+		'_manualSort_660ea147-5f5d-41b4-a4a9-61a8ef2634e5',
+		placeholderLigneTemps
+	);
+	
+	useEffect(() => {
+		if (wixPersonnesData) {
+			setContentPersonnes(wixPersonnesData);
+			//console.log(contentPersonnes);
+		}
+		
+		if (wixLigneTempsData) {
+			setContentLignesTemps(wixLigneTempsData);
+			//console.log(contentLignesTemps);
+		}
+	}, [wixPersonnesData, wixLigneTempsData]);
+		
+	// Screen type check
+	useEffect( () => {
+		if (!screenType) {
+			if (window.matchMedia('(hover: hover)').matches) {
+				console.log('Device has a mouse or touchpad events');
+				setScreenType('mouse');
+			} else {
+				console.log('Device has no mouse, so has touch events');
+				setScreenType('touch');
+			}
+		}
+	}, []);
+	
+	// GSAP First animations
 	const gsapFirstAnimations = contextSafe(() => {
+		console.log(gsapFirstAnimations);
 		
 		const scrollTriggerObj = {
-			trigger: '.histoires',
-			scroller: window,
-			start: 'top 35%',
-		}
+				trigger: '.histoires',
+				scroller: window,
+				start: 'top 35%',
+			}
 		
 		// Cache les histoires qui ne sont pas la premiere
 		gsap.to( '.histoire:not(:first-child)', {
@@ -281,25 +299,37 @@ const HistoiresList = () => {
 			duration: 0.5,
 			scrollTrigger: scrollTriggerObj,
 		})
-	}, { dependencies: [screenType], scope: gsapScopeRef });
-	
-	// Screen type check and proper animations trigger
-	useEffect( () => {
-		if (!screenType) {
-			if (window.matchMedia('(hover: hover)').matches) {
-				console.log('Device has a mouse or touchpad events');
-				setScreenType('mouse');
-			} else {
-				console.log('Device has no mouse, so has touch events');
-				setScreenType('touch');
-			}
-		}
-	}, []);
+		
+	}, { dependencies: [screenType, wixPersonnesData, wixLigneTempsData], scope: gsapScopeRef });
 	
 	if ( screenType ) {
-		gsapFirstAnimations();
+		gsapFirstAnimations()
 	}
-	
+		
+	// Slider Glide configs
+	useEffect(() => {
+		if (screenType) {
+			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire--glide');
+			
+			// Glide.js initialisation
+			histoiresElems.forEach( (item) => {
+				const histoiresGlide = new Glide( item, {
+					type: 'slider',
+					perView: 1.25,
+					gap: 50,
+					bound: true,
+					swipeThreshold: 50,
+					rewind: false,
+					breakpoints: {
+						768: {
+							perView: 1,
+						},
+					}
+				}).mount() 
+			});
+		}
+	}, [screenType, gsapScopeElem]);
+
 	// event handlers
 	const histoireSwitchClickHandler = contextSafe( (clickedIndex) => {
 		const clickedId = contentPersonnes[clickedIndex].data.idUnique;
@@ -348,30 +378,6 @@ const HistoiresList = () => {
 			duration: 0.5
 		});
 	})
-	
-	// Lignes du temps : Slider Glide configs pour défilement mouse drag ou slide touch
-	useEffect(() => {
-		if (screenType) {
-			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire--glide');
-			
-			// Glide.js initialisation
-			histoiresElems.forEach( (item) => {
-				const histoiresGlide = new Glide( item, {
-					type: 'slider',
-					perView: 1.25,
-					gap: 50,
-					bound: true,
-					swipeThreshold: 50,
-					rewind: false,
-					breakpoints: {
-						768: {
-							perView: 1,
-						},
-					}
-				}).mount() 
-			});
-		}
-	}, [screenType, gsapScopeElem]);
 
 	return (
 		<section id='consequences'>
