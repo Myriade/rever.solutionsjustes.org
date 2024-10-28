@@ -60,7 +60,7 @@ const SectionProgression = styled.section`
   justify-content: stretch;
   margin-bottom: 1.25rem;
   background: white;
-  padding-block: 2rem 1.5rem !important;
+  padding-block: 2.5rem 2rem !important;
   z-index: 30;
   
   .question {
@@ -76,7 +76,7 @@ const SectionProgression = styled.section`
     padding-inline: 3vw;
     &__reponse {
       position: relative;
-      bottom: 0.75rem;}
+      bottom: calc(0.75rem + 5px);}
     &__point {
       display: grid;
       justify-content: center;

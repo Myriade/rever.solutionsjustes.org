@@ -80,7 +80,7 @@ const Choix = styled.div`
 	label {
 		display: block;
 		color: white;
-		background: var(--color-bleu-tres-fonce);
+		background: #777;
 		padding: 0.3em 0.8em;
 		border-radius: 0.5em;
 		border: 3px dashed transparent;
@@ -90,10 +90,11 @@ const Choix = styled.div`
 		&:hover {
 			background: var(--color-bleu-clair);}
 		&.selected {
-			border-color: var(--color-bleu-tres-fonce);}}
+			text-decoration: underline;}}
 	
 	&.is-answered {
 		label:hover {
+			background: #777;
 			cursor: unset;}}
 	
 	${media.desktopUp`
@@ -127,9 +128,9 @@ const QuizItem = ({ itemData, onChange }) => {
 		setSelectedChoice(clickedChoiceId);
 		
 		if (clickedChoiceId === rightAnswerId ) {
-			onChange('bon');
+			onChange('✔');
 		} else {
-			onChange('pas bon');
+			onChange('✗');
 		}
 		
 		const choixRefElem = choixRef.current;
@@ -138,13 +139,13 @@ const QuizItem = ({ itemData, onChange }) => {
 		choixRefElem.classList.add('is-answered');
 		choixRefElem.querySelector('fieldset').setAttribute('disabled', '');
 		
-		gsap.to( itemRefElem.querySelectorAll(`label`), {
-			backgroundColor: '#3D728D',
-			duration: 0.5
-		});
+		// gsap.to( itemRefElem.querySelectorAll(`label`), {
+		// 	backgroundColor: '#3D728D',
+		// 	duration: 0.5
+		// });
 		
 		gsap.to( itemRefElem.querySelector(`label[for=${rightAnswerId}]`), {
-			backgroundColor: '#1e8ed2',
+			backgroundColor: 'green',
 			duration: 1
 		});
 		
