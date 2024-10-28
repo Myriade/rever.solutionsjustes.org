@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 
 import useWixData from '../utils/useWixData'
-import histoiresData from '../data/histoires'
+import histoiresImgData from '../data/histoires-img-data'
 import HistoireLigneTemps from './histoireLigneTemps'
 
 import { gsap } from 'gsap'
@@ -189,6 +189,7 @@ const Histoire = styled.div`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
+// Loading placeholder data
 const placeholderPersonne = {
 	'data': {
 		'idUnique': 'placeholder',
@@ -198,17 +199,40 @@ const placeholderPersonne = {
 	'_id': 'placeholdercard',
 }
 
-const placeholderLigneTemps = {
-	'data': {
-		'loading' : true
-	},
-	'_id': 'placeholderligne',
-}
+const placeholderLigneTemps = [
+	[
+		{
+			date: '...',
+			texte: 'chargement'
+		}, 
+	]
+]
+
+// Function to create array of target associated data grouped by associated Id
+const transformData = ( (inputArray, targetArray, associatedId) => {
+		
+		let associatedInputItems = [];
+		
+		targetArray.forEach( (personne, pIndex) => {
+			associatedInputItems = inputArray.filter( ligneTempsItem => ligneTempsItem.data.histoireAssocie === associatedId);
+		});
+		
+		//console.log('associatedInputItems = ', associatedInputItems);
+		
+		const purifiedInputItems = associatedInputItems.map( item => {
+			return {'date': item.data.title, 'texte': item.data.texte}
+		});
+		//console.log('purifiedInputItems = ', purifiedInputItems);
+		
+		return purifiedInputItems;
+		
+});
 
 const HistoiresList = () => {
 	// State
 	const [contentPersonnes, setContentPersonnes] = useState([placeholderPersonne]);
 	const [contentLignesTemps, setContentLignesTemps] = useState([placeholderLigneTemps]);
+	const [isDataReady, setIsDataReady] = useState(false);
 	const [screenType, setScreenType] = useState(null);
 	
 	// Dom references and variables
@@ -217,7 +241,7 @@ const HistoiresList = () => {
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
 	// Data fetch
-	const histoiresArray = histoiresData(); // Temp hardcoded 
+	const histoiresImgArray = histoiresImgData(); // Temp hardcoded 
 	const wixPersonnesData = useWixData(
 		'PageRever-Histoireconsequence', 
 		'_manualSort_adbe7ddc-ef0d-4bb5-94b7-deac5047fa94',
@@ -226,7 +250,7 @@ const HistoiresList = () => {
 	useEffect(() => {
 		if (wixPersonnesData) {
 			setContentPersonnes(wixPersonnesData);
-			console.log('wixPersonnesData = ', wixPersonnesData);
+			//console.log('wixPersonnesData = ', wixPersonnesData);
 		}
 	}, [wixPersonnesData]);
 	
@@ -235,38 +259,29 @@ const HistoiresList = () => {
 		'_manualSort_660ea147-5f5d-41b4-a4a9-61a8ef2634e5',
 		placeholderLigneTemps
 	);
-	useEffect(() => {
-		if (wixLigneTempsData) {
-			setContentLignesTemps(wixLigneTempsData);
-			console.log('wixLigneTempsData = ', wixLigneTempsData);
-		}
-	}, [wixLigneTempsData]);
 	
-	// Tranform data
-	if ( wixLigneTempsData && wixPersonnesData ) {
-		function transformData(inputArray) {
-			const resultObject = {};
-		
-			inputArray.forEach( (item, index) => {
-				const date = item.data.title;
-				const text = item.data.texte;
-		
-				if (!resultObject[index]) {
-					resultObject[index] = {
-						data: []
-					};
-				}
-		
-				resultObject[index].data.push({ date, text });
+	// Data concatenation from 2 Wix data collections
+	useEffect(() => {
+		//console.log('contentLignesTemps = ', contentLignesTemps);
+		if (wixLigneTempsData.length > 1 && contentPersonnes.length > 1 ) {
+				
+			contentPersonnes.forEach( (personne, i) => {
+				
+				const transformedData = transformData(wixLigneTempsData, wixPersonnesData, personne._id);
+				//console.log('transformedData ', personne.data.idUnique, ', = ', transformedData);
+				setContentLignesTemps(prevState => {
+					const newState = [...prevState];
+					newState[i] = { ...newState[i], transformedData };
+					return newState;
+				});
+				setIsDataReady(true);
+				
 			});
-		
-			return Object.values(resultObject);
+			
+			//console.log('contentLignesTemps = ', contentLignesTemps);
+			
 		}
-		
-		// Usage
-		const transformedData = transformData(wixLigneTempsData);
-		console.log(transformedData);
-	}
+	}, [wixLigneTempsData, wixPersonnesData, contentPersonnes]);
 		
 	// Screen type check
 	useEffect( () => {
@@ -322,7 +337,7 @@ const HistoiresList = () => {
 			scrollTrigger: scrollTriggerObj(3),
 		})
 		
-	}, { dependencies: [screenType, contentPersonnes, contentLignesTemps], scope: gsapScopeRef });
+	}, { dependencies: [screenType, contentPersonnes], scope: gsapScopeRef });
 	
 	useEffect( () => {
 		if ( screenType ) {
@@ -332,7 +347,7 @@ const HistoiresList = () => {
 		
 	// Slider Glide configs
 	useEffect(() => {
-		if (screenType) {
+		if (screenType && isDataReady) {
 			const histoiresElems = gsapScopeElem.querySelectorAll('.histoire--glide');
 			
 			// Glide.js initialisation
@@ -352,7 +367,7 @@ const HistoiresList = () => {
 				}).mount() 
 			});
 		}
-	}, [screenType, gsapScopeElem]);
+	}, [screenType, isDataReady, gsapScopeElem]);
 
 	// event handlers
 	const histoireSwitchClickHandler = contextSafe( (clickedIndex) => {
@@ -420,7 +435,7 @@ const HistoiresList = () => {
 						>
 							<div 
 								className='bg-img'
-								style={{ backgroundImage: `url(/images/${histoiresArray[cardIndex].fichierImage}.webp)` }} 
+								style={{ backgroundImage: `url(/images/${histoiresImgArray[cardIndex].fichierImage}.webp)` }} 
 								></div>
 							<p className='nom'>{cardItem.data.title}</p>
 							<button
@@ -449,7 +464,8 @@ const HistoiresList = () => {
 									<button data-glide-dir="<" title='Précédent'> &#8249; </button>
 								</div>
 								<div className='glide__bullets points-list' data-glide-el='controls[nav]'>
-									{histoiresArray[histoireIndex].ligneTemps.map( (item, index) => { return (
+									
+									{ isDataReady === true ? contentLignesTemps[histoireIndex].transformedData.map( (item, index) => { return (
 										<button 
 											className='glide__bullet list-item' 
 											key={index} 
@@ -458,7 +474,8 @@ const HistoiresList = () => {
 										>
 											<div className='point'></div>
 										</button>
-									)})}
+									)}) : '...'}
+									
 								</div>
 								<div className='control-arrows' data-glide-el='controls[nav]'>
 									<button data-glide-dir=">" title='Suivant'> &#8250; </button>
@@ -467,9 +484,11 @@ const HistoiresList = () => {
 							
 							<div className='glide__track' data-glide-el='track'>
 								<ul className='glide__slides'>
+									
 									<HistoireLigneTemps 
-										data={ histoiresArray[histoireIndex].ligneTemps }
+										data={ isDataReady === true ? contentLignesTemps[histoireIndex].transformedData : null }
 									/>
+									
 								</ul>
 							</div>
 						</div>
