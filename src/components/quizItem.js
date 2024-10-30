@@ -13,9 +13,12 @@ const Item = styled.div`
 		font-weight: normal;
 		margin-bottom:0;}
 		
-	&:last-child {
-		.interaction {
-			border-bottom: 2px solid var(--color-bleu-tres-fonce);}}
+	&:not(:first-child) > .grid {
+		height: 0;
+		> div {
+			overflow: hidden;
+			opacity: 0;
+			visibility: hidden;}}
 			
 	${media.desktopUp`
 		> .grid {
@@ -31,19 +34,19 @@ const Presentation = styled.div`
 	color: var(--color-bleu-tres-fonce);
 	padding: var(--v-spacer) var(--h2-spacer);
 	border-bottom: 2px solid var(--color-bleu-tres-fonce);
-	${media.desktopUp`
-	`};
 	
 	p:not(:first-child) {
-		font-size: 1rem;
-	}	
+		font-size: 1rem;}
+	
+	${media.desktopUp`
+	`};
 `;
 
 const Interaction = styled.div`
 	background: var(--color-bleu-tres-fonce);
 	color: white;
 	padding: var(--v-spacer) var(--h2-spacer);
-	border-bottom: 2px solid white;
+	border-bottom: 2px solid var(--color-bleu-tres-fonce);
 	
 	.question h3 {
 		font-size: 1.5rem;}
@@ -131,20 +134,25 @@ const QuizItem = ({ itemData, onQuizItemChange }) => {
 		choixRefElem.classList.add('is-answered');
 		choixRefElem.querySelector('fieldset').setAttribute('disabled', '');
 		
-		gsap.to( itemRefElem.querySelector(`label[for=${rightAnswerId}]`), {
-			backgroundColor: 'green',
-			duration: 1
-		});
-		
+		// Selected wrong answer becomes red
 		gsap.to( itemRefElem.querySelector(`label[for=${clickedChoiceId}]:not([for=${rightAnswerId}])`), {
 			backgroundColor: '#d9093d',
 			duration: 0.5
 		});
 		
+		// Right aswwer becomes green
+		gsap.to( itemRefElem.querySelector(`label[for=${rightAnswerId}]`), {
+			backgroundColor: 'green',
+			duration: 0.5,
+			delay: 0.5
+		});
+		
+		// Explanation text appears
 		gsap.from( itemRefElem.querySelectorAll('.resultat p'), {
 			autoAlpha: 0,
 			duration: 1,
-			stagger: 1.5
+			stagger: 0.5,
+			delay: 1
 		});
 		
 	});

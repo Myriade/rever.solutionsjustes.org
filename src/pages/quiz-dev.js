@@ -122,15 +122,16 @@ const SectionProgression = styled.section`
 `;
 
 const SectionConclusion = styled.section`
-  background-color: white;
+  min-height: 50vh;
+  border-top: 1px solid var(--color-bleu-tres-fonce);
     
   h3 {
     font-size: 2rem;
     font-weight: 500;}
     
   p {
+    text-align: center;
     font-weight: 500;
-    max-width: 32ch;
     font-size: 1.2rem;}
   
   .button {
@@ -182,10 +183,10 @@ const QuizDevPage = () => {
         answerState: 'attente'
       }
     });
-    setAnswersProgression(initialAnswersProgression);
+    setAnswersProgression(initialAnswersProgression);    
   }
   
-  // Gsap animations 
+  // Gsap general animations 
   const gsapAnimations = contextSafe(() => {
   
     const pageRefElem = gsapPageContainerRef.current;
@@ -199,7 +200,7 @@ const QuizDevPage = () => {
         pin: true,
         pinSpacing: false,
         start: `top ${heroTopPosition - 1}`,
-        endTrigger: '#s-impliquer',
+        endTrigger: '#conclusion',
         end: `top 150`,
       }
     });
@@ -213,17 +214,55 @@ const QuizDevPage = () => {
       scrollTo: {y: '#quiz', offsetY: 180} });
   });
   
-  const updateProgressionTracking = (index, answerResult) => {
+  const updateQuiz = (index, answerResult) => {
     
+    // Progression Bar
     setAnswersProgression( prevState => {
       return prevState.map((item, i) => 
         i === index ? { ...item, answerState: answerResult } : item
       );
     });
     
+    // Conclusion result
     if ( answerResult === 'bonne' ) {
       setGoodAnswerCount( goodAnswerCount + 1 );
     }
+    
+    // Next Question animation
+    const onChangeGsapAnimations = contextSafe(() => {
+      const thisInteraction = gsapPageContainerRef.current.querySelector(`#quiz > div:nth-child(${index+ 1}) .interaction`);
+      const nextQuestion = gsapPageContainerRef.current.querySelector(`#quiz > div:nth-child(${index+ 2}) > .grid`);
+      
+      // dévoiler la prochaine question en transition de hauteur
+      gsap.to( nextQuestion, {
+        height: 'auto',
+        duration: 1,
+        scrollTrigger: {
+          trigger: nextQuestion,
+          start: 'top 50%'
+        }
+      });
+      
+      // dévoiler les 2 zones zones de la prochaine question en alpha transition une à la fois
+      if (nextQuestion !== null) {
+        gsap.to( nextQuestion.children, {
+          autoAlpha: 1,
+          duration: 2,
+          stagger: 1,
+          scrollTrigger: {
+            trigger: nextQuestion,
+            start: 'top 50%'
+          },
+          onStart: () => {
+            // Sets the border color of the current question interaction div to white
+            gsap.set( thisInteraction, {
+              borderColor: 'white'
+            });
+          }
+        });   
+      }   
+    }, { dependencies: [screenType], scope: gsapPageContainerRef } ); 
+    onChangeGsapAnimations();
     
   };
   
@@ -289,21 +328,30 @@ const QuizDevPage = () => {
               key={item.id} 
               itemData={item} 
               itemIndex={qIndex}
-              onQuizItemChange={ (answerResult) => updateProgressionTracking(qIndex, answerResult) } 
+              onQuizItemChange={ (answerResult) => updateQuiz(qIndex, answerResult) } 
             />
           )})}
         </section>
         
-        <SectionConclusion id='s-impliquer'>
-          <h2>Conclusion du Quiz</h2>
+        <SectionConclusion id='conclusion'>
           { answersProgression !== null ?
-            <p>
-              Vous avez { goodAnswerCount } bonne{goodAnswerCount > 1 && 's'} réponse{goodAnswerCount > 1 && 's'} sur {answersProgression.length}.
-            </p>
+            <div> 
+              { answersProgression[answersProgression.length - 1 ].answerState == 'attente' ? 
+                <p>Répondez à la question ci-haut pour voir la suite en défilant plus bas</p>
+                : <p>
+                  Vous avez { goodAnswerCount } bonne{goodAnswerCount > 1 && 's'} réponse{goodAnswerCount > 1 && 's'} sur {answersProgression.length}.
+                </p>
+              }
+            </div>
           : ''}
-          <code><em>Résumé des résultats bonnes réponses sur total.<br/>
-          Phrase de conclusion<br/>
-          Bouton «Partager»</em></code>
+          <div style={{marginTop: '2rem'}}>
+            <code><em>
+            <b>Notes conclusion du Quiz</b> :<br/>
+            Résumé des résultats bonnes réponses sur total.<br/>
+            Phrase de conclusion<br/>
+            Bouton «Partager»
+            </em></code>
+          </div>
         </SectionConclusion>
     
       </div>
