@@ -87,7 +87,11 @@ const SectionProgression = styled.section`
       width: 1.75rem;
       height: 1.75rem;
       line-height: 1.75;
-      font-weight: 700;}}
+      font-weight: 700;
+      &.repondu {
+        background: var(--color-bleu-tres-fonce);
+        color: white;
+      }}
 `;
 
 const Section2Intro = styled.section`
@@ -174,7 +178,7 @@ const QuizDevPage = () => {
     const initialAnswersProgression = quizData.map( (item, index) => { 
       return {
         questionNumber: index + 1,
-        answerState: '\u00A0'
+        answerState: 'attente'
       }
     });
     setAnswersProgression(initialAnswersProgression);
@@ -241,8 +245,10 @@ const QuizDevPage = () => {
           { answersProgression ? 
             answersProgression.map( (question, index) => { return (
               <div className='question' key={index}>
-                <div className='question__reponse'>{question.answerState}</div>
-                <div className='question__point'>{question.questionNumber}</div>
+                <div className='question__reponse'>{question.answerState === 'bonne' ? '✔' : '\u00A0'}{question.answerState === 'mauvaise' ? '✗' : '\u00A0'}</div>
+                <div className={ question.answerState === 'attente' ? 'question__point attente' : 'question__point repondu'}>
+                  {question.questionNumber}
+                </div>
               </div>
             )})
           : ''}
@@ -283,6 +289,9 @@ const QuizDevPage = () => {
           <p>Résumé des résultats bonnes réponses sur total.<br/>
           Phrase de conclusion<br/>
           Bouton «Partager»</p>
+          <code>
+            { answersProgression !== null ? answersProgression.map( item => <div>{item.questionNumber}, {item.answerState}</div> ) : '' }
+          </code>
         </SectionConclusion>
     
       </div>

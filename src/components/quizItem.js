@@ -128,9 +128,9 @@ const QuizItem = ({ itemData, onChange }) => {
 		setSelectedChoice(clickedChoiceId);
 		
 		if (clickedChoiceId === rightAnswerId ) {
-			onChange('✔');
+			onChange('bonne');
 		} else {
-			onChange('✗');
+			onChange('mauvaise');
 		}
 		
 		const choixRefElem = choixRef.current;
