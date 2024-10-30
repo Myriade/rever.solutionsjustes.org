@@ -104,7 +104,7 @@ const Choix = styled.div`
 
 gsap.registerPlugin(useGSAP);
 
-const QuizItem = ({ itemData, onChange }) => {
+const QuizItem = ({ itemData, onQuizItemChange }) => {
 	const [selectedChoice, setSelectedChoice] = useState(null);
 	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
 	
@@ -128,9 +128,9 @@ const QuizItem = ({ itemData, onChange }) => {
 		setSelectedChoice(clickedChoiceId);
 		
 		if (clickedChoiceId === rightAnswerId ) {
-			onChange('bonne');
+			onQuizItemChange('bonne');
 		} else {
-			onChange('mauvaise');
+			onQuizItemChange('mauvaise');
 		}
 		
 		const choixRefElem = choixRef.current;

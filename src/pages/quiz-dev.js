@@ -147,6 +147,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 const QuizDevPage = () => {
   const [screenType, setScreenType] = useState(''); 
   const [answersProgression, setAnswersProgression] = useState(null);
+  const [goodAnswerCount, setGoodAnswerCount] = useState(0);
   const gsapPageContainerRef = useRef();
   const { contextSafe } = useGSAP({ scope: gsapPageContainerRef });
   
@@ -187,8 +188,6 @@ const QuizDevPage = () => {
   // Gsap animations 
   const gsapAnimations = contextSafe(() => {
     
-    //console.log(document);
-    
     // progression bar pins 
     gsap.to('#progression-bar', {
       scrollTrigger: {
@@ -208,15 +207,21 @@ const QuizDevPage = () => {
   const shortcutClickHandler = contextSafe(() => {
     gsap.to( window, { 
       duration: 1, 
-      scrollTo: {y: '#quiz', offsetY: 120} });
+      scrollTo: {y: '#quiz', offsetY: 180} });
   });
   
-  const updateProgressionItem = (index, newValue) => {
+  const updateProgressionTracking = (index, answerResult) => {
+    
     setAnswersProgression( prevState => {
       return prevState.map((item, i) => 
-        i === index ? { ...item, answerState: newValue } : item
+        i === index ? { ...item, answerState: answerResult } : item
       );
     });
+    
+    if ( answerResult === 'bonne' ) {
+      setGoodAnswerCount( goodAnswerCount + 1 );
+    }
+    
   };
   
   return (
@@ -241,19 +246,6 @@ const QuizDevPage = () => {
           </div>
         </Section1Hero>
         
-        <SectionProgression id='progression-bar'>
-          { answersProgression ? 
-            answersProgression.map( (question, index) => { return (
-              <div className='question' key={index}>
-                <div className='question__reponse'>{question.answerState === 'bonne' ? '✔' : '\u00A0'}{question.answerState === 'mauvaise' ? '✗' : '\u00A0'}</div>
-                <div className={ question.answerState === 'attente' ? 'question__point attente' : 'question__point repondu'}>
-                  {question.questionNumber}
-                </div>
-              </div>
-            )})
-          : ''}
-        </SectionProgression>
-        
         <Section2Intro>
           <div className='grid'>
             <div>
@@ -273,25 +265,42 @@ const QuizDevPage = () => {
           </div>
         </Section2Intro>
         
+        <SectionProgression id='progression-bar'>
+          { answersProgression ? 
+            answersProgression.map( (question, index) => { return (
+              <div className='question' key={index}>
+                <div className='question__reponse'>
+                  {question.answerState === 'bonne' ? '✔' : '\u00A0'}{question.answerState === 'mauvaise' ? '✗' : '\u00A0'}
+                </div>
+                <div className={ question.answerState === 'attente' ? 'question__point attente' : 'question__point repondu'}>
+                  {question.questionNumber}
+                </div>
+              </div>
+            )})
+          : ''}
+        </SectionProgression>
+        
         <section className='full-width' id='quiz'>
-          { quizData.map( (item, index) => { return (
+          { quizData.map( (item, qIndex) => { return (
             <QuizItem  
               key={item.id} 
               itemData={item} 
-              itemIndex={index}
-              onChange={ (newValue) => updateProgressionItem(index, newValue) } 
+              itemIndex={qIndex}
+              onQuizItemChange={ (answerResult) => updateProgressionTracking(qIndex, answerResult) } 
             />
           )})}
         </section>
         
         <SectionConclusion id='s-impliquer'>
           <h2>Conclusion du Quiz</h2>
-          <p>Résumé des résultats bonnes réponses sur total.<br/>
+          { answersProgression !== null ?
+            <p>
+              Vous avez { goodAnswerCount } bonne{goodAnswerCount > 1 && 's'} réponse{goodAnswerCount > 1 && 's'} sur {answersProgression.length}.
+            </p>
+          : ''}
+          <code><em>Résumé des résultats bonnes réponses sur total.<br/>
           Phrase de conclusion<br/>
-          Bouton «Partager»</p>
-          <code>
-            { answersProgression !== null ? answersProgression.map( item => <div>{item.questionNumber}, {item.answerState}</div> ) : '' }
-          </code>
+          Bouton «Partager»</em></code>
         </SectionConclusion>
     
       </div>
