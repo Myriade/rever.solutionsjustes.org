@@ -117,43 +117,24 @@ const Section2Intro = styled.section`
     margin-top: calc(var(--v-spacer) / 2);}
 `;
 
-const Section4Cta = styled.section`
+const SectionConclusion = styled.section`
   background-color: white;
-  .grid {
-    display: grid;
-    gap: calc(var(--v-spacer) / 2) var(--h-spacer);
-    margin-inline: -1vw;
-    > div {
-      padding: calc(var(--v-spacer) / 2) var(--h-spacer);
-      background: var(--color-bleu-tres-pale);
-      border-radius: var(--border-radius);
-      display: grid;
-      justify-items: left;
-      align-content: space-between;
-      overflow: hidden;}
     
   h3 {
     font-size: 2rem;
     font-weight: 500;}
     
-  .intro p {
+  p {
     font-weight: 500;
     max-width: 32ch;
     font-size: 1.2rem;}
-    
-  p {
-    font-size: 1rem;}
   
   .button {
     margin-top: var(--h-spacer);
     padding-inline: 3vw;}
   
   ${media.mediumUp`
-    grid-template-columns: 1fr 1fr;
-  `}
-  
-  ${media.largeUp`
-    grid-template-columns: 1fr 1fr 1fr;
+    
   `}
 `;
 
@@ -297,62 +278,12 @@ const QuizDevPage = () => {
           )})}
         </section>
         
-        <Section4Cta id='s-impliquer'>
-          <h2>S'impliquer davantage</h2>
-          <div className='grid'>
-          
-            <div className='sensibilsation'>
-              <div className='intro'>
-                <h3>Je souhaite accueillir un atelier</h3>
-                <p>Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école&nbsp;?</p>
-              </div>
-              <StaticImage 
-                src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
-                alt='Illustration d’une famille portant des boîtes'
-                placeholder='blurred'
-                quality={100}
-                height={200}
-                style={{ marginInline: 'auto' }}
-              />
-              <a 
-                href={`mailto:atelier@montrealcitymission.org?subject=Je%20souhaite%20participer%20%C3%A0%20un%20atelier&body=Bonjour%2C%0A%0AJ'ai%20vu%20la%20campagne%20R%C3%AAver%20%C3%A0%20l'essentiel%20et%20j'aimerais%20organiser%20une%20activit%C3%A9%20de%20sensibilisation%20ou%20une%20formation%20dans%20mon%20entreprise%2C%20organisation%2C%20f%C3%AAte%20de%20quartier%20ou%20%C3%A9cole.`} 
-                className='button centered' 
-                target='_blank' 
-                rel='noreferrer'
-              >
-                Contactez-nous
-              </a>
-            </div>
-            
-            <div className='benevolat'>
-              <div className='intro'>
-                <h3>Je veux faire du bénévolat</h3>
-                <p>Vous souhaitez aider et vous avez un peu de temps à nous offrir&nbsp;? Devenez bénévole chez nous&nbsp;!</p>
-              </div>
-              <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
-              <p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
-              <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
-            </div>
-            
-            <div className='petitions'>
-              <div className='intro'>
-                <h3>Je souhaite signer des pétitions</h3>
-                <p>Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
-              </div>
-              <StaticImage 
-                src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
-                alt='Illustration d’une famille'
-                placeholder='blurred'
-                quality={100}
-                height={200}
-                style={{ marginInline: 'auto' }}
-              />
-              <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
-                Agir
-              </a>
-            </div>
-          </div>
-        </Section4Cta>
+        <SectionConclusion id='s-impliquer'>
+          <h2>Conclusion du Quiz</h2>
+          <p>Résumé des résultats bonnes réponses sur total.<br/>
+          Phrase de conclusion<br/>
+          Bouton «Partager»</p>
+        </SectionConclusion>
     
       </div>
     </PageLayout>
