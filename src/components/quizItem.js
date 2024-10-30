@@ -13,11 +13,8 @@ const Item = styled.div`
 		font-weight: normal;
 		margin-bottom:0;}
 		
-	&:first-child {
-		.presentation {
-			border-top: 2px solid var(--color-bleu-tres-fonce);}}
 	&:last-child {
-		.presentation {
+		.interaction {
 			border-bottom: 2px solid var(--color-bleu-tres-fonce);}}
 			
 	${media.desktopUp`
@@ -30,10 +27,10 @@ const Item = styled.div`
 `;
 
 const Presentation = styled.div`
+	background: white;
+	color: var(--color-bleu-tres-fonce);
 	padding: var(--v-spacer) var(--h2-spacer);
-	background: var(--color-bleu-tres-fonce);
-	color: white;
-	border-bottom: 2px solid white;
+	border-bottom: 2px solid var(--color-bleu-tres-fonce);
 	${media.desktopUp`
 	`};
 	
@@ -43,23 +40,20 @@ const Presentation = styled.div`
 `;
 
 const Interaction = styled.div`
+	background: var(--color-bleu-tres-fonce);
+	color: white;
 	padding: var(--v-spacer) var(--h2-spacer);
-	color: var(--color-bleu-tres-fonce);
-	background: white;
-	border-bottom: 2px solid var(--color-bleu-tres-fonce);
+	border-bottom: 2px solid white;
 	
 	.question h3 {
 		font-size: 1.5rem;}
 		
 	.resultat {
 		display: grid;
-		grid-template-rows: 1fr 1fr 1fr; 
+		grid-template-rows: 1fr 1fr; 
 	}
 	
 	${media.desktopUp`
-		.good-answers-count {
-			height: 3rem;
-		}
 	`};
 	
 `;
@@ -88,9 +82,7 @@ const Choix = styled.div`
 		&:hover {
 			cursor: pointer;}
 		&:hover {
-			background: var(--color-bleu-clair);}
-		&.selected {
-			text-decoration: underline;}}
+			background: var(--color-bleu-clair);}}
 	
 	&.is-answered {
 		label:hover {
@@ -139,14 +131,14 @@ const QuizItem = ({ itemData, onQuizItemChange }) => {
 		choixRefElem.classList.add('is-answered');
 		choixRefElem.querySelector('fieldset').setAttribute('disabled', '');
 		
-		// gsap.to( itemRefElem.querySelectorAll(`label`), {
-		// 	backgroundColor: '#3D728D',
-		// 	duration: 0.5
-		// });
-		
 		gsap.to( itemRefElem.querySelector(`label[for=${rightAnswerId}]`), {
 			backgroundColor: 'green',
 			duration: 1
+		});
+		
+		gsap.to( itemRefElem.querySelector(`label[for=${clickedChoiceId}]:not([for=${rightAnswerId}])`), {
+			backgroundColor: '#d9093d',
+			duration: 0.5
 		});
 		
 		gsap.from( itemRefElem.querySelectorAll('.resultat p'), {

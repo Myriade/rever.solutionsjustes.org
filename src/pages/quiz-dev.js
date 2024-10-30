@@ -55,6 +55,33 @@ const Section1Hero = styled.div`
   `};
 `;
 
+const Section2Intro = styled.section`
+  height: calc(90vh - var(--header-height));
+  .grid {
+    gap: var(--v-h2-spacer);}
+    
+  h2 {
+    font-size: clamp(24px, 2vw, 2rem);
+    max-width: 21ch;
+    font-weight: 500;
+    line-height: 1.25;
+    text-transform: initial;}
+    
+  p {
+    margin-top: 0;}
+    
+  ${media.mediumUp`
+    .grid {
+      grid-template-columns: 1fr 1fr;}
+    
+    h2 {
+      max-width: initial;}
+  `};
+  
+  .button {
+    margin-top: calc(var(--v-spacer) / 2);}
+`;
+
 const SectionProgression = styled.section`
   display: flex;
   justify-content: stretch;
@@ -92,33 +119,6 @@ const SectionProgression = styled.section`
         background: var(--color-bleu-tres-fonce);
         color: white;
       }}
-`;
-
-const Section2Intro = styled.section`
-  height: calc(100vh - var(--header-height));
-  .grid {
-    gap: var(--v-h2-spacer);}
-    
-  h2 {
-    font-size: clamp(24px, 2vw, 2rem);
-    max-width: 21ch;
-    font-weight: 500;
-    line-height: 1.25;
-    text-transform: initial;}
-    
-  p {
-    margin-top: 0;}
-    
-  ${media.mediumUp`
-    .grid {
-      grid-template-columns: 1fr 1fr;}
-    
-    h2 {
-      max-width: initial;}
-  `};
-  
-  .button {
-    margin-top: calc(var(--v-spacer) / 2);}
 `;
 
 const SectionConclusion = styled.section`
@@ -187,6 +187,9 @@ const QuizDevPage = () => {
   
   // Gsap animations 
   const gsapAnimations = contextSafe(() => {
+  
+    const pageRefElem = gsapPageContainerRef.current;
+    const heroTopPosition = pageRefElem.querySelector('#page-hero').getBoundingClientRect().y;
     
     // progression bar pins 
     gsap.to('#progression-bar', {
@@ -195,9 +198,9 @@ const QuizDevPage = () => {
         trigger: '#progression-bar',
         pin: true,
         pinSpacing: false,
-        start: `top 85`,
+        start: `top ${heroTopPosition - 1}`,
         endTrigger: '#s-impliquer',
-        end: 'top 150'
+        end: `top 150`,
       }
     });
     
@@ -228,7 +231,7 @@ const QuizDevPage = () => {
     <PageLayout>
       <div ref={gsapPageContainerRef} id='gsap-container'>
     
-        <Section1Hero>
+        <Section1Hero id='page-hero'>
           <StaticImage 
             className='bg-image'
             src='../images/grand-portrait-Daniel.webp'
