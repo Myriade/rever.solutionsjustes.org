@@ -585,6 +585,7 @@ const ConnaitrePage = () => {
   // States, refs, context and data variables
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(0);
+  const [glideIsInit, setGlideIsInit] = useState(false);
   
   const gsapContainerRef = useRef();
   const timelineRef = useRef([]);
@@ -615,6 +616,19 @@ const ConnaitrePage = () => {
     }
   }, []);
   
+  // Hash in url triggers scroll to section
+  useEffect( () => {
+    if (window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hash);
+      if (screenType === 'mouse') {
+        navClickHandler(correspondingDataArrayIndex);
+      } else if ( glideIsInit && screenType !== 'mouse' ) {
+        navClickHandler(correspondingDataArrayIndex);
+      }
+    }
+  }, [screenType, glideIsInit]);
+  
   // event handlers
   const navClickHandler = contextSafe( (clickedIndex) => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
@@ -638,7 +652,7 @@ const ConnaitrePage = () => {
       const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
       associateScrollTrigger.scroll(associateScrollTrigger.start);
       
-    } else if (screenType === 'touch') {
+    } else if ( glideIsInit && screenType !== 'mouse' )  {
       glideCarrousel.current.go(`=${clickedIndex}`);
       const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
       // scroll to top under the nav, and recalculate the scrolltriggers
@@ -1050,7 +1064,7 @@ const ConnaitrePage = () => {
   
   // Mobile Glide Carrousel init
   useEffect( () => {
-    if (screenType === 'touch') {
+    if ( (screenType === 'touch') || (screenType === 'mouse-narrow') ) {
       glideCarrousel.current = new Glide('.glide', {
         type: 'slider',
         swipeThreshold: false,
@@ -1064,6 +1078,7 @@ const ConnaitrePage = () => {
         swipeThreshold: 50,
         rewind: false,
       }).mount()
+      setGlideIsInit(true);
     }
   }, [screenType]);
   
@@ -1122,10 +1137,10 @@ const ConnaitrePage = () => {
               </ul>
             </nav>
             
-            <div id='realites-container' className={screenType === 'touch' ? 'glide' : ''}>
+            <div id='realites-container' className={screenType !== 'mouse' ? 'glide' : ''}>
               
-              <div className={screenType === 'touch' ? 'glide__track' : ''} data-glide-el='track'>
-                <div className={screenType === 'touch' ? 'glide__slides' : ''}>
+              <div className={screenType !== 'mouse' ? 'glide__track' : ''} data-glide-el='track'>
+                <div className={screenType !== 'mouse' ? 'glide__slides' : ''}>
                   
                   {realitesDataArray.map( (realite, index) => { return (
                     <div
@@ -1242,7 +1257,7 @@ const ConnaitrePage = () => {
                 </div>
               </div>
               
-              { screenType === 'touch' ? 
+              { screenType !== 'mouse' ? 
                 <BulletsControls>
                   <div data-glide-el="controls[nav]">
                     <button 

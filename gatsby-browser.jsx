@@ -1,7 +1,9 @@
 const React = require("react");
 
-exports.shouldUpdateScroll = () => {
-	window.scrollTo(0, 0);
-	return false;
-};
-
+if (!window.location.hash) {
+	exports.shouldUpdateScroll = () => {
+		console.log('shouldUpdateScroll');
+		window.scrollTo(0, 0);
+		return false;
+	} 
+}
