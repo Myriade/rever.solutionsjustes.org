@@ -586,6 +586,7 @@ const ConnaitrePage = () => {
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(null);
   const [glideIsInit, setGlideIsInit] = useState(false);
+  //const [mobileNavBarIsMinimised, setMobileNavBarIsMinimised] = useState(false);
   
   const gsapContainerRef = useRef();
   const timelineRef = useRef([]);
@@ -634,7 +635,7 @@ const ConnaitrePage = () => {
     }
   }, [screenType, glideIsInit]);
   
-  // NaBarPin recalculation
+  // Desktop NaBarPin recalculation
   useEffect( () => {
     const timelineRefArrayLength = timelineRef.current.length;
     if (timelineRefArrayLength > 1) { 
@@ -965,7 +966,7 @@ const ConnaitrePage = () => {
   
   // Mobiles touch GSAP Animations sobres 
   const sobreGsapAnimations = contextSafe(() => {
-    const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom;
+    const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom; // pour le vavbar pin
     const navElement = gsapContainerRef.current.querySelector('#realites-nav');
     const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
     const realitesUniquesArr = gsap.utils.toArray('.realite-unique');
@@ -995,18 +996,21 @@ const ConnaitrePage = () => {
       }
     });
     
-    // Nav bar pins 
-    gsap.to('#realites-nav', { 
-      scrollTrigger: {
-        id: 'touchRealitesNavPin',
-        trigger: '#realites-nav',
-        pin: true,
-        pinSpacing: false,
-        start: 'top ' + headerBottomInViewport,
-        end: () => `+=${allRealitesElement.offsetHeight}`,
-        //markers: true,
-      }
-    });
+    // Nav bar pin function to use in the next gsap tween
+    const navBarPin = () => {
+      const gsapPin = gsap.to('#realites-nav', { 
+        scrollTrigger: {
+          id: 'touchRealitesNavPin',
+          trigger: '#realites-nav',
+          pin: true,
+          pinSpacing: false,
+          start: 'top ' + headerBottomInViewport,
+          end: () => `+=${allRealitesElement.offsetHeight}`,
+          //markers: true,
+        }
+      });
+      return gsapPin;
+    }
     
     // Nav bar sub-titles disapear after 40px of scroll
     gsap.to( navElement.querySelectorAll('strong'), {
@@ -1018,24 +1022,14 @@ const ConnaitrePage = () => {
         start: 'top 40%',
         end: '+=40px',
         scrub: true,
-        onUpdate: (self) => {
-          navElement.querySelector('ul').style.gap = 1 - (self.progress * 0.8) + 'rem 1rem';
-          navElement.style.paddingTop = 1 - (self.progress * 0.8) + 'rem';
-          self.previous().refresh();
-          // if (self.progress === 1 ) {
-          //   setMenuIsCollapsed(true);
-          // } else {
-          //   setMenuIsCollapsed(false);
-          // }
+        //markers: true,
+        onLeave: (self) => {
+          //console.log('onLeave');
+          navBarPin();
         },
-        onLeave: () => {
-          // const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
-          // gsap.to( realitesUniquesArr, {
-          //   height: (window.innerHeight * 0.85) - navBottomInViewport + 'px',
-          //   marginTop: '1.5rem',
-          //   duration: 0.5,
-          // });
-
+        onEnterBack: (self) => {
+          //console.log('onEnterBack');
+          ScrollTrigger.getById('touchRealitesNavPin').kill();
         },
       }
     });
@@ -1080,7 +1074,7 @@ const ConnaitrePage = () => {
       
     });
     
-  }, { dependencies: [screenType], scope: gsapContainerRef } );
+  }, { dependencies: [screenType, activeRealite], scope: gsapContainerRef } );
   
   // Mobile Glide Carrousel init
   useEffect( () => {
