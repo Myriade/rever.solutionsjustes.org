@@ -584,12 +584,13 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, TextPlugin);
 const ConnaitrePage = () => {
   // States, refs, context and data variables
   const [screenType, setScreenType] = useState(''); 
-  const [activeRealite, setActiveRealite] = useState(0);
+  const [activeRealite, setActiveRealite] = useState(null);
   const [glideIsInit, setGlideIsInit] = useState(false);
   
   const gsapContainerRef = useRef();
   const timelineRef = useRef([]);
   const glideCarrousel = useRef();
+  const navBarPinEndValue = useRef();
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
@@ -618,16 +619,40 @@ const ConnaitrePage = () => {
   
   // Hash in url triggers scroll to section
   useEffect( () => {
-    if (window.location.hash) {
-      const hash = window.location.hash.substring(1);
-      const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hash);
-      if (screenType === 'mouse') {
-        navClickHandler(correspondingDataArrayIndex);
-      } else if ( glideIsInit && screenType !== 'mouse' ) {
-        navClickHandler(correspondingDataArrayIndex);
+    if ( screenType !== '') {
+      if ( window.location.hash ) {
+        console.log('effect location hash check');
+        
+        if ( window.location.hash !== '#s-impliquer' && activeRealite === null  ) {
+          const hash = window.location.hash.substring(1);
+          console.log('effect location hash substring = ', hash);
+          const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hash);
+          console.log('correspondingDataArrayIndex = ', correspondingDataArrayIndex);
+          //navClickHandler(correspondingDataArrayIndex);
+        }
       }
     }
   }, [screenType, glideIsInit]);
+  
+  // NaBarPin recalculation
+  useEffect( () => {
+    const timelineRefArrayLength = timelineRef.current.length;
+    if (timelineRefArrayLength > 1) { 
+      navBarPinEndValue.current = timelineRef.current[timelineRefArrayLength - 1].scrollTrigger.end;
+      console.log('navBarPinEndValue = ', navBarPinEndValue.current);
+      ScrollTrigger.refresh();
+    }
+  }, [screenType, timelineRef]);
+  
+  // Change hash to the corresponding activeRealite state
+  useEffect( () => {
+    if ( activeRealite !== null ) {
+      const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
+      const newLocationPath = `#${activeRealiteHash}`;
+      window.history.pushState({}, '', newLocationPath);
+    }
+    
+  }, [activeRealite]);
   
   // event handlers
   const navClickHandler = contextSafe( (clickedIndex) => {
@@ -635,10 +660,11 @@ const ConnaitrePage = () => {
     setActiveRealite(clickedIndex);
     
     if (screenType === 'mouse') {
+      console.log('navClickHandler screenType === mouse');
       gsap.to( window, { 
         duration: 0, 
         scrollTo: {
-          y: `#${clickedId}`,
+          y: `#${clickedId} .recit__narratif`,
           offsetY: 120
         }
       });
@@ -650,7 +676,7 @@ const ConnaitrePage = () => {
       
       // reset scroll progress to its start
       const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
-      associateScrollTrigger.scroll(associateScrollTrigger.start);
+      associateScrollTrigger.scroll(associateScrollTrigger.start + 10);
       
     } else if ( glideIsInit && screenType !== 'mouse' )  {
       glideCarrousel.current.go(`=${clickedIndex}`);
@@ -662,7 +688,7 @@ const ConnaitrePage = () => {
           offsetY: navBottomInViewport,
         },
       });
-      ScrollTrigger.refresh();
+      
       // update the glidetrack elem height
       const glideTrackElem =  gsapContainerRef.current.querySelector('.glide__track ')
       const activeElemHeight = gsapContainerRef.current.querySelectorAll('.glide__slide')[clickedIndex].offsetHeight;
@@ -672,6 +698,7 @@ const ConnaitrePage = () => {
       });
     }
     
+    ScrollTrigger.refresh();
   });
   
   const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
@@ -705,7 +732,7 @@ const ConnaitrePage = () => {
   // Laptop et desktop GSAP Animations 
   const gsapAnimations = contextSafe(() => {
     
-    let allRealitesHeight = 1000;
+    //let allRealitesHeight = 1000;
     
     // NAVIGATION 
     // nav items appears smoothly
@@ -722,14 +749,15 @@ const ConnaitrePage = () => {
     });
     
     // nav bar pins 
-    gsap.to('#realites-nav', {
+    gsap.to('#realites-container', {
       scrollTrigger: {
         id: 'realitesNavPin',
-        trigger: '#realites-nav',
-        pin: true,
+        trigger: '#realites-container',
+        pin: '#realites-nav',
         pinSpacing: false,
         start: 'top 115px',
-        end: () => allRealitesHeight,
+        end: () => navBarPinEndValue.current,
+        //markers: true
       }
     });
     
@@ -904,25 +932,17 @@ const ConnaitrePage = () => {
         id: `realiteContent-index-${realiteIndex}`,
         trigger: element,
         animation: contentTimeline,
-        start: 'top 115px',
+        start: 'top 110px',
         end: "+=" + (window.innerHeight * 5),
         scrub: 1.5,
         pin: element,
         toggleClass: 'active',
         fastScrollEnd: true,
         onEnter: (self) => {
-          setActiveRealite(realiteIndex);
-          if (realiteIndex < realitesGsapArr.length - 1) {
-            allRealitesHeight = self.end + window.innerHeight;
-          } else {
-            allRealitesHeight = self.end;
-          }
-          ScrollTrigger.refresh();
+          if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
         },
         onEnterBack: (self) => {
-          setActiveRealite(realiteIndex);
-          allRealitesHeight = self.end;
-          ScrollTrigger.refresh();
+          if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
         },
         //markers: true,
       });

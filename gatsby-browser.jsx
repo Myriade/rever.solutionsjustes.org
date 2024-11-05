@@ -1,9 +1,13 @@
 const React = require("react");
 
-if (!window.location.hash) {
-	exports.shouldUpdateScroll = () => {
-		console.log('shouldUpdateScroll');
-		window.scrollTo(0, 0);
+
+exports.shouldUpdateScroll = () => {
+	if (!window.location.hash) {
+		console.log('browser no location hash');
 		return false;
-	} 
+	} else if (window.location.hash) {
+		const hashSubstring = window.location.hash.substring(1);
+		console.log('browser hashSubstring = ', hashSubstring);
+		return false;
+	}
 }
