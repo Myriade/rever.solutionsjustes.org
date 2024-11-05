@@ -756,6 +756,9 @@ const ConnaitrePage = () => {
         pinSpacing: false,
         start: 'top 115px',
         end: () => navBarPinEndValue.current,
+        onLeave: () => {
+          document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = 'unset';
+        },
         //markers: true
       }
     });
