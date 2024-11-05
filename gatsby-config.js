@@ -7,6 +7,7 @@ module.exports = {
     siteUrl: `https://rever.solutionsjustes.org`,
     description: `Chaque rêve mérite de ne pas être essentiel ! Ensemble, apprenons la réalité de l’immigration humanitaire et faisons entendre les histoires de ceux et celles qui aspirent à un avenir meilleur.`
   },
+  //trailingSlash: "never",
   plugins: [
     "gatsby-plugin-image", 
     "gatsby-plugin-sharp", 

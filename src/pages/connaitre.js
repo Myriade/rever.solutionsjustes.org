@@ -620,28 +620,21 @@ const ConnaitrePage = () => {
   useEffect( () => {
     if ( screenType !== '') {
       if ( window.location.hash ) {
-        console.log('effect location hash check');
         
         if ( window.location.hash !== '#s-impliquer' && activeRealite === null  ) {
           const hash = window.location.hash.substring(1);
-          console.log('effect location hash substring = ', hash);
+          
           const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hash);
-          console.log('correspondingDataArrayIndex = ', correspondingDataArrayIndex);
-          //navClickHandler(correspondingDataArrayIndex);
+          
+          if (screenType === 'mouse') {
+            navClickHandler(correspondingDataArrayIndex);
+          } else if (glideIsInit === true) {
+            navClickHandler(correspondingDataArrayIndex);
+          }
         }
       }
     }
   }, [screenType, glideIsInit]);
-  
-  // Desktop NaBarPin recalculation
-  useEffect( () => {
-    const timelineRefArrayLength = timelineRef.current.length;
-    if (timelineRefArrayLength > 1) { 
-      navBarPinEndValue.current = timelineRef.current[timelineRefArrayLength - 1].scrollTrigger.end;
-      console.log('navBarPinEndValue = ', navBarPinEndValue.current);
-      ScrollTrigger.refresh();
-    }
-  }, [screenType, timelineRef]);
   
   // Change hash to the corresponding activeRealite state
   useEffect( () => {
@@ -652,6 +645,15 @@ const ConnaitrePage = () => {
     }
     
   }, [activeRealite]);
+  
+  // Desktop NaBarPin end calculation
+  useEffect( () => {
+    const timelineRefArrayLength = timelineRef.current.length;
+    if (timelineRefArrayLength > 1) { 
+      navBarPinEndValue.current = timelineRef.current[timelineRefArrayLength - 1].scrollTrigger.end;
+      ScrollTrigger.refresh();
+    }
+  }, [screenType, timelineRef]);
   
   // event handlers
   const navClickHandler = contextSafe( (clickedIndex) => {
@@ -668,16 +670,17 @@ const ConnaitrePage = () => {
         }
       });
       
-      gsap.from( '#realites-container' , {
+      gsap.from( '#realites-container', {
         autoAlpha: 0,
         duration: 1
       });
       
       // reset scroll progress to its start
       const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
-      associateScrollTrigger.scroll(associateScrollTrigger.start + 10);
+      associateScrollTrigger.scroll(associateScrollTrigger.start + 1);
       
     } else if ( glideIsInit && screenType !== 'mouse' )  {
+      console.log('navClickHandler screenType !== mouse');
       glideCarrousel.current.go(`=${clickedIndex}`);
       const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
       // scroll to top under the nav, and recalculate the scrolltriggers
@@ -697,7 +700,7 @@ const ConnaitrePage = () => {
       });
     }
     
-    ScrollTrigger.refresh();
+    //ScrollTrigger.refresh();
   });
   
   const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
@@ -1024,11 +1027,9 @@ const ConnaitrePage = () => {
         scrub: true,
         //markers: true,
         onLeave: (self) => {
-          //console.log('onLeave');
           navBarPin();
         },
         onEnterBack: (self) => {
-          //console.log('onEnterBack');
           ScrollTrigger.getById('touchRealitesNavPin').kill();
         },
       }
