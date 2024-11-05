@@ -7,9 +7,6 @@ import '../styles/globals.scss'
 
 import CookieConsent from '../components/cookieConsent'
 
-import { gsap } from 'gsap'
-import { useGSAP } from '@gsap/react'
-
 const Header = styled.header`
   position: fixed;
   top: 0;
@@ -121,7 +118,7 @@ export default function PageLayout({ children }) {
       <Main>
         {children}
         <div className='loading-placeholder'>
-          <img src='/logo.jpg' />
+          <img src='/logo.jpg' alt='Solutions Justes, logo' />
         </div>
       </Main>
       

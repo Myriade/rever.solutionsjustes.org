@@ -56,7 +56,7 @@ const StatutImmigrationFiche = ({ ficheData }) => {
 		<SatutFiche>
 			{ ficheData.loading ? 
 				<div className='placeholder-img'>
-					<img src='logo.jpg' />
+					<img src='logo.jpg' alt='Solutions Justes, logo' />
 				</div>
 				: 
 				<img src={imageSrc} alt="Illustration"/>

@@ -16,7 +16,6 @@ const LigneTempsItemLi = styled.li`
 `;
 
 const HistoireLigneTemps = ({ data }) => {
-	console.log('ligne data = ', data);
 	
 	return (
 		<>

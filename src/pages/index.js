@@ -431,7 +431,8 @@ const IndexPage = () => {
                 key={pindex}
                 href={partenaire.websiteUrl} 
                 target='_blank'
-                title={partenaire.nom}
+                title={partenaire.nom} 
+                rel='noreferrer'
               >
                 <img 
                   src={`../images/partenaires/${partenaire.id}.png`} 

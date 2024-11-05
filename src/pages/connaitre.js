@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect }  from 'react'
 import PageLayout from '../layouts/pageLayout'
-import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
@@ -586,7 +585,6 @@ const ConnaitrePage = () => {
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(null);
   const [glideIsInit, setGlideIsInit] = useState(false);
-  //const [mobileNavBarIsMinimised, setMobileNavBarIsMinimised] = useState(false);
   
   const gsapContainerRef = useRef();
   const timelineRef = useRef([]);
@@ -969,7 +967,6 @@ const ConnaitrePage = () => {
     const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom; // pour le vavbar pin
     const navElement = gsapContainerRef.current.querySelector('#realites-nav');
     const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
-    const realitesUniquesArr = gsap.utils.toArray('.realite-unique');
      
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
@@ -1089,7 +1086,6 @@ const ConnaitrePage = () => {
         perView: 1,
         gap: 20,
         bound: true,
-        swipeThreshold: 50,
         rewind: false,
       }).mount()
       setGlideIsInit(true);
@@ -1135,7 +1131,7 @@ const ConnaitrePage = () => {
                       aria-label='Aller à la section'
                     >
                       <div className='avatar'>
-                        <img src={`/images/connaitre/${realite.nom}.svg`}/>
+                        <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
                       </div>
                       <div className='nom'>{realite.nom}</div>
                       <strong>{realite.titreCourt}</strong>
@@ -1178,7 +1174,7 @@ const ConnaitrePage = () => {
                             </h2>
                           </div>
                           <div className='identification'>
-                            <img src={`/images/connaitre/${realite.nom}.svg`}/>
+                            <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
                             <p className='nom'>{realite.nom}</p>
                             <p>{realite.titreCourt}</p>
                           </div>
@@ -1199,7 +1195,7 @@ const ConnaitrePage = () => {
                           </div>
                           <div className='impacts'>
                             <div className='impacts__intro'>
-                              <img className='impacts__avatar' src={`/images/connaitre/${realite.nom}.svg`} />
+                              <img className='impacts__avatar' src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
                               <p dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
                             </div>
                             <div className='impacts__content'>
