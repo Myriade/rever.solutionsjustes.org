@@ -617,34 +617,34 @@ const ConnaitrePage = () => {
   }, []);
   
   // Hash in url triggers scroll to section
-  useEffect( () => {
-    if ( screenType !== '') {
-      if ( window.location.hash ) {
-        
-        if ( window.location.hash !== '#s-impliquer' && activeRealite === null  ) {
-          const hash = window.location.hash.substring(1);
-          
-          const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hash);
-          
-          if (screenType === 'mouse') {
-            navClickHandler(correspondingDataArrayIndex);
-          } else if (glideIsInit === true) {
-            navClickHandler(correspondingDataArrayIndex);
-          }
-        }
-      }
-    }
-  }, [screenType, glideIsInit]);
+  // useEffect( () => {
+  //   if ( screenType !== '') {
+  //     if ( window.location.hash ) {
+  //       
+  //       if ( window.location.hash !== '#s-impliquer' && activeRealite === null  ) {
+  //         const hash = window.location.hash.substring(1);
+  //         
+  //         const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hash);
+  //         
+  //         if (screenType === 'mouse') {
+  //           navClickHandler(correspondingDataArrayIndex);
+  //         } else if (glideIsInit === true) {
+  //           navClickHandler(correspondingDataArrayIndex);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }, [screenType, glideIsInit, activeRealite]);
   
   // Change hash to the corresponding activeRealite state
-  useEffect( () => {
-    if ( activeRealite !== null ) {
-      const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
-      const newLocationPath = `#${activeRealiteHash}`;
-      window.history.pushState({}, '', newLocationPath);
-    }
-    
-  }, [activeRealite]);
+  // useEffect( () => {
+  //   if ( activeRealite !== null ) {
+  //     const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
+  //     const newLocationPath = `#${activeRealiteHash}`;
+  //     window.history.pushState({}, '', newLocationPath);
+  //   }
+  //   
+  // }, [activeRealite]);
   
   // Desktop NaBarPin end calculation
   useEffect( () => {
@@ -733,9 +733,6 @@ const ConnaitrePage = () => {
   
   // Laptop et desktop GSAP Animations 
   const gsapAnimations = contextSafe(() => {
-    
-    //let allRealitesHeight = 1000;
-    
     // NAVIGATION 
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
@@ -940,7 +937,7 @@ const ConnaitrePage = () => {
         start: 'top 110px',
         end: "+=" + (window.innerHeight * 5),
         scrub: 1.5,
-        pin: element,
+        pin: true,
         toggleClass: 'active',
         fastScrollEnd: true,
         onEnter: (self) => {
@@ -949,7 +946,7 @@ const ConnaitrePage = () => {
         onEnterBack: (self) => {
           if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
         },
-        //markers: true,
+        //markers: true,  TESTER LE START dynamique
       });
       
       ScrollTrigger.create({
