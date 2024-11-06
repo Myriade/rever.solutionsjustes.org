@@ -589,7 +589,6 @@ const ConnaitrePage = () => {
   const gsapContainerRef = useRef();
   const timelineRef = useRef([]);
   const glideCarrousel = useRef();
-  const navBarPinEndValue = useRef();
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
@@ -646,22 +645,13 @@ const ConnaitrePage = () => {
   //   
   // }, [activeRealite]);
   
-  // Desktop NaBarPin end calculation
-  useEffect( () => {
-    const timelineRefArrayLength = timelineRef.current.length;
-    if (timelineRefArrayLength > 1) { 
-      navBarPinEndValue.current = timelineRef.current[timelineRefArrayLength - 1].scrollTrigger.end;
-      ScrollTrigger.refresh();
-    }
-  }, [screenType, timelineRef]);
-  
   // event handlers
   const navClickHandler = contextSafe( (clickedIndex) => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
     setActiveRealite(clickedIndex);
     
     if (screenType === 'mouse') {
-      console.log('navClickHandler screenType === mouse');
+      // console.log('navClickHandler screenType === mouse');
       gsap.to( window, { 
         duration: 0, 
         scrollTo: {
@@ -680,7 +670,7 @@ const ConnaitrePage = () => {
       associateScrollTrigger.scroll(associateScrollTrigger.start + 1);
       
     } else if ( glideIsInit && screenType !== 'mouse' )  {
-      console.log('navClickHandler screenType !== mouse');
+      //console.log('navClickHandler screenType = not mouse');
       glideCarrousel.current.go(`=${clickedIndex}`);
       const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
       // scroll to top under the nav, and recalculate the scrolltriggers
@@ -733,6 +723,9 @@ const ConnaitrePage = () => {
   
   // Laptop et desktop GSAP Animations 
   const gsapAnimations = contextSafe(() => {
+    // console.log('timelineRef = ', timelineRef.current);
+    // console.log('navBarPinEndValue = ', navBarPinEndValue);
+    
     // NAVIGATION 
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
@@ -755,7 +748,15 @@ const ConnaitrePage = () => {
         pin: '#realites-nav',
         pinSpacing: false,
         start: 'top 115px',
-        end: () => navBarPinEndValue.current,
+        end: () => { 
+          const timelineRefArrayLastIndex = timelineRef.current.length - 1;
+          let endValue = 1000;
+          if (timelineRefArrayLastIndex > 0) { 
+            endValue = timelineRef.current[timelineRefArrayLastIndex].scrollTrigger.end;
+          }
+          return endValue;
+        },
+        //onEnter: () => { ScrollTrigger.refresh()},
         onLeave: () => {
           document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = 'unset';
         },
@@ -933,20 +934,22 @@ const ConnaitrePage = () => {
       ScrollTrigger.create({
         id: `realiteContent-index-${realiteIndex}`,
         trigger: element,
+        scrub: 1.5,
         animation: contentTimeline,
+        pin: element,
+        pinSpacing: true,
         start: 'top 110px',
         end: "+=" + (window.innerHeight * 5),
-        scrub: 1.5,
-        pin: true,
         toggleClass: 'active',
-        fastScrollEnd: true,
+        // fastScrollEnd: true,
         onEnter: (self) => {
-          if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
+          if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)};
+          ScrollTrigger.refresh();
         },
         onEnterBack: (self) => {
           if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
         },
-        //markers: true,  TESTER LE START dynamique
+        //markers: true,  //TESTER LE START dynamique
       });
       
       ScrollTrigger.create({
@@ -959,7 +962,7 @@ const ConnaitrePage = () => {
         //markers: true,
       });
       
-      timelineRef.current[realiteIndex] = contentTimeline;
+      timelineRef.current = [...timelineRef.current, contentTimeline];
       
     }); // end forEach
     
