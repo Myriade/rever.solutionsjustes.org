@@ -648,24 +648,17 @@ const ConnaitrePage = () => {
   // event handlers
   const navClickHandler = contextSafe( (clickedIndex) => {
     const clickedId = realitesDataArray[clickedIndex].idUnique;
-    setActiveRealite(clickedIndex);
+    if (clickedIndex !== activeRealite) { setActiveRealite(clickedIndex);}
     
     if (screenType === 'mouse') {
-      // console.log('navClickHandler screenType === mouse');
-      gsap.to( window, { 
-        duration: 0, 
-        scrollTo: {
-          y: `#${clickedId} .recit__narratif`,
-          offsetY: 120
-        }
-      });
       
+      // Fade-out fade-in animation
       gsap.from( '#realites-container', {
         autoAlpha: 0,
         duration: 1
       });
-      
-      // reset scroll progress to its start
+    
+      // Reset active realite scroll its progress near start
       const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
       associateScrollTrigger.scroll(associateScrollTrigger.start + 1);
       
@@ -690,8 +683,7 @@ const ConnaitrePage = () => {
       });
     }
     
-    //ScrollTrigger.refresh();
-  });
+  }, {dependencies: [activeRealite]});
   
   const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
     if (screenType === 'mouse') {
@@ -941,15 +933,16 @@ const ConnaitrePage = () => {
         start: 'top 110px',
         end: "+=" + (window.innerHeight * 5),
         toggleClass: 'active',
-        // fastScrollEnd: true,
+        toggleActions: 'play none none none',
         onEnter: (self) => {
-          if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)};
-          ScrollTrigger.refresh();
+          if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
+          console.log('onEnter');
         },
         onEnterBack: (self) => {
           if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
+          console.log('onEnterBack');
         },
-        //markers: true,  //TESTER LE START dynamique
+        //markers: true
       });
       
       ScrollTrigger.create({
