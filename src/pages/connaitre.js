@@ -644,11 +644,12 @@ const ConnaitrePage = () => {
   
   // Hash in url triggers scroll to section
   useEffect( () => {
-    if ( screenType !== '' && afterGsapFirstInit === true ) {
+    if ( (screenType !== '') && (afterGsapFirstInit === true) ) {
+      console.log('Hash in url check begin');
       ScrollTrigger.refresh();
       if ( window.location.hash ) {
         
-        if ( window.location.hash !== '#s-impliquer' && activeRealite === null  ) {
+        if ( (window.location.hash !== '#s-impliquer') && (activeRealite === null)  ) {
           const hashSubstring = window.location.hash.substring(1);
           console.log('url has hash : ', hashSubstring);
           
