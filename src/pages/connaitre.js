@@ -585,6 +585,9 @@ const ConnaitrePage = () => {
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(null);
   const [glideIsInit, setGlideIsInit] = useState(false);
+  const [afterGsapFirstInit, setAfterGsapFirstInit] = useState(false);
+  
+  console.log('afterGsapFirstInit = ', afterGsapFirstInit);
   
   const gsapContainerRef = useRef();
   const timelineRef = useRef([]);
@@ -595,58 +598,74 @@ const ConnaitrePage = () => {
   
   // Screen type check and proper animations trigger
   useEffect( () => {
-    if (!screenType) {
+    
+    function screenTypeCheck() {
+      console.log('screenTypeCheck called')
       if (window.matchMedia('(hover: hover)').matches) {
         console.log('Device has a mouse or touchpad events');
         if (window.matchMedia('(min-width: 1200px)').matches) {
           console.log('Screen is more than 1200px wide.  Full Animations ok.');
           setScreenType('mouse');
           gsapAnimations();
+          return
         } else {
           setScreenType('mouse-narrow');
           console.log('Screen is less than 1200px wide. Animations sobres.');
           sobreGsapAnimations();
+          return
         }
       } else {
         console.log('Device has no mouse, so has touch events. Animations sobres.');
         setScreenType('touch');
         sobreGsapAnimations();
+        return
       }
+    }
+    
+    async function appInitialisation() {
+      await screenTypeCheck();
+      setAfterGsapFirstInit(true);
+    }
+    
+    if (!screenType) {
+      appInitialisation();
     }
   }, []);
   
   // Hash in url triggers scroll to section
-  // useEffect( () => {
-  //   if ( screenType !== '') {
-  //     if ( window.location.hash ) {
-  //       
-  //       if ( window.location.hash !== '#s-impliquer' && activeRealite === null  ) {
-  //         const hash = window.location.hash.substring(1);
-  //         
-  //         const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hash);
-  //         
-  //         if (screenType === 'mouse') {
-  //           navClickHandler(correspondingDataArrayIndex);
-  //         } else if (glideIsInit === true) {
-  //           navClickHandler(correspondingDataArrayIndex);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }, [screenType, glideIsInit, activeRealite]);
+  useEffect( () => {
+    if ( screenType !== '' && afterGsapFirstInit === true ) {
+      if ( window.location.hash ) {
+        
+        if ( window.location.hash !== '#s-impliquer' && activeRealite === null  ) {
+          const hashSubstring = window.location.hash.substring(1);
+          console.log('url has hash : ', hashSubstring);
+          
+          const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hashSubstring);
+          
+          if (screenType === 'mouse') {
+            navClickHandler(correspondingDataArrayIndex);
+          } else if (glideIsInit === true) {
+            navClickHandler(correspondingDataArrayIndex);
+          }
+        }
+      }
+    }
+  }, [screenType, afterGsapFirstInit, activeRealite, glideIsInit]);
   
   // Change hash to the corresponding activeRealite state
-  // useEffect( () => {
-  //   if ( activeRealite !== null ) {
-  //     const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
-  //     const newLocationPath = `#${activeRealiteHash}`;
-  //     window.history.pushState({}, '', newLocationPath);
-  //   }
-  //   
-  // }, [activeRealite]);
+  useEffect( () => {
+    if ( activeRealite !== null ) {
+      const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
+      const newLocationPath = `#${activeRealiteHash}`;
+      window.history.pushState({}, '', newLocationPath);
+    }
+    
+  }, [activeRealite]);
   
   // event handlers
   const navClickHandler = contextSafe( (clickedIndex) => {
+    console.log('navClickHandler called with ', clickedIndex);
     const clickedId = realitesDataArray[clickedIndex].idUnique;
     if (clickedIndex !== activeRealite) { setActiveRealite(clickedIndex);}
     
@@ -932,15 +951,13 @@ const ConnaitrePage = () => {
         pinSpacing: true,
         start: 'top 110px',
         end: "+=" + (window.innerHeight * 5),
-        toggleClass: 'active',
+        //toggleClass: 'active',
         toggleActions: 'play none none none',
         onEnter: (self) => {
           if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
-          console.log('onEnter');
         },
         onEnterBack: (self) => {
           if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
-          console.log('onEnterBack');
         },
         //markers: true
       });
@@ -1147,7 +1164,7 @@ const ConnaitrePage = () => {
             <div id='realites-container' className={screenType !== 'mouse' ? 'glide' : ''}>
               
               <div className={screenType !== 'mouse' ? 'glide__track' : ''} data-glide-el='track'>
-                <div className={screenType !== 'mouse' ? 'glide__slides' : ''}>
+                <div className={screenType !== 'mouse' ? 'glide__slides' : 'no-glide-slides'}>
                   
                   {realitesDataArray.map( (realite, index) => { return (
                     <div
