@@ -74,6 +74,9 @@ const SectionRealites = styled.section`
   padding: 0.5rem;
   background: var(--color-bleu-tres-pale);
   
+  .no-glide-slides {
+  }
+  
   > .titre {
     h2 {
       color: var(--color-bleu-tres-fonce);}}
@@ -632,9 +635,17 @@ const ConnaitrePage = () => {
     }
   }, []);
   
+  // Refresh all ScrollTrigger avec the first animations trigger
+  useEffect( () => { 
+    if (afterGsapFirstInit === true ) {
+      ScrollTrigger.refresh(); 
+    }
+  }, [afterGsapFirstInit] )
+  
   // Hash in url triggers scroll to section
   useEffect( () => {
     if ( screenType !== '' && afterGsapFirstInit === true ) {
+      ScrollTrigger.refresh();
       if ( window.location.hash ) {
         
         if ( window.location.hash !== '#s-impliquer' && activeRealite === null  ) {
@@ -645,6 +656,7 @@ const ConnaitrePage = () => {
           
           if (screenType === 'mouse') {
             navClickHandler(correspondingDataArrayIndex);
+            ScrollTrigger.refresh();
           } else if (glideIsInit === true) {
             navClickHandler(correspondingDataArrayIndex);
           }
@@ -734,8 +746,6 @@ const ConnaitrePage = () => {
   
   // Laptop et desktop GSAP Animations 
   const gsapAnimations = contextSafe(() => {
-    // console.log('timelineRef = ', timelineRef.current);
-    // console.log('navBarPinEndValue = ', navBarPinEndValue);
     
     // NAVIGATION 
     // nav items appears smoothly
@@ -951,13 +961,21 @@ const ConnaitrePage = () => {
         pinSpacing: true,
         start: 'top 110px',
         end: "+=" + (window.innerHeight * 5),
-        //toggleClass: 'active',
         toggleActions: 'play none none none',
         onEnter: (self) => {
-          if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
+          console.log('onEnter, ', realiteIndex);
+          ScrollTrigger.refresh()
+          if (activeRealite !== realiteIndex) { 
+            console.log('activeRealite sate change, ', realiteIndex);
+            setActiveRealite(realiteIndex);
+          }
         },
         onEnterBack: (self) => {
-          if (activeRealite !== realiteIndex) { setActiveRealite(realiteIndex)}
+          console.log('onEnterBack, ', realiteIndex);
+          if (activeRealite !== realiteIndex) { 
+            console.log('activeRealite sate change, ', realiteIndex);
+            setActiveRealite(realiteIndex);
+          }
         },
         //markers: true
       });
