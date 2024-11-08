@@ -56,30 +56,72 @@ const Section1Hero = styled.div`
 `;
 
 const Section2Intro = styled.section`
-  height: calc(90vh - var(--header-height));
-  .grid {
-    gap: var(--v-h2-spacer);}
+  background: var(--color-bleu-tres-pale);
+  
+  > .card {
+    max-width: max-content !important;
+  }
+  
+  .card {
+    background: white;
+    display: grid;
+    justify-items: center;
+    border-radius: var(--border-radius);
+    padding: var(--v-h2-spacer);
+    position: relative;
+    > div {
+      max-width: 755px;
+      text-align: center;}}
     
   h2 {
-    font-size: clamp(24px, 2vw, 2rem);
-    max-width: 21ch;
+    text-align: center;
+    max-width: 27ch;
+    font-size: 1.25rem;
     font-weight: 500;
     line-height: 1.25;
-    text-transform: initial;}
+    text-transform: initial;
+    background: var(--color-bleu-clair);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: calc(var(--border-radius) / 2);}
+    
+  .texte {
+    position: relative;}
+    
+  h3 {
+    text-align: center;
+    line-height: 1.75;
+    font-size: clamp(24px, 2vw, 27px);
+    b {
+      font-weight: inherit;
+      background: var(--color-bleu-tres-pale);
+      border-radius: calc(var(--border-radius) / 2);
+      padding: 0.25em 0.5em;}}
     
   p {
-    margin-top: 0;}
+    font-size: 1rem;
+    line-height: 1.75;
+    max-width: 65ch;
+    margin-inline: auto;}
     
-  ${media.mediumUp`
-    .grid {
-      grid-template-columns: 1fr 1fr;}
-    
-    h2 {
-      max-width: initial;}
-  `};
+  .cta {
+    position: absolute;
+    bottom: -1.5rem;
+    width: 100%;
+    display: grid;
+    justify-items: center;}
   
   .button {
-    margin-top: calc(var(--v-spacer) / 2);}
+    margin-top: calc(var(--v-spacer) / 2);
+    span {
+      font-size: 2rem;
+      line-height: 0;}
+      
+  ${media.mediumUp`
+    h3 span {
+      display: block;
+    }
+  `};
 `;
 
 const SectionProgression = styled.section`
@@ -192,6 +234,28 @@ const QuizDevPage = () => {
     const pageRefElem = gsapPageContainerRef.current;
     const heroTopPosition = pageRefElem.querySelector('#page-hero').getBoundingClientRect().y;
     
+    // Le titre d'intro apparaît
+    gsap.from( '.intro .cta .button' ,{
+      xPercent: -75,
+      autoAlpha: 0,
+      duration: 1.5,
+      scrollTrigger: {
+        trigger: '.intro .card',
+        start: '80% bottom'
+      }
+    });
+    
+    // Le bouton Commencer slides from left
+    gsap.from( '.intro .titre h2' ,{
+      scale: 0.75,
+      duration: 1,
+      ease: "circ.in",
+      scrollTrigger: {
+        trigger: '.intro .card',
+        start: '20% bottom'
+      }
+    });
+    
     // progression bar pins 
     gsap.to('#progression-bar', {
       scrollTrigger: {
@@ -288,20 +352,21 @@ const QuizDevPage = () => {
           </div>
         </Section1Hero>
         
-        <Section2Intro>
-          <div className='grid'>
-            <div>
-              <h2>Testez vos connaissances avec le quiz <br/>
-               Au delà des statuts</h2>
+        <Section2Intro className='intro'>
+          <div className='card'>
+            <div className='titre'>
+              <h2>Testez vos connaissances avec notre quiz interactif&nbsp;!&nbsp;🧠💡</h2>
             </div>
-            <div>
-              <p><strong>Vous vous demandez comment les différents statuts d'immigration influencent la vie quotidienne des personnes migrantes ? Testez vos connaissances avec notre quiz interactif&nbsp;!</strong> 🧠💡</p>
-              <p>Ce quiz vous offrira une perspective unique sur les défis auxquels font face les personnes migrantes et vous permettra de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien.</p>
+            <div className='texte'>
+              <h3><span>Vous vous demandez comment les différents</span> statuts d'immigration <b>influencent la vie quotidienne</b> <span>des personnes migrantes&nbsp;? </span></h3>
+              <p>Ce quiz vous offrira une perspective unique sur les défis auxquels font face les personnes migrantes et vous permettra de mieux <b>comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien.</b></p>
+            </div>
+            <div className='cta'>
               <button 
                 className='button'
                 onClick={shortcutClickHandler}
               >
-                commencer le quiz !
+                Commencer le quiz&nbsp;&nbsp;<span>→</span>
               </button>
             </div>
           </div>
