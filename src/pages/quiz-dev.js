@@ -59,8 +59,7 @@ const Section2Intro = styled.section`
   background: var(--color-bleu-tres-pale);
   
   > .card {
-    max-width: max-content !important;
-  }
+    max-width: max-content !important;}
   
   .card {
     background: white;
@@ -69,9 +68,14 @@ const Section2Intro = styled.section`
     border-radius: var(--border-radius);
     padding: var(--v-h2-spacer);
     position: relative;
+    margin-bottom: 1.5rem;
     > div {
       max-width: 755px;
       text-align: center;}}
+      
+  h2, h3 {
+    margin-bottom: 2.5rem;
+  }
     
   h2 {
     text-align: center;
@@ -125,42 +129,60 @@ const Section2Intro = styled.section`
 `;
 
 const SectionProgression = styled.section`
+  background: var(--color-bleu-clair);
   display: flex;
   justify-content: stretch;
-  margin-bottom: 1.25rem;
-  background: white;
-  padding-block: 2.5rem 2rem !important;
+  padding-block: 2rem 3rem !important;
   z-index: 30;
   
   .question {
     display: grid;
-    grid-template-rows: 1fr 1fr;
     justify-items: center;
-    border-bottom: 3px solid var(--color-bleu-tres-fonce);
+    border-bottom: 3px solid white;
     border-radius: 0;
     background-color: transparent;
     margin: 0;
-    height: 1.5rem;
+    height: 1rem;
     flex-grow: 1;
     padding-inline: 3vw;
-    &__reponse {
-      position: relative;
-      bottom: calc(0.75rem + 5px);}
+      
     &__point {
       display: grid;
-      justify-content: center;
-      position: relative;
-      bottom: 1rem;
-      background: var(--color-bleu-tres-pale);
+      justify-items: center;
+      align-items: center;
+      background: white;
       border-radius: 50%;
-      width: 1.75rem;
-      height: 1.75rem;
-      line-height: 1.75;
-      font-weight: 700;
-      &.repondu {
-        background: var(--color-bleu-tres-fonce);
-        color: white;
-      }}
+      width: 2rem;
+      height: 2rem;
+      color: var(--color-bleu-fonce);
+      line-height: 0.5;
+      position: relative;}
+    
+    &__reponse {
+      font-weight: bold;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--color-bleu-tres-fonce);
+      position: absolute;
+      top: -4px;
+      right: 0;}
+    
+    &--repondue {
+      border-color: var(--color-bleu-tres-fonce); 
+      .question__point {
+        background: var(--color-bleu-tres-fonce); 
+        color: white;}
+      .question__reponse {
+        right: -3px;
+        font-weight: normal;}}
+    
+    &--bonne .question__reponse {
+      color: white;}
+    
+    &--mauvaise .question__reponse {
+      color: var(--color-rouge);}
+  }
+    
 `;
 
 const SectionConclusion = styled.section`
@@ -235,26 +257,29 @@ const QuizDevPage = () => {
     const heroTopPosition = pageRefElem.querySelector('#page-hero').getBoundingClientRect().y;
     
     // Le titre d'intro apparaît
-    gsap.from( '.intro .cta .button' ,{
-      xPercent: -75,
-      autoAlpha: 0,
-      duration: 1.5,
+    gsap.from( '.intro .titre h2' ,{
+      rotation: 3,
+      duration: 0.5,
+      repeat: 2,
+      yoyo: true,
+      ease: "circ.in",
       scrollTrigger: {
         trigger: '.intro .card',
-        start: '80% bottom'
+        start: 'top 80%'
       }
     });
     
     // Le bouton Commencer slides from left
-    gsap.from( '.intro .titre h2' ,{
-      scale: 0.75,
-      duration: 1,
-      ease: "circ.in",
+    gsap.from( '.intro .cta .button' ,{
+      xPercent: -25,
+      autoAlpha: 0,
+      duration: 1.5,
       scrollTrigger: {
         trigger: '.intro .card',
-        start: '20% bottom'
+        start: 'bottom 80%'
       }
     });
+    
     
     // progression bar pins 
     gsap.to('#progression-bar', {
@@ -303,7 +328,7 @@ const QuizDevPage = () => {
         duration: 1,
         scrollTrigger: {
           trigger: nextQuestion,
-          start: 'top 50%'
+          start: 'top 80%'
         }
       });
       
@@ -315,7 +340,7 @@ const QuizDevPage = () => {
           stagger: 1,
           scrollTrigger: {
             trigger: nextQuestion,
-            start: 'top 50%'
+            start: 'top 80%'
           },
           onStart: () => {
             // Sets the border color of the current question interaction div to white
@@ -372,15 +397,21 @@ const QuizDevPage = () => {
           </div>
         </Section2Intro>
         
-        <SectionProgression id='progression-bar'>
+        <SectionProgression id='progression-bar' className='full-width'>
           { answersProgression ? 
             answersProgression.map( (question, index) => { return (
-              <div className='question' key={index}>
-                <div className='question__reponse'>
-                  {question.answerState === 'bonne' ? '✔' : '\u00A0'}{question.answerState === 'mauvaise' ? '✗' : '\u00A0'}
-                </div>
-                <div className={ question.answerState === 'attente' ? 'question__point attente' : 'question__point repondu'}>
-                  {question.questionNumber}
+              <div key={index} className={`question 
+                ${ question.answerState !== 'attente' ? 'question--repondue' : '' }
+                ${ question.answerState === 'bonne' ? 'question--bonne' : '' }
+                ${ question.answerState === 'mauvaise' ? 'question--mauvaise' : '' }
+              `}>
+                <div className='question__point'>
+                  <div className='question__reponse'>
+                    {question.answerState === 'attente' && '?' }{question.answerState === 'bonne' && '✔'}{question.answerState === 'mauvaise' && '✗'}
+                  </div>
+                  <div className='question__number'>
+                    {question.questionNumber}
+                  </div>
                 </div>
               </div>
             )})

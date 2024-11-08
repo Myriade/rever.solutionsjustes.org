@@ -136,13 +136,14 @@ const QuizItem = ({ itemData, onQuizItemChange }) => {
 		
 		// Selected wrong answer becomes red
 		gsap.to( itemRefElem.querySelector(`label[for=${clickedChoiceId}]:not([for=${rightAnswerId}])`), {
-			backgroundColor: '#d9093d',
+			backgroundColor: 'var(--color-rouge)',
 			duration: 0.5
 		});
 		
 		// Right aswwer becomes green
 		gsap.to( itemRefElem.querySelector(`label[for=${rightAnswerId}]`), {
-			backgroundColor: 'green',
+			backgroundColor: 'white',
+			color: 'var(--color-bleu-tres-fonce)',
 			duration: 0.5,
 			delay: 0.5
 		});
