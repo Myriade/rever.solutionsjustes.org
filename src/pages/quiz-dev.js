@@ -188,6 +188,10 @@ const SectionProgression = styled.section`
 const SectionConclusion = styled.section`
   min-height: 50vh;
   border-top: 1px solid var(--color-bleu-tres-fonce);
+  
+  .grid {
+    justify-items: center;
+  }
     
   h3 {
     font-size: 2rem;
@@ -213,8 +217,21 @@ const QuizDevPage = () => {
   const [screenType, setScreenType] = useState(''); 
   const [answersProgression, setAnswersProgression] = useState(null);
   const [goodAnswerCount, setGoodAnswerCount] = useState(0);
+  const [activeQuestion, setActiveQuestion] = useState(null)
+  
   const gsapPageContainerRef = useRef();
+  const offsetHeight = useRef()
   const { contextSafe } = useGSAP({ scope: gsapPageContainerRef });
+  
+  // Get Headerr and progresssion frise offset height for scrolling offset
+  useEffect ( () => {
+    function getOffsetHeight() {
+      const headerHeight = document.querySelector('header').offsetHeight;
+      const progressionHeight = document.querySelector('#progression-bar').offsetHeight;
+      return headerHeight + progressionHeight;
+    }
+    offsetHeight.current = getOffsetHeight();
+  }, [screenType]);
   
   // Screen type check and animations trigger
   useEffect( () => {
@@ -247,7 +264,8 @@ const QuizDevPage = () => {
         answerState: 'attente'
       }
     });
-    setAnswersProgression(initialAnswersProgression);    
+    setAnswersProgression(initialAnswersProgression);
+    setActiveQuestion(0); 
   }
   
   // Gsap general animations 
@@ -258,14 +276,24 @@ const QuizDevPage = () => {
     
     // Le titre d'intro apparaît
     gsap.from( '.intro .titre h2' ,{
-      rotation: 3,
-      duration: 0.5,
-      repeat: 2,
-      yoyo: true,
-      ease: "circ.in",
+      scale: 0.9,
+      duration: 1,
+      ease: 'none',
       scrollTrigger: {
         trigger: '.intro .card',
         start: 'top 80%'
+      }
+    });
+    
+    // Les paragraphes aparaissent
+    gsap.from( '.intro .texte > * ' ,{
+      autoAlpha: 0,
+      duration: 1,
+      ease: 'circ.in',
+      stagger: 0.5,
+      scrollTrigger: {
+        trigger: '.intro .texte',
+        start: 'top 70%'
       }
     });
     
@@ -279,7 +307,6 @@ const QuizDevPage = () => {
         start: 'bottom 80%'
       }
     });
-    
     
     // progression bar pins 
     gsap.to('#progression-bar', {
@@ -300,8 +327,55 @@ const QuizDevPage = () => {
   const shortcutClickHandler = contextSafe(() => {
     gsap.to( window, { 
       duration: 1, 
-      scrollTo: {y: '#quiz', offsetY: 180} });
+      scrollTo: {y: '#quiz', offsetY: 180} 
+    });
+    goNextHandler();
   });
+  
+  // Next Question animation
+  const goNextHandler = contextSafe(() => {
+    const quizContainerElem = gsapPageContainerRef.current.querySelector('#quiz');
+    const activeQInteraction = quizContainerElem.querySelector(`.quiz-item:nth-child(${activeQuestion + 1}) > .grid`);
+    const prevQInteraction = quizContainerElem.querySelector(`.quiz-item:nth-child(${activeQuestion}) .interaction`);
+    
+    // Next question reveal Timeline
+    let tl = gsap.timeline();
+    
+    // dévoiler la prochaine question en transition de hauteur
+    tl.to( activeQInteraction, {
+      height: 'auto',
+      duration: 0.25,
+      ease: 'power1.in',
+      onComplete: () => { 
+        ScrollTrigger.refresh();
+      },
+    });
+    
+    // scroller jusqu'à la prochaine question
+    tl.to( window, { 
+      duration: 0.5, 
+      scrollTo: {
+        y: `#quiz-item-${quizData[activeQuestion].id}`,
+        offsetY: offsetHeight.current,
+      } 
+    });
+    
+    // dévoiler les 2 zones zones de la prochaine question en alpha transition une à la fois
+    //if (activeQInteraction !== null) {
+      tl.to( activeQInteraction.children, {
+        autoAlpha: 1,
+        duration: 2,
+        stagger: 1,
+        onStart: () => {
+          // Sets the border color of the current question interaction div to white
+          gsap.set( prevQInteraction, {
+            borderColor: 'white'
+          });
+        }
+      });   
+    //}
+
+  }, { dependencies: [screenType], scope: gsapPageContainerRef } );
   
   const updateQuiz = (index, answerResult) => {
     
@@ -317,41 +391,7 @@ const QuizDevPage = () => {
       setGoodAnswerCount( goodAnswerCount + 1 );
     }
     
-    // Next Question animation
-    const onChangeGsapAnimations = contextSafe(() => {
-      const thisInteraction = gsapPageContainerRef.current.querySelector(`#quiz > div:nth-child(${index+ 1}) .interaction`);
-      const nextQuestion = gsapPageContainerRef.current.querySelector(`#quiz > div:nth-child(${index+ 2}) > .grid`);
-      
-      // dévoiler la prochaine question en transition de hauteur
-      gsap.to( nextQuestion, {
-        height: 'auto',
-        duration: 1,
-        scrollTrigger: {
-          trigger: nextQuestion,
-          start: 'top 80%'
-        }
-      });
-      
-      // dévoiler les 2 zones zones de la prochaine question en alpha transition une à la fois
-      if (nextQuestion !== null) {
-        gsap.to( nextQuestion.children, {
-          autoAlpha: 1,
-          duration: 2,
-          stagger: 1,
-          scrollTrigger: {
-            trigger: nextQuestion,
-            start: 'top 80%'
-          },
-          onStart: () => {
-            // Sets the border color of the current question interaction div to white
-            gsap.set( thisInteraction, {
-              borderColor: 'white'
-            });
-          }
-        });   
-      }   
-    }, { dependencies: [screenType], scope: gsapPageContainerRef } ); 
-    onChangeGsapAnimations();
+    setActiveQuestion( index + 1 )
     
   };
   
@@ -407,7 +447,7 @@ const QuizDevPage = () => {
               `}>
                 <div className='question__point'>
                   <div className='question__reponse'>
-                    {question.answerState === 'attente' && '?' }{question.answerState === 'bonne' && '✔'}{question.answerState === 'mauvaise' && '✗'}
+                    {question.answerState === 'bonne' && '✔'}{question.answerState === 'mauvaise' && '✗'}
                   </div>
                   <div className='question__number'>
                     {question.questionNumber}
@@ -433,21 +473,24 @@ const QuizDevPage = () => {
           { answersProgression !== null ?
             <div> 
               { answersProgression[answersProgression.length - 1 ].answerState == 'attente' ? 
-                <p>Répondez à la question ci-haut pour voir la suite en défilant plus bas</p>
-                : <p>
-                  Vous avez { goodAnswerCount } bonne{goodAnswerCount > 1 && 's'} réponse{goodAnswerCount > 1 && 's'} sur {answersProgression.length}.
-                </p>
+                <div className='grid'>
+                  <button className='button' onClick={ goNextHandler }>
+                    Prochaine question
+                  </button>
+                </div>
+                : 
+                <>
+                  <p>
+                    Vous avez { goodAnswerCount } bonne{goodAnswerCount > 1 && 's'} réponse{goodAnswerCount > 1 && 's'} sur {answersProgression.length}.
+                  </p>
+                  <code><em>
+                  Phrase de conclusion<br/>
+                  Bouton «Partager»
+                  </em></code>
+                </>
               }
             </div>
           : ''}
-          <div style={{marginTop: '2rem'}}>
-            <code><em>
-            <b>Notes conclusion du Quiz</b> :<br/>
-            Résumé des résultats bonnes réponses sur total.<br/>
-            Phrase de conclusion<br/>
-            Bouton «Partager»
-            </em></code>
-          </div>
         </SectionConclusion>
     
       </div>

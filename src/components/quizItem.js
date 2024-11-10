@@ -99,7 +99,7 @@ const Choix = styled.div`
 
 gsap.registerPlugin(useGSAP);
 
-const QuizItem = ({ itemData, onQuizItemChange }) => {
+const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 	const [selectedChoice, setSelectedChoice] = useState(null);
 	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
 	
@@ -166,7 +166,7 @@ const QuizItem = ({ itemData, onQuizItemChange }) => {
 		>
 			<div className='grid'>
 				<Presentation className='presentation'>
-					<h2>{itemData.title}</h2>
+					<h2><span>{itemIndex + 1} - </span> {itemData.title}</h2>
 					<div className='situation'>
 						{ itemData.situation.map( (paragraphe, index) => <p key={index}>{paragraphe}</p>)}
 					</div>

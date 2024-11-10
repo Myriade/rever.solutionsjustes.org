@@ -20,10 +20,6 @@ export default function quizData() { return [
 				text: 'étudiant·e international·e',
 				isRightAnswer: false
 			},
-			{
-				text: 'liée à un permis de travail fermé',
-				isRightAnswer: false
-			}
 		],
 		explications: [`Apparaît ici une phrase ou deux d'explications (à rédiger)`]
 	} , {
@@ -36,10 +32,6 @@ export default function quizData() { return [
 		],
 		question: 'Selon vous, cette personne est ...',
 		choix: [
-			{
-				text: 'en permis de séjour temporaire',
-				isRightAnswer: false
-			},
 			{
 				text: 'sans statut d’immigration',
 				isRightAnswer: true
@@ -65,10 +57,6 @@ export default function quizData() { return [
 			{
 				text: 'en permis de séjour temporaire',
 				isRightAnswer: true
-			},
-			{
-				text: 'sans statut d’immigration',
-				isRightAnswer: false
 			},
 			{
 				text: 'étudiant·e international·e',
