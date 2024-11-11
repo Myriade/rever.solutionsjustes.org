@@ -35,8 +35,19 @@ const Presentation = styled.div`
 	padding: var(--v-spacer) var(--h2-spacer);
 	border-bottom: 2px solid var(--color-bleu-tres-fonce);
 	
-	p:not(:first-child) {
-		font-size: 1rem;}
+	h2 {
+		text-transform: uppercase;
+		font-size: clamp(25px, 4vw, 2.5rem);
+		line-height: 1.12;
+		font-weight: 600;
+	}
+	
+	p {
+		line-height: 1.6;
+		&:first-child {
+			font-weight: 600;}
+		&:not(:first-child) {
+			font-size: 1rem;}}
 	
 	${media.desktopUp`
 	`};
@@ -167,9 +178,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 			<div className='grid'>
 				<Presentation className='presentation'>
 					<h2><span>{itemIndex + 1} - </span> {itemData.title}</h2>
-					<div className='situation'>
-						{ itemData.situation.map( (paragraphe, index) => <p key={index}>{paragraphe}</p>)}
-					</div>
+					<div className='situation' dangerouslySetInnerHTML={{ __html: itemData.situation }} />
 				</Presentation>
 			
 				<Interaction className='interaction'>
