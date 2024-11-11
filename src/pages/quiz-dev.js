@@ -162,7 +162,7 @@ const SectionProgression = styled.section`
       font-weight: bold;
       font-size: 1.25rem;
       font-style: italic;
-      color: var(--color-bleu-tres-fonce);
+      color: white;
       position: absolute;
       top: -4px;
       right: 0;}
@@ -176,13 +176,9 @@ const SectionProgression = styled.section`
         right: -3px;
         font-weight: normal;}}
     
-    &--bonne .question__reponse {
-      color: white;}
-    
     &--mauvaise .question__reponse {
       color: var(--color-rouge);}
-  }
-    
+  } 
 `;
 
 const SectionConclusion = styled.section`
@@ -428,7 +424,7 @@ const QuizDevPage = () => {
             </div>
             <div className='cta'>
               <button 
-                className='button'
+                className='button centered'
                 onClick={shortcutClickHandler}
               >
                 Commencer le quiz&nbsp;&nbsp;<span>→</span>
@@ -447,7 +443,7 @@ const QuizDevPage = () => {
               `}>
                 <div className='question__point'>
                   <div className='question__reponse'>
-                    {question.answerState === 'bonne' && '✔'}{question.answerState === 'mauvaise' && '✗'}
+                    {question.answerState === 'bonne' && '\u2714'}{question.answerState === 'mauvaise' && '\u2717'}
                   </div>
                   <div className='question__number'>
                     {question.questionNumber}
@@ -474,7 +470,7 @@ const QuizDevPage = () => {
             <div> 
               { answersProgression[answersProgression.length - 1 ].answerState == 'attente' ? 
                 <div className='grid'>
-                  <button className='button' onClick={ goNextHandler }>
+                  <button className='button centered' onClick={ goNextHandler }>
                     Prochaine question
                   </button>
                 </div>

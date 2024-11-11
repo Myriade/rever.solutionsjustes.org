@@ -21,6 +21,7 @@ const Item = styled.div`
 			visibility: hidden;}}
 			
 	${media.desktopUp`
+		background: linear-gradient(to right, white, white 50%, var(--color-bleu-tres-fonce) 50%, var(--color-bleu-tres-fonce) 100%);
 		> .grid {
 			grid-template-columns: 1fr 1fr;
 			gap: 0;}
@@ -35,12 +36,36 @@ const Presentation = styled.div`
 	padding: var(--v-spacer) var(--h2-spacer);
 	border-bottom: 2px solid var(--color-bleu-tres-fonce);
 	
+	.grid {
+		grid-template-columns: min-content auto;
+		align-items: center;
+		gap: var(--h-spacer);
+		.cercle {
+			border: 1px solid var(--color-bleu-clair);
+			border-radius: 50%;
+			width: 96px;
+			height: 96px;
+			display: grid;
+			justify-items: center;
+			align-items: center;
+			position: relative;}
+		.number {
+			position: absolute;
+			top: -4px;
+			left: 0;
+			color: var(--color-bleu-clair);
+			font-size: 1.5rem;
+			padding-inline: 0.25em;
+			background: white;
+			border-radius: 50%;}
+		img {
+			width: 48px;}}
+	
 	h2 {
 		text-transform: uppercase;
 		font-size: clamp(25px, 4vw, 2.5rem);
 		line-height: 1.12;
-		font-weight: 600;
-	}
+		font-weight: 600;}
 	
 	p {
 		line-height: 1.6;
@@ -60,12 +85,23 @@ const Interaction = styled.div`
 	border-bottom: 2px solid var(--color-bleu-tres-fonce);
 	
 	.question h3 {
-		font-size: 1.5rem;}
+		font-size: 1.2rem;
+		text-align: center;
+		line-height: 1.6;}
 		
 	.resultat {
-		display: grid;
-		grid-template-rows: 1fr 1fr; 
-	}
+		text-align: center;
+		margin-top: 1rem;
+		color: var(--color-bleu-tres-fonce);
+		border-radius: var(--border-radius);
+		padding: 1rem 2rem;
+		grid-template-rows: 1fr 1fr;}
+	
+	.answer p {
+		margin-block: 0;
+		font-weight: 600;
+		&:first-child {
+			font-size: 1.75rem;}}
 	
 	${media.desktopUp`
 	`};
@@ -76,32 +112,54 @@ const Choix = styled.div`
 	fieldset {
 		border: 0;
 		margin-inline: auto;
-		display: flex;
+		display: grid;
 		gap: 1rem;
-		flex-wrap: wrap;
-		justify-content: center;
-		justify-items: space-evenly;}
+		justify-content: center;}
 	input {
 		visibilty: hidden;
 		display: none;}
 		
 	label {
 		display: block;
-		color: white;
-		background: #777;
-		padding: 0.3em 0.8em;
+		background: white;
+		color: var(--color-bleu-tres-fonce);
+		padding: 0.3em 1.5em;
 		border-radius: 0.5em;
 		border: 3px dashed transparent;
 		font-size: 1rem; 
+		font-weight: 600;
+		display: flex;
+		gap: 1.75rem;
+		align-items: center;
+		span {
+			background: var(--color-bleu-clair);
+			color: white;
+			font-weight: 800;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			display: grid;
+			justify-items: center;
+			align-items: center;}
 		&:hover {
-			cursor: pointer;}
-		&:hover {
-			background: var(--color-bleu-clair);}}
+			cursor: pointer;
+			background: var(--color-bleu-clair);
+			color: white;
+			span {
+				background: white;
+				color: var(--color-bleu-clair);}}}
 	
 	&.is-answered {
 		label:hover {
-			background: #777;
-			cursor: unset;}}
+			cursor: unset;
+			background: white;
+			color: var(--color-bleu-tres-fonce);
+			span {
+				background: var(--color-bleu-clair);
+				color: white;
+			}
+		}
+	}
 	
 	${media.desktopUp`
 	`};
@@ -145,27 +203,31 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 		choixRefElem.classList.add('is-answered');
 		choixRefElem.querySelector('fieldset').setAttribute('disabled', '');
 		
+		let tl = gsap.timeline();
+		
 		// Selected wrong answer becomes red
-		gsap.to( itemRefElem.querySelector(`label[for=${clickedChoiceId}]:not([for=${rightAnswerId}])`), {
-			backgroundColor: 'var(--color-rouge)',
+		tl.to( itemRefElem.querySelector(`label[for=${clickedChoiceId}]:not([for=${rightAnswerId}])`), {
+			backgroundColor: '#F15959',
 			duration: 0.5
 		});
 		
-		// Right aswwer becomes green
-		gsap.to( itemRefElem.querySelector(`label[for=${rightAnswerId}]`), {
-			backgroundColor: 'white',
-			color: 'var(--color-bleu-tres-fonce)',
+		// Right answer becomes bleu
+		tl.to( itemRefElem.querySelector(`label[for=${rightAnswerId}]`), {
+			backgroundColor: '#1e8ed2',
+			color: 'white',
 			duration: 0.5,
-			delay: 0.5
-		});
+		}, '<');
+		
+		tl.to( itemRefElem.querySelector(`label[for=${rightAnswerId}] span`), {
+			backgroundColor: 'white',
+			color: '#1e8ed2',
+			duration: 0.5,
+		}, '<');
 		
 		// Explanation text appears
-		gsap.from( itemRefElem.querySelectorAll('.resultat p'), {
-			autoAlpha: 0,
-			duration: 1,
-			stagger: 0.5,
-			delay: 1
-		});
+		tl.to( itemRefElem.querySelectorAll('.resultat'), {
+			backgroundColor: 'white',
+			duration: 1,		});
 		
 	});
 	
@@ -177,13 +239,19 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 		>
 			<div className='grid'>
 				<Presentation className='presentation'>
-					<h2><span>{itemIndex + 1} - </span> {itemData.title}</h2>
+					<div className='grid'>
+						<div className='cercle'>
+							<div className='number'>{itemIndex + 1}</div>
+							<img src={`/images/quiz/${itemData.id}.svg`} alt='Illustration portrait' />
+						</div>
+						<h2>{itemData.title}</h2>
+					</div>
 					<div className='situation' dangerouslySetInnerHTML={{ __html: itemData.situation }} />
 				</Presentation>
 			
 				<Interaction className='interaction'>
 					<div className='question'>
-						<h3>{itemData.question}</h3>
+						<h3>Selon vous,<br/> cette personne est dans quelle situation&nbsp;?</h3>
 					</div>
 					<Choix ref={choixRef}>
 						{ arrayIsShuffled === true ? 
@@ -203,7 +271,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 												htmlFor={choiceId}
 												className={ choiceId == selectedChoice ? 'selected' : '' }
 											>
-												{choix.text}
+												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span>{choix.text}
 											</label>
 										</div>
 								)})}
@@ -213,12 +281,18 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 					<div className='resultat'>
 						<p className='answer'>
 							{ selectedChoice == rightAnswerId ? 
-								`Bien vu ! Cette personne est bien ${rightAnswerText}.`
+								(<>
+									<p>Bien vu !</p> 
+									<p>Cette personne est bien <span className='lowercase'>{rightAnswerText}</span>.</p>
+								</>)
 							: ''} 
 							
 							{ selectedChoice != rightAnswerId && selectedChoice !== null ?
-								`Oups ! En vérité, cette personne est ${rightAnswerText}.`
-							: <span>&nbsp;</span> }
+								(<>
+									<p>Oups !</p>
+									<p>En vérité, cette personne est <span className='lowercase'>{rightAnswerText}</span>.</p>
+								</>)
+							: '' }
 						</p>
 						
 						<p className='explication'>
