@@ -182,12 +182,12 @@ const SectionProgression = styled.section`
 `;
 
 const SectionConclusion = styled.section`
-  min-height: 50vh;
   border-top: 1px solid var(--color-bleu-tres-fonce);
   
   .grid {
+    height: 35vh;
     justify-items: center;
-  }
+    align-items: center;}
     
   h3 {
     font-size: 2rem;
@@ -200,7 +200,10 @@ const SectionConclusion = styled.section`
   
   .button {
     margin-top: var(--h-spacer);
-    padding-inline: 3vw;}
+    padding-inline: 3vw;
+    span {
+      margin-left: 1rem;
+      font-weight: 100;}}
   
   ${media.mediumUp`
     
@@ -219,7 +222,7 @@ const QuizDevPage = () => {
   const offsetHeight = useRef()
   const { contextSafe } = useGSAP({ scope: gsapPageContainerRef });
   
-  // Get Headerr and progresssion frise offset height for scrolling offset
+  // Get Header and progresssion frise offset height for scrolling offset
   useEffect ( () => {
     function getOffsetHeight() {
       const headerHeight = document.querySelector('header').offsetHeight;
@@ -317,7 +320,25 @@ const QuizDevPage = () => {
       }
     });
     
-  }, { dependencies: [screenType], scope: gsapPageContainerRef } );
+  }, {dependencies: [screenType]} );
+  
+  // Dévoiler la prochaine question lorsqu'on on défile au delà du bouton Prochaine question
+  useEffect( () => {
+    if ( activeQuestion !== null ) {
+      // seulement si la question active n'est pas la première et que la dernière est en attente
+      if ( activeQuestion !== 0 && answersProgression[quizData.length - 1 ].answerState === 'attente' ) {
+        ScrollTrigger.create({
+          id: 'nextOnScroll',
+          trigger: '#conclusion',
+          start: 'bottom bottom',
+          once: true,
+          onEnter: () => {
+            goNextHandler();
+          },
+        });
+      }
+    }
+  }, [activeQuestion]);
   
   // Event handlers
   const shortcutClickHandler = contextSafe(() => {
@@ -328,7 +349,7 @@ const QuizDevPage = () => {
     goNextHandler();
   });
   
-  // Next Question animation
+  // Go to Next Question animation
   const goNextHandler = contextSafe(() => {
     const quizContainerElem = gsapPageContainerRef.current.querySelector('#quiz');
     const activeQInteraction = quizContainerElem.querySelector(`.quiz-item:nth-child(${activeQuestion + 1}) > .grid`);
@@ -357,29 +378,30 @@ const QuizDevPage = () => {
     });
     
     // dévoiler les 2 zones zones de la prochaine question en alpha transition une à la fois
-    //if (activeQInteraction !== null) {
-      tl.to( activeQInteraction.children, {
-        autoAlpha: 1,
-        duration: 2,
-        stagger: 1,
-        onStart: () => {
-          // Sets the border color of the current question interaction div to white
-          gsap.set( prevQInteraction, {
-            borderColor: 'white'
-          });
-        }
-      });   
-    //}
+    tl.to( activeQInteraction.children, {
+      autoAlpha: 1,
+      duration: 2,
+      stagger: 1,
+      onStart: () => {
+        // Sets the border color of the current question interaction div to white
+        gsap.set( prevQInteraction, {
+          borderColor: 'white'
+        });
+      },
+      onComplete: () => { ScrollTrigger.refresh() },
+    });
 
-  }, { dependencies: [screenType], scope: gsapPageContainerRef } );
+  }, { dependencies: [screenType, activeQuestion], scope: gsapPageContainerRef } );
   
   const updateQuiz = (index, answerResult) => {
-    
     // Progression Bar
     setAnswersProgression( prevState => {
-      return prevState.map((item, i) => 
-        i === index ? { ...item, answerState: answerResult } : item
-      );
+      return prevState.map((item, i) => {
+        if (i === index ) { 
+          return { ...item, answerState: answerResult }; 
+        }
+        return item;
+      });
     });
     
     // Conclusion result
@@ -387,7 +409,11 @@ const QuizDevPage = () => {
       setGoodAnswerCount( goodAnswerCount + 1 );
     }
     
-    setActiveQuestion( index + 1 )
+    const lastQuestionIndex = answersProgression.length - 1;
+    
+    if ( index < lastQuestionIndex ) {
+      setActiveQuestion( index + 1 )
+    }
     
   };
   
@@ -467,15 +493,15 @@ const QuizDevPage = () => {
         
         <SectionConclusion id='conclusion'>
           { answersProgression !== null ?
-            <div> 
-              { answersProgression[answersProgression.length - 1 ].answerState == 'attente' ? 
+            <>
+              { answersProgression[ answersProgression.length - 1 ].answerState == 'attente' ? 
                 <div className='grid'>
                   <button className='button centered' onClick={ goNextHandler }>
-                    Prochaine question
+                    Prochaine question<span>❯</span>
                   </button>
                 </div>
                 : 
-                <>
+                <div>
                   <p>
                     Vous avez { goodAnswerCount } bonne{goodAnswerCount > 1 && 's'} réponse{goodAnswerCount > 1 && 's'} sur {answersProgression.length}.
                   </p>
@@ -483,9 +509,9 @@ const QuizDevPage = () => {
                   Phrase de conclusion<br/>
                   Bouton «Partager»
                   </em></code>
-                </>
+                </div>
               }
-            </div>
+            </>
           : ''}
         </SectionConclusion>
     

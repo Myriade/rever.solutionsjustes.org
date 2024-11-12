@@ -279,7 +279,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 						: '...' }
 					</Choix>
 					<div className='resultat'>
-						<p className='answer'>
+						<div className='answer'>
 							{ selectedChoice == rightAnswerId ? 
 								(<>
 									<p>Bien vu !</p> 
@@ -293,7 +293,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 									<p>En vérité, cette personne est <span className='lowercase'>{rightAnswerText}</span>.</p>
 								</>)
 							: '' }
-						</p>
+						</div>
 						
 						<p className='explication'>
 							{ selectedChoice !== null ? 
