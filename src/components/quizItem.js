@@ -26,7 +26,7 @@ const Item = styled.div`
 			grid-template-columns: 1fr 1fr;
 			gap: 0;}
 		&:first-child .interaction {
-			border-top: 2px solid var(--color-bleu-tres-fonce);}
+			border-top: 2px solid var(--color-bleu-tres-pale);}
 	`};
 `;
 
@@ -34,7 +34,7 @@ const Presentation = styled.div`
 	background: white;
 	color: var(--color-bleu-tres-fonce);
 	padding: var(--v-spacer) var(--h2-spacer);
-	border-bottom: 2px solid var(--color-bleu-tres-fonce);
+	border-bottom: 2px solid var(--color-bleu-tres-pale);
 	
 	.grid {
 		grid-template-columns: min-content auto;
@@ -82,7 +82,7 @@ const Interaction = styled.div`
 	background: var(--color-bleu-tres-fonce);
 	color: white;
 	padding: var(--v-spacer) var(--h2-spacer);
-	border-bottom: 2px solid var(--color-bleu-tres-fonce);
+	border-bottom: 2px solid var(--color-bleu-tres-pale);
 	
 	.question h3 {
 		font-size: 1.2rem;
@@ -125,7 +125,6 @@ const Choix = styled.div`
 		color: var(--color-bleu-tres-fonce);
 		padding: 0.3em 1.5em;
 		border-radius: 0.5em;
-		border: 3px dashed transparent;
 		font-size: 1rem; 
 		font-weight: 600;
 		display: flex;
@@ -253,7 +252,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 					<div className='question'>
 						<h3>Selon vous,<br/> cette personne est dans quelle situation&nbsp;?</h3>
 					</div>
-					<Choix ref={choixRef}>
+					<Choix ref={choixRef} className='choix'>
 						{ arrayIsShuffled === true ? 
 							<fieldset id={`input-radio-${itemData.id}`}>
 								{ shuffledChoiceArray.current.map( (choix, index) => {

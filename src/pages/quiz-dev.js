@@ -182,21 +182,40 @@ const SectionProgression = styled.section`
 `;
 
 const SectionConclusion = styled.section`
-  border-top: 1px solid var(--color-bleu-tres-fonce);
+  border-top: 1px solid var(--color-bleu-tres-pale);
   
-  .grid {
+  .next {
     height: 35vh;
     justify-items: center;
-    align-items: center;}
-    
-  h3 {
-    font-size: 2rem;
-    font-weight: 500;}
+    align-content: center;}
     
   p {
+    color: var(--color-bleu-tres-fonce);
     text-align: center;
-    font-weight: 500;
-    font-size: 1.2rem;}
+    font-weight: 300;
+    font-size: 1.2rem;
+    max-width: 65ch;
+    b {
+      font-weight: 700;}}
+    
+  p.instructions {
+    color: #888; 
+    font-style: italic;}
+  
+  .resultats {
+    visibility: hidden;
+    opacity: 0;
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--v-h2-spacer);
+    display: grid;
+    justify-items: center;}
+    
+  p.resultats__finaux {
+    font-weight: 600;
+    background: var(--color-bleu-tres-pale);
+    border-radius: 0.5em;
+    padding: 1em 2em;}
   
   .button {
     margin-top: var(--h-spacer);
@@ -251,7 +270,7 @@ const QuizDevPage = () => {
     }
     
     if (screenType) {
-      gsapAnimations();
+      introAnimations();
     }  
   }, [screenType]);
   
@@ -267,8 +286,8 @@ const QuizDevPage = () => {
     setActiveQuestion(0); 
   }
   
-  // Gsap general animations 
-  const gsapAnimations = contextSafe(() => {
+  // Intro Animations 
+  const introAnimations = contextSafe(() => {
   
     const pageRefElem = gsapPageContainerRef.current;
     const heroTopPosition = pageRefElem.querySelector('#page-hero').getBoundingClientRect().y;
@@ -340,26 +359,39 @@ const QuizDevPage = () => {
     }
   }, [activeQuestion]);
   
-  // Event handlers
-  const shortcutClickHandler = contextSafe(() => {
-    gsap.to( window, { 
-      duration: 1, 
-      scrollTo: {y: '#quiz', offsetY: 180} 
-    });
-    goNextHandler();
-  });
+  // Conclusion Animation : lorsque la dernière question est répondue, la zone de conclusion devient bleu foncée
+  const conclusionAnimations = contextSafe(() => {
+    if ( answersProgression !== null && answersProgression[ answersProgression.length - 1 ].answerState !== 'attente' ) {
+      
+      let conclusionTimeline = gsap.timeline();
+      
+      conclusionTimeline.to('#conclusion', {
+        backgroundColor: '#d6e7f5',
+        duration: 1,
+        ease: 'expoScale(0.5,7,none)',
+        delay: 2,
+      });
+      
+      conclusionTimeline.to('#conclusion .resultats', {
+        autoAlpha: 1,
+        duration: 1,
+      }, '<');
+      
+    }
+  }, {dependencies: [answersProgression]});
+  conclusionAnimations();
   
-  // Go to Next Question animation
+  // Event handlers
   const goNextHandler = contextSafe(() => {
     const quizContainerElem = gsapPageContainerRef.current.querySelector('#quiz');
     const activeQInteraction = quizContainerElem.querySelector(`.quiz-item:nth-child(${activeQuestion + 1}) > .grid`);
     const prevQInteraction = quizContainerElem.querySelector(`.quiz-item:nth-child(${activeQuestion}) .interaction`);
     
     // Next question reveal Timeline
-    let tl = gsap.timeline();
+    let goNextTimeline = gsap.timeline();
     
     // dévoiler la prochaine question en transition de hauteur
-    tl.to( activeQInteraction, {
+    goNextTimeline.to( activeQInteraction, {
       height: 'auto',
       duration: 0.25,
       ease: 'power1.in',
@@ -369,23 +401,24 @@ const QuizDevPage = () => {
     });
     
     // scroller jusqu'à la prochaine question
-    tl.to( window, { 
+    goNextTimeline.to( window, { 
       duration: 0.5, 
+      ease: 'power1.inOut',
       scrollTo: {
         y: `#quiz-item-${quizData[activeQuestion].id}`,
-        offsetY: offsetHeight.current,
+        offsetY: offsetHeight.current - 2,
       } 
     });
     
     // dévoiler les 2 zones zones de la prochaine question en alpha transition une à la fois
-    tl.to( activeQInteraction.children, {
+    goNextTimeline.to( activeQInteraction.children, {
       autoAlpha: 1,
-      duration: 2,
+      duration: 1.25,
       stagger: 1,
       onStart: () => {
         // Sets the border color of the current question interaction div to white
         gsap.set( prevQInteraction, {
-          borderColor: 'white'
+          borderColor: '#d6e7f5'
         });
       },
       onComplete: () => { ScrollTrigger.refresh() },
@@ -451,7 +484,7 @@ const QuizDevPage = () => {
             <div className='cta'>
               <button 
                 className='button centered'
-                onClick={shortcutClickHandler}
+                onClick={goNextHandler}
               >
                 Commencer le quiz&nbsp;&nbsp;<span>→</span>
               </button>
@@ -494,23 +527,33 @@ const QuizDevPage = () => {
         <SectionConclusion id='conclusion'>
           { answersProgression !== null ?
             <>
+            
               { answersProgression[ answersProgression.length - 1 ].answerState == 'attente' ? 
-                <div className='grid'>
-                  <button className='button centered' onClick={ goNextHandler }>
-                    Prochaine question<span>❯</span>
-                  </button>
-                </div>
-                : 
-                <div>
-                  <p>
-                    Vous avez { goodAnswerCount } bonne{goodAnswerCount > 1 && 's'} réponse{goodAnswerCount > 1 && 's'} sur {answersProgression.length}.
+                <div className='grid next'>
+                  { answersProgression[ answersProgression.length - 2 ].answerState == 'attente' ?
+                    <button className='button centered' onClick={ goNextHandler }>
+                      Prochaine question<span>❯</span>
+                    </button>
+                  : ''}
+                  <p className='instructions'>
+                    Encore {answersProgression.length - activeQuestion} question{answersProgression.length - activeQuestion > 1 && 's'} à répondre.
                   </p>
-                  <code><em>
-                  Phrase de conclusion<br/>
-                  Bouton «Partager»
-                  </em></code>
                 </div>
-              }
+              : ''}
+              
+              <div className='resultats'>
+                { answersProgression[ answersProgression.length - 1 ].answerState !== 'attente' ?
+                  <>
+                    <p className='resultats__finaux'>
+                     Résultat : { goodAnswerCount }/{answersProgression.length} !
+                    </p>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <b>Ut enim ad minim veniam, quis nostrud</b>. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                    </p>
+                  </>
+                : '' }
+              </div>
+              
             </>
           : ''}
         </SectionConclusion>

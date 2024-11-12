@@ -74,9 +74,6 @@ const SectionRealites = styled.section`
   padding: 0.5rem;
   background: var(--color-bleu-tres-pale);
   
-  .no-glide-slides {
-  }
-  
   > .titre {
     h2 {
       color: var(--color-bleu-tres-fonce);}}
