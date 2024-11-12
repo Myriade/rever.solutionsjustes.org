@@ -530,11 +530,9 @@ const QuizDevPage = () => {
             
               { answersProgression[ answersProgression.length - 1 ].answerState == 'attente' ? 
                 <div className='grid next'>
-                  { answersProgression[ answersProgression.length - 2 ].answerState == 'attente' ?
-                    <button className='button centered' onClick={ goNextHandler }>
-                      Prochaine question<span>❯</span>
-                    </button>
-                  : ''}
+                  <button className='button centered' onClick={ goNextHandler }>
+                    Prochaine question<span>❯</span>
+                  </button>
                   <p className='instructions'>
                     Encore {answersProgression.length - activeQuestion} question{answersProgression.length - activeQuestion > 1 && 's'} à répondre.
                   </p>
@@ -548,7 +546,7 @@ const QuizDevPage = () => {
                      Résultat : { goodAnswerCount }/{answersProgression.length} !
                     </p>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <b>Ut enim ad minim veniam, quis nostrud</b>. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                      <i>Les textes de conclusions et le bouton de partage seront intégrés bientôt.</i>
                     </p>
                   </>
                 : '' }

@@ -70,7 +70,9 @@ const Presentation = styled.div`
 	p {
 		line-height: 1.6;
 		&:first-child {
-			font-weight: 600;}
+			font-weight: 600;
+			b {
+				font-weight: 800;}}
 		&:not(:first-child) {
 			font-size: 1rem;}}
 	
@@ -102,6 +104,16 @@ const Interaction = styled.div`
 		font-weight: 600;
 		&:first-child {
 			font-size: 1.75rem;}}
+			
+	.explication {
+		p:not(:first-child) {
+			font-size: 1rem;}
+		a {
+			background: var(--color-bleu-tres-pale);
+			border-radius: calc(var(--border-radius) / 2);
+			padding: 0.25em 0.5em;
+		}
+	}
 	
 	${media.desktopUp`
 	`};
@@ -282,23 +294,22 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 							{ selectedChoice == rightAnswerId ? 
 								(<>
 									<p>Bien vu !</p> 
-									<p>Cette personne est bien <span className='lowercase'>{rightAnswerText}</span>.</p>
+									<p>En effet, <span className='lowercase'>{rightAnswerText}</span>.</p>
 								</>)
 							: ''} 
 							
 							{ selectedChoice != rightAnswerId && selectedChoice !== null ?
 								(<>
 									<p>Oups !</p>
-									<p>En vérité, cette personne est <span className='lowercase'>{rightAnswerText}</span>.</p>
+									<p>En vérité <span className='lowercase'>{rightAnswerText}</span>.</p>
 								</>)
 							: '' }
 						</div>
 						
-						<p className='explication'>
-							{ selectedChoice !== null ? 
-								itemData.explications
-								: <span>&nbsp;</span> }
-						</p>
+						{ selectedChoice !== null ? 
+							<div className='explication' dangerouslySetInnerHTML={{ __html: itemData.explications }} />
+						: <span>&nbsp;</span> }
+
 					</div>
 				</Interaction>
 			</div>
