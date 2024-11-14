@@ -22,6 +22,7 @@ const Header = styled.header`
   
   .internal-nav {
     display: flex;
+    justify-items: center;
     gap: 1rem;}
   
   a {
@@ -31,12 +32,12 @@ const Header = styled.header`
     &:hover {
       text-decoration: underline;}
     &.active {
-      font-weight: 300;
-      &:hover {
-        text-decoration: none;
-        cursor: default;
-      }
-    }}
+        text-decoration: underline;}}}
+        
+  ${media.mediumUp`
+    .mirror {
+      width: 180px;}
+  `}
   
 `;
 
@@ -99,7 +100,7 @@ export default function PageLayout({ children }) {
       <Header>
         <a 
           href='https://www.solutionsjustes.org/'
-          title='Solutions Justes MCM'
+          title='Site principal de Solutions Justes MCM'
           className='sj-logo'
         >
           <StaticImage 
@@ -109,10 +110,11 @@ export default function PageLayout({ children }) {
             style={{maxWidth: '180px'}}
           />
         </a>
-        <div className='internal-nav'>
-          <Link to='/' activeClassName='active'>Rêver</Link>
-          <Link to='/connaitre' activeClassName='active'>Connaître</Link>
-        </div>
+        <nav className='internal-nav'>
+          <Link to='/' activeClassName='active' title='Rêver à l&rsquo;essentiel'>Rêver</Link>
+          <Link to='/connaitre' activeClassName='active' title='Connaître l&rsquo;essentiel'>Connaître</Link>
+        </nav>
+        <div className='mirror'></div>
       </Header>
       
       <Main>
