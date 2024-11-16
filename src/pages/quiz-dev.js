@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
+import { Link } from 'gatsby'
 import PageLayout from '../layouts/pageLayout'
 import styled from 'styled-components'
 import { StaticImage } from 'gatsby-plugin-image'
@@ -209,7 +210,12 @@ const SectionConclusion = styled.section`
     border-radius: var(--border-radius);
     padding: var(--v-h2-spacer);
     display: grid;
-    justify-items: center;}
+    justify-items: center;
+    p a {
+      background: var(--color-bleu-tres-pale);
+      border-radius: calc(var(--border-radius) / 2);
+      padding: 0.25em 0.5em;
+    }}
     
   p.resultats__finaux {
     font-weight: 600;
@@ -545,9 +551,26 @@ const QuizDevPage = () => {
                     <p className='resultats__finaux'>
                      Résultat : { goodAnswerCount }/{answersProgression.length} !
                     </p>
-                    <p>
-                      <i>Les textes de conclusions et le bouton de partage seront intégrés bientôt.</i>
-                    </p>
+                    
+                    { goodAnswerCount < 4 ? 
+                      <>
+                        <p><b>Pas de panique, vous êtes sur la bonne voie&nbsp;!</b> Il est normal de ne pas tout savoir : les personnes migrantes sans statut et à statut précaire vivent souvent dans l'invisibilité, ce qui rend difficile la compréhension de leurs histoires et de leurs défis. Cependant, ce quiz vous a permis de mieux comprendre certains aspects clés de la réalité des personnes migrantes et les enjeux liés à leur statut d'immigration.</p>
+                        <p>Nous vous encourageons à poursuivre votre apprentissage<br/> 
+                        <Link to='/connaitre'>en explorant ces autres récits</Link><br/> 
+                        et en nous suivant sur les réseaux sociaux pour en savoir plus.</p>
+                      </>
+                    : 
+                      <>
+                        <p><b>Félicitations&nbsp;!</b> Vous avez désormais une meilleure compréhension de la réalité vécue par les personnes migrantes sans statut ou à statut précaire, dont de nombreux problèmes et enjeux découlent de leur statut d’immigration.</p>
+                        <p>Continuez à vous informer <Link to='/connaitre'>avec ces autres récits</Link><br/> et en nous suivant sur les réseaux sociaux.</p>
+                      </>
+                    }
+                    
+                    <div className='socials'>
+                      <a href='' target='_blank'>FB</a> 
+                      <a href='' target='_blank'>LI</a>
+                    </div>
+                    
                   </>
                 : '' }
               </div>

@@ -128,6 +128,19 @@ button {
 	&.centered {
 		left: initial;
 		margin-inline: auto;}}
+		
+	.socials {
+		display: flex;
+		gap: 1.5rem;
+		a {
+			width: 3ch;
+			text-align: center;
+			padding-block: 0.25em;
+			background: var(--color-bleu-clair);
+			color: white;
+			border-radius: 5px;
+			&:hover {
+				background: var(--color-bleu-tres-fonce);}}}
 
 // Utils
 .text-centered {

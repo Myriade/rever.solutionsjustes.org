@@ -5,17 +5,24 @@ Design : Republik & Manon Lecante
 Front-end framework : Gatsby/React
 
 ## Installation
-- Récupérer le code source dans le repo GIT nommé DEV sur le serveur d'hébergement
+- Récupérer le code source dans le repo GIT
 - S'assurer que node.js et NPM sont installés sur la machine locale
 - Dans un terminal : `npm install`
 
 ## Développement
-- Dans un terminal : `run npm develop`
+- Terminal : `run npm develop`
 - Dans un browser, la version en développement est disponible à l'adresse localhost:8000/
+
+## Build
+Pour tester le build en local, avant le déploiement
+- Terminal : `run npm build`
+- Terminal : `run npm serve`
+Le site built est disponible sur l'url du serveur affiché dans le terminal
 
 ### Variables .env
 Attention!!
-Le variables d'environnement doivent être préfixées de GATSBY_ pour les protéger côté serveur et éviter de les exposer côté browser. C'est important surtout pour le build au déploiement.
+Le variables d'environnement doivent être préfixées de GATSBY_ pour les protéger côté serveur et éviter de les exposer côté browser. C'est important surtout pour le build au déploiement. Elles doivent être ajoutée manuellement en local dans le fichier .env.development sou la forme :
+`GATSBY_MA_VARIABLE= 'valeur-de-ma-variable'`
 
 ## Déploiement
 Push master branch to GitHub repo. It triggers a deployment script on Netlify
