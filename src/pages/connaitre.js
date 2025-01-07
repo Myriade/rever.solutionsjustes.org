@@ -1103,14 +1103,15 @@ const ConnaitrePage = () => {
             navClickHandler(correspondingDataArrayIndex);
             mobileIsFirstLoad.current = false;
           }
-        } else if (urlHash.current === '#s-impliquer') {
+        } else if (urlHash.current === '#s-impliquer' && mobileIsFirstLoad.current) {
           if (screenType === 'mouse' || glideIsInit === true ) {
             simpliquerClickHandler();
+            mobileIsFirstLoad.current = false;
           }
         }
       }
     }
-  }, [screenType, afterGsapFirstInit, activeRealite, glideIsInit, navClickHandler, realitesDataArray]);
+  }, [screenType, afterGsapFirstInit, activeRealite, glideIsInit, navClickHandler, realitesDataArray, simpliquerClickHandler]);
   
   // Mobile Glide Carrousel init
   useEffect( () => {
@@ -1142,7 +1143,7 @@ const ConnaitrePage = () => {
       }
     }
     
-  }, [activeRealite, realitesDataArray]);
+  }, [activeRealite, realitesDataArray, glideIsInit, screenType]);
   
   return (
     <div id='page-wrapper'>
