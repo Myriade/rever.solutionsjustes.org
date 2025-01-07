@@ -587,8 +587,7 @@ const ConnaitrePage = () => {
   const [glideIsInit, setGlideIsInit] = useState(false);
   const [afterGsapFirstInit, setAfterGsapFirstInit] = useState(false);
   
-  console.log('afterGsapFirstInit = ', afterGsapFirstInit);
-  
+  const urlHash = useRef(null);
   const gsapContainerRef = useRef();
   const timelineRef = useRef([]);
   const glideCarrousel = useRef();
@@ -596,87 +595,9 @@ const ConnaitrePage = () => {
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
   
-  // Screen type check and proper animations trigger
-  useEffect( () => {
-    
-    function screenTypeCheck() {
-      console.log('screenTypeCheck called')
-      if (window.matchMedia('(hover: hover)').matches) {
-        console.log('Device has a mouse or touchpad events');
-        if (window.matchMedia('(min-width: 1200px)').matches) {
-          console.log('Screen is more than 1200px wide.  Full Animations ok.');
-          setScreenType('mouse');
-          gsapAnimations();
-          return
-        } else {
-          setScreenType('mouse-narrow');
-          console.log('Screen is less than 1200px wide. Animations sobres.');
-          sobreGsapAnimations();
-          return
-        }
-      } else {
-        console.log('Device has no mouse, so has touch events. Animations sobres.');
-        setScreenType('touch');
-        sobreGsapAnimations();
-        return
-      }
-    }
-    
-    async function appInitialisation() {
-      await screenTypeCheck();
-      setAfterGsapFirstInit(true);
-    }
-    
-    if (!screenType) {
-      appInitialisation();
-    }
-  }, []);
-  
-  // Refresh all ScrollTrigger avec the first animations trigger
-  useEffect( () => { 
-    if (afterGsapFirstInit === true ) {
-      ScrollTrigger.refresh(); 
-    }
-  }, [afterGsapFirstInit] )
-  
-  // Hash in url triggers scroll to section
-  useEffect( () => {
-    if ( (screenType !== '') && (afterGsapFirstInit === true) ) {
-      console.log('Hash in url check begin');
-      ScrollTrigger.refresh();
-      if ( window.location.hash ) {
-        
-        if ( (window.location.hash !== '#s-impliquer') && (activeRealite === null)  ) {
-          const hashSubstring = window.location.hash.substring(1);
-          console.log('url has hash : ', hashSubstring);
-          
-          const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hashSubstring);
-          
-          if (screenType === 'mouse') {
-            navClickHandler(correspondingDataArrayIndex);
-            ScrollTrigger.refresh();
-          } else if (glideIsInit === true) {
-            navClickHandler(correspondingDataArrayIndex);
-          }
-        }
-      }
-    }
-  }, [screenType, afterGsapFirstInit, activeRealite, glideIsInit]);
-  
-  // Change hash to the corresponding activeRealite state
-  useEffect( () => {
-    if ( activeRealite !== null ) {
-      const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
-      const newLocationPath = `#${activeRealiteHash}`;
-      window.history.pushState({}, '', newLocationPath);
-    }
-    
-  }, [activeRealite]);
-  
-  // event handlers
+  /******** Event Handlers *******/
   const navClickHandler = contextSafe( (clickedIndex) => {
     console.log('navClickHandler called with ', clickedIndex);
-    const clickedId = realitesDataArray[clickedIndex].idUnique;
     if (clickedIndex !== activeRealite) { setActiveRealite(clickedIndex);}
     
     if (screenType === 'mouse') {
@@ -692,7 +613,6 @@ const ConnaitrePage = () => {
       associateScrollTrigger.scroll(associateScrollTrigger.start + 1);
       
     } else if ( glideIsInit && screenType !== 'mouse' )  {
-      //console.log('navClickHandler screenType = not mouse');
       glideCarrousel.current.go(`=${clickedIndex}`);
       const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
       // scroll to top under the nav, and recalculate the scrolltriggers
@@ -714,14 +634,6 @@ const ConnaitrePage = () => {
     
   }, {dependencies: [activeRealite]});
   
-  const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
-    if (screenType === 'mouse') {
-      gsap.to( window, { 
-        scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
-      });
-    }
-  });
-  
   const glideControlClickHandler = contextSafe( (clickedIndex) => {
     setActiveRealite(clickedIndex);
     // scroll to top
@@ -742,6 +654,15 @@ const ConnaitrePage = () => {
     ScrollTrigger.refresh();
   });
   
+  const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
+    if (screenType === 'mouse') {
+      gsap.to( window, { 
+        scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
+      });
+    }
+  });
+  
+  /******** Gsap Animations *******/
   // Laptop et desktop GSAP Animations 
   const gsapAnimations = contextSafe(() => {
     
@@ -759,7 +680,7 @@ const ConnaitrePage = () => {
       },
     });
     
-    // nav bar pins 
+    // nav bar pins and hash control
     gsap.to('#realites-container', {
       scrollTrigger: {
         id: 'realitesNavPin',
@@ -775,9 +696,15 @@ const ConnaitrePage = () => {
           }
           return endValue;
         },
-        //onEnter: () => { ScrollTrigger.refresh()},
         onLeave: () => {
           document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = 'unset';
+          window.history.pushState({}, '', '#s-impliquer');
+          urlHash.current = '#s-impliquer';
+        },
+        onEnterBack: () => {
+          const activeRealiteHash =  realitesDataArray[3].idUnique;
+          const newLocationPath = `#${activeRealiteHash}`;
+          window.history.pushState({}, '', newLocationPath);
         },
         //markers: true
       }
@@ -963,7 +890,7 @@ const ConnaitrePage = () => {
         onEnter: (self) => {
           console.log('onEnter, ', realiteIndex);
           ScrollTrigger.refresh()
-          if (activeRealite !== realiteIndex) { 
+          if (activeRealite !== realiteIndex && urlHash.current !== '#s-impliquer') { 
             console.log('activeRealite sate change, ', realiteIndex);
             setActiveRealite(realiteIndex);
           }
@@ -1103,6 +1030,89 @@ const ConnaitrePage = () => {
     
   }, { dependencies: [screenType, activeRealite], scope: gsapContainerRef } );
   
+  /******** Browser Effects (useEffect) *******/
+  // Screen type check and proper animations trigger
+  useEffect( () => {
+    
+    function screenTypeCheck() {
+      if (window.matchMedia('(hover: hover)').matches) {
+        console.log('Device has a mouse or touchpad events');
+        if (window.matchMedia('(min-width: 1200px)').matches) {
+          console.log('Screen is more than 1200px wide.  Full Animations ok.');
+          setScreenType('mouse');
+          gsapAnimations();
+          return
+        } else {
+          setScreenType('mouse-narrow');
+          console.log('Screen is less than 1200px wide. Animations sobres.');
+          sobreGsapAnimations();
+          return
+        }
+      } else {
+        console.log('Device has no mouse, so has touch events. Animations sobres.');
+        setScreenType('touch');
+        sobreGsapAnimations();
+        return
+      }
+    }
+    
+    async function appInitialisation() {
+      await screenTypeCheck();
+      setAfterGsapFirstInit(true);
+    }
+    
+    if (!screenType) {
+      appInitialisation();
+    }
+  }, [screenType, gsapAnimations, sobreGsapAnimations]);
+  
+  // Refresh all ScrollTrigger avec the first animations trigger
+  useEffect( () => { 
+    if (afterGsapFirstInit === true ) {
+      ScrollTrigger.refresh(); 
+    }
+  }, [afterGsapFirstInit] )
+  
+  // Hash in url triggers scroll to section
+  useEffect( () => {
+    if ( (screenType !== '') && (afterGsapFirstInit === true) ) {
+      ScrollTrigger.refresh();
+      if ( window.location.hash ) {
+        urlHash.current = window.location.hash;
+        const hashSubstring = urlHash.current.substring(1);
+        console.log('url has hash : ', hashSubstring);
+        if ( (urlHash.current !== '#s-impliquer') && (activeRealite === null)  ) {
+          const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hashSubstring);
+          if (screenType === 'mouse') {
+            navClickHandler(correspondingDataArrayIndex);
+            ScrollTrigger.refresh();
+          } else if (glideIsInit === true) {
+            navClickHandler(correspondingDataArrayIndex);
+          }
+        } else if (urlHash.current === '#s-impliquer') {
+          if (screenType === 'mouse') {
+            const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom;
+            gsap.to(window, { duration: 0, scrollTo: { y: '#s-impliquer', offsetY: headerBottomInViewport } });
+          } else if (glideIsInit === true) {
+            console.log('urlHash.current = #s-impliquer ET glideIsInit');
+            gsap.to(window, { duration: 0.5, scrollTo: { y: '#s-impliquer', offsetY: 130 }} )
+          }
+        }
+      }
+    }
+  }, [screenType, afterGsapFirstInit, activeRealite, glideIsInit, navClickHandler, realitesDataArray]);
+  
+  // Change hash to the corresponding activeRealite state
+  useEffect( () => {
+    if ( activeRealite !== null ) {
+      const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
+      const newLocationPath = `#${activeRealiteHash}`;
+      window.history.pushState({}, '', newLocationPath);
+      urlHash.current = newLocationPath;
+    }
+    
+  }, [activeRealite, realitesDataArray]);
+  
   // Mobile Glide Carrousel init
   useEffect( () => {
     if ( (screenType === 'touch') || (screenType === 'mouse-narrow') ) {
@@ -1159,6 +1169,7 @@ const ConnaitrePage = () => {
                     <a 
                       onClick={() => navClickHandler(index)}
                       aria-label='Aller à la section'
+                      href={`#${realite.idUnique}`}
                     >
                       <div className='avatar'>
                         <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />

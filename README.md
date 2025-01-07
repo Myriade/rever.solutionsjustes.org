@@ -10,13 +10,13 @@ Front-end framework : Gatsby/React
 - Dans un terminal : `npm install`
 
 ## Développement
-- Terminal : `run npm develop`
+- Terminal : `npm run develop`
 - Dans un browser, la version en développement est disponible à l'adresse localhost:8000/
 
 ## Build
 Pour tester le build en local, avant le déploiement
-- Terminal : `run npm build`
-- Terminal : `run npm serve`
+- Terminal : `npm run build`
+- Terminal : `npm run serve`
 Le site built est disponible sur l'url du serveur affiché dans le terminal
 
 ### Variables .env
