@@ -597,7 +597,8 @@ const ConnaitrePage = () => {
   const realitesDataArray = connaitreData();
   
   /******** Event Handlers *******/
-  const navClickHandler = contextSafe( (clickedIndex) => {
+  const navClickHandler = contextSafe( (clickedIndex, event) => {
+    if (typeof event !== 'undefined') { event.preventDefault() }
     // console.log('navClickHandler called with ', clickedIndex);
     if (clickedIndex !== activeRealite) { setActiveRealite(clickedIndex); }
     
@@ -665,7 +666,8 @@ const ConnaitrePage = () => {
     }
   });
   
-  const simpliquerClickHandler = contextSafe( () => {
+  const simpliquerClickHandler = contextSafe( (event) => {
+    event.preventDefault();
     if (glideIsInit !== true) { document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = '0'}
     gsap.to( window, { 
       scrollTo: {y: '#s-impliquer', offsetY: 130},
@@ -909,7 +911,7 @@ const ConnaitrePage = () => {
           }
         },
         onEnterBack: (self) => {
-          console.log('onEnterBack, ', realiteIndex);
+          // console.log('onEnterBack, ', realiteIndex);
           if (activeRealite !== realiteIndex) { 
             // console.log('activeRealite sate change, ', realiteIndex);
             setActiveRealite(realiteIndex);
@@ -1180,8 +1182,9 @@ const ConnaitrePage = () => {
                     className={activeRealite === index ? 'realite-nav-item active' : 'realite-nav-item'}
                   >
                     <a 
-                      onClick={() => navClickHandler(index)}
+                      onClick={(e) => navClickHandler(index, e)}
                       aria-label='Aller à la section'
+                      href={`#${realite.idUnique}`}
                     >
                       <div className='avatar'>
                         <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
@@ -1192,7 +1195,7 @@ const ConnaitrePage = () => {
                   </li>
                 )})}
                 <li className='realite-nav-item shortcut'>
-                  <a href='#s-impliquer' onClick={() => simpliquerClickHandler()}>
+                  <a href='#s-impliquer' onClick={(event) => simpliquerClickHandler(event)}>
                     <div className='avatar'><div>✓</div></div>
                     S'impliquer
                   </a>
