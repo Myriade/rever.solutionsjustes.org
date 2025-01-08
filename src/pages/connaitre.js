@@ -667,7 +667,7 @@ const ConnaitrePage = () => {
   });
   
   const simpliquerClickHandler = contextSafe( (event) => {
-    event.preventDefault();
+    if (typeof event !== 'undefined') { event.preventDefault() }
     if (glideIsInit !== true) { document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = '0'}
     gsap.to( window, { 
       scrollTo: {y: '#s-impliquer', offsetY: 130},
