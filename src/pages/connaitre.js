@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect }  from 'react'
 import PageLayout from '../layouts/pageLayout'
 import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
-import { media } from '../styles/mixins.js'
+import { media, breakpoints } from '../styles/mixins.js'
 
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
@@ -73,6 +73,7 @@ const Section1Hero = styled.div`
 const SectionRealites = styled.section`
   padding: 0.5rem;
   background: var(--color-bleu-tres-pale);
+  margin-inline: auto;
   
   > .titre {
     h2 {
@@ -580,12 +581,30 @@ const Section4Cta = styled.section`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, TextPlugin);
 
+const createBreakpointHandler = (breakpoints, callback) => {
+  const mqls = breakpoints.map(([breakpoint, query]) => ({
+    breakpoint,
+    mql: window.matchMedia(query),
+    handler: (e) => e.matches && callback(breakpoint)
+  }));
+
+  mqls.forEach(({ mql, handler }) => {
+    mql.addListener(handler);
+    handler({ matches: mql.matches });
+  });
+
+  return () => {
+    mqls.forEach(({ mql, handler }) => mql.removeListener(handler));
+  };
+};
+
 const ConnaitrePage = () => {
   /********  States, refs, context and data variables ********/
   const [screenType, setScreenType] = useState(''); 
   const [activeRealite, setActiveRealite] = useState(null);
   const [glideIsInit, setGlideIsInit] = useState(false);
   const [afterGsapFirstInit, setAfterGsapFirstInit] = useState(false);
+  const [isUnmounting, setIsUnmounting] = useState(false);
   
   const mobileIsFirstLoad = useRef(true);
   const urlHash = useRef(null);
@@ -934,6 +953,8 @@ const ConnaitrePage = () => {
       
     }); // end forEach
     
+    console.log('Desktop GSAP init');
+    
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
   // Mobiles touch GSAP Animations sobres 
@@ -1043,30 +1064,64 @@ const ConnaitrePage = () => {
       
     });
     
+    console.log('Mobile GSAP init');
+    
   }, { dependencies: [screenType, activeRealite], scope: gsapContainerRef } );
   
   /******** Browser Effects (useEffect) *******/
+  // Responsive logic on viewport resize
+  useEffect(() => {
+    const cleanup = createBreakpointHandler([
+      ['sm', `(max-width: ${breakpoints.smallMinusOne})`],
+      ['md', `(min-width: ${breakpoints.small}) and (max-width: ${breakpoints.mediumMinusOne})`],
+      ['lg', `(min-width: ${breakpoints.medium}) and (max-width: ${breakpoints.largeMinusOne})`],
+      ['xl', `(min-width: ${breakpoints.large})`]
+    ], (breakpoint) => {
+      console.log(`Viewport size is : ${breakpoint}`);
+      setIsUnmounting(true);
+    });
+    return cleanup;
+  }, []);
+  
+  console.log('isUnmounting :', isUnmounting);
+  
+  if ( isUnmounting === true ) {
+    console.log('DO SOME Logic');
+    // setScreenType('');
+    // ScrollTrigger.killAll();
+    // if (glideCarrousel.current) { glideCarrousel.current.destroy() }
+    // console.log('Unmounting everything...')
+    setIsUnmounting(false);
+  } 
+  
   // Screen type check and proper animations trigger
   useEffect( () => {
     
     function screenTypeCheck() {
       if (window.matchMedia('(hover: hover)').matches) {
         console.log('Device has a mouse or touchpad events');
-        if (window.matchMedia('(min-width: 1200px)').matches) {
-          console.log('Screen is more than 1200px wide.  Full Animations ok.');
+        if (window.matchMedia(`(min-width: ${breakpoints.large})`).matches) {
+          console.log(`Screen is more than ${breakpoints.large} wide.  Full Animations ok.`);
           setScreenType('mouse');
           gsapAnimations();
           return
         } else {
           setScreenType('mouse-narrow');
-          console.log('Screen is less than 1200px wide. Animations sobres.');
+          console.log(`Screen is less than ${breakpoints.large} wide. Animations sobres.`);
           sobreGsapAnimations();
           return
         }
       } else {
-        console.log('Device has no mouse, so has touch events. Animations sobres.');
-        setScreenType('touch');
-        sobreGsapAnimations();
+        console.log('Device has no mouse, so has touch events.');
+        if (window.matchMedia(`(min-width: ${breakpoints.large})`).matches) {
+          console.log(`Screen is more than ${breakpoints.large} wide. Full Animations ok.`)
+          setScreenType('mouse');
+          gsapAnimations();
+        } else {
+          console.log(`Screen is less than ${breakpoints.large} wide. Animations sobres.`);
+          setScreenType('touch');
+          sobreGsapAnimations();
+        }
         return
       }
     }
@@ -1147,286 +1202,313 @@ const ConnaitrePage = () => {
     
   }, [activeRealite, realitesDataArray, glideIsInit, screenType]);
   
-  return (
-    <div id='page-wrapper'>
-      <PageLayout>
-        <Section1Hero>
-          <StaticImage 
-            className='bg-image'
-            src='../images/grand-portrait-Anabel.webp'
-            layout='fullWidth'
-            alt='portrait de Anabel'
-            placeholder='blurred'
-            quality={100}
-          />
-          <div className='overlay-text'>
-            <h1>
-              <span className='right'>Connaître</span>
-              <span>l’essentiel&nbsp;...</span>
-              <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
-            </h1>
-          </div>
-        </Section1Hero>
-        
-        <div ref={gsapContainerRef}  id='gsap-container'>
-          <SectionRealites>
-            <div className='titre'>
-              <h2>Récits, mythes et réalités</h2>
+  if ( isUnmounting ) {
+    return (
+      <div id='page-wrapper'>
+        <PageLayout>
+          <Section1Hero>
+            <StaticImage 
+              className='bg-image'
+              src='../images/grand-portrait-Anabel.webp'
+              layout='fullWidth'
+              alt='portrait de Anabel'
+              placeholder='blurred'
+              quality={100}
+            />
+            <div className='overlay-text'>
+              <h1>
+                <span className='right'>Connaître</span>
+                <span>l’essentiel&nbsp;...</span>
+                <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
+              </h1>
             </div>
-            
-            <nav id='realites-nav'>
-              <ul>
-                {realitesDataArray.map( (realite, index) => { return (
-                  <li 
-                    key={index} 
-                    className={activeRealite === index ? 'realite-nav-item active' : 'realite-nav-item'}
-                  >
-                    <a 
-                      onClick={(e) => navClickHandler(index, e)}
-                      aria-label='Aller à la section'
-                      href={`#${realite.idUnique}`}
+          </Section1Hero>
+          <p>...</p>
+        </PageLayout>
+      </div>
+    )
+  } else {
+    return (
+      <div id='page-wrapper'>
+        <PageLayout>
+          <Section1Hero>
+            <StaticImage 
+              className='bg-image'
+              src='../images/grand-portrait-Anabel.webp'
+              layout='fullWidth'
+              alt='portrait de Anabel'
+              placeholder='blurred'
+              quality={100}
+            />
+            <div className='overlay-text'>
+              <h1>
+                <span className='right'>Connaître</span>
+                <span>l’essentiel&nbsp;...</span>
+                <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
+              </h1>
+            </div>
+          </Section1Hero>
+          
+          <div ref={gsapContainerRef} id='gsap-container'>
+            <SectionRealites id='section-realites'>
+              <div className='titre'>
+                <h2>Récits, mythes et réalités</h2>
+              </div>
+              
+              <nav id='realites-nav'>
+                <ul>
+                  {realitesDataArray.map( (realite, index) => { return (
+                    <li 
+                      key={index} 
+                      className={activeRealite === index ? 'realite-nav-item active' : 'realite-nav-item'}
                     >
-                      <div className='avatar'>
-                        <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
-                      </div>
-                      <div className='nom'>{realite.nom}</div>
-                      <strong>{realite.titreCourt}</strong>
+                      <a 
+                        onClick={(e) => navClickHandler(index, e)}
+                        aria-label='Aller à la section'
+                        href={`#${realite.idUnique}`}
+                      >
+                        <div className='avatar'>
+                          <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
+                        </div>
+                        <div className='nom'>{realite.nom}</div>
+                        <strong>{realite.titreCourt}</strong>
+                      </a>
+                    </li>
+                  )})}
+                  <li className='realite-nav-item shortcut'>
+                    <a href='#s-impliquer' onClick={(event) => simpliquerClickHandler(event)}>
+                      <div className='avatar'><div>✓</div></div>
+                      S'impliquer
                     </a>
                   </li>
-                )})}
-                <li className='realite-nav-item shortcut'>
-                  <a href='#s-impliquer' onClick={(event) => simpliquerClickHandler(event)}>
-                    <div className='avatar'><div>✓</div></div>
-                    S'impliquer
-                  </a>
-                </li>
-              </ul>
-            </nav>
-            
-            <div id='realites-container' className={screenType !== 'mouse' ? 'glide' : ''}>
+                </ul>
+              </nav>
               
-              <div className={screenType !== 'mouse' ? 'glide__track' : ''} data-glide-el='track'>
-                <div className={screenType !== 'mouse' ? 'glide__slides' : 'no-glide-slides'}>
-                  
-                  {realitesDataArray.map( (realite, index) => { return (
-                    <div
-                      className='realite-unique glide__slide'
-                      id={realite.idUnique} 
-                      key={index}
-                      rel='noreferrer'
-                    > 
+              <div id='realites-container' className={screenType !== 'mouse' ? 'glide' : ''}>
+                
+                <div className={screenType !== 'mouse' ? 'glide__track' : ''} data-glide-el='track'>
+                  <div className={screenType !== 'mouse' ? 'glide__slides' : 'no-glide-slides'}>
                     
-                      <div className='recit'>
-                        <div className='recit__personna'>
-                          <div className='philactere'>
-                            <StaticImage 
-                              src='../images/connaitre/philactere.svg'
-                              format='svg'
-                              alt=''
-                              placeholder='none'
-                            />
-                            <h2>
-                              {realite.intro}<span>{realite.statut}</span>.
-                            </h2>
+                    {realitesDataArray.map( (realite, index) => { return (
+                      <div
+                        className='realite-unique glide__slide'
+                        id={realite.idUnique} 
+                        key={index}
+                        rel='noreferrer'
+                      > 
+                      
+                        <div className='recit'>
+                          <div className='recit__personna'>
+                            <div className='philactere'>
+                              <StaticImage 
+                                src='../images/connaitre/philactere.svg'
+                                format='svg'
+                                alt=''
+                                placeholder='none'
+                              />
+                              <h2>
+                                {realite.intro}<span>{realite.statut}</span>.
+                              </h2>
+                            </div>
+                            <div className='identification'>
+                              <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
+                              <p className='nom'>{realite.nom}</p>
+                              <p>{realite.titreCourt}</p>
+                            </div>
                           </div>
-                          <div className='identification'>
-                            <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
-                            <p className='nom'>{realite.nom}</p>
-                            <p>{realite.titreCourt}</p>
+                          
+                          <div className='recit__narratif'>
+                            <p className='recit__instruction instruction'>
+                              Faites défiler pour lire mon histoire
+                            </p>
+                            <div className='presentation'>
+                              {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
+                                return (
+                                <p 
+                                  key={pIndex} 
+                                  className='paragr' 
+                                  dangerouslySetInnerHTML={{ __html: paragraphe}}></p>
+                              )})}
+                            </div>
+                            <div className='impacts'>
+                              <div className='impacts__intro'>
+                                <img className='impacts__avatar' src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
+                                <p dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
+                              </div>
+                              <div className='impacts__content'>
+                                <p className='impacts__instruction instruction'>
+                                  Faites défiler pour voir les impacts
+                                </p>
+                                {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
+                                  return (
+                                    <div key={pIndex} className='impact'>
+                                      <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
+                                    </div>
+                                )})}
+                              </div>
+                              <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
+                            </div>
                           </div>
                         </div>
                         
-                        <div className='recit__narratif'>
-                          <p className='recit__instruction instruction'>
-                            Faites défiler pour lire mon histoire
-                          </p>
-                          <div className='presentation'>
-                            {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
-                              return (
+                        <div className='mythe'>
+                          <div className='mythe__intro'>
+                            <h3 className='mythe__titre'>
+                              <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
+                              «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
+                            </h3>
+                            <p className='mythe__instruction instruction'>Faites défiler pour lire la suite</p>
+                            <div className='mythe__sous-titre'>
+                              <div>
+                                <img
+                                  src='/images/logo-sans-texte.svg'
+                                  alt='Solutions Justes'
+                                />
+                              </div>
+                              <h3>{realite.mytheSoustitre}</h3>
+                            </div>
+                          </div>
+                          <div className='mythe__explications'>
+                            {realite.mytheExplications.map( (paragraphe, pIndex) => { return (
                               <p 
-                                key={pIndex} 
-                                className='paragr' 
-                                dangerouslySetInnerHTML={{ __html: paragraphe}}></p>
+                                key={pIndex}
+                                dangerouslySetInnerHTML={{ __html: paragraphe }}
+                              ></p>
                             )})}
                           </div>
-                          <div className='impacts'>
-                            <div className='impacts__intro'>
-                              <img className='impacts__avatar' src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
-                              <p dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
-                            </div>
-                            <div className='impacts__content'>
-                              <p className='impacts__instruction instruction'>
-                                Faites défiler pour voir les impacts
-                              </p>
-                              {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
-                                return (
-                                  <div key={pIndex} className='impact'>
-                                    <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
-                                  </div>
-                              )})}
-                            </div>
-                            <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
+                        </div>
+                        
+                        <div className='progress'>
+                          <nav className='shortcuts'>
+                            <button
+                              onClick={ () => labelClickHandler(index, 'mon-statut') } 
+                              aria-label='Aller à la section'
+                            >&#8250; Mon statut</button>
+                            <button
+                              onClick={ () => labelClickHandler(index, 'les-impacts') }
+                              aria-label='Aller à la section'
+                            >&#8250; Les impacts</button>
+                            <button
+                              onClick={ () => labelClickHandler(index, 'mythe-et-realite') }
+                              aria-label='Aller à la section'
+                            >&#8250; Mythe et réalité</button>
+                          </nav>
+                          <div className='progress__bar-background'>
+                            <div className='progress__bar-animate'></div>
                           </div>
                         </div>
+                        
                       </div>
-                      
-                      <div className='mythe'>
-                        <div className='mythe__intro'>
-                          <h3 className='mythe__titre'>
-                            <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
-                            «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
-                          </h3>
-                          <p className='mythe__instruction instruction'>Faites défiler pour lire la suite</p>
-                          <div className='mythe__sous-titre'>
-                            <div>
-                              <img
-                                src='/images/logo-sans-texte.svg'
-                                alt='Solutions Justes'
-                              />
-                            </div>
-                            <h3>{realite.mytheSoustitre}</h3>
-                          </div>
-                        </div>
-                        <div className='mythe__explications'>
-                          {realite.mytheExplications.map( (paragraphe, pIndex) => { return (
-                            <p 
-                              key={pIndex}
-                              dangerouslySetInnerHTML={{ __html: paragraphe }}
-                            ></p>
-                          )})}
-                        </div>
-                      </div>
-                      
-                      <div className='progress'>
-                        <nav className='shortcuts'>
-                          <button
-                            onClick={ () => labelClickHandler(index, 'mon-statut') } 
-                            aria-label='Aller à la section'
-                          >&#8250; Mon statut</button>
-                          <button
-                            onClick={ () => labelClickHandler(index, 'les-impacts') }
-                            aria-label='Aller à la section'
-                          >&#8250; Les impacts</button>
-                          <button
-                            onClick={ () => labelClickHandler(index, 'mythe-et-realite') }
-                            aria-label='Aller à la section'
-                          >&#8250; Mythe et réalité</button>
-                        </nav>
-                        <div className='progress__bar-background'>
-                          <div className='progress__bar-animate'></div>
-                        </div>
-                      </div>
-                      
-                    </div>
-                  )})}
-                  
+                    )})}
+                    
+                  </div>
                 </div>
+                
+                { screenType !== 'mouse' ? 
+                  <BulletsControls>
+                    <div data-glide-el="controls[nav]">
+                      <button 
+                        className='arrow' 
+                        data-glide-dir="<"
+                        onClick={ () => glideControlClickHandler( activeRealite - 1 )}
+                      > 
+                       ‹ 
+                      </button>
+                    </div>
+                    <div className="glide__bullets" data-glide-el="controls[nav]">
+                      { realitesDataArray.map( (item, index) => {
+                        return (
+                          <button 
+                            title={`voir l'histoire de ${item.nom}`}
+                            data-glide-dir={`=${index}`} 
+                            key={`point-${index}`}
+                            aria-label={`Aller à la fiche ${index + 1}`}
+                            onClick={ () => glideControlClickHandler(index)}
+                          >
+                            <div className='glide__bullet' ></div>
+                            {item.nom}
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <div data-glide-el="controls[nav]">
+                      <button 
+                        className='arrow' 
+                        data-glide-dir=">"
+                        onClick={ () => glideControlClickHandler( activeRealite + 1)}
+                      >
+                       › 
+                      </button>
+                    </div>
+                  </BulletsControls>
+                : ''}
+                
               </div>
               
-              { screenType !== 'mouse' ? 
-                <BulletsControls>
-                  <div data-glide-el="controls[nav]">
-                    <button 
-                      className='arrow' 
-                      data-glide-dir="<"
-                      onClick={ () => glideControlClickHandler( activeRealite - 1 )}
-                    > 
-                     ‹ 
-                    </button>
-                  </div>
-                  <div className="glide__bullets" data-glide-el="controls[nav]">
-                    { realitesDataArray.map( (item, index) => {
-                      return (
-                        <button 
-                          title={`voir l'histoire de ${item.nom}`}
-                          data-glide-dir={`=${index}`} 
-                          key={`point-${index}`}
-                          aria-label={`Aller à la fiche ${index + 1}`}
-                          onClick={ () => glideControlClickHandler(index)}
-                        >
-                          <div className='glide__bullet' ></div>
-                          {item.nom}
-                        </button>
-                      )
-                    })}
-                  </div>
-                  <div data-glide-el="controls[nav]">
-                    <button 
-                      className='arrow' 
-                      data-glide-dir=">"
-                      onClick={ () => glideControlClickHandler( activeRealite + 1)}
-                    >
-                     › 
-                    </button>
-                  </div>
-                </BulletsControls>
-              : ''}
-              
-            </div>
-            
-          </SectionRealites>  
-        </div>
-        
-        <Section4Cta id='s-impliquer'>
-          <h2>S'impliquer davantage</h2>
-          <div className='grid'>
-          
-            <div className='sensibilsation'>
-              <div className='intro'>
-                <h3>Je souhaite accueillir un atelier</h3>
-                <p>Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école&nbsp;?</p>
-              </div>
-              <StaticImage 
-                src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
-                alt='Illustration d’une famille portant des boîtes'
-                placeholder='blurred'
-                quality={100}
-                height={200}
-                style={{ marginInline: 'auto' }}
-              />
-              <a 
-                href={`mailto:atelier@montrealcitymission.org?subject=Je%20souhaite%20participer%20%C3%A0%20un%20atelier&body=Bonjour%2C%0A%0AJ'ai%20vu%20la%20campagne%20R%C3%AAver%20%C3%A0%20l'essentiel%20et%20j'aimerais%20organiser%20une%20activit%C3%A9%20de%20sensibilisation%20ou%20une%20formation%20dans%20mon%20entreprise%2C%20organisation%2C%20f%C3%AAte%20de%20quartier%20ou%20%C3%A9cole.`} 
-                className='button centered' 
-                target='_blank' 
-                rel='noreferrer'
-              >
-                Contactez-nous
-              </a>
-            </div>
-            
-            <div className='benevolat'>
-              <div className='intro'>
-                <h3>Je veux faire du bénévolat</h3>
-                <p>Vous souhaitez aider et vous avez un peu de temps à nous offrir&nbsp;? Devenez bénévole chez nous&nbsp;!</p>
-              </div>
-              <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
-              <p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
-              <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
-            </div>
-            
-            <div className='petitions'>
-              <div className='intro'>
-                <h3>Je souhaite signer des pétitions</h3>
-                <p>Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
-              </div>
-              <StaticImage 
-                src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
-                alt='Illustration d’une famille'
-                placeholder='blurred'
-                quality={100}
-                height={200}
-                style={{ marginInline: 'auto' }}
-              />
-              <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
-                Agir
-              </a>
-            </div>
+            </SectionRealites>  
           </div>
-        </Section4Cta>
-      
-      </PageLayout>
-    </div>
-  )
+          
+          <Section4Cta id='s-impliquer'>
+            <h2>S'impliquer davantage</h2>
+            <div className='grid'>
+            
+              <div className='sensibilsation'>
+                <div className='intro'>
+                  <h3>Je souhaite accueillir un atelier</h3>
+                  <p>Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école&nbsp;?</p>
+                </div>
+                <StaticImage 
+                  src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
+                  alt='Illustration d’une famille portant des boîtes'
+                  placeholder='blurred'
+                  quality={100}
+                  height={200}
+                  style={{ marginInline: 'auto' }}
+                />
+                <a 
+                  href={`mailto:atelier@montrealcitymission.org?subject=Je%20souhaite%20participer%20%C3%A0%20un%20atelier&body=Bonjour%2C%0A%0AJ'ai%20vu%20la%20campagne%20R%C3%AAver%20%C3%A0%20l'essentiel%20et%20j'aimerais%20organiser%20une%20activit%C3%A9%20de%20sensibilisation%20ou%20une%20formation%20dans%20mon%20entreprise%2C%20organisation%2C%20f%C3%AAte%20de%20quartier%20ou%20%C3%A9cole.`} 
+                  className='button centered' 
+                  target='_blank' 
+                  rel='noreferrer'
+                >
+                  Contactez-nous
+                </a>
+              </div>
+              
+              <div className='benevolat'>
+                <div className='intro'>
+                  <h3>Je veux faire du bénévolat</h3>
+                  <p>Vous souhaitez aider et vous avez un peu de temps à nous offrir&nbsp;? Devenez bénévole chez nous&nbsp;!</p>
+                </div>
+                <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
+                <p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
+                <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
+              </div>
+              
+              <div className='petitions'>
+                <div className='intro'>
+                  <h3>Je souhaite signer des pétitions</h3>
+                  <p>Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
+                </div>
+                <StaticImage 
+                  src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
+                  alt='Illustration d’une famille'
+                  placeholder='blurred'
+                  quality={100}
+                  height={200}
+                  style={{ marginInline: 'auto' }}
+                />
+                <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
+                  Agir
+                </a>
+              </div>
+            </div>
+          </Section4Cta>
+        
+        </PageLayout>
+      </div>
+    )
+  }
 }
 
 export default ConnaitrePage

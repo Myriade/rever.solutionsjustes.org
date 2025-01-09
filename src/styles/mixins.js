@@ -1,11 +1,13 @@
 import { css } from 'styled-components';
 
 // Responsive breakpoints
-const breakpoints = {
+export const breakpoints = {
   small: '768px',   // Phones and small tablets
   medium: '992px',  // Tablets and small laptops
   large: '1200px',  // Desktops and larger screens
-  smallMinusOne: '767px'
+  smallMinusOne: '767px',
+  mediumMinusOne: '991px',
+  largeMinusOne: '1199px'
 }
 
 // Default styling is for small-up, then, apply exceptions : 
