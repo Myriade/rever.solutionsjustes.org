@@ -601,7 +601,8 @@ const createBreakpointHandler = (breakpoints, callback) => {
 const ConnaitrePage = () => {
   /********  States, refs, context and data variables ********/
   const [screenType, setScreenType] = useState(null); 
-  const [isHtmlReady, setIsHtmlReady] = useState(true);
+  const [isHtmlReady, setIsHtmlReady] = useState(false);
+  const [currentBreakpoint, setCurrentBreakpoint] = useState(null);
   const [activeRealite, setActiveRealite] = useState(null);
   const [glideIsInit, setGlideIsInit] = useState(false);
   const [afterGsapFirstInit, setAfterGsapFirstInit] = useState(false);
@@ -609,12 +610,14 @@ const ConnaitrePage = () => {
   const stateStore = {
     screenType: screenType,
     isHtmlReady: isHtmlReady,
+    currentBreakpoint: currentBreakpoint,
     activeRealite: activeRealite,
     glideIsInit: glideIsInit,
     afterGsapFirstInit: afterGsapFirstInit
   };
   console.log(stateStore);
   
+  const isHtmlReadyRef = useRef(false);
   const mobileIsFirstLoad = useRef(true);
   const urlHash = useRef(null);
   const gsapContainerRef = useRef();
@@ -1112,14 +1115,14 @@ const ConnaitrePage = () => {
       await setAfterGsapFirstInit(true);
     }
     
-    if (!screenType) {
+    if (!screenType && isHtmlReady) {
       appInitialisation();
     }
-  }, [screenType, gsapAnimations, sobreGsapAnimations]);
+  }, [screenType, isHtmlReady, gsapAnimations, sobreGsapAnimations]);
   
   // Responsive logic on viewport resize
   useEffect(() => {
-    if (screenType && isHtmlReady) {
+    if ( screenType ) {
       const cleanup = createBreakpointHandler([
         ['sm', `(max-width: ${breakpoints.smallMinusOne})`],
         ['md', `(min-width: ${breakpoints.small}) and (max-width: ${breakpoints.mediumMinusOne})`],
@@ -1127,27 +1130,29 @@ const ConnaitrePage = () => {
         ['xl', `(min-width: ${breakpoints.large})`]
       ], (breakpoint) => {
         // callback function appelé au changement de breakpoint
-        console.log(`Viewport size is : ${breakpoint}`);
-        // setIsHtmlReady(false);
+        if ( isHtmlReadyRef.current === true ) {
+          console.log(`Viewport size is : ${breakpoint}`);
+          setIsHtmlReady(false);
+          isHtmlReadyRef.current = false;
+          console.log('State isHtmlReady est true et devient false');
+          console.log('isHtmlReadyRef : ', isHtmlReadyRef.current);
+          setCurrentBreakpoint(breakpoint);
+        }
       });
       return cleanup;
     }
   }, [screenType, isHtmlReady]);
   
   // Pendant le remontage (is not html ready)
-  if ( !isHtmlReady ) {
-    // const delay = 1000;
-    // console.log('isHtmlReady FALSE Delay BEGINGS: ', delay);
-    // setTimeout( () => {
-      // console.log('isHtmlReady FALSE Delay ENDS: ', delay);
-      setScreenType(null);
-      // setIsHtmlReady(true);
-    // }, delay );
-    
-    // setScreenType('');
-    // ScrollTrigger.killAll();
-    // if (glideCarrousel.current) { glideCarrousel.current.destroy() }
-  } 
+  useEffect(() => {
+    if ( !isHtmlReady && currentBreakpoint ) {
+      setTimeout( () => {
+        console.log('setTimeout 1500 ---- State isHtmlReady est faux et devient vrai');
+        setIsHtmlReady(true);
+        isHtmlReadyRef.current = true;
+      }, 1500 );
+    }
+  }, [isHtmlReady]);
   
   // Refresh all ScrollTrigger avec the first animations trigger
   useEffect( () => { 
@@ -1215,54 +1220,29 @@ const ConnaitrePage = () => {
     }
     
   }, [activeRealite, realitesDataArray, glideIsInit, screenType]);
-  
-  if ( !isHtmlReady ) {
-    return (
-      <div id='page-wrapper'>
-        <PageLayout>
-          <Section1Hero>
-            <StaticImage 
-              className='bg-image'
-              src='../images/grand-portrait-Anabel.webp'
-              layout='fullWidth'
-              alt='portrait de Anabel'
-              placeholder='blurred'
-              quality={100}
-            />
-            <div className='overlay-text'>
-              <h1>
-                <span className='right'>Connaître</span>
-                <span>l’essentiel&nbsp;...</span>
-                <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
-              </h1>
-            </div>
-          </Section1Hero>
-          <p>...</p>
-        </PageLayout>
-      </div>
-    )
-  } else {
-    return (
-      <div id='page-wrapper'>
-        <PageLayout>
-          <Section1Hero>
-            <StaticImage 
-              className='bg-image'
-              src='../images/grand-portrait-Anabel.webp'
-              layout='fullWidth'
-              alt='portrait de Anabel'
-              placeholder='blurred'
-              quality={100}
-            />
-            <div className='overlay-text'>
-              <h1>
-                <span className='right'>Connaître</span>
-                <span>l’essentiel&nbsp;...</span>
-                <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
-              </h1>
-            </div>
-          </Section1Hero>
-          
+
+  return (
+    <div id='page-wrapper'>
+      <PageLayout>
+        <Section1Hero>
+          <StaticImage 
+            className='bg-image'
+            src='../images/grand-portrait-Anabel.webp'
+            layout='fullWidth'
+            alt='portrait de Anabel'
+            placeholder='blurred'
+            quality={100}
+          />
+          <div className='overlay-text'>
+            <h1>
+              <span className='right'>Connaître</span>
+              <span>l’essentiel&nbsp;...</span>
+              <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
+            </h1>
+          </div>
+        </Section1Hero>
+        
+        { isHtmlReady === true ?
           <div ref={gsapContainerRef} id='gsap-container'>
             <SectionRealites id='section-realites'>
               <div className='titre'>
@@ -1426,7 +1406,7 @@ const ConnaitrePage = () => {
                         data-glide-dir="<"
                         onClick={ () => glideControlClickHandler( activeRealite - 1 )}
                       > 
-                       ‹ 
+                      ‹ 
                       </button>
                     </div>
                     <div className="glide__bullets" data-glide-el="controls[nav]">
@@ -1451,7 +1431,7 @@ const ConnaitrePage = () => {
                         data-glide-dir=">"
                         onClick={ () => glideControlClickHandler( activeRealite + 1)}
                       >
-                       › 
+                      › 
                       </button>
                     </div>
                   </BulletsControls>
@@ -1461,68 +1441,68 @@ const ConnaitrePage = () => {
               
             </SectionRealites>  
           </div>
-          
-          <Section4Cta id='s-impliquer'>
-            <h2>S'impliquer davantage</h2>
-            <div className='grid'>
-            
-              <div className='sensibilsation'>
-                <div className='intro'>
-                  <h3>Je souhaite accueillir un atelier</h3>
-                  <p>Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école&nbsp;?</p>
-                </div>
-                <StaticImage 
-                  src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
-                  alt='Illustration d’une famille portant des boîtes'
-                  placeholder='blurred'
-                  quality={100}
-                  height={200}
-                  style={{ marginInline: 'auto' }}
-                />
-                <a 
-                  href={`mailto:atelier@montrealcitymission.org?subject=Je%20souhaite%20participer%20%C3%A0%20un%20atelier&body=Bonjour%2C%0A%0AJ'ai%20vu%20la%20campagne%20R%C3%AAver%20%C3%A0%20l'essentiel%20et%20j'aimerais%20organiser%20une%20activit%C3%A9%20de%20sensibilisation%20ou%20une%20formation%20dans%20mon%20entreprise%2C%20organisation%2C%20f%C3%AAte%20de%20quartier%20ou%20%C3%A9cole.`} 
-                  className='button centered' 
-                  target='_blank' 
-                  rel='noreferrer'
-                >
-                  Contactez-nous
-                </a>
-              </div>
-              
-              <div className='benevolat'>
-                <div className='intro'>
-                  <h3>Je veux faire du bénévolat</h3>
-                  <p>Vous souhaitez aider et vous avez un peu de temps à nous offrir&nbsp;? Devenez bénévole chez nous&nbsp;!</p>
-                </div>
-                <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
-                <p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
-                <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
-              </div>
-              
-              <div className='petitions'>
-                <div className='intro'>
-                  <h3>Je souhaite signer des pétitions</h3>
-                  <p>Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
-                </div>
-                <StaticImage 
-                  src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
-                  alt='Illustration d’une famille'
-                  placeholder='blurred'
-                  quality={100}
-                  height={200}
-                  style={{ marginInline: 'auto' }}
-                />
-                <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
-                  Agir
-                </a>
-              </div>
-            </div>
-          </Section4Cta>
+        : <h4>... chargement</h4> }
         
-        </PageLayout>
-      </div>
-    )
-  }
+        <Section4Cta id='s-impliquer'>
+          <h2>S'impliquer davantage</h2>
+          <div className='grid'>
+          
+            <div className='sensibilsation'>
+              <div className='intro'>
+                <h3>Je souhaite accueillir un atelier</h3>
+                <p>Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école&nbsp;?</p>
+              </div>
+              <StaticImage 
+                src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
+                alt='Illustration d’une famille portant des boîtes'
+                placeholder='blurred'
+                quality={100}
+                height={200}
+                style={{ marginInline: 'auto' }}
+              />
+              <a 
+                href={`mailto:atelier@montrealcitymission.org?subject=Je%20souhaite%20participer%20%C3%A0%20un%20atelier&body=Bonjour%2C%0A%0AJ'ai%20vu%20la%20campagne%20R%C3%AAver%20%C3%A0%20l'essentiel%20et%20j'aimerais%20organiser%20une%20activit%C3%A9%20de%20sensibilisation%20ou%20une%20formation%20dans%20mon%20entreprise%2C%20organisation%2C%20f%C3%AAte%20de%20quartier%20ou%20%C3%A9cole.`} 
+                className='button centered' 
+                target='_blank' 
+                rel='noreferrer'
+              >
+                Contactez-nous
+              </a>
+            </div>
+            
+            <div className='benevolat'>
+              <div className='intro'>
+                <h3>Je veux faire du bénévolat</h3>
+                <p>Vous souhaitez aider et vous avez un peu de temps à nous offrir&nbsp;? Devenez bénévole chez nous&nbsp;!</p>
+              </div>
+              <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
+              <p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
+              <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
+            </div>
+            
+            <div className='petitions'>
+              <div className='intro'>
+                <h3>Je souhaite signer des pétitions</h3>
+                <p>Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
+              </div>
+              <StaticImage 
+                src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
+                alt='Illustration d’une famille'
+                placeholder='blurred'
+                quality={100}
+                height={200}
+                style={{ marginInline: 'auto' }}
+              />
+              <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
+                Agir
+              </a>
+            </div>
+          </div>
+        </Section4Cta>
+      
+      </PageLayout>
+    </div>
+  )
 }
 
 export default ConnaitrePage
