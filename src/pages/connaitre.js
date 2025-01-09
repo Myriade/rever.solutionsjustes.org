@@ -600,11 +600,20 @@ const createBreakpointHandler = (breakpoints, callback) => {
 
 const ConnaitrePage = () => {
   /********  States, refs, context and data variables ********/
-  const [screenType, setScreenType] = useState(''); 
+  const [screenType, setScreenType] = useState(null); 
+  const [isHtmlReady, setIsHtmlReady] = useState(true);
   const [activeRealite, setActiveRealite] = useState(null);
   const [glideIsInit, setGlideIsInit] = useState(false);
   const [afterGsapFirstInit, setAfterGsapFirstInit] = useState(false);
-  const [isUnmounting, setIsUnmounting] = useState(false);
+  
+  const stateStore = {
+    screenType: screenType,
+    isHtmlReady: isHtmlReady,
+    activeRealite: activeRealite,
+    glideIsInit: glideIsInit,
+    afterGsapFirstInit: afterGsapFirstInit
+  };
+  console.log(stateStore);
   
   const mobileIsFirstLoad = useRef(true);
   const urlHash = useRef(null);
@@ -615,90 +624,9 @@ const ConnaitrePage = () => {
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
   
-  /******** Event Handlers *******/
-  const navClickHandler = contextSafe( (clickedIndex, event) => {
-    if (typeof event !== 'undefined') { event.preventDefault() }
-    // console.log('navClickHandler called with ', clickedIndex);
-    if (clickedIndex !== activeRealite) { setActiveRealite(clickedIndex); }
-    
-    if (screenType === 'mouse') {
-      
-      // Fade-out fade-in animation
-      gsap.from( '#realites-container', {
-        autoAlpha: 0,
-        duration: 1
-      });
-    
-      // Reset active realite scroll its progress near start
-      const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
-      associateScrollTrigger.scroll(associateScrollTrigger.start + 1);
-      
-    } else if ( glideIsInit && screenType !== 'mouse')  {
-      // console.log('navClickHandler glideIsInit clickedIndex :', clickedIndex);
-      glideCarrousel.current.go(`=${clickedIndex}`);
-      const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
-      // scroll to top under the nav, and recalculate the scrolltriggers
-      gsap.to( window, { 
-        scrollTo: {
-          y: '#realites-container',
-          offsetY: navBottomInViewport,
-        },
-      });
-      urlHash.current = realitesDataArray[clickedIndex].idUnique;
-      
-      // update the glidetrack elem height
-      const glideTrackElem =  gsapContainerRef.current.querySelector('.glide__track ')
-      const activeElemHeight = gsapContainerRef.current.querySelectorAll('.glide__slide')[clickedIndex].offsetHeight;
-      gsap.to( glideTrackElem, {
-        height: activeElemHeight,
-        duration: 0.5,
-      });
-    }
-    
-  }, {dependencies: [activeRealite]});
-  
-  const glideControlClickHandler = contextSafe( (clickedIndex) => {
-    setActiveRealite(clickedIndex);
-    // scroll to top
-    const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
-    gsap.to( window, { 
-      scrollTo: {
-        y: '#realites-container',
-        offsetY: navBottomInViewport,
-      },
-    });
-    // update the glidetrack elem height
-    const glideTrackElem =  gsapContainerRef.current.querySelector('.glide__track ')
-    const activeElemHeight = gsapContainerRef.current.querySelectorAll('.glide__slide')[clickedIndex].offsetHeight;
-    gsap.to( glideTrackElem, {
-      height: activeElemHeight,
-      duration: 0.5,
-    });
-    ScrollTrigger.refresh();
-  });
-  
-  const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
-    if (screenType === 'mouse') {
-      gsap.to( window, { 
-        scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
-      });
-    }
-  });
-  
-  const simpliquerClickHandler = contextSafe( (event) => {
-    if (typeof event !== 'undefined') { event.preventDefault() }
-    if (glideIsInit !== true) { document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = '0'}
-    gsap.to( window, { 
-      scrollTo: {y: '#s-impliquer', offsetY: 130},
-    });
-    window.history.pushState({}, '', '#s-impliquer');
-    urlHash.current = '#s-impliquer';
-  });
-  
   /******** Gsap Animations *******/
-  // Laptop et desktop GSAP Animations 
+  // Laptop et desktop GSAP Animations (appelé au moment du screenTypeCheck)
   const gsapAnimations = contextSafe(() => {
-    
     // NAVIGATION 
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
@@ -953,16 +881,15 @@ const ConnaitrePage = () => {
       
     }); // end forEach
     
-    console.log('Desktop GSAP init');
-    
+    console.log('Full Gsap Animations init (desktop)');
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
-  // Mobiles touch GSAP Animations sobres 
+  // Mobiles touch GSAP Animations sobres (appelé au moment du screenTypeCheck)
   const sobreGsapAnimations = contextSafe(() => {
     const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom; // pour le vavbar pin
     const navElement = gsapContainerRef.current.querySelector('#realites-nav');
     const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
-     
+    
     // nav items appears smoothly
     gsap.from('.realite-nav-item', {
       opacity: 0, 
@@ -1057,43 +984,97 @@ const ConnaitrePage = () => {
           start: 'top 70%',
           end: 'bottom 30%', 
           scrub: 0.5,
-         // markers: true,
+        // markers: true,
         },
         duration: 2.5,
       });
       
-    });
+    }); // end forEach
     
-    console.log('Mobile GSAP init');
-    
+    console.log('sobre Gsap Animations init (mobile)');
   }, { dependencies: [screenType, activeRealite], scope: gsapContainerRef } );
   
-  /******** Browser Effects (useEffect) *******/
-  // Responsive logic on viewport resize
-  useEffect(() => {
-    const cleanup = createBreakpointHandler([
-      ['sm', `(max-width: ${breakpoints.smallMinusOne})`],
-      ['md', `(min-width: ${breakpoints.small}) and (max-width: ${breakpoints.mediumMinusOne})`],
-      ['lg', `(min-width: ${breakpoints.medium}) and (max-width: ${breakpoints.largeMinusOne})`],
-      ['xl', `(min-width: ${breakpoints.large})`]
-    ], (breakpoint) => {
-      console.log(`Viewport size is : ${breakpoint}`);
-      setIsUnmounting(true);
+  /******** Event Handlers *******/
+  const navClickHandler = contextSafe( (clickedIndex, event) => {
+    if (typeof event !== 'undefined') { event.preventDefault() }
+    // console.log('navClickHandler called with ', clickedIndex);
+    if (clickedIndex !== activeRealite) { setActiveRealite(clickedIndex); }
+    
+    if (screenType === 'mouse') {
+      
+      // Fade-out fade-in animation
+      gsap.from( '#realites-container', {
+        autoAlpha: 0,
+        duration: 1
+      });
+    
+      // Reset active realite scroll its progress near start
+      const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
+      associateScrollTrigger.scroll(associateScrollTrigger.start + 1);
+      
+    } else if ( glideIsInit && screenType !== 'mouse')  {
+      // console.log('navClickHandler glideIsInit clickedIndex :', clickedIndex);
+      glideCarrousel.current.go(`=${clickedIndex}`);
+      const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+      // scroll to top under the nav, and recalculate the scrolltriggers
+      gsap.to( window, { 
+        scrollTo: {
+          y: '#realites-container',
+          offsetY: navBottomInViewport,
+        },
+      });
+      urlHash.current = realitesDataArray[clickedIndex].idUnique;
+      
+      // update the glidetrack elem height
+      const glideTrackElem =  gsapContainerRef.current.querySelector('.glide__track ')
+      const activeElemHeight = gsapContainerRef.current.querySelectorAll('.glide__slide')[clickedIndex].offsetHeight;
+      gsap.to( glideTrackElem, {
+        height: activeElemHeight,
+        duration: 0.5,
+      });
+    }
+    
+  }, {dependencies: [screenType, glideIsInit, activeRealite, gsapAnimations]});
+  
+  const glideControlClickHandler = contextSafe( (clickedIndex) => {
+    setActiveRealite(clickedIndex);
+    // scroll to top
+    const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
+    gsap.to( window, { 
+      scrollTo: {
+        y: '#realites-container',
+        offsetY: navBottomInViewport,
+      },
     });
-    return cleanup;
-  }, []);
+    // update the glidetrack elem height
+    const glideTrackElem =  gsapContainerRef.current.querySelector('.glide__track ')
+    const activeElemHeight = gsapContainerRef.current.querySelectorAll('.glide__slide')[clickedIndex].offsetHeight;
+    gsap.to( glideTrackElem, {
+      height: activeElemHeight,
+      duration: 0.5,
+    });
+    ScrollTrigger.refresh();
+  });
   
-  console.log('isUnmounting :', isUnmounting);
+  const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
+    if (screenType === 'mouse') {
+      gsap.to( window, { 
+        scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
+      });
+    }
+  });
   
-  if ( isUnmounting === true ) {
-    console.log('DO SOME Logic');
-    // setScreenType('');
-    // ScrollTrigger.killAll();
-    // if (glideCarrousel.current) { glideCarrousel.current.destroy() }
-    // console.log('Unmounting everything...')
-    setIsUnmounting(false);
-  } 
+  const simpliquerClickHandler = contextSafe( (event) => {
+    if (typeof event !== 'undefined') { event.preventDefault() }
+    if (glideIsInit !== true) { document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = '0'}
+    gsap.to( window, { 
+      scrollTo: {y: '#s-impliquer', offsetY: 130},
+    });
+    window.history.pushState({}, '', '#s-impliquer');
+    urlHash.current = '#s-impliquer';
+  });
   
+  /******** Browser Effects (useEffect) *******/
   // Screen type check and proper animations trigger
   useEffect( () => {
     
@@ -1128,13 +1109,45 @@ const ConnaitrePage = () => {
     
     async function appInitialisation() {
       await screenTypeCheck();
-      setAfterGsapFirstInit(true);
+      await setAfterGsapFirstInit(true);
     }
     
     if (!screenType) {
       appInitialisation();
     }
   }, [screenType, gsapAnimations, sobreGsapAnimations]);
+  
+  // Responsive logic on viewport resize
+  useEffect(() => {
+    if (screenType && isHtmlReady) {
+      const cleanup = createBreakpointHandler([
+        ['sm', `(max-width: ${breakpoints.smallMinusOne})`],
+        ['md', `(min-width: ${breakpoints.small}) and (max-width: ${breakpoints.mediumMinusOne})`],
+        ['lg', `(min-width: ${breakpoints.medium}) and (max-width: ${breakpoints.largeMinusOne})`],
+        ['xl', `(min-width: ${breakpoints.large})`]
+      ], (breakpoint) => {
+        // callback function appelé au changement de breakpoint
+        console.log(`Viewport size is : ${breakpoint}`);
+        // setIsHtmlReady(false);
+      });
+      return cleanup;
+    }
+  }, [screenType, isHtmlReady]);
+  
+  // Pendant le remontage (is not html ready)
+  if ( !isHtmlReady ) {
+    // const delay = 1000;
+    // console.log('isHtmlReady FALSE Delay BEGINGS: ', delay);
+    // setTimeout( () => {
+      // console.log('isHtmlReady FALSE Delay ENDS: ', delay);
+      setScreenType(null);
+      // setIsHtmlReady(true);
+    // }, delay );
+    
+    // setScreenType('');
+    // ScrollTrigger.killAll();
+    // if (glideCarrousel.current) { glideCarrousel.current.destroy() }
+  } 
   
   // Refresh all ScrollTrigger avec the first animations trigger
   useEffect( () => { 
@@ -1143,9 +1156,9 @@ const ConnaitrePage = () => {
     }
   }, [afterGsapFirstInit] )
   
-  // Hash in url triggers scroll to section
+  // Hash in url triggers scroll to section (pour mobile, c'est seulement au premier montage du page load)
   useEffect( () => {
-    if ( (screenType !== '') && (afterGsapFirstInit === true) ) {
+    if ( (screenType !== null) && (afterGsapFirstInit === true)) {
       ScrollTrigger.refresh();
       if ( window.location.hash ) {
         urlHash.current = window.location.hash;
@@ -1158,7 +1171,7 @@ const ConnaitrePage = () => {
             ScrollTrigger.refresh();
           } else if (glideIsInit === true) {
             navClickHandler(correspondingDataArrayIndex);
-            mobileIsFirstLoad.current = false;
+            mobileIsFirstLoad.current = false; 
           }
         } else if (urlHash.current === '#s-impliquer' && mobileIsFirstLoad.current) {
           if (screenType === 'mouse' || glideIsInit === true ) {
@@ -1172,7 +1185,7 @@ const ConnaitrePage = () => {
   
   // Mobile Glide Carrousel init
   useEffect( () => {
-    if ( (screenType === 'touch') || (screenType === 'mouse-narrow') ) {
+    if ( screenType === 'touch' || screenType === 'mouse-narrow' ) {
       glideCarrousel.current = new Glide('.glide', {
         type: 'slider',
         swipeThreshold: false,
@@ -1186,6 +1199,7 @@ const ConnaitrePage = () => {
         rewind: false,
       }).mount()
       setGlideIsInit(true);
+      console.log('Glide Is Init');
     }
   }, [screenType]);
   
@@ -1202,7 +1216,7 @@ const ConnaitrePage = () => {
     
   }, [activeRealite, realitesDataArray, glideIsInit, screenType]);
   
-  if ( isUnmounting ) {
+  if ( !isHtmlReady ) {
     return (
       <div id='page-wrapper'>
         <PageLayout>
@@ -1404,7 +1418,7 @@ const ConnaitrePage = () => {
                   </div>
                 </div>
                 
-                { screenType !== 'mouse' ? 
+                { screenType === 'touch' || screenType === 'mouse-narrow' ? 
                   <BulletsControls>
                     <div data-glide-el="controls[nav]">
                       <button 
