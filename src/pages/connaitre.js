@@ -581,53 +581,80 @@ const Section4Cta = styled.section`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, TextPlugin);
 
-const createBreakpointHandler = (breakpoints, callback) => {
-  const mqls = breakpoints.map(([breakpoint, query]) => ({
-    breakpoint,
-    mql: window.matchMedia(query),
-    handler: (e) => e.matches && callback(breakpoint)
-  }));
+const breakPointsArray = [
+  ['sm', `(max-width: ${breakpoints.smallMinusOne})`],
+  ['md', `(min-width: ${breakpoints.small}) and (max-width: ${breakpoints.mediumMinusOne})`],
+  ['lg', `(min-width: ${breakpoints.medium}) and (max-width: ${breakpoints.largeMinusOne})`],
+  ['xl', `(min-width: ${breakpoints.large})`]
+];
 
-  mqls.forEach(({ mql, handler }) => {
-    mql.addListener(handler);
-    handler({ matches: mql.matches });
-  });
+/* Appelle createBreakpointHandler avec les points de rupture et une fonction de rappel personnalisée. */
+const initializeBreakpointHandling = (breakPointsArray, onBreakpointChange) => {
+  /* Crée un gestionnaire de points de rupture pour la taille de la fenêtre. */
+  const createBreakpointHandler = (breakpoints, callback) => {
+    // Crée un tableau d'objets contenant les informations nécessaires pour chaque point de rupture
+    const mediaQueryListeners = breakpoints.map(([breakpointName, mediaQuery]) => ({
+      breakpointName,
+      mediaQueryListener: window.matchMedia(mediaQuery),
+      handler: (event) => event.matches && callback(breakpointName)
+    }));
 
-  return () => {
-    mqls.forEach(({ mql, handler }) => mql.removeListener(handler));
+    // Initialise les écouteurs et appelle la fonction de rappel pour chaque point de rupture
+    mediaQueryListeners.forEach(({ mediaQueryListener, handler }) => {
+      mediaQueryListener.addListener(handler);
+      handler({ matches: mediaQueryListener.matches });
+    });
+
+    // Retourne une fonction de nettoyage pour supprimer les écouteurs
+    return () => {
+      mediaQueryListeners.forEach(({ mediaQueryListener, handler }) => 
+        mediaQueryListener.removeListener(handler));
+    };
   };
+
+  // Appelle createBreakpointHandler avec les points de rupture et la fonction de rappel personnalisée
+  return createBreakpointHandler(breakPointsArray, onBreakpointChange);
 };
 
 const ConnaitrePage = () => {
   /********  States, refs, context and data variables ********/
   const [screenType, setScreenType] = useState(null); 
   const [isHtmlReady, setIsHtmlReady] = useState(false);
-  const [currentBreakpoint, setCurrentBreakpoint] = useState(null);
   const [activeRealite, setActiveRealite] = useState(null);
   const [glideIsInit, setGlideIsInit] = useState(false);
   const [afterGsapFirstInit, setAfterGsapFirstInit] = useState(false);
   
-  const stateStore = {
-    screenType: screenType,
-    isHtmlReady: isHtmlReady,
-    currentBreakpoint: currentBreakpoint,
-    activeRealite: activeRealite,
-    glideIsInit: glideIsInit,
-    afterGsapFirstInit: afterGsapFirstInit
-  };
-  console.log(stateStore);
-  
-  const isHtmlReadyRef = useRef(false);
+  const currentBreakpoint = useRef(null);
   const mobileIsFirstLoad = useRef(true);
   const urlHash = useRef(null);
-  const gsapContainerRef = useRef();
+  const gsapContainerRef = useRef(null);
   const timelineRef = useRef([]);
-  const glideCarrousel = useRef();
+  const glideCarrousel = useRef(null);
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
   
-  /******** Gsap Animations *******/
+  // Dev helpers
+  const stateStore = {
+    screenType: screenType,
+    isHtmlReady: isHtmlReady,
+    activeRealite: activeRealite,
+    glideIsInit: glideIsInit,
+    afterGsapFirstInit: afterGsapFirstInit
+  };
+  console.log('stateStore', stateStore);
+  
+  const refValues = {
+    currentBreakpoint: currentBreakpoint.current,
+    mobileIsFirstLoad: mobileIsFirstLoad.current,
+    urlHash: mobileIsFirstLoad.current,
+    gsapContainerRef: gsapContainerRef.current,
+    timelineRef: timelineRef.current,
+    glideCarrousel: glideCarrousel.current,
+  }
+  console.log('refValues :', refValues);
+  
+  /******** Fonctions réutilisables *******/
   // Laptop et desktop GSAP Animations (appelé au moment du screenTypeCheck)
   const gsapAnimations = contextSafe(() => {
     // NAVIGATION 
@@ -884,12 +911,12 @@ const ConnaitrePage = () => {
       
     }); // end forEach
     
-    console.log('Full Gsap Animations init (desktop)');
+    console.log('GSAP is set (mouse)');
   }, { dependencies: [screenType], scope: gsapContainerRef } );
   
   // Mobiles touch GSAP Animations sobres (appelé au moment du screenTypeCheck)
   const sobreGsapAnimations = contextSafe(() => {
-    const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom; // pour le vavbar pin
+    const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom; // pour le navbar pin
     const navElement = gsapContainerRef.current.querySelector('#realites-nav');
     const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
     
@@ -994,8 +1021,32 @@ const ConnaitrePage = () => {
       
     }); // end forEach
     
-    console.log('sobre Gsap Animations init (mobile)');
+    console.log('GSAP is set (sobre)');
   }, { dependencies: [screenType, activeRealite], scope: gsapContainerRef } );
+  
+  // Breakpoint set and change handler
+  const onBreakpointChange = breakpoint => {
+    if ( currentBreakpoint.current === null || currentBreakpoint.current === breakpoint) {
+      console.log(`Viewport size is : ${breakpoint}`, '. Setup begins.');
+      currentBreakpoint.current = breakpoint;
+      setIsHtmlReady(true);
+    } else if ( currentBreakpoint.current && currentBreakpoint.current !== breakpoint ) {
+      console.log(`CHANGING Viewport size to : ${breakpoint}`);
+      setIsHtmlReady(false);
+      setScreenType(null);
+      setGlideIsInit(false);
+      setAfterGsapFirstInit(false);
+      
+      if (glideCarrousel.current) { 
+        glideCarrousel.current.destroy();
+        glideCarrousel.current = null;
+      }
+      
+      if (mobileIsFirstLoad.current) { mobileIsFirstLoad.current = true }
+      
+      currentBreakpoint.current = breakpoint;
+    }
+  }
   
   /******** Event Handlers *******/
   const navClickHandler = contextSafe( (clickedIndex, event) => {
@@ -1078,81 +1129,74 @@ const ConnaitrePage = () => {
   });
   
   /******** Browser Effects (useEffect) *******/
-  // Screen type check and proper animations trigger
+  // Screen type check (touch or mouse)
   useEffect( () => {
-    
-    function screenTypeCheck() {
+    if (!screenType) {
       if (window.matchMedia('(hover: hover)').matches) {
         console.log('Device has a mouse or touchpad events');
         if (window.matchMedia(`(min-width: ${breakpoints.large})`).matches) {
           console.log(`Screen is more than ${breakpoints.large} wide.  Full Animations ok.`);
           setScreenType('mouse');
-          gsapAnimations();
-          return
         } else {
           setScreenType('mouse-narrow');
           console.log(`Screen is less than ${breakpoints.large} wide. Animations sobres.`);
-          sobreGsapAnimations();
-          return
         }
       } else {
         console.log('Device has no mouse, so has touch events.');
         if (window.matchMedia(`(min-width: ${breakpoints.large})`).matches) {
           console.log(`Screen is more than ${breakpoints.large} wide. Full Animations ok.`)
           setScreenType('mouse');
-          gsapAnimations();
         } else {
           console.log(`Screen is less than ${breakpoints.large} wide. Animations sobres.`);
           setScreenType('touch');
-          sobreGsapAnimations();
         }
-        return
       }
     }
-    
-    async function appInitialisation() {
-      await screenTypeCheck();
-      await setAfterGsapFirstInit(true);
-    }
-    
-    if (!screenType && isHtmlReady) {
-      appInitialisation();
-    }
-  }, [screenType, isHtmlReady, gsapAnimations, sobreGsapAnimations]);
+  }, [screenType]);
   
-  // Responsive logic on viewport resize
+  // Viewport size check (and logic on viewport resize ?)
   useEffect(() => {
-    if ( screenType ) {
-      const cleanup = createBreakpointHandler([
-        ['sm', `(max-width: ${breakpoints.smallMinusOne})`],
-        ['md', `(min-width: ${breakpoints.small}) and (max-width: ${breakpoints.mediumMinusOne})`],
-        ['lg', `(min-width: ${breakpoints.medium}) and (max-width: ${breakpoints.largeMinusOne})`],
-        ['xl', `(min-width: ${breakpoints.large})`]
-      ], (breakpoint) => {
-        // callback function appelé au changement de breakpoint
-        if ( isHtmlReadyRef.current === true ) {
-          console.log(`Viewport size is : ${breakpoint}`);
-          setIsHtmlReady(false);
-          isHtmlReadyRef.current = false;
-          console.log('State isHtmlReady est true et devient false');
-          console.log('isHtmlReadyRef : ', isHtmlReadyRef.current);
-          setCurrentBreakpoint(breakpoint);
-        }
-      });
-      return cleanup;
+    if ( screenType && !isHtmlReady) {
+      const cleanupFunction = initializeBreakpointHandling(breakPointsArray, onBreakpointChange);
     }
   }, [screenType, isHtmlReady]);
   
-  // Pendant le remontage (is not html ready)
-  useEffect(() => {
-    if ( !isHtmlReady && currentBreakpoint ) {
-      setTimeout( () => {
-        console.log('setTimeout 1500 ---- State isHtmlReady est faux et devient vrai');
-        setIsHtmlReady(true);
-        isHtmlReadyRef.current = true;
-      }, 1500 );
+  /******** 
+            APRES screen and viewport check
+                                             *********/
+  // GSAP init
+  useEffect( () => {
+    if ( isHtmlReady && !afterGsapFirstInit ) {
+      if (screenType === 'mouse') {
+        console.log('GSAP is initiating (mouse)');
+        gsapAnimations();
+      } else if ( screenType === 'mouse-narrow' || screenType === 'touch' ) {
+        console.log('GSAP is initiating (sobre)');
+        sobreGsapAnimations();  
+      }
+      setAfterGsapFirstInit(true);
     }
-  }, [isHtmlReady]);
+  }, [screenType, isHtmlReady, afterGsapFirstInit, gsapAnimations, sobreGsapAnimations]);
+  
+  // Mobile Glide Carrousel init
+  useEffect( () => {
+    if ( isHtmlReady && ( screenType === 'touch' || screenType === 'mouse-narrow' ) ) {
+      glideCarrousel.current = new Glide('.glide', {
+        type: 'slider',
+        swipeThreshold: false,
+        touchAngle: 0,
+        dragThreshold: false,
+        keyboard: false,
+        hoverpause: true,
+        perView: 1,
+        gap: 20,
+        bound: true,
+        rewind: false,
+      }).mount()
+      setGlideIsInit(true);
+      console.log('Glide Is Init');
+    }
+  }, [screenType, isHtmlReady]);
   
   // Refresh all ScrollTrigger avec the first animations trigger
   useEffect( () => { 
@@ -1187,26 +1231,6 @@ const ConnaitrePage = () => {
       }
     }
   }, [screenType, afterGsapFirstInit, activeRealite, glideIsInit, navClickHandler, realitesDataArray, simpliquerClickHandler]);
-  
-  // Mobile Glide Carrousel init
-  useEffect( () => {
-    if ( screenType === 'touch' || screenType === 'mouse-narrow' ) {
-      glideCarrousel.current = new Glide('.glide', {
-        type: 'slider',
-        swipeThreshold: false,
-        touchAngle: 0,
-        dragThreshold: false,
-        keyboard: false,
-        hoverpause: true,
-        perView: 1,
-        gap: 20,
-        bound: true,
-        rewind: false,
-      }).mount()
-      setGlideIsInit(true);
-      console.log('Glide Is Init');
-    }
-  }, [screenType]);
   
   // Change hash to the corresponding activeRealite state
   useEffect( () => {
