@@ -621,15 +621,16 @@ const ConnaitrePage = () => {
   const [screenType, setScreenType] = useState(null); 
   const [isHtmlReady, setIsHtmlReady] = useState(false);
   const [activeRealite, setActiveRealite] = useState(null);
-  const [glideIsInit, setGlideIsInit] = useState(false);
-  const [afterGsapFirstInit, setAfterGsapFirstInit] = useState(false);
+  //const [readyToResize, setReadyToResize] = useState(false);
   
+  const gsapIsInit = useRef(false);
+  const glideIsInit = useRef(false);
   const currentBreakpoint = useRef(null);
-  const mobileIsFirstLoad = useRef(true);
   const urlHash = useRef(null);
   const gsapContainerRef = useRef(null);
   const timelineRef = useRef([]);
   const glideCarrousel = useRef(null);
+  // const mobileIsFirstLoad = useRef(true);
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
@@ -637,22 +638,19 @@ const ConnaitrePage = () => {
   // Dev helpers
   const stateStore = {
     screenType: screenType,
-    isHtmlReady: isHtmlReady,
-    activeRealite: activeRealite,
-    glideIsInit: glideIsInit,
-    afterGsapFirstInit: afterGsapFirstInit
-  };
-  console.log('stateStore', stateStore);
-  
-  const refValues = {
     currentBreakpoint: currentBreakpoint.current,
-    mobileIsFirstLoad: mobileIsFirstLoad.current,
-    urlHash: mobileIsFirstLoad.current,
-    gsapContainerRef: gsapContainerRef.current,
+    isHtmlReady: isHtmlReady,
+    //readyToResize: readyToResize,
+    glideIsInit: glideIsInit.current,
+    gsapIsInit: gsapIsInit.current,
+    activeRealite: activeRealite,
+    urlHash: urlHash.current,
+    //gsapContainerRef: gsapContainerRef.current,
     timelineRef: timelineRef.current,
     glideCarrousel: glideCarrousel.current,
+    //mobileIsFirstLoad: mobileIsFirstLoad.current,
   }
-  console.log('refValues :', refValues);
+  console.log(stateStore);
   
   /******** Fonctions réutilisables *******/
   // Laptop et desktop GSAP Animations (appelé au moment du screenTypeCheck)
@@ -911,8 +909,9 @@ const ConnaitrePage = () => {
       
     }); // end forEach
     
-    console.log('GSAP is set (mouse)');
-  }, { dependencies: [screenType], scope: gsapContainerRef } );
+    console.log('GSAP is set (full)');
+    //setReadyToResize(true);
+  }, { scope: gsapContainerRef } );
   
   // Mobiles touch GSAP Animations sobres (appelé au moment du screenTypeCheck)
   const sobreGsapAnimations = contextSafe(() => {
@@ -1022,30 +1021,34 @@ const ConnaitrePage = () => {
     }); // end forEach
     
     console.log('GSAP is set (sobre)');
-  }, { dependencies: [screenType, activeRealite], scope: gsapContainerRef } );
+    //setReadyToResize(true);
+  }, { dependencies: [activeRealite], scope: gsapContainerRef } );
   
   // Breakpoint set and change handler
   const onBreakpointChange = breakpoint => {
-    if ( currentBreakpoint.current === null || currentBreakpoint.current === breakpoint) {
+    if ( currentBreakpoint.current && currentBreakpoint.current !== breakpoint ) {
+      console.log(`CHANGING Viewport size to : ${breakpoint}`);
+      window.location.reload();
+      // setScreenType(null);
+      // //setIsHtmlReady(false);
+      // setReadyToResize(false);
+      // //timelineRef.current = [];
+      // gsapIsInit.current = false;
+      // glideIsInit.current = false;
+      // 
+      // ScrollTrigger.killAll();
+      // 
+      // if (glideCarrousel.current) { 
+      //   glideCarrousel.current.destroy();
+      //   glideCarrousel.current = null;
+      // }
+      // 
+      // currentBreakpoint.current = breakpoint;
+    } else if ( currentBreakpoint.current === null || currentBreakpoint.current === breakpoint) {
       console.log(`Viewport size is : ${breakpoint}`, '. Setup begins.');
       currentBreakpoint.current = breakpoint;
       setIsHtmlReady(true);
-    } else if ( currentBreakpoint.current && currentBreakpoint.current !== breakpoint ) {
-      console.log(`CHANGING Viewport size to : ${breakpoint}`);
-      setIsHtmlReady(false);
-      setScreenType(null);
-      setGlideIsInit(false);
-      setAfterGsapFirstInit(false);
-      
-      if (glideCarrousel.current) { 
-        glideCarrousel.current.destroy();
-        glideCarrousel.current = null;
-      }
-      
-      if (mobileIsFirstLoad.current) { mobileIsFirstLoad.current = true }
-      
-      currentBreakpoint.current = breakpoint;
-    }
+    } 
   }
   
   /******** Event Handlers *******/
@@ -1054,7 +1057,7 @@ const ConnaitrePage = () => {
     // console.log('navClickHandler called with ', clickedIndex);
     if (clickedIndex !== activeRealite) { setActiveRealite(clickedIndex); }
     
-    if (screenType === 'mouse') {
+    if (screenType === 'mouse' || screenType === 'touch-large' ) {
       
       // Fade-out fade-in animation
       gsap.from( '#realites-container', {
@@ -1066,7 +1069,7 @@ const ConnaitrePage = () => {
       const associateScrollTrigger = ScrollTrigger.getById(`realiteContent-index-${clickedIndex}`);
       associateScrollTrigger.scroll(associateScrollTrigger.start + 1);
       
-    } else if ( glideIsInit && screenType !== 'mouse')  {
+    } else if ( glideIsInit.current && (screenType === 'touch' || screenType === 'mouse-narrow') )  {
       // console.log('navClickHandler glideIsInit clickedIndex :', clickedIndex);
       glideCarrousel.current.go(`=${clickedIndex}`);
       const navBottomInViewport = gsapContainerRef.current.querySelector('#realites-nav').getBoundingClientRect().bottom;
@@ -1088,7 +1091,7 @@ const ConnaitrePage = () => {
       });
     }
     
-  }, {dependencies: [screenType, glideIsInit, activeRealite, gsapAnimations]});
+  }, {dependencies: [screenType, activeRealite, gsapAnimations]});
   
   const glideControlClickHandler = contextSafe( (clickedIndex) => {
     setActiveRealite(clickedIndex);
@@ -1111,7 +1114,7 @@ const ConnaitrePage = () => {
   });
   
   const labelClickHandler = contextSafe( (realiteIndex, clickedLabel ) => { 
-    if (screenType === 'mouse') {
+    if (screenType === 'mouse' || screenType === 'touch-large') {
       gsap.to( window, { 
         scrollTo: timelineRef.current[realiteIndex].scrollTrigger.labelToScroll(clickedLabel),
       });
@@ -1120,7 +1123,7 @@ const ConnaitrePage = () => {
   
   const simpliquerClickHandler = contextSafe( (event) => {
     if (typeof event !== 'undefined') { event.preventDefault() }
-    if (glideIsInit !== true) { document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = '0'}
+    if (glideIsInit.current !== true) { document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = '0'}
     gsap.to( window, { 
       scrollTo: {y: '#s-impliquer', offsetY: 130},
     });
@@ -1133,21 +1136,21 @@ const ConnaitrePage = () => {
   useEffect( () => {
     if (!screenType) {
       if (window.matchMedia('(hover: hover)').matches) {
-        console.log('Device has a mouse or touchpad events');
+        //console.log('Device has a mouse or touchpad events');
         if (window.matchMedia(`(min-width: ${breakpoints.large})`).matches) {
-          console.log(`Screen is more than ${breakpoints.large} wide.  Full Animations ok.`);
+          //console.log(`Screen is more than ${breakpoints.large} wide.  Full Animations ok.`);
           setScreenType('mouse');
         } else {
           setScreenType('mouse-narrow');
-          console.log(`Screen is less than ${breakpoints.large} wide. Animations sobres.`);
+          //console.log(`Screen is less than ${breakpoints.large} wide. Animations sobres.`);
         }
       } else {
         console.log('Device has no mouse, so has touch events.');
         if (window.matchMedia(`(min-width: ${breakpoints.large})`).matches) {
-          console.log(`Screen is more than ${breakpoints.large} wide. Full Animations ok.`)
-          setScreenType('mouse');
+          //console.log(`Screen is more than ${breakpoints.large} wide. Full Animations ok.`)
+          setScreenType('touch-large');
         } else {
-          console.log(`Screen is less than ${breakpoints.large} wide. Animations sobres.`);
+          //console.log(`Screen is less than ${breakpoints.large} wide. Animations sobres.`);
           setScreenType('touch');
         }
       }
@@ -1166,17 +1169,15 @@ const ConnaitrePage = () => {
                                              *********/
   // GSAP init
   useEffect( () => {
-    if ( isHtmlReady && !afterGsapFirstInit ) {
-      if (screenType === 'mouse') {
-        console.log('GSAP is initiating (mouse)');
+    if ( isHtmlReady && !gsapIsInit.current ) {
+      if (screenType === 'mouse' || screenType === 'touch-large') {
         gsapAnimations();
       } else if ( screenType === 'mouse-narrow' || screenType === 'touch' ) {
-        console.log('GSAP is initiating (sobre)');
         sobreGsapAnimations();  
       }
-      setAfterGsapFirstInit(true);
+      gsapIsInit.current = true;
     }
-  }, [screenType, isHtmlReady, afterGsapFirstInit, gsapAnimations, sobreGsapAnimations]);
+  }, [screenType, activeRealite, isHtmlReady, gsapAnimations, sobreGsapAnimations]);
   
   // Mobile Glide Carrousel init
   useEffect( () => {
@@ -1193,21 +1194,21 @@ const ConnaitrePage = () => {
         bound: true,
         rewind: false,
       }).mount()
-      setGlideIsInit(true);
+      glideIsInit.current = true;
       console.log('Glide Is Init');
     }
   }, [screenType, isHtmlReady]);
   
-  // Refresh all ScrollTrigger avec the first animations trigger
+  // Refresh all ScrollTrigger une fois la premiere animation effectuee [--  PAS SURE --]
   useEffect( () => { 
-    if (afterGsapFirstInit === true ) {
+    if ( isHtmlReady && gsapIsInit.current === true ) {
       ScrollTrigger.refresh(); 
     }
-  }, [afterGsapFirstInit] )
+  }, [isHtmlReady] )
   
-  // Hash in url triggers scroll to section (pour mobile, c'est seulement au premier montage du page load)
+  // Hash in url triggers scroll to section (pour mobile, c'est seulement au premier montage du page load) [-- PAS SURE --]
   useEffect( () => {
-    if ( (screenType !== null) && (afterGsapFirstInit === true)) {
+    if ( (screenType !== null) && (gsapIsInit.current === true)) {
       ScrollTrigger.refresh();
       if ( window.location.hash ) {
         urlHash.current = window.location.hash;
@@ -1215,27 +1216,28 @@ const ConnaitrePage = () => {
         // console.log('url has hash : ', hashSubstring);
         if ( (urlHash.current !== '#s-impliquer') && (activeRealite === null)  ) {
           const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hashSubstring);
-          if (screenType === 'mouse') {
+          if (screenType === 'mouse' || screenType === 'touch-large') {
             navClickHandler(correspondingDataArrayIndex);
             ScrollTrigger.refresh();
-          } else if (glideIsInit === true) {
+          } else if (glideIsInit.current === true) {
             navClickHandler(correspondingDataArrayIndex);
-            mobileIsFirstLoad.current = false; 
+            // mobileIsFirstLoad.current = false; 
           }
-        } else if (urlHash.current === '#s-impliquer' && mobileIsFirstLoad.current) {
-          if (screenType === 'mouse' || glideIsInit === true ) {
+        // } else if (urlHash.current === '#s-impliquer' && mobileIsFirstLoad.current) {
+        } else if (urlHash.current === '#s-impliquer') {
+          if (screenType === 'mouse' || screenType === 'touch-large' || glideIsInit.current === true ) {
             simpliquerClickHandler();
-            mobileIsFirstLoad.current = false;
+            // mobileIsFirstLoad.current = false;
           }
         }
       }
     }
-  }, [screenType, afterGsapFirstInit, activeRealite, glideIsInit, navClickHandler, realitesDataArray, simpliquerClickHandler]);
+  }, [screenType, activeRealite, navClickHandler, realitesDataArray, simpliquerClickHandler]);
   
   // Change hash to the corresponding activeRealite state
   useEffect( () => {
     if ( activeRealite !== null ) {
-      if ( screenType === 'mouse' || glideIsInit === true ) {
+      if ( screenType === 'mouse' || screenType === 'touch-large' || glideIsInit.current === true ) {
         const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
         const newLocationPath = `#${activeRealiteHash}`;
         window.history.pushState({}, '', newLocationPath);
@@ -1243,7 +1245,7 @@ const ConnaitrePage = () => {
       }
     }
     
-  }, [activeRealite, realitesDataArray, glideIsInit, screenType]);
+  }, [activeRealite, realitesDataArray, screenType]);
 
   return (
     <div id='page-wrapper'>
@@ -1302,10 +1304,10 @@ const ConnaitrePage = () => {
                 </ul>
               </nav>
               
-              <div id='realites-container' className={screenType !== 'mouse' ? 'glide' : ''}>
+              <div id='realites-container' className={screenType === 'touch' || screenType === 'mouse-narrow' ? 'glide' : ''}>
                 
-                <div className={screenType !== 'mouse' ? 'glide__track' : ''} data-glide-el='track'>
-                  <div className={screenType !== 'mouse' ? 'glide__slides' : 'no-glide-slides'}>
+                <div className={screenType === 'touch' || screenType === 'mouse-narrow' ? 'glide__track' : ''} data-glide-el='track'>
+                  <div className={screenType === 'touch' || screenType === 'mouse-narrow' ? 'glide__slides' : 'no-glide-slides'}>
                     
                     {realitesDataArray.map( (realite, index) => { return (
                       <div
