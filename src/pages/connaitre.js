@@ -621,7 +621,6 @@ const ConnaitrePage = () => {
   const [screenType, setScreenType] = useState(null); 
   const [isHtmlReady, setIsHtmlReady] = useState(false);
   const [activeRealite, setActiveRealite] = useState(null);
-  //const [readyToResize, setReadyToResize] = useState(false);
   
   const gsapIsInit = useRef(false);
   const glideIsInit = useRef(false);
@@ -630,7 +629,7 @@ const ConnaitrePage = () => {
   const gsapContainerRef = useRef(null);
   const timelineRef = useRef([]);
   const glideCarrousel = useRef(null);
-  // const mobileIsFirstLoad = useRef(true);
+  const mobileIsFirstLoad = useRef(true);
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
@@ -640,7 +639,6 @@ const ConnaitrePage = () => {
     screenType: screenType,
     currentBreakpoint: currentBreakpoint.current,
     isHtmlReady: isHtmlReady,
-    //readyToResize: readyToResize,
     glideIsInit: glideIsInit.current,
     gsapIsInit: gsapIsInit.current,
     activeRealite: activeRealite,
@@ -648,7 +646,7 @@ const ConnaitrePage = () => {
     //gsapContainerRef: gsapContainerRef.current,
     timelineRef: timelineRef.current,
     glideCarrousel: glideCarrousel.current,
-    //mobileIsFirstLoad: mobileIsFirstLoad.current,
+    mobileIsFirstLoad: mobileIsFirstLoad.current,
   }
   console.log(stateStore);
   
@@ -910,7 +908,6 @@ const ConnaitrePage = () => {
     }); // end forEach
     
     console.log('GSAP is set (full)');
-    //setReadyToResize(true);
   }, { scope: gsapContainerRef } );
   
   // Mobiles touch GSAP Animations sobres (appelé au moment du screenTypeCheck)
@@ -1021,7 +1018,6 @@ const ConnaitrePage = () => {
     }); // end forEach
     
     console.log('GSAP is set (sobre)');
-    //setReadyToResize(true);
   }, { dependencies: [activeRealite], scope: gsapContainerRef } );
   
   // Breakpoint set and change handler
@@ -1029,21 +1025,6 @@ const ConnaitrePage = () => {
     if ( currentBreakpoint.current && currentBreakpoint.current !== breakpoint ) {
       console.log(`CHANGING Viewport size to : ${breakpoint}`);
       window.location.reload();
-      // setScreenType(null);
-      // //setIsHtmlReady(false);
-      // setReadyToResize(false);
-      // //timelineRef.current = [];
-      // gsapIsInit.current = false;
-      // glideIsInit.current = false;
-      // 
-      // ScrollTrigger.killAll();
-      // 
-      // if (glideCarrousel.current) { 
-      //   glideCarrousel.current.destroy();
-      //   glideCarrousel.current = null;
-      // }
-      // 
-      // currentBreakpoint.current = breakpoint;
     } else if ( currentBreakpoint.current === null || currentBreakpoint.current === breakpoint) {
       console.log(`Viewport size is : ${breakpoint}`, '. Setup begins.');
       currentBreakpoint.current = breakpoint;
@@ -1221,18 +1202,17 @@ const ConnaitrePage = () => {
             ScrollTrigger.refresh();
           } else if (glideIsInit.current === true) {
             navClickHandler(correspondingDataArrayIndex);
-            // mobileIsFirstLoad.current = false; 
+            mobileIsFirstLoad.current = false; 
           }
-        // } else if (urlHash.current === '#s-impliquer' && mobileIsFirstLoad.current) {
-        } else if (urlHash.current === '#s-impliquer') {
+        } else if (urlHash.current === '#s-impliquer' && mobileIsFirstLoad.current) {
           if (screenType === 'mouse' || screenType === 'touch-large' || glideIsInit.current === true ) {
             simpliquerClickHandler();
-            // mobileIsFirstLoad.current = false;
+            mobileIsFirstLoad.current = false;
           }
         }
       }
     }
-  }, [screenType, activeRealite, navClickHandler, realitesDataArray, simpliquerClickHandler]);
+  }, [screenType, activeRealite, mobileIsFirstLoad, navClickHandler, realitesDataArray, simpliquerClickHandler]);
   
   // Change hash to the corresponding activeRealite state
   useEffect( () => {
