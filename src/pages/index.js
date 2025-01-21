@@ -11,10 +11,9 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 import StatutsImmigrationList from '../components/statutsImmigrationList'
 import HistoiresList from '../components/histoiresList'
+import PartenairesLogoList from '../components/partenairesLogoList'
 import DonsImpactTabs from '../components/donsImpactsTabs'
 import CopyLinkButton from '../components/copyLinkButton'
-
-import partenairesData from '../data/partenaires-data'
 
 const Section1Hero = styled.div`
   width: 100%;
@@ -208,44 +207,6 @@ const Section6Agir = styled.section`
   
 `;
 
-const Section7Partenaires = styled.section`
-  background: var(--color-bleu-tres-fonce);
-  color: white;
-  padding-bottom: calc(var(--v-spacer) / 2) !important;
-  
-  h2 {
-    margin-bottom: 0;}
-  
-  .partenaires {
-    align-items: center;
-    justify-items: center;
-    gap: 0 5vw;
-    grid-template-columns: repeat(2, 1fr);}
-    
-  a {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    border: 2px solid transparent;
-    border-radius: var(--border-radius);
-    padding: 0 5vw;
-    transition: all 0.2s ease-in-out;
-    &:hover {
-      border-color: var(--color-bleu-tres-pale);
-    }}
-    
-  img {
-    display: block;
-    max-width: 100%;
-    height: auto;}
-  
-  ${media.mediumUp`
-    .partenaires {
-      grid-template-columns: repeat(3, 1fr);}
-  `}
-  
-`;
-
 const Section8Apropos = styled.section`
   .grid {
     gap: var(--v-h2-spacer);}
@@ -286,8 +247,6 @@ const IndexPage = () => {
       setShareTooltipOn(false);
     }
   });
-  
-  const partenaireArray = partenairesData();
   
   return (
     <PageLayout>
@@ -423,26 +382,7 @@ const IndexPage = () => {
           </div>
         </Section6Agir>
         
-        <Section7Partenaires id='plus-loin'>
-          <h2>Pour aller plus loin</h2>
-          <div className='partenaires grid'>
-            {partenaireArray.map( (partenaire, pindex) => { return (
-              <a 
-                key={pindex}
-                href={partenaire.websiteUrl} 
-                target='_blank'
-                title={partenaire.nom} 
-                rel='noreferrer'
-              >
-                <img 
-                  src={`../images/partenaires/${partenaire.id}.png`} 
-                  placeholder='dominantColor'
-                  alt={partenaire.nom} 
-                />
-              </a>
-            )})}
-          </div>
-        </Section7Partenaires>
+        <PartenairesLogoList></PartenairesLogoList>
         
         <Section8Apropos id='a-propos' className='grid'>
           <div className='grid'>

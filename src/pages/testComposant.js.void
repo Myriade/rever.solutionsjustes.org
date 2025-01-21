@@ -1,0 +1,31 @@
+import React from 'react'
+import PageLayout from '../layouts/pageLayout'
+import styled from 'styled-components'
+import { Link } from 'gatsby'
+import { media } from '../styles/mixins.js'
+
+import PartenairesLogoList from '../components/partenairesLogoList'
+
+import { useGetManualSortId } from '../utils/useWixData'
+
+const Section = styled.section`
+  background: white;
+`;
+
+const TestComposant = () => {
+  //useGetManualSortId('PageRever-Logosdespartenaires');
+  return (
+    <PageLayout>
+      
+      <Section>
+        <div>
+          <h2>Page juste pour tester un composant isolé</h2>
+          <PartenairesLogoList></PartenairesLogoList>
+        </div>
+      </Section>
+      
+    </PageLayout>
+  )
+}
+
+export default TestComposant

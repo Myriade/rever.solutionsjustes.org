@@ -12,6 +12,7 @@ Front-end framework : Gatsby/React
 ## Développement
 - Terminal : `npm run develop`
 - Dans un browser, la version en développement est disponible à l'adresse localhost:8000/
+- Pour trouver la valeur du tri manuel de Wix (_manualsort...), utiliser temporairement le hook useGetManualSortId importé deûis le fichier useWixData avec la collectionID en argument. Un objet de configs system pour cette collection est imprimé dans la console.
 
 ## Build
 Pour tester le build en local, avant le déploiement
