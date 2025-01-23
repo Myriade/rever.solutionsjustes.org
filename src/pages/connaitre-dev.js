@@ -4,6 +4,7 @@ import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media, breakpoints } from '../styles/mixins.js'
 
+import useWixData from '../utils/useWixData'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
@@ -634,6 +635,21 @@ const ConnaitrePage = () => {
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   const realitesDataArray = connaitreData();
   
+  const placeholderData = {
+    data: {
+      title: 'Chargement ...',
+    }
+  }
+  
+  let fetchedData = useWixData(
+    'PageConnaitre-Recits', 
+    '_manualSort_d4963379-4cc6-44fa-bbed-e60987fe611d',
+    placeholderData
+  );
+  
+  const recitArray = fetchedData;
+  console.log(recitArray);
+  
   // Dev helpers
   // const stateStore = {
   //   screenType: screenType,
@@ -1028,7 +1044,7 @@ const ConnaitrePage = () => {
     } else if ( currentBreakpoint.current === null || currentBreakpoint.current === breakpoint) {
       console.log(`Viewport size is : ${breakpoint}`, '. Setup begins.');
       currentBreakpoint.current = breakpoint;
-      setIsHtmlReady(true);
+      if (recitArray) { setIsHtmlReady(true) }
     } 
   }
   
@@ -1230,23 +1246,21 @@ const ConnaitrePage = () => {
   return (
     <div id='page-wrapper'>
       <PageLayout>
-        <Section1Hero>
-          <StaticImage 
-            className='bg-image'
-            src='../images/grand-portrait-Anabel.webp'
-            layout='fullWidth'
-            alt='portrait de Anabel'
-            placeholder='blurred'
-            quality={100}
-          />
-          <div className='overlay-text'>
-            <h1>
-              <span className='right'>Connaître</span>
-              <span>l’essentiel&nbsp;...</span>
-              <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
-            </h1>
-          </div>
-        </Section1Hero>
+        <section>
+          {recitArray.map((realite, index) => { return (
+            <div key={index} style={{border: "1px solid", padding: "1em", marginBlock: "2em"}}>
+              realite.nom > realite.data.title : {realite.data.title} <br/>
+              realite.idUnique > realite.data.identifiantUnique : {realite.data.identifiantUnique} <br/>
+              realite.titreCourt > realite.data.titreCourt : {realite.data.titreCourt} <br/>
+              realite.intro > realite.data.nomDuStatutExact : <div dangerouslySetInnerHTML={{ __html: realite.data.nomDuStatutExact }}></div>
+              realite.impactIntro > realite.data.impactsBrveIntroduction : <div dangerouslySetInnerHTML={{ __html: realite.data.impactsBrveIntroduction }}></div>
+              realite.impacts > realite.data.lesImpact : <div dangerouslySetInnerHTML={{ __html: realite.data.lesImpacts }}></div>
+              realite.mytheTitre > realite.data.mythePhraseTitre : {realite.data.mythePhraseTitre} <br/>
+              realite.mytheSoustitre > realite.data.mytheSoustitre : <div dangerouslySetInnerHTML={{ __html: realite.data.mytheSoustitre}}></div>
+              realite.mytheExplications > realite.data.mytheExplications : <div dangerouslySetInnerHTML={{ __html: realite.data.mytheExplications}}></div>
+            </div>
+          )})}
+        </section>
         
         { isHtmlReady === true ?
           <div ref={gsapContainerRef} id='gsap-container'>
@@ -1307,7 +1321,7 @@ const ConnaitrePage = () => {
                                 placeholder='none'
                               />
                               <h2>
-                                {realite.intro}<span>{realite.statut}</span>.
+                                {realite.intro}
                               </h2>
                             </div>
                             <div className='identification'>
@@ -1339,7 +1353,7 @@ const ConnaitrePage = () => {
                                 <p className='impacts__instruction instruction'>
                                   Faites défiler pour voir les impacts
                                 </p>
-                                {realitesDataArray[index].impacts.map( (paragraphe, pIndex) => { 
+                                {realite.impacts.map( (paragraphe, pIndex) => { 
                                   return (
                                     <div key={pIndex} className='impact'>
                                       <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
@@ -1451,59 +1465,6 @@ const ConnaitrePage = () => {
         
         <Section4Cta id='s-impliquer'>
           <h2>S'impliquer davantage</h2>
-          <div className='grid'>
-          
-            <div className='sensibilsation'>
-              <div className='intro'>
-                <h3>Je souhaite accueillir un atelier</h3>
-                <p>Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école&nbsp;?</p>
-              </div>
-              <StaticImage 
-                src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
-                alt='Illustration d’une famille portant des boîtes'
-                placeholder='blurred'
-                quality={100}
-                height={200}
-                style={{ marginInline: 'auto' }}
-              />
-              <a 
-                href={`mailto:atelier@montrealcitymission.org?subject=Je%20souhaite%20participer%20%C3%A0%20un%20atelier&body=Bonjour%2C%0A%0AJ'ai%20vu%20la%20campagne%20R%C3%AAver%20%C3%A0%20l'essentiel%20et%20j'aimerais%20organiser%20une%20activit%C3%A9%20de%20sensibilisation%20ou%20une%20formation%20dans%20mon%20entreprise%2C%20organisation%2C%20f%C3%AAte%20de%20quartier%20ou%20%C3%A9cole.`} 
-                className='button centered' 
-                target='_blank' 
-                rel='noreferrer'
-              >
-                Contactez-nous
-              </a>
-            </div>
-            
-            <div className='benevolat'>
-              <div className='intro'>
-                <h3>Je veux faire du bénévolat</h3>
-                <p>Vous souhaitez aider et vous avez un peu de temps à nous offrir&nbsp;? Devenez bénévole chez nous&nbsp;!</p>
-              </div>
-              <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
-              <p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
-              <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
-            </div>
-            
-            <div className='petitions'>
-              <div className='intro'>
-                <h3>Je souhaite signer des pétitions</h3>
-                <p>Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
-              </div>
-              <StaticImage 
-                src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
-                alt='Illustration d’une famille'
-                placeholder='blurred'
-                quality={100}
-                height={200}
-                style={{ marginInline: 'auto' }}
-              />
-              <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
-                Agir
-              </a>
-            </div>
-          </div>
         </Section4Cta>
       
       </PageLayout>
