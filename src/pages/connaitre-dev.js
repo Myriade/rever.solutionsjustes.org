@@ -635,37 +635,65 @@ const ConnaitrePage = () => {
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
   
-  const placeholderData = {
-    data: {
-      nomDuStatutExact: 'Chargement ...',
-    }
-  }
-  
-  let fetchedData = useWixData(
-    'PageConnaitre-Recits', 
-    '_manualSort_d4963379-4cc6-44fa-bbed-e60987fe611d',
-    placeholderData
-  );
-  const recitsArray = fetchedData;
-  
   // Dev helpers
-  const stateStore = {
-    recitsArray: recitsArray,
-    screenType: screenType,
-    currentBreakpoint: currentBreakpoint.current,
-    isHtmlReady: isHtmlReady,
-    glideIsInit: glideIsInit.current,
-    gsapIsInit: gsapIsInit.current,
-    activeRealite: activeRealite,
-    urlHash: urlHash.current,
-    //gsapContainerRef: gsapContainerRef.current,
-    timelineRef: timelineRef.current,
-    glideCarrousel: glideCarrousel.current,
-    mobileIsFirstLoad: mobileIsFirstLoad.current,
-  }
-  console.log(stateStore);
+  // const stateStore = {
+  //   recitsArray: recitsArray,
+  //   screenType: screenType,
+  //   currentBreakpoint: currentBreakpoint.current,
+  //   isHtmlReady: isHtmlReady,
+  //   glideIsInit: glideIsInit.current,
+  //   gsapIsInit: gsapIsInit.current,
+  //   activeRealite: activeRealite,
+  //   urlHash: urlHash.current,
+  //   //gsapContainerRef: gsapContainerRef.current,
+  //   timelineRef: timelineRef.current,
+  //   glideCarrousel: glideCarrousel.current,
+  //   mobileIsFirstLoad: mobileIsFirstLoad.current,
+  // }
+  // console.log(stateStore);
   
   /******** Fonctions réutilisables *******/
+  // Wix Data rich text parsing
+  function replaceTagsWithH2NoAttributes(htmlString) {
+    // Regular expression pattern to match opening tags (p, h1, h3, h4, h5, h6) 
+    const openTagPattern = /<(p|h1|h3|h4|h5|h6)[^>]*>/gi;
+    
+    // Regular expression pattern to match closing tags (p, h1, h3, h4|h5|h6)
+    const closeTagPattern = /<\/(p|h1|h3|h4|h5|h6)>/gi;
+    
+    // Function to replace opening tags
+    function replaceOpenTag(match) {
+      return '<h2>';
+    }
+    
+    // Function to replace closing tags
+    function replaceCloseTag(match, tagName) {
+      return '</h2>';
+    }
+    
+    // Replace opening tags
+    let modifiedHtml = htmlString.replace(openTagPattern, replaceOpenTag);
+    
+    // Replace closing tags
+    modifiedHtml = modifiedHtml.replace(closeTagPattern, replaceCloseTag);
+    
+    return modifiedHtml;
+  }
+  
+  function extractLisTags(htmlString) {
+      // Create a DOM parser to parse the HTML string
+      const parser = new DOMParser();
+      
+      // Parse the HTML string into a document object
+      const doc = parser.parseFromString(htmlString, 'text/html');
+      
+      // Find all paragraph elements
+      const paragraphs = doc.querySelectorAll('li');
+      
+      // Map over the paragraphs and return their text content
+      return Array.from(paragraphs).map(p => p.textContent);
+  }
+
   // Laptop et desktop GSAP Animations (appelé au moment du screenTypeCheck)
   const gsapAnimations = contextSafe(() => {
     // NAVIGATION 
@@ -1129,6 +1157,25 @@ const ConnaitrePage = () => {
     urlHash.current = '#s-impliquer';
   });
   
+  /******** Fetch and parse data *********/
+  const placeholderData = {
+    data: {
+      nomDuStatutExact: 'Chargement ...',
+    }
+  }
+  
+  let fetchedData = useWixData(
+    'PageConnaitre-Recits', 
+    '_manualSort_d4963379-4cc6-44fa-bbed-e60987fe611d',
+    placeholderData
+  );
+  const recitsArray = fetchedData;
+  recitsArray.forEach( recit => {
+    recit.parsedData = {};
+    recit.parsedData.introBulle = replaceTagsWithH2NoAttributes(recit.data.nomDuStatutExact);
+    recit.parsedData.lesImpacts = extractLisTags(recit.data.lesImpacts);
+  });
+  
   /******** Browser Effects (useEffect) *******/
   // Screen type check (touch or mouse)
   useEffect( () => {
@@ -1248,22 +1295,7 @@ const ConnaitrePage = () => {
     <div id='page-wrapper'>
       <PageLayout>
         <section style={{minHeight: '96vh'}}>
-          {
-            // recitsArray.map((realite, index) => { return (
-            //   <div key={index} style={{border: "1px solid", padding: "1em", marginBlock: "2em"}}>
-            //     realite.nom > realite.data.title : {realite.data.title} <br/>
-            //     realite.idUnique > realite.data.identifiantUnique : {realite.data.identifiantUnique} <br/>
-            //     realite.titreCourt > realite.data.titreCourt : {realite.data.titreCourt} <br/>
-            //     realite.intro > realite.data.nomDuStatutExact : <div dangerouslySetInnerHTML={{ __html: realite.data.nomDuStatutExact }}></div>
-            //     realite.presentation > realite.data.prsentation : <div dangerouslySetInnerHTML={{ __html: realite.data.prsentation }}></div>
-            //     realite.impactIntro > realite.data.impactsBrveIntroduction : <div dangerouslySetInnerHTML={{ __html: realite.data.impactsBrveIntroduction }}></div>
-            //     realite.impacts > realite.data.lesImpact : <div dangerouslySetInnerHTML={{ __html: realite.data.lesImpacts }}></div>
-            //     realite.mytheTitre > realite.data.mythePhraseTitre : {realite.data.mythePhraseTitre} <br/>
-            //     realite.mytheSoustitre > realite.data.mytheSoustitre : <div dangerouslySetInnerHTML={{ __html: realite.data.mytheSoustitre}}></div>
-            //     realite.mytheExplications > realite.data.mytheExplications : <div dangerouslySetInnerHTML={{ __html: realite.data.mytheExplications}}></div>
-            //   </div>
-            // )})
-          }
+          
         </section>
         
         { isHtmlReady === true ?
@@ -1324,7 +1356,7 @@ const ConnaitrePage = () => {
                                 alt=''
                                 placeholder='none'
                               />
-                              <h2 dangerouslySetInnerHTML={{ __html: realite.data.nomDuStatutExact }}></h2>
+                              <span dangerouslySetInnerHTML={{ __html: realite.parsedData.introBulle }}></span>
                             </div>
                             <div className='identification'>
                               <img src={`/images/connaitre/personna-${index + 1}.svg`} alt='Illustration portrait' />
@@ -1337,9 +1369,7 @@ const ConnaitrePage = () => {
                             <p className='recit__instruction instruction'>
                               Faites défiler pour lire mon histoire
                             </p>
-                            <div className='presentation'>
-                              <div dangerouslySetInnerHTML={{ __html: realite.data.prsentation }}></div>
-                            </div>
+                            <div className='presentation' dangerouslySetInnerHTML={{ __html: realite.data.prsentation }}></div>
                             <div className='impacts'>
                               <div className='impacts__intro'>
                                 <img className='impacts__avatar' src={`/images/connaitre/personna-${index + 1}.svg`} alt='Illustration portrait' />
@@ -1349,7 +1379,12 @@ const ConnaitrePage = () => {
                                 <p className='impacts__instruction instruction'>
                                   Faites défiler pour voir les impacts
                                 </p>
-                                <div dangerouslySetInnerHTML={{ __html: realite.data.lesImpacts }}></div>
+                                {realite.parsedData.lesImpacts.map( (paragraphe, pIndex) => { 
+                                  return (
+                                    <div key={pIndex} className='impact'>
+                                      <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
+                                    </div>
+                                )})}
                               </div>
                               <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
                             </div>
