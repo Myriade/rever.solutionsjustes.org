@@ -1045,8 +1045,6 @@ const ConnaitrePage = () => {
       currentBreakpoint.current = breakpoint;
       if (recitsArray && recitsArray.length === 4) { 
         setIsHtmlReady(true) 
-      } else {
-        throw new Error('Pour que cette page fonctionne, il doit y avoir exactement 4 récits dans les contenus Wix ');
       }
     } 
   }
@@ -1449,7 +1447,15 @@ const ConnaitrePage = () => {
               
             </SectionRealites>  
           </div>
-        : <h4>... chargement</h4> }
+        : <section>
+            <h4>... chargement</h4>
+            { 
+              recitsArray && recitsArray.length !== 4 ? 
+              <p>Note aux responsables de ce site : pour que cette page fonctionne, il doit y avoir exactement 4 récits dans les contenus Wix</p>
+              : ''
+            }
+          </section> 
+        }
         
         <Section4Cta id='s-impliquer'>
           <h2>S'impliquer davantage</h2>
