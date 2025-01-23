@@ -138,6 +138,7 @@ const SectionRealites = styled.section`
       border-radius: 10px;
       line-height: 1.4;
       display: grid;
+      max-height: 15vh;
       a {
         display: grid;
         align-content: center;
@@ -633,11 +634,10 @@ const ConnaitrePage = () => {
   const mobileIsFirstLoad = useRef(true);
   
   const { contextSafe } = useGSAP({ scope: gsapContainerRef });
-  const realitesDataArray = connaitreData();
   
   const placeholderData = {
     data: {
-      title: 'Chargement ...',
+      nomDuStatutExact: 'Chargement ...',
     }
   }
   
@@ -646,25 +646,24 @@ const ConnaitrePage = () => {
     '_manualSort_d4963379-4cc6-44fa-bbed-e60987fe611d',
     placeholderData
   );
-  
-  const recitArray = fetchedData;
-  console.log(recitArray);
+  const recitsArray = fetchedData;
   
   // Dev helpers
-  // const stateStore = {
-  //   screenType: screenType,
-  //   currentBreakpoint: currentBreakpoint.current,
-  //   isHtmlReady: isHtmlReady,
-  //   glideIsInit: glideIsInit.current,
-  //   gsapIsInit: gsapIsInit.current,
-  //   activeRealite: activeRealite,
-  //   urlHash: urlHash.current,
-  //   //gsapContainerRef: gsapContainerRef.current,
-  //   timelineRef: timelineRef.current,
-  //   glideCarrousel: glideCarrousel.current,
-  //   mobileIsFirstLoad: mobileIsFirstLoad.current,
-  // }
-  // console.log(stateStore);
+  const stateStore = {
+    recitsArray: recitsArray,
+    screenType: screenType,
+    currentBreakpoint: currentBreakpoint.current,
+    isHtmlReady: isHtmlReady,
+    glideIsInit: glideIsInit.current,
+    gsapIsInit: gsapIsInit.current,
+    activeRealite: activeRealite,
+    urlHash: urlHash.current,
+    //gsapContainerRef: gsapContainerRef.current,
+    timelineRef: timelineRef.current,
+    glideCarrousel: glideCarrousel.current,
+    mobileIsFirstLoad: mobileIsFirstLoad.current,
+  }
+  console.log(stateStore);
   
   /******** Fonctions réutilisables *******/
   // Laptop et desktop GSAP Animations (appelé au moment du screenTypeCheck)
@@ -706,7 +705,7 @@ const ConnaitrePage = () => {
         },
         onEnterBack: () => {
           document.querySelector('.pin-spacer-realitesNavPin').style.zIndex = '55';
-          const activeRealiteHash =  realitesDataArray[3].idUnique;
+          const activeRealiteHash =  recitsArray[3].data.identifiantUnique;
           const newLocationPath = `#${activeRealiteHash}`;
           window.history.pushState({}, '', newLocationPath);
         },
@@ -735,7 +734,7 @@ const ConnaitrePage = () => {
       const elementYMargin = window.innerHeight * 0.05;
       const elementXMargin = window.innerWidth * 0.05;
       
-      const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
+      const mythTextToStrike = recitsArray[realiteIndex].data.mythePhraseTitre;
       
       const mytheExplicationsHiddenHeight = element.querySelector('.mythe__explications').scrollHeight - element.querySelector('.mythe__explications').offsetHeight;
       
@@ -1014,7 +1013,7 @@ const ConnaitrePage = () => {
       });
       
       // Mythe Titre se raye
-      const mythTextToStrike = realitesDataArray[realiteIndex].mytheTitre;
+      const mythTextToStrike = recitsArray[realiteIndex].data.mythePhraseTitre;
       gsap.to( element.querySelector('.mythe__titre .biffer'), {
         text: {
           value: mythTextToStrike,
@@ -1044,7 +1043,11 @@ const ConnaitrePage = () => {
     } else if ( currentBreakpoint.current === null || currentBreakpoint.current === breakpoint) {
       console.log(`Viewport size is : ${breakpoint}`, '. Setup begins.');
       currentBreakpoint.current = breakpoint;
-      if (recitArray) { setIsHtmlReady(true) }
+      if (recitsArray && recitsArray.length === 4) { 
+        setIsHtmlReady(true) 
+      } else {
+        throw new Error('Pour que cette page fonctionne, il doit y avoir exactement 4 récits dans les contenus Wix ');
+      }
     } 
   }
   
@@ -1077,7 +1080,7 @@ const ConnaitrePage = () => {
           offsetY: navBottomInViewport,
         },
       });
-      urlHash.current = realitesDataArray[clickedIndex].idUnique;
+      urlHash.current = recitsArray[clickedIndex].recitsArray;
       
       // update the glidetrack elem height
       const glideTrackElem =  gsapContainerRef.current.querySelector('.glide__track ')
@@ -1156,10 +1159,10 @@ const ConnaitrePage = () => {
   
   // Viewport size check (and logic on viewport resize ?)
   useEffect(() => {
-    if ( screenType && !isHtmlReady) {
+    if (recitsArray && recitsArray.length === 4 && screenType && !isHtmlReady) {
       const cleanupFunction = initializeBreakpointHandling(breakPointsArray, onBreakpointChange);
     }
-  }, [screenType, isHtmlReady]);
+  }, [screenType, recitsArray, isHtmlReady]);
   
   /******** 
             APRES screen and viewport check
@@ -1212,7 +1215,7 @@ const ConnaitrePage = () => {
         const hashSubstring = urlHash.current.substring(1);
         // console.log('url has hash : ', hashSubstring);
         if ( (urlHash.current !== '#s-impliquer') && (activeRealite === null)  ) {
-          const correspondingDataArrayIndex = realitesDataArray.findIndex(item => item.idUnique === hashSubstring);
+          const correspondingDataArrayIndex = recitsArray.findIndex(item => item.data.identifiantUnique === hashSubstring);
           if (screenType === 'mouse' || screenType === 'touch-large') {
             navClickHandler(correspondingDataArrayIndex);
             ScrollTrigger.refresh();
@@ -1228,38 +1231,41 @@ const ConnaitrePage = () => {
         }
       }
     }
-  }, [screenType, activeRealite, mobileIsFirstLoad, navClickHandler, realitesDataArray, simpliquerClickHandler]);
+  }, [screenType, activeRealite, mobileIsFirstLoad, navClickHandler, recitsArray, simpliquerClickHandler]);
   
   // Change hash to the corresponding activeRealite state
   useEffect( () => {
     if ( activeRealite !== null ) {
       if ( screenType === 'mouse' || screenType === 'touch-large' || glideIsInit.current === true ) {
-        const activeRealiteHash =  realitesDataArray[activeRealite].idUnique;
+        const activeRealiteHash =  recitsArray[activeRealite].data.identifiantUnique;
         const newLocationPath = `#${activeRealiteHash}`;
         window.history.pushState({}, '', newLocationPath);
         urlHash.current = newLocationPath;
       }
     }
     
-  }, [activeRealite, realitesDataArray, screenType]);
+  }, [activeRealite, recitsArray, screenType]);
 
   return (
     <div id='page-wrapper'>
       <PageLayout>
-        <section>
-          {recitArray.map((realite, index) => { return (
-            <div key={index} style={{border: "1px solid", padding: "1em", marginBlock: "2em"}}>
-              realite.nom > realite.data.title : {realite.data.title} <br/>
-              realite.idUnique > realite.data.identifiantUnique : {realite.data.identifiantUnique} <br/>
-              realite.titreCourt > realite.data.titreCourt : {realite.data.titreCourt} <br/>
-              realite.intro > realite.data.nomDuStatutExact : <div dangerouslySetInnerHTML={{ __html: realite.data.nomDuStatutExact }}></div>
-              realite.impactIntro > realite.data.impactsBrveIntroduction : <div dangerouslySetInnerHTML={{ __html: realite.data.impactsBrveIntroduction }}></div>
-              realite.impacts > realite.data.lesImpact : <div dangerouslySetInnerHTML={{ __html: realite.data.lesImpacts }}></div>
-              realite.mytheTitre > realite.data.mythePhraseTitre : {realite.data.mythePhraseTitre} <br/>
-              realite.mytheSoustitre > realite.data.mytheSoustitre : <div dangerouslySetInnerHTML={{ __html: realite.data.mytheSoustitre}}></div>
-              realite.mytheExplications > realite.data.mytheExplications : <div dangerouslySetInnerHTML={{ __html: realite.data.mytheExplications}}></div>
-            </div>
-          )})}
+        <section style={{minHeight: '96vh'}}>
+          {
+            // recitsArray.map((realite, index) => { return (
+            //   <div key={index} style={{border: "1px solid", padding: "1em", marginBlock: "2em"}}>
+            //     realite.nom > realite.data.title : {realite.data.title} <br/>
+            //     realite.idUnique > realite.data.identifiantUnique : {realite.data.identifiantUnique} <br/>
+            //     realite.titreCourt > realite.data.titreCourt : {realite.data.titreCourt} <br/>
+            //     realite.intro > realite.data.nomDuStatutExact : <div dangerouslySetInnerHTML={{ __html: realite.data.nomDuStatutExact }}></div>
+            //     realite.presentation > realite.data.prsentation : <div dangerouslySetInnerHTML={{ __html: realite.data.prsentation }}></div>
+            //     realite.impactIntro > realite.data.impactsBrveIntroduction : <div dangerouslySetInnerHTML={{ __html: realite.data.impactsBrveIntroduction }}></div>
+            //     realite.impacts > realite.data.lesImpact : <div dangerouslySetInnerHTML={{ __html: realite.data.lesImpacts }}></div>
+            //     realite.mytheTitre > realite.data.mythePhraseTitre : {realite.data.mythePhraseTitre} <br/>
+            //     realite.mytheSoustitre > realite.data.mytheSoustitre : <div dangerouslySetInnerHTML={{ __html: realite.data.mytheSoustitre}}></div>
+            //     realite.mytheExplications > realite.data.mytheExplications : <div dangerouslySetInnerHTML={{ __html: realite.data.mytheExplications}}></div>
+            //   </div>
+            // )})
+          }
         </section>
         
         { isHtmlReady === true ?
@@ -1271,7 +1277,7 @@ const ConnaitrePage = () => {
               
               <nav id='realites-nav'>
                 <ul>
-                  {realitesDataArray.map( (realite, index) => { return (
+                  {recitsArray.map( (realite, index) => { return (
                     <li 
                       key={index} 
                       className={activeRealite === index ? 'realite-nav-item active' : 'realite-nav-item'}
@@ -1279,13 +1285,13 @@ const ConnaitrePage = () => {
                       <a 
                         onClick={(e) => navClickHandler(index, e)}
                         aria-label='Aller à la section'
-                        href={`#${realite.idUnique}`}
+                        href={`#${realite.data.identifiantUnique}`}
                       >
                         <div className='avatar'>
-                          <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
+                          <img src={`/images/connaitre/personna-${index + 1}.svg`} alt='Illustration portrait' />
                         </div>
-                        <div className='nom'>{realite.nom}</div>
-                        <strong>{realite.titreCourt}</strong>
+                        <div className='nom'>{realite.data.title}</div>
+                        <strong>{realite.data.titreCourt}</strong>
                       </a>
                     </li>
                   )})}
@@ -1303,10 +1309,10 @@ const ConnaitrePage = () => {
                 <div className={screenType === 'touch' || screenType === 'mouse-narrow' ? 'glide__track' : ''} data-glide-el='track'>
                   <div className={screenType === 'touch' || screenType === 'mouse-narrow' ? 'glide__slides' : 'no-glide-slides'}>
                     
-                    {realitesDataArray.map( (realite, index) => { return (
+                    {recitsArray.map( (realite, index) => { return (
                       <div
                         className='realite-unique glide__slide'
-                        id={realite.idUnique} 
+                        id={realite.data.identifiantUnique} 
                         key={index}
                         rel='noreferrer'
                       > 
@@ -1320,14 +1326,12 @@ const ConnaitrePage = () => {
                                 alt=''
                                 placeholder='none'
                               />
-                              <h2>
-                                {realite.intro}
-                              </h2>
+                              <h2 dangerouslySetInnerHTML={{ __html: realite.data.nomDuStatutExact }}></h2>
                             </div>
                             <div className='identification'>
-                              <img src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
-                              <p className='nom'>{realite.nom}</p>
-                              <p>{realite.titreCourt}</p>
+                              <img src={`/images/connaitre/personna-${index + 1}.svg`} alt='Illustration portrait' />
+                              <p className='nom'>{realite.data.title}</p>
+                              <p>{realite.data.titreCourt}</p>
                             </div>
                           </div>
                           
@@ -1336,29 +1340,18 @@ const ConnaitrePage = () => {
                               Faites défiler pour lire mon histoire
                             </p>
                             <div className='presentation'>
-                              {realitesDataArray[index].presentation.map( (paragraphe, pIndex) => { 
-                                return (
-                                <p 
-                                  key={pIndex} 
-                                  className='paragr' 
-                                  dangerouslySetInnerHTML={{ __html: paragraphe}}></p>
-                              )})}
+                              <div dangerouslySetInnerHTML={{ __html: realite.data.prsentation }}></div>
                             </div>
                             <div className='impacts'>
                               <div className='impacts__intro'>
-                                <img className='impacts__avatar' src={`/images/connaitre/${realite.nom}.svg`} alt='Illustration portrait' />
-                                <p dangerouslySetInnerHTML={{ __html: realite.impactIntro }} ></p>
+                                <img className='impacts__avatar' src={`/images/connaitre/personna-${index + 1}.svg`} alt='Illustration portrait' />
+                                <div dangerouslySetInnerHTML={{ __html: realite.data.impactsBrveIntroduction }}></div>
                               </div>
                               <div className='impacts__content'>
                                 <p className='impacts__instruction instruction'>
                                   Faites défiler pour voir les impacts
                                 </p>
-                                {realite.impacts.map( (paragraphe, pIndex) => { 
-                                  return (
-                                    <div key={pIndex} className='impact'>
-                                      <p dangerouslySetInnerHTML={{ __html: paragraphe }}></p>
-                                    </div>
-                                )})}
+                                <div dangerouslySetInnerHTML={{ __html: realite.data.lesImpacts }}></div>
                               </div>
                               <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
                             </div>
@@ -1369,7 +1362,7 @@ const ConnaitrePage = () => {
                           <div className='mythe__intro'>
                             <h3 className='mythe__titre'>
                               <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
-                              «&nbsp;<span className='biffer'>{realite.mytheTitre}</span>&nbsp;»
+                              «&nbsp;<span className='biffer'>{realite.data.mythePhraseTitre}</span>&nbsp;»
                             </h3>
                             <p className='mythe__instruction instruction'>Faites défiler pour lire la suite</p>
                             <div className='mythe__sous-titre'>
@@ -1379,16 +1372,11 @@ const ConnaitrePage = () => {
                                   alt='Solutions Justes'
                                 />
                               </div>
-                              <h3>{realite.mytheSoustitre}</h3>
+                              <h3 dangerouslySetInnerHTML={{ __html: realite.data.mytheSoustitre}}></h3>
                             </div>
                           </div>
                           <div className='mythe__explications'>
-                            {realite.mytheExplications.map( (paragraphe, pIndex) => { return (
-                              <p 
-                                key={pIndex}
-                                dangerouslySetInnerHTML={{ __html: paragraphe }}
-                              ></p>
-                            )})}
+                            <div dangerouslySetInnerHTML={{ __html: realite.data.mytheExplications}}></div>
                           </div>
                         </div>
                         
@@ -1430,17 +1418,17 @@ const ConnaitrePage = () => {
                       </button>
                     </div>
                     <div className="glide__bullets" data-glide-el="controls[nav]">
-                      { realitesDataArray.map( (item, index) => {
+                      { recitsArray.map( (item, index) => {
                         return (
                           <button 
-                            title={`voir l'histoire de ${item.nom}`}
+                            title={`voir l'histoire de ${item.data.title}`}
                             data-glide-dir={`=${index}`} 
                             key={`point-${index}`}
                             aria-label={`Aller à la fiche ${index + 1}`}
                             onClick={ () => glideControlClickHandler(index)}
                           >
                             <div className='glide__bullet' ></div>
-                            {item.nom}
+                            {item.data.title}
                           </button>
                         )
                       })}
