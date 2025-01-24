@@ -1180,6 +1180,12 @@ const ConnaitrePage = () => {
       recit.parsedData.lesImpacts = extractLisTags(recit.data.lesImpacts);
     });
   }
+  let fetchedCtaData = useWixData(
+    'PageConnaitre-Appelalaction',
+    '', 
+    placeholderData
+  );
+  console.log(fetchedCtaData);
   
   /******** Browser Effects (useEffect) *******/
   // Screen type check (touch or mouse)
@@ -1546,23 +1552,27 @@ const ConnaitrePage = () => {
               <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
             </div>
             
-            <div className='petitions'>
-              <div className='intro'>
-                <h3>Je souhaite signer des pétitions</h3>
-                <p>Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.</p>
+            { typeof fetchedCtaData[0].data.titre === 'string' ?
+              <div className='petitions'>
+                <div className='intro'>
+                  <h3>{fetchedCtaData[0].data.titre}</h3>
+                  <div dangerouslySetInnerHTML={{ __html: fetchedCtaData[0].data.texte }}></div>
+                </div>
+                { fetchedCtaData[0].data.imageAfficherLillustrationDeLaFamille === true ?
+                  <StaticImage 
+                    src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
+                    alt='Illustration d’une famille'
+                    placeholder='blurred'
+                    quality={100}
+                    height={200}
+                    style={{ marginInline: 'auto' }}
+                  />
+                : `` }
+                <a href={fetchedCtaData[0].data.boutonLienAuClicSurLeBouton} className='button centered' target='_blank' rel='noreferrer'>
+                  {fetchedCtaData[0].data.boutonMotsSurLeBouton}
+                </a>
               </div>
-              <StaticImage 
-                src='../images/connaitre/MCM_SiteWeb_Illustration-Personnes-sans-statut-immigration.png'
-                alt='Illustration d’une famille'
-                placeholder='blurred'
-                quality={100}
-                height={200}
-                style={{ marginInline: 'auto' }}
-              />
-              <a href='https://migrantrights.ca/take-action/participez/' className='button centered' target='_blank' rel='noreferrer'>
-                Agir
-              </a>
-            </div>
+            : `` }
           </div>
         </Section4Cta>
       
