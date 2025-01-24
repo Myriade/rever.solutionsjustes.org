@@ -6,14 +6,15 @@ import { StaticImage } from 'gatsby-plugin-image'
 import { media } from '../styles/mixins.js'
 
 import QuizItem from '../components/quizItem'
-import data from '../data/quizData'
+import data from '../data/quizData'             //  À supprimer 
 
+import useWixData from '../utils/useWixData'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-const quizData = data();
+// const quizData = data();                        //  À supprimer 
 
 const Section1Hero = styled.div`
   width: 100%;
@@ -247,7 +248,24 @@ const QuizDevPage = () => {
   const offsetHeight = useRef()
   const { contextSafe } = useGSAP({ scope: gsapPageContainerRef });
   
-  // Get Header and progresssion frise offset height for scrolling offset
+  const placeholderData = {
+    data: {
+      title: 'Chargement ...',
+    }
+  }
+  
+  /******** Fetch and parse data *********/
+  let fetchedData = useWixData(
+    'QuizAudeladesStatuts', 
+    '_manualSort_5b60fad8-3b02-40b7-9a25-6e59ca5f5651',
+    placeholderData
+  );
+  const quizData = fetchedData;
+  if (quizData && quizData.length > 1) {
+    //console.log(quizData);
+  }
+  
+  // Get Header and progression frise offset height for scrolling offset
   useEffect ( () => {
     function getOffsetHeight() {
       const headerHeight = document.querySelector('header').offsetHeight;
@@ -281,7 +299,7 @@ const QuizDevPage = () => {
   }, [screenType]);
   
   // Initiate the progression array
-  if ( answersProgression === null ) {
+  if ( answersProgression === null && quizData && quizData.length > 1) {
     const initialAnswersProgression = quizData.map( (item, index) => { 
       return {
         questionNumber: index + 1,
@@ -519,16 +537,18 @@ const QuizDevPage = () => {
           : ''}
         </SectionProgression>
         
-        <section className='full-width' id='quiz'>
-          { quizData.map( (item, qIndex) => { return (
-            <QuizItem  
-              key={item.id} 
-              itemData={item} 
-              itemIndex={qIndex}
-              onQuizItemChange={ (answerResult) => updateQuiz(qIndex, answerResult) } 
-            />
-          )})}
-        </section>
+        { quizData && quizData.length > 1 ?
+          <section className='full-width' id='quiz'>
+            { quizData.map( (item, qIndex) => { return (
+              <QuizItem  
+                key={item._id} 
+                itemData={item.data} 
+                itemIndex={qIndex}
+                onQuizItemChange={ (answerResult) => updateQuiz(qIndex, answerResult) } 
+              />
+            )})}
+          </section>
+        : `` }
         
         <SectionConclusion id='conclusion'>
           { answersProgression !== null ?

@@ -1,5 +1,5 @@
-import React, {useState, useRef} from 'react';
-//import { convertImageUrl } from '../utils/utils'
+import React, {useState, useEffect, useRef} from 'react';
+import { convertImageUrl } from '../utils/utils'
 import styled from 'styled-components'
 
 import { media } from '../styles/mixins.js'
@@ -25,6 +25,10 @@ const Item = styled.div`
 		> .grid {
 			grid-template-columns: 1fr 1fr;
 			gap: 0;}
+		.interaction {
+			display: grid;
+			align-content: end;
+		}
 		&:first-child .interaction {
 			border-top: 2px solid var(--color-bleu-tres-pale);}
 	`};
@@ -182,19 +186,52 @@ gsap.registerPlugin(useGSAP);
 const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 	const [selectedChoice, setSelectedChoice] = useState(null);
 	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
+	const [choixArray, setChoixArray] = useState(null);
 	
 	const shuffledChoiceArray = useRef();
 	const choixRef = useRef();
 	const itemRef = useRef();
+	let rightAnswerIndex = useRef();
+	let rightAnswerId = useRef();
+	let rightAnswerText = useRef();
 	
-	const rightAnswerIndex = itemData.choix.findIndex( choix => choix.isRightAnswer === true );
-	const rightAnswerId = `${itemData.id}-${rightAnswerIndex}`;
-	const rightAnswerText = itemData.choix.filter( choix => choix.isRightAnswer === true )[0].text;
-	
-	if ( !arrayIsShuffled ) {
-		shuffledChoiceArray.current = itemData.choix.sort((a, b) => 0.5 - Math.random());
-		setArrayIsShuffled(true);
+	function extractLisTags(htmlString) {
+			// Create a DOM parser to parse the HTML string
+			const parser = new DOMParser();
+			
+			// Parse the HTML string into a document object
+			const doc = parser.parseFromString(htmlString, 'text/html');
+			
+			// Find all li elements
+			const listElems = doc.querySelectorAll('li');
+			
+			// Map over the paragraphs and return their text content
+			return Array.from(listElems).map(li => { 
+				const liString = li.innerHTML;
+				const strippedHtmlTagsString = liString.replace(/(<([^>]+)>)/gi, "");
+				return strippedHtmlTagsString;
+			});
 	}
+	
+	useEffect( () => {
+		if (!choixArray) { 
+			const parsedChoixList = extractLisTags(itemData.choixDeRponses);
+			setChoixArray(parsedChoixList) 
+		}
+		
+		if (choixArray) {
+			rightAnswerIndex.current = itemData.bonneRponse - 1;
+			rightAnswerId.current = `question${itemIndex}-reponse${rightAnswerIndex.current}`;
+			rightAnswerText.current = choixArray[rightAnswerIndex.current];
+		}
+		
+		if ( !arrayIsShuffled && choixArray ) {
+			shuffledChoiceArray.current = choixArray.sort((a, b) => 0.5 - Math.random());
+			setArrayIsShuffled(true);
+		}
+	}, [choixArray, arrayIsShuffled]);
+	
+	console.log('choixArray', itemIndex, choixArray);
 	
 	const { contextSafe } = useGSAP({ scope: itemRef });
 	
@@ -202,7 +239,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 	const onOptionChange = contextSafe( (clickedChoiceId) => {
 		setSelectedChoice(clickedChoiceId);
 		
-		if (clickedChoiceId === rightAnswerId ) {
+		if (clickedChoiceId === rightAnswerId.current ) {
 			onQuizItemChange('bonne');
 		} else {
 			onQuizItemChange('mauvaise');
@@ -217,19 +254,19 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 		let tl = gsap.timeline();
 		
 		// Selected wrong answer becomes red
-		tl.to( itemRefElem.querySelector(`label[for=${clickedChoiceId}]:not([for=${rightAnswerId}])`), {
+		tl.to( itemRefElem.querySelector(`label[for=${clickedChoiceId}]:not([for=${rightAnswerId.current}])`), {
 			backgroundColor: '#F15959',
 			duration: 0.5
 		});
 		
 		// Right answer becomes bleu
-		tl.to( itemRefElem.querySelector(`label[for=${rightAnswerId}]`), {
+		tl.to( itemRefElem.querySelector(`label[for=${rightAnswerId.current}]`), {
 			backgroundColor: '#1e8ed2',
 			color: 'white',
 			duration: 0.5,
 		}, '<');
 		
-		tl.to( itemRefElem.querySelector(`label[for=${rightAnswerId}] span`), {
+		tl.to( itemRefElem.querySelector(`label[for=${rightAnswerId.current}] span`), {
 			backgroundColor: 'white',
 			color: '#1e8ed2',
 			duration: 0.5,
@@ -245,7 +282,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 	return (
 		<Item 
 			className='quiz-item' 
-			id={`quiz-item-${itemData.id}`}
+			id={`quiz-item-${itemData._id}`}
 			ref={itemRef}
 		>
 			<div className='grid'>
@@ -253,11 +290,11 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 					<div className='grid'>
 						<div className='cercle'>
 							<div className='number'>{itemIndex + 1}</div>
-							<img src={`/images/quiz/${itemData.id}.svg`} alt='Illustration portrait' />
+							<img src={`/images/quiz/enceinte.svg`} alt='Illustration portrait' />
 						</div>
 						<h2>{itemData.title}</h2>
 					</div>
-					<div className='situation' dangerouslySetInnerHTML={{ __html: itemData.situation }} />
+					<div className='situation' dangerouslySetInnerHTML={{ __html: itemData.texteDeLaSituation }} />
 				</Presentation>
 			
 				<Interaction className='interaction'>
@@ -266,23 +303,23 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 					</div>
 					<Choix ref={choixRef} className='choix'>
 						{ arrayIsShuffled === true ? 
-							<fieldset id={`input-radio-${itemData.id}`}>
+							<fieldset id={`input-radio-${itemData._id}`}>
 								{ shuffledChoiceArray.current.map( (choix, index) => {
-									const choiceId = `${itemData.id}-${index}`;
+									const choiceId = `question${itemIndex}-reponse${index}`;
 									return (
 										<div key={choiceId} className='choix-unique'>
 											<input 
 												type='radio' 
 												id={choiceId} 
 												name='statut' 
-												value={choix.text}
+												value={choix}
 												onChange={ () => onOptionChange(choiceId) }
 											/>
 											<label 
 												htmlFor={choiceId}
 												className={ choiceId == selectedChoice ? 'selected' : '' }
 											>
-												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span>{choix.text}
+												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> Elle {choix}
 											</label>
 										</div>
 								)})}
@@ -291,17 +328,17 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 					</Choix>
 					<div className='resultat'>
 						<div className='answer'>
-							{ selectedChoice == rightAnswerId ? 
+							{ selectedChoice == rightAnswerId.current ? 
 								(<>
-									<p>Bien vu !</p> 
-									<p>En effet, <span className='lowercase'>{rightAnswerText}</span>.</p>
+									<p>Effectivement&nbsp;!</p> 
+									<p>Cette personne <span className='lowercase'>{rightAnswerText.current}</span>.</p>
 								</>)
 							: ''} 
 							
-							{ selectedChoice != rightAnswerId && selectedChoice !== null ?
+							{ selectedChoice != rightAnswerId.current && selectedChoice !== null ?
 								(<>
 									<p>Oups !</p>
-									<p>En vérité <span className='lowercase'>{rightAnswerText}</span>.</p>
+									<p>En vérité, cette personne <span className='lowercase'>{rightAnswerText.current}</span>.</p>
 								</>)
 							: '' }
 						</div>
