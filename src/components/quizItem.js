@@ -13,6 +13,13 @@ const Item = styled.div`
 		font-weight: normal;
 		margin-bottom:0;}
 		
+	li p {
+		margin-block: 0;
+		font-size: inherit;
+		&:first-child {
+			font-weight: inherit;}
+	}
+		
 	&:not(:first-child) > .grid {
 		height: 0;
 		> div {
@@ -75,7 +82,7 @@ const Presentation = styled.div`
 		line-height: 1.6;
 		&:first-child {
 			font-weight: 600;
-			b {
+			b, strong {
 				font-weight: 800;}}
 		&:not(:first-child) {
 			font-size: 1rem;}}
@@ -96,6 +103,8 @@ const Interaction = styled.div`
 		line-height: 1.6;}
 		
 	.resultat {
+		height: 0;
+		overflow: hidden;
 		text-align: center;
 		margin-top: 1rem;
 		color: var(--color-bleu-tres-fonce);
@@ -147,6 +156,7 @@ const Choix = styled.div`
 		gap: 1.75rem;
 		align-items: center;
 		span {
+			flex-shrink: 0;
 			background: var(--color-bleu-clair);
 			color: white;
 			font-weight: 800;
@@ -274,15 +284,17 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 		
 		// Explanation text appears
 		tl.to( itemRefElem.querySelectorAll('.resultat'), {
+			height: 'auto',
 			backgroundColor: 'white',
-			duration: 1,		});
+			duration: 1.5,		
+		});
 		
 	});
 	
 	return (
 		<Item 
 			className='quiz-item' 
-			id={`quiz-item-${itemData._id}`}
+			id={`quiz-item-${itemIndex}`}
 			ref={itemRef}
 		>
 			<div className='grid'>

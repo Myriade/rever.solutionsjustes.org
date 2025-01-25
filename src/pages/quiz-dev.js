@@ -429,7 +429,7 @@ const QuizDevPage = () => {
       duration: 0.5, 
       ease: 'power1.inOut',
       scrollTo: {
-        y: `#quiz-item-${quizData[activeQuestion].id}`,
+        y: `#quiz-item-${activeQuestion}`,
         offsetY: offsetHeight.current - 2,
       } 
     });
