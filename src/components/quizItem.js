@@ -204,6 +204,8 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 	let rightAnswerIndex = useRef();
 	let rightAnswerId = useRef();
 	let rightAnswerText = useRef();
+
+	//console.log(itemData);
 	
 	function extractLisTags(htmlString) {
 			// Create a DOM parser to parse the HTML string
@@ -240,8 +242,6 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 			setArrayIsShuffled(true);
 		}
 	}, [choixArray, arrayIsShuffled]);
-	
-	console.log('choixArray', itemIndex, choixArray);
 	
 	const { contextSafe } = useGSAP({ scope: itemRef });
 	
@@ -291,6 +291,13 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 		
 	});
 	
+	// Image url extraction
+	console.log(itemData.illustration);
+	let imageSrc = '/logo.jpg';
+	if (itemData.illustration) { 
+		imageSrc = convertImageUrl(itemData.illustration) 
+	}
+	
 	return (
 		<Item 
 			className='quiz-item' 
@@ -302,7 +309,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 					<div className='grid'>
 						<div className='cercle'>
 							<div className='number'>{itemIndex + 1}</div>
-							<img src={`/images/quiz/enceinte.svg`} alt='Illustration portrait' />
+							<img src={imageSrc} alt='Illustration portrait' />
 						</div>
 						<h2>{itemData.title}</h2>
 					</div>
