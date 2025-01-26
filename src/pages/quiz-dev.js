@@ -6,15 +6,12 @@ import { StaticImage } from 'gatsby-plugin-image'
 import { media } from '../styles/mixins.js'
 
 import QuizItem from '../components/quizItem'
-import data from '../data/quizData'             //  À supprimer 
 
 import useWixData from '../utils/useWixData'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-// const quizData = data();                        //  À supprimer 
 
 const Section1Hero = styled.div`
   width: 100%;
