@@ -1,8 +1,11 @@
 # rever.solutionsjustes.org
 ## Un microsite de campagne pour la clinique Solutions justes
-Code author : Myriam Bizier / Myriade web
-Design : Republik & Manon Lecante
-Front-end framework : Gatsby/React
+
+## Crédits :
+Programmation et développement  web : Myriam Bizier / Myriade web  
+Design graphique web : Republik & Manon Lecante  
+Framework front-end : Gatsby/React  
+Back-end: Wix CMS  
 
 ## Installation
 - Récupérer le code source dans le repo GIT
@@ -12,7 +15,7 @@ Front-end framework : Gatsby/React
 ## Développement
 - Terminal : `npm run develop`
 - Dans un browser, la version en développement est disponible à l'adresse localhost:8000/
-- Pour trouver la valeur du tri manuel de Wix (_manualsort...), utiliser temporairement le hook useGetManualSortId importé deûis le fichier useWixData avec la collectionID en argument. Un objet de configs system pour cette collection est imprimé dans la console.
+- Pour trouver la valeur du tri manuel de Wix (_manualsort...), console.log les données brutes, et la tri se trouve dans une propriété de chaque élément data.  
 
 ## Build
 Pour tester le build en local, avant le déploiement
@@ -27,8 +30,3 @@ Le variables d'environnement doivent être préfixées de GATSBY_ pour les prot�
 
 ## Déploiement
 Push master branch to GitHub repo. It triggers a deployment script on Netlify
-
-## Refactor todo
-- Page Connaitre, ce fichier est beaucoup trop long : séparer en composants
-- Nomenclature des composants plus logique
-- Faire un composant Header, et mettre un placeholder data en attendant le chargement de l'image (au lieu du fond animé dans layout)
