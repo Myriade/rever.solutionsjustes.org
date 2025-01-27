@@ -1,11 +1,13 @@
 # rever.solutionsjustes.org
 ## Un microsite de campagne pour la clinique Solutions justes
+Porteur de projet : MCM Mission Communautaire Montréal  
+Licence : GNU GENERAL PUBLIC LICENSE
 
 ## Crédits :
 Programmation et développement  web : Myriam Bizier / Myriade web  
 Design graphique web : Republik & Manon Lecante  
 Framework front-end : Gatsby/React  
-Back-end: Wix CMS headless
+Back-end: Wix CMS headless  
 Librairies : GSAP, Glide
 
 ## Installation
