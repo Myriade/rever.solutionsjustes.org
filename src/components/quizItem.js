@@ -338,7 +338,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 												htmlFor={choiceId}
 												className={ choiceId == selectedChoice ? 'selected' : '' }
 											>
-												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> Elle {choix}
+												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> Elle {choix}.
 											</label>
 										</div>
 								)})}

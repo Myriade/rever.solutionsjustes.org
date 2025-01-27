@@ -486,7 +486,7 @@ const QuizDevPage = () => {
           />
           <div className='overlay-text'>
             <h1>
-              <span>Au delà</span> 
+              <span>Au-delà</span> 
               <span className='right'>des</span> 
               <span>statuts</span>
             </h1>
