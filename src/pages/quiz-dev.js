@@ -692,7 +692,7 @@ const QuizDevPage = () => {
                 <p>ou partager par : </p>
                 <ul>
                   <li><a 
-                    href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Testez%20vos%20connaissances%20et%20appendez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%0Ahttps%3A%2F%2Frever.solutionsjustes.org%2Fquiz%0A`}
+                    href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Testez%20vos%20connaissances%20et%20apprenez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%0Ahttps%3A%2F%2Frever.solutionsjustes.org%2Fquiz%0A`}
                     target='_blank'
                     rel='noreferrer'
                     >Courriel</a></li>
@@ -708,7 +708,7 @@ const QuizDevPage = () => {
                     >LinkedIn</a></li>
                   <li>
                     <a
-                      href='https://twitter.com/intent/tweet?text=Testez%20vos%20connaissances%20et%20appendez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%20https%3A%2F%2Frever.solutionsjustes.org%2Fquiz'
+                      href='https://twitter.com/intent/tweet?text=Testez%20vos%20connaissances%20et%20apprenez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%20https%3A%2F%2Frever.solutionsjustes.org%2Fquiz'
                       target='_blank'
                       rel='noreferrer'
                       >
