@@ -292,7 +292,6 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 	});
 	
 	// Image url extraction
-	console.log(itemData.illustration);
 	let imageSrc = '/logo.jpg';
 	if (itemData.illustration) { 
 		imageSrc = convertImageUrl(itemData.illustration) 

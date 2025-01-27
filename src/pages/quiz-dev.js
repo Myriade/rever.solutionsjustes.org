@@ -6,6 +6,7 @@ import { StaticImage } from 'gatsby-plugin-image'
 import { media } from '../styles/mixins.js'
 
 import QuizItem from '../components/quizItem'
+import CopyLinkButton from '../components/copyLinkButton'
 
 import useWixData from '../utils/useWixData'
 import { gsap } from 'gsap'
@@ -194,6 +195,9 @@ const SectionConclusion = styled.section`
     font-weight: 300;
     font-size: 1.2rem;
     max-width: 65ch;
+    a {
+      margin-block: 0.5em;
+      display: inline-block;}
     b {
       font-weight: 700;}}
     
@@ -233,13 +237,62 @@ const SectionConclusion = styled.section`
   `}
 `;
 
+const SectionPartager = styled.section`
+  .cta {
+    position: relative;
+    max-width: 730px;
+    display: grid;
+    margin-inline: auto;
+    justify-items; center;}
+    
+  .tooltip {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+    top: -150px;
+    right: 0;
+    background: var(--color-bleu-clair);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius);
+    border-bottom-left-radius: 0;
+    z-index: 30;
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 1.25rem;
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      display: flex;
+      gap: 1rem;
+      margin-block:0;}
+    a, .copylink {
+      text-align: center;
+      border: 1px solid white;
+      border-radius: 4px;
+      padding: 0.25em;
+      font-weight: bold;
+      &:hover {
+        cursor: pointer;
+        border-color: var(--color-bleu-tres-fonce);
+      }
+    }
+    p {
+      margin-block: 0;
+      text-align: center;
+    }
+  }
+`;
+
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
 const QuizDevPage = () => {
   const [screenType, setScreenType] = useState(''); 
   const [answersProgression, setAnswersProgression] = useState(null);
   const [goodAnswerCount, setGoodAnswerCount] = useState(0);
-  const [activeQuestion, setActiveQuestion] = useState(null)
+  const [activeQuestion, setActiveQuestion] = useState(null);
+  const [shareTooltipOn, setShareTooltipOn] = useState(false);
   
   const gsapPageContainerRef = useRef();
   const offsetHeight = useRef()
@@ -471,6 +524,16 @@ const QuizDevPage = () => {
     
   };
   
+  const shareClickHandler = contextSafe(() => {
+    if (!shareTooltipOn) {
+      gsap.to( '.tooltip', { duration: 0.5, opacity: 1, height: 'auto' });
+      setShareTooltipOn(true);
+    } else {
+      gsap.to( '.tooltip', { duration: 0.5, opacity: 0, height: 0 });
+      setShareTooltipOn(false);
+    }
+  });
+  
   return (
     <PageLayout>
       <div ref={gsapPageContainerRef} id='gsap-container'>
@@ -551,7 +614,7 @@ const QuizDevPage = () => {
           { answersProgression !== null ?
             <>
             
-              { answersProgression[ answersProgression.length - 1 ].answerState == 'attente' ? 
+              { answersProgression[ answersProgression.length - 1 ].answerState === 'attente' ? 
                 <div className='grid next'>
                   <button className='button centered' onClick={ goNextHandler }>
                     Prochaine question<span>❯</span>
@@ -584,8 +647,27 @@ const QuizDevPage = () => {
                     }
                     
                     <div className='socials'>
-                      <a href='' target='_blank'>FB</a> 
-                      <a href='' target='_blank'>LI</a>
+                      <a href='https://www.facebook.com/MCityMission' target='_blank' rel="noreferrer" title='Notre page Facebook'>
+                        <StaticImage 
+                          src='../images/facebook_icon.svg' 
+                          alt='Facebook' 
+                          layout='constrained'
+                        ></StaticImage>
+                      </a> 
+                      <a href='https://www.linkedin.com/company/solutions-justes/' rel="noreferrer" target='_blank' title='Notre page LinkedIn'>
+                        <StaticImage 
+                          src='../images/linkedin_icon.svg' 
+                          alt='LinkedIn' 
+                          layout='constrained'
+                        ></StaticImage>
+                      </a>
+                      <a href='https://www.instagram.com/solutionsjustes/' rel="noreferrer" target='_blank' title='Notre fil Instagram'>
+                        <StaticImage 
+                          src='../images/instagram_icon.svg' 
+                          alt='Instagram' 
+                          layout='constrained'
+                        ></StaticImage>
+                      </a>
                     </div>
                     
                   </>
@@ -595,6 +677,48 @@ const QuizDevPage = () => {
             </>
           : ''}
         </SectionConclusion>
+        
+        <SectionPartager>
+          <div>
+            <div className='cta grid'>
+              <button 
+                className='button centered'
+                onClick={shareClickHandler}
+              >
+                Partager ce quiz
+              </button>
+              <div className='tooltip'>
+                <CopyLinkButton url={'https://rever.solutionsjustes.org/quiz'} />
+                <p>ou partager par : </p>
+                <ul>
+                  <li><a 
+                    href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Testez%20vos%20connaissances%20et%20appendez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%0Ahttps%3A%2F%2Frever.solutionsjustes.org%2Fquiz%0A`}
+                    target='_blank'
+                    rel='noreferrer'
+                    >Courriel</a></li>
+                  <li><a 
+                    href='https://www.facebook.com/dialog/share?app_id=2315665215432948&display=popup&href=https%3A%2F%2Frever.solutionsjustes.org%2Fquiz'
+                    target='_blank'
+                    rel='noreferrer'
+                    >Facebook</a></li>
+                  <li><a
+                    href='https://www.linkedin.com/sharing/share-offsite/?url=https://rever.solutionsjustes.org/quiz'
+                    target='_blank'
+                    rel='noreferrer'
+                    >LinkedIn</a></li>
+                  <li>
+                    <a
+                      href='https://twitter.com/intent/tweet?text=Testez%20vos%20connaissances%20et%20appendez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%20https%3A%2F%2Frever.solutionsjustes.org%2Fquiz'
+                      target='_blank'
+                      rel='noreferrer'
+                      >
+                    X</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </SectionPartager>
     
       </div>
     </PageLayout>
@@ -603,4 +727,17 @@ const QuizDevPage = () => {
 
 export default QuizDevPage
 
-export const Head = () => <title>Quiz | Au delà les statuts</title>
+export const Head = () => ( 
+  <>
+    <title>Quiz : Au-delà des statuts d'immigration | Solutions justes</title>
+    <meta name='description' content="Ce quiz offre une perspective unique sur les défis auxquels font face les personnes migrantes et permet de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien." />
+    
+    <meta property='og:title' content="Quiz : Au-delà des statuts d'immigration | Solutions justes" />
+    <meta property='og:description' content="Ce quiz offre une perspective unique sur les défis auxquels font face les personnes migrantes et permet de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien." />
+    <meta property='og:image' content='https://rever.solutionsjustes.org/quiz-solutions-justes-mcm-og.jpg' />
+    <meta property='og:image:alt' content="Testez vos connaissances avec notre quiz interactif ! 🧠💡
+    Vous vous demandez comment les différents statuts d'immigration influencent la vie quotidienne des personnes migrantes ? Ce quiz vous offrira une perspective unique sur les défis auxquels font face les personnes migrantes et vous permettra de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien." />
+    <meta property='og:url' content='https://rever.solutionsjustes.org/quiz' />
+    <meta property='og:type' content='website' />
+  </>
+);
