@@ -26,11 +26,11 @@ Pour tester le build en local, avant le déploiement
 - Terminal : `npm run serve`
 Le site built est disponible sur l'url du serveur affiché dans le terminal
 
-### Variables .env
-Pour la récupération des données du back-end Wix, un fichier .env doit être créé manuellement à la racine du projet.
+## Wix Clients Headless et variables .env
+Pour la récupération des données du back-end Wix, un fichier .env doit être créé manuellement à la racine du projet pour contenir la clé API pour le client Wix headless. Celle-ci se trouve dans le panneau admin Wix > Paramètres > Avancé > Paramètres Headless
 Attention!!
 Les variables d'environnement doivent être préfixées de GATSBY_ pour les protéger côté serveur et éviter de les exposer côté browser. C'est important surtout pour le build au déploiement. Elles doivent être ajoutée manuellement en local dans le fichier .env.development sou la forme :
 `GATSBY_MA_VARIABLE= 'valeur-de-ma-variable'`
 
 ## Déploiement
-Push master branch to GitHub repo. It triggers a deployment script on Netlify
+Pour déployer, faire un git push de la branche master sur le dépôt GitHub. Celui-ci va déclencher automatiquement un script de déploiement par Netlify
