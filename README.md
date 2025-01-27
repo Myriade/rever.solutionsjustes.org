@@ -5,7 +5,8 @@
 Programmation et développement  web : Myriam Bizier / Myriade web  
 Design graphique web : Republik & Manon Lecante  
 Framework front-end : Gatsby/React  
-Back-end: Wix CMS  
+Back-end: Wix CMS headless
+Librairies : GSAP, Glide
 
 ## Installation
 - Récupérer le code source dans le repo GIT
@@ -24,8 +25,9 @@ Pour tester le build en local, avant le déploiement
 Le site built est disponible sur l'url du serveur affiché dans le terminal
 
 ### Variables .env
+Pour la récupération des données du back-end Wix, un fichier .env doit être créé manuellement à la racine du projet.
 Attention!!
-Le variables d'environnement doivent être préfixées de GATSBY_ pour les protéger côté serveur et éviter de les exposer côté browser. C'est important surtout pour le build au déploiement. Elles doivent être ajoutée manuellement en local dans le fichier .env.development sou la forme :
+Les variables d'environnement doivent être préfixées de GATSBY_ pour les protéger côté serveur et éviter de les exposer côté browser. C'est important surtout pour le build au déploiement. Elles doivent être ajoutée manuellement en local dans le fichier .env.development sou la forme :
 `GATSBY_MA_VARIABLE= 'valeur-de-ma-variable'`
 
 ## Déploiement
