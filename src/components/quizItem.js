@@ -201,11 +201,8 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 	const shuffledChoiceArray = useRef();
 	const choixRef = useRef();
 	const itemRef = useRef();
-	let rightAnswerIndex = useRef();
 	let rightAnswerId = useRef();
 	let rightAnswerText = useRef();
-
-	//console.log(itemData);
 	
 	function extractLisTags(htmlString) {
 			// Create a DOM parser to parse the HTML string
@@ -218,10 +215,13 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 			const listElems = doc.querySelectorAll('li');
 			
 			// Map over the paragraphs and return their text content
-			return Array.from(listElems).map(li => { 
+			return Array.from(listElems).map( (li, index) => { 
 				const liString = li.innerHTML;
 				const strippedHtmlTagsString = liString.replace(/(<([^>]+)>)/gi, "");
-				return strippedHtmlTagsString;
+				return {
+					text: strippedHtmlTagsString,
+					originalIndex: index
+				};
 			});
 	}
 	
@@ -231,13 +231,11 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 			setChoixArray(parsedChoixList) 
 		}
 		
-		if (choixArray) {
-			rightAnswerIndex.current = itemData.bonneRponse - 1;
-			rightAnswerId.current = `question${itemIndex}-reponse${rightAnswerIndex.current}`;
-			rightAnswerText.current = choixArray[rightAnswerIndex.current];
-		}
-		
 		if ( !arrayIsShuffled && choixArray ) {
+			const rightAnswerIndex = itemData.bonneRponse - 1;
+			rightAnswerId.current = `question${itemIndex + 1}-reponse${itemData.bonneRponse}`;
+			rightAnswerText.current = choixArray[rightAnswerIndex].text;
+			
 			shuffledChoiceArray.current = choixArray.sort((a, b) => 0.5 - Math.random());
 			setArrayIsShuffled(true);
 		}
@@ -319,25 +317,26 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 					<div className='question'>
 						<h3>Selon vous,<br/> cette personne est dans quelle situation&nbsp;?</h3>
 					</div>
+					
 					<Choix ref={choixRef} className='choix'>
 						{ arrayIsShuffled === true ? 
 							<fieldset id={`input-radio-${itemData._id}`}>
 								{ shuffledChoiceArray.current.map( (choix, index) => {
-									const choiceId = `question${itemIndex}-reponse${index}`;
+									const choiceId = `question${itemIndex + 1}-reponse${choix.originalIndex + 1}`;
 									return (
 										<div key={choiceId} className='choix-unique'>
 											<input 
 												type='radio' 
 												id={choiceId} 
 												name='statut' 
-												value={choix}
+												value={choix.originalIndex}
 												onChange={ () => onOptionChange(choiceId) }
 											/>
 											<label 
 												htmlFor={choiceId}
 												className={ choiceId == selectedChoice ? 'selected' : '' }
 											>
-												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> Elle {choix}.
+												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> Elle {choix.text}.
 											</label>
 										</div>
 								)})}

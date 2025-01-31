@@ -636,13 +636,13 @@ const QuizDevPage = () => {
                       <>
                         <p><b>Pas de panique, vous êtes sur la bonne voie&nbsp;!</b> Il est normal de ne pas tout savoir : les personnes migrantes sans statut et à statut précaire vivent souvent dans l'invisibilité, ce qui rend difficile la compréhension de leurs histoires et de leurs défis. Cependant, ce quiz vous a permis de mieux comprendre certains aspects clés de la réalité des personnes migrantes et les enjeux liés à leur statut d'immigration.</p>
                         <p>Nous vous encourageons à poursuivre votre apprentissage<br/> 
-                        <Link to='/connaitre'>en explorant ces autres récits</Link><br/> 
+                        <Link to='/connaitre/#sans-statut'>en explorant ces autres récits</Link><br/> 
                         et en nous suivant sur les réseaux sociaux pour en savoir plus.</p>
                       </>
                     : 
                       <>
                         <p><b>Félicitations&nbsp;!</b> Vous avez désormais une meilleure compréhension de la réalité vécue par les personnes migrantes sans statut ou à statut précaire, dont de nombreux problèmes et enjeux découlent de leur statut d’immigration.</p>
-                        <p>Continuez à vous informer <Link to='/connaitre'>avec ces autres récits</Link><br/> et en nous suivant sur les réseaux sociaux.</p>
+                        <p>Continuez à vous informer <Link to='/connaitre/#sans-statut'>avec ces autres récits</Link><br/> et en nous suivant sur les réseaux sociaux.</p>
                       </>
                     }
                     
