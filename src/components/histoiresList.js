@@ -417,6 +417,22 @@ const HistoiresList = () => {
 			duration: 0.5
 		});
 	})
+	
+	// Scroll to this section if hash is present in url
+	useEffect( () => {
+		if ( window.location.hash ) {
+			const urlHash = window.location.hash;
+			const hashSubstring = urlHash.substring(1);
+			if (hashSubstring === 'consequences') {
+				gsap.to( window, { 
+					scrollTo: {
+						y: '#consequences',
+						offsetY: 50
+					},
+				});
+			}
+		}
+	}, [gsapFirstAnimations]);
 
 	return (
 		<section id='consequences'>
