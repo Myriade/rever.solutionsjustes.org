@@ -34,7 +34,7 @@ const Item = styled.div`
 			gap: 0;}
 		.interaction {
 			display: grid;
-			align-content: end;
+			align-content: center;
 		}
 		&:first-child .interaction {
 			border-top: 2px solid var(--color-bleu-tres-pale);}
