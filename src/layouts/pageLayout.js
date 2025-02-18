@@ -113,6 +113,7 @@ export default function PageLayout({ children }) {
         <nav className='internal-nav'>
           <Link to='/' activeClassName='active' title='Rêver à l&rsquo;essentiel'>Rêver</Link>
           <Link to='/connaitre' activeClassName='active' title='Connaître l&rsquo;essentiel'>Connaître</Link>
+          <Link to='/quiz' activeClassName='active' title='Testez vos connaissances'>Quiz</Link>
         </nav>
         <div className='mirror'></div>
       </Header>
