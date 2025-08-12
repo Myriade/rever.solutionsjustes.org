@@ -12,8 +12,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { TextPlugin } from 'gsap/TextPlugin'
 import Glide from '@glidejs/glide'
 
-import connaitreData from '../data/connaitreData'
-
 const Section1Hero = styled.div`
   width: 100%;
   padding: initial !important;

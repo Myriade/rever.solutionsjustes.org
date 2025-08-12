@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import useWixData from '../utils/useWixData'
 import { convertImageUrl } from '../utils/utils'

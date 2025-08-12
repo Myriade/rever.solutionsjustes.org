@@ -239,7 +239,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 			shuffledChoiceArray.current = choixArray.sort((a, b) => 0.5 - Math.random());
 			setArrayIsShuffled(true);
 		}
-	}, [choixArray, arrayIsShuffled]);
+	}, [choixArray, arrayIsShuffled, itemData.bonneRponse, itemData.choixDeRponses, itemIndex]);
 	
 	const { contextSafe } = useGSAP({ scope: itemRef });
 	
@@ -334,7 +334,7 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 											/>
 											<label 
 												htmlFor={choiceId}
-												className={ choiceId == selectedChoice ? 'selected' : '' }
+												className={ choiceId === selectedChoice ? 'selected' : '' }
 											>
 												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> Elle {choix.text}.
 											</label>
@@ -345,14 +345,14 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 					</Choix>
 					<div className='resultat'>
 						<div className='answer'>
-							{ selectedChoice == rightAnswerId.current ? 
+							{ selectedChoice === rightAnswerId.current ? 
 								(<>
 									<p>Effectivement&nbsp;!</p> 
 									<p>Cette personne <span className='lowercase'>{rightAnswerText.current}</span>.</p>
 								</>)
 							: ''} 
 							
-							{ selectedChoice != rightAnswerId.current && selectedChoice !== null ?
+							{ selectedChoice !== rightAnswerId.current && selectedChoice !== null ?
 								(<>
 									<p>Oups !</p>
 									<p>En vérité, cette personne <span className='lowercase'>{rightAnswerText.current}</span>.</p>

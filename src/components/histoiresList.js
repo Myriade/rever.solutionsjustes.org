@@ -294,7 +294,7 @@ const HistoiresList = () => {
 				setScreenType('touch');
 			}
 		}
-	}, []);
+	}, [screenType]);
 	
 	// GSAP First animations
 	const gsapFirstAnimations = contextSafe(() => {

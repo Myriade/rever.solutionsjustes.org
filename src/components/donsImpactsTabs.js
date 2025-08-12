@@ -138,7 +138,7 @@ const DonsImpactTabs = () => {
 				{data.map( (item, index) => { return (
 					<li
 						key={index} 
-						className={index == activeIndex ? `index-${index} active` : `index-${index}`}
+						className={index === activeIndex ? `index-${index} active` : `index-${index}`}
 					>
 						<button
 							onClick={clickHandler}

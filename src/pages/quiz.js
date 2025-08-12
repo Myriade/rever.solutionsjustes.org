@@ -431,7 +431,7 @@ const QuizDevPage = () => {
         });
       }
     }
-  }, [activeQuestion]);
+  }, [activeQuestion, answersProgression]);
   
   // Conclusion Animation : lorsque la dernière question est répondue, la zone de conclusion devient bleu foncée
   const conclusionAnimations = contextSafe(() => {

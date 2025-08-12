@@ -2,7 +2,6 @@ import React from 'react'
 import PageLayout from '../layouts/pageLayout'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-import { media } from '../styles/mixins.js'
 
 const Section = styled.section`
   min-height: calc(94vh - var(--header-height));

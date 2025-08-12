@@ -14,7 +14,7 @@ const convertImageUrl = (wixMediaString) => {
 		
 	} else if (matchVector) { 
 		// Match the input string against the vector image pattern
-		const [, hash, imageName] = matchVector; // Extract captured groups
+		const [, hash] = matchVector; // Extract captured groups
 		return `https://static.wixstatic.com/shapes/${hash}`; // Construct the new url string
 	}
 	
