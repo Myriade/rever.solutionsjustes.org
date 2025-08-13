@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import PageLayout from '../layouts/pageLayout'
+import PageLayout from '../layouts/pageLayout.fr'
 import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'

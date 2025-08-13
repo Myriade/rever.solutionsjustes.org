@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect }  from 'react'
-import PageLayout from '../layouts/pageLayout'
+import PageLayout from '../layouts/pageLayout.fr'
 import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media, breakpoints } from '../styles/mixins.js'

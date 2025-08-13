@@ -1,5 +1,5 @@
 import React from 'react'
-import PageLayout from '../layouts/pageLayout'
+import PageLayout from '../layouts/pageLayout.fr'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 

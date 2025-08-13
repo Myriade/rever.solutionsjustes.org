@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { Link } from 'gatsby'
-import PageLayout from '../layouts/pageLayout'
+import PageLayout from '../layouts/pageLayout.fr'
 import styled from 'styled-components'
 import { StaticImage } from 'gatsby-plugin-image'
 import { media } from '../styles/mixins.js'

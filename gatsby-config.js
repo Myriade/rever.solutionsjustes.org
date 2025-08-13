@@ -37,6 +37,15 @@ module.exports = {
         enableWebVitalsTracking: true,
       },
     },
+    {
+      resolve: `gatsby-plugin-i18n`,
+        options: {
+          langKeyDefault: 'fr',
+          langKeyForNull: 'fr',
+          prefixDefault: false,
+          useLangKeyLayout: false,
+        },
+    },
   ]
 };
 
