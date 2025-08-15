@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, {useState, useRef} from "react"
+import { StaticImage } from "gatsby-plugin-image"
 import { Link } from 'gatsby'
-import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
-
-import { gsap } from "gsap";
-import { useGSAP } from '@gsap/react';
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { gsap } from "gsap"
+import { useGSAP } from '@gsap/react'
+import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 
 import StatutsImmigrationList from './statutsImmigrationList'
 import HistoiresList from './histoiresList'
@@ -223,15 +222,13 @@ const Section8Apropos = styled.section`
 	`}
 `;
 
-gsap.registerPlugin(useGSAP);
-gsap.registerPlugin(ScrollToPlugin);
-
-const PageAccueil = () => {
+const Accueil = () => {
 	const [shareTooltipOn, setShareTooltipOn] = useState(false);
 	
 	const gsapContainerRef = useRef();
-	
 	const { contextSafe } = useGSAP({ scope: gsapContainerRef });
+	gsap.registerPlugin(useGSAP);
+	gsap.registerPlugin(ScrollToPlugin);
 	
 	const shortcutClickHandler = contextSafe(() => {
 		gsap.to( window, { duration: 1, scrollTo: '#agir' });
@@ -403,4 +400,4 @@ const PageAccueil = () => {
 	)
 }
 
-export default PageAccueil
+export default Accueil

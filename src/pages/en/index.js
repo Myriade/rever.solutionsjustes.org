@@ -1,11 +1,11 @@
 import React from 'react'
 import PageLayout from '../../layouts/pageLayout.en'
-import PageAccueil from '../../components/PageAccueil'
+import Accueil from '../../components/pAccueil'
 
 const Page = () => {
   return (
     <PageLayout>
-      <PageAccueil />
+      <Accueil />
     </PageLayout>
   )
 }

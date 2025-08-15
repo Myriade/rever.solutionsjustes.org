@@ -7,14 +7,19 @@ module.exports = {
     siteUrl: `https://rever.solutionsjustes.org`,
     description: `Chaque rêve mérite de ne pas être essentiel ! Ensemble, apprenons la réalité de l’immigration humanitaire et faisons entendre les histoires de ceux et celles qui aspirent à un avenir meilleur.`
   },
-  //trailingSlash: "never",
   plugins: [
-    "gatsby-plugin-image", 
-    "gatsby-plugin-sharp", 
-    "gatsby-transformer-sharp", 
-    "gatsby-plugin-sass", 
-    "gatsby-plugin-sitemap", 
+    `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/src/images`,
+      },
+    }, 
+    "gatsby-plugin-sass", 
+    "gatsby-plugin-sitemap", {
       resolve: 'gatsby-plugin-manifest',
       options: {
         "icon": "src/images/icon.jpg"
@@ -27,17 +32,14 @@ module.exports = {
       options: {
         siteUrl: `https://rever.solutionsjustes.org`,
       },
-    } ,
-    `gatsby-plugin-image`,
-    {
+    } , {
       resolve: "gatsby-plugin-google-tagmanager",
       options: {
         id: "GTM-59WRR2G6",
         includeInDevelopment: false,
         enableWebVitalsTracking: true,
       },
-    },
-    {
+    } , {
       resolve: `gatsby-plugin-i18n`,
         options: {
           langKeyDefault: 'fr',
