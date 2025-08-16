@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import donsImpactsData from '../data/dons-impacts'
-
 const Container = styled.div`
+	width: 100%;
 	&.index-0 {
 		background: var(--color-bleu-clair);}
 	&.index-1 {
@@ -119,14 +118,28 @@ const Container = styled.div`
 		width: 100%;
 		.button:hover {
 			background-color: white;
+			color: var(--color-bleu-tres-fonce);
 			&:before, &:after {
 				background-color: white;}}}
 `;
 
-const DonsImpactTabs = () => {
+const DonsImpactTabs = ({textData}) => {
 	const [activeIndex, setActiveIndex] = useState(0)
 	
-	const data = donsImpactsData();
+	const data = [
+		{
+			montant: '20\u00A0$',
+			impact: textData.p6a1,
+		} ,
+		{
+			montant: '200\u00A0$',
+			impact: textData.p6a2,
+		} ,
+		{
+			montant: '2000\u00A0$',
+			impact: textData.p6a3,
+		}
+	]
 	
 	function clickHandler(e) {
 		const clickedDataIndex = e.target.dataset.index;
@@ -161,7 +174,7 @@ const DonsImpactTabs = () => {
 					target='_blank' 
 					rel='noreferrer'
 				>
-					Donner
+					{textData.b6a}
 				</a>
 			</div>
 		</Container>

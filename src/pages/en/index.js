@@ -9,7 +9,7 @@ const Page = () => {
   return (
     <PageLayout>
       { textes ? 
-        <Accueil textData={textes.rever.en} />
+        <Accueil lang='en' textData={textes.rever.en} />
         : '...'
       } 
     </PageLayout>

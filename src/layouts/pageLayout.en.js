@@ -23,7 +23,11 @@ const Header = styled.header`
   .internal-nav {
     display: flex;
     justify-items: center;
-    gap: 1rem;}
+    gap: 1rem;
+    span {
+      color: white;
+      font-weight: normal;
+    }}
   
   a {
     color: white;
@@ -114,6 +118,8 @@ export default function PageLayout({ children }) {
           <Link to='/en' activeClassName='active' title='Dream to the essential'>Dream</Link>
           <Link to='/en/know' activeClassName='active' title='Know the essential'>Know</Link>
           <Link to='/en/quiz' activeClassName='active' title='Test your knowledge'>Quiz</Link>
+          <span>|</span>
+          <Link to='/' activeClassName='active' title='Français'>Fr</Link>
         </nav>
         <div className='mirror'></div>
       </Header>

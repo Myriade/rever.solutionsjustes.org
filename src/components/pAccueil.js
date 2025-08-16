@@ -222,7 +222,18 @@ const Section8Apropos = styled.section`
 	`}
 `;
 
-const Accueil = ({textData}) => {
+const localisedText = {
+	fr: {
+		partager: 'Partager',
+		ou: 'ou partager par'
+	},
+	en: {
+		partager: 'Share',
+		ou: 'or share by'
+	}
+}
+
+const Accueil = ({lang, textData}) => {
 	const [shareTooltipOn, setShareTooltipOn] = useState(false);
 	
 	const gsapContainerRef = useRef();
@@ -244,8 +255,6 @@ const Accueil = ({textData}) => {
 		}
 	});
 	
-	console.log('LOG pAccueil', textData)
-	
 	return (
 		<div ref={gsapContainerRef} id='gsap-container'>
 			<Section1Hero >
@@ -258,20 +267,20 @@ const Accueil = ({textData}) => {
 					quality={100}
 				/>
 				<div className='overlay-text'>
-					<h1 dangerouslySetInnerHTML={{ __html: textData.t1 }}></h1>
+					<h1 dangerouslySetInnerHTML={{ __html: textData.t1 }} />
 				</div>
 			</Section1Hero>
 			
 			<Section2Intro>
 				<div className='grid'>
-					<h2>Tout le monde a des rêves, mais ce n'est pas donné à tout le monde de pouvoir en faire une réalité.</h2>
+					<h2>{textData.t2}</h2>
 					<div>
-						<p>Les personnes im·migrantes sans statut ou à statut précaire sont souvent contraintes de mettre de côté leurs plus grandes aspirations pour ne rêver qu'à l'essentiel. En passant de grandes ambitions aux désirs les plus simples—et les plus humains—la campagne Rêver à l'essentiel met en lumière les obstacles auxquels ces personnes doivent faire face pour vivre dignement lorsque leur quotidien est dicté par leur statut migratoire.</p>
+						<p>{textData.p2}</p>
 						<button 
 							className='button soutenir'
 							onClick={shortcutClickHandler}
 						>
-							Soutenir la cause
+							{textData.b2}
 						</button>
 					</div>
 				</div>
@@ -279,17 +288,17 @@ const Accueil = ({textData}) => {
 			
 			<Section3Statuts>
 				<div className='grid'>
-					<h2>Les statuts d'immigration</h2>
-					<p>Connaître la réalité des personnes im·migrantes au statut d'immigration absent ou précaire nécessite une meilleure compréhension des termes liés à l'enjeu. Apprenez-en davantage sur les différentes situations qui affectent les personnes im·migrantes.</p>
+					<h2>{textData.t3}</h2>
+					<p>{textData.p3}</p>
 				</div>
 				<StatutsImmigrationList />
 			</Section3Statuts>
 			
-			<HistoiresList />
+			<HistoiresList textData={textData} />
 			
 			<Section5Video id='video'>
 				<div>
-					<h2>De toi à moi: témoignage d'une personne sans statut d'immigration.</h2>
+					<h2>{textData.t5}</h2>
 					<div className="video">
 						<iframe
 							src='https://www.youtube-nocookie.com/embed/yL-fwv2Z3rE?si=HFvBzDUZJMr3zBiu&rel=0' 
@@ -307,27 +316,27 @@ const Accueil = ({textData}) => {
 			</Section5Video>
 			
 			<Section6Agir id='agir'>
-				<h2>Comment vous pouvez aider</h2>
+				<h2>{textData.t6}</h2>
 				<div className='grid'>
 					<div className='donner'>
 						<div className='intro'>
-							<h3>1. Faire un don</h3>
-							<p>Chaque don compte. Découvrez l'impact de votre générosité.</p>
+							<h3>1. {textData.t6a}</h3>
+							<p>{textData.p6a}</p>
 						</div>
-						<DonsImpactTabs />
+						<DonsImpactTabs textData={textData} />
 					</div>
 					
 					<div className='sensibiliser'>
-						<h3>2. Vous sensibiliser à la cause</h3>
-						<p>En apprendre davantage sur les enjeux qui touchent les personnes sans statut ou à statut précaire, c'est un pas dans la bonne direction. Devenez un défenseur ou une défenseuse de leur bien-être en vous sensibilisant à l'impact qu'ont les différents statuts d'immigration sur la vie quotidienne des personnes im.migrantes et réfugiées.</p>
+						<h3>2. {textData.t6b}</h3>
+						<p>{textData.p6b}</p>
 						<Link to='/connaitre' className='button centered'>
-							En savoir plus
+							{textData.b6b}
 						</Link>
 					</div>
 					
 					<div className='partager'>
-						<h3>3. Passer le mot</h3>
-						<p>Partagez cette campagne à vos proches et collègues afin de les sensibiliser à la cause</p>
+						<h3>3. {textData.t6c}</h3>
+						<p>{textData.p6c}</p>
 						<StaticImage
 							src='../images/rever-a-l-essentiel-MCM.webp'
 							placeholder='dominantColor'
@@ -339,11 +348,11 @@ const Accueil = ({textData}) => {
 								className='button centered'
 								onClick={shareClickHandler}
 							>
-								Partager
+								{textData.b6c}
 							</button>
 							<div className='tooltip'>
-								<CopyLinkButton url={'https://rever.solutionsjustes.org/'} />
-								<p>ou partager par : </p>
+								<CopyLinkButton lang={lang} url={'https://rever.solutionsjustes.org/'} />
+								<p>{lang === 'fr' ? localisedText.fr.ou : ''}{lang === 'en' ? localisedText.en.ou : ''}</p>
 								<ul>
 									<li><a 
 										href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Bonjour%2C%0A%0AJ'esp%C3%A8re%20que%20tu%20vas%20bien.%20Je%20voulais%20te%20parler%20d'une%20campagne%20importante%20sur%20l'immigration%20humanitaire%2C%20qui%20met%20en%20lumi%C3%A8re%20les%20statuts%20d%E2%80%99immigration%2C%20l%E2%80%99absence%20de%20statut%20et%20leurs%20impacts%20sur%20la%20vie%20des%20personnes.%0A%0Ahttps%3A%2F%2Frever.solutionsjustes.org%2F%0A%0AChaque%20histoire%20m%C3%A9rite%20d'%C3%AAtre%20entendue.%20Ensemble%2C%20nous%20pouvons%20faire%20la%20diff%C3%A9rence%20en%20apprenant%20cette%20r%C3%A9alit%C3%A9%20et%20soutenir%20ces%20voix.%20Je%20t'invite%20%C3%A0%20d%C3%A9couvrir%20la%20campagne%20et%20%C3%A0%20partager%20tes%20r%C3%A9flexions.%0A%0AMerci%20de%20ton%20soutien%20!%0A%0ACordialement%2C`}

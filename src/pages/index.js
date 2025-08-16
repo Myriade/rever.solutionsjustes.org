@@ -9,7 +9,7 @@ const Page = () => {
   return (
     <PageLayout>
       { textes ? 
-        <Accueil textData={textes.rever.fr} />
+        <Accueil lang='fr' textData={textes.rever.fr} />
         : '...'
       } 
     </PageLayout>

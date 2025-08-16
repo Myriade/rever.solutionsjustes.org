@@ -228,7 +228,7 @@ const transformData = ( (inputArray, targetArray, associatedId) => {
 		
 });
 
-const HistoiresList = () => {
+const HistoiresList = ({textData}) => {
 	// State
 	const [contentPersonnes, setContentPersonnes] = useState([placeholderPersonne]);
 	const [contentLignesTemps, setContentLignesTemps] = useState([placeholderLigneTemps]);
@@ -437,8 +437,8 @@ const HistoiresList = () => {
 	return (
 		<section id='consequences'>
 			<Intro className='grid'>
-				<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
-				<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
+				<h2>{textData.t4}</h2>
+				<p>{textData.p4}</p>
 			</Intro>
 			
 			<div ref={gsapScopeRef} style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}>
@@ -458,7 +458,7 @@ const HistoiresList = () => {
 								onClick={() => histoireSwitchClickHandler(cardIndex)} 
 								className='button' 
 							>
-								Lire son histoire
+								{textData.b4}
 							</button>
 						</div>
 					)})}
@@ -472,7 +472,7 @@ const HistoiresList = () => {
 							id={`histoire-${histoireItem.data.idUnique}`} 
 							key={histoireIndex}
 						>
-							<h3 className='histoire__titre'>L'histoire de {histoireItem.data.title}</h3>
+							<h3 className='histoire__titre'>{textData.t4b} {histoireItem.data.title}</h3>
 							<p className='histoire__resume'>{histoireItem.data.titre}</p>
 							
 							<div className='all-controls'>
