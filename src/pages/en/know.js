@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect }  from 'react'
-import PageLayout from '../layouts/pageLayout.fr'
-import Connaitre from '../components/pConnaitre'
+import PageLayout from '../../layouts/pageLayout.en'
+import Connaitre from '../../components/pConnaitre'
 
 const Page = () => {
   return (

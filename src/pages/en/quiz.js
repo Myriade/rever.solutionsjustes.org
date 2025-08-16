@@ -1,9 +1,8 @@
 import React from 'react'
-import PageLayout from '../layouts/pageLayout.fr'
-import Quiz from '../components/pQuiz'
+import PageLayout from '../../layouts/pageLayout.en'
+import Quiz from '../../components/pQuiz'
 
 const Page = () => {
-  
   return (
     <PageLayout>
       <Quiz />
