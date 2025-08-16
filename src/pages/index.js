@@ -1,11 +1,17 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PageLayout from '../layouts/pageLayout.fr'
 import Accueil from '../components/pAccueil'
+import lesTextes from '../data/textes'
 
 const Page = () => {
+  const [textes, setTextes] = useState(lesTextes());
+  
   return (
     <PageLayout>
-      <Accueil />
+      { textes ? 
+        <Accueil textData={textes.rever.fr} />
+        : '...'
+      } 
     </PageLayout>
   )
 }

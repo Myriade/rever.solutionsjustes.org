@@ -222,7 +222,7 @@ const Section8Apropos = styled.section`
 	`}
 `;
 
-const Accueil = () => {
+const Accueil = ({textData}) => {
 	const [shareTooltipOn, setShareTooltipOn] = useState(false);
 	
 	const gsapContainerRef = useRef();
@@ -244,6 +244,8 @@ const Accueil = () => {
 		}
 	});
 	
+	console.log('LOG pAccueil', textData)
+	
 	return (
 		<div ref={gsapContainerRef} id='gsap-container'>
 			<Section1Hero >
@@ -256,11 +258,7 @@ const Accueil = () => {
 					quality={100}
 				/>
 				<div className='overlay-text'>
-					<h1>
-						<span>Rêver</span> 
-						<span className='right'>à</span> 
-						<span>l’essentiel</span>
-					</h1>
+					<h1 dangerouslySetInnerHTML={{ __html: textData.t1 }}></h1>
 				</div>
 			</Section1Hero>
 			
@@ -377,7 +375,7 @@ const Accueil = () => {
 				</div>
 			</Section6Agir>
 			
-			<PartenairesLogoList></PartenairesLogoList>
+			<PartenairesLogoList />
 			
 			<Section8Apropos id='a-propos' className='grid'>
 				<div className='grid'>
