@@ -259,7 +259,7 @@ const Accueil = ({lang, textData}) => {
 	
 	return (
 		<div ref={gsapContainerRef} id='gsap-container'>
-			<Section1Hero >
+			<Section1Hero>
 				<StaticImage 
 					className='bg-image'
 					src='../images/grand-portrait-Said.webp'
@@ -389,14 +389,14 @@ const Accueil = ({lang, textData}) => {
 				</div>
 			</Section6Agir>
 			
-			<PartenairesLogoList />
+			<PartenairesLogoList titre={textData.t7}/>
 			
 			<Section8Apropos id='a-propos' className='grid'>
 				<div className='grid'>
 					<div>
-						<h2>À propos</h2>
-						<p>Fondée en 1910, la MCM est un organisme communautaire à but non lucratif de l'Église Unie du Canada ouvert, diversifié et interconfessionnel qui cherche à défendre les droits et les intérêts des personnes les plus vulnérables afin de créer une société accueillante, inclusive et juste. Bien que la MCM ait vu le jour à Montréal, elle s’étend désormais à l’ensemble du Québec.</p>
-						<p><a href='https://solutionsjustes.org' target='_blank' rel="noreferrer">Solutions Justes</a> est un programme de la MCM visant à améliorer l'accès à la justice pour les personnes im·migrantes et réfugiées. Elle est une clinique juridique qui adopte une approche holistique et offre des services accessibles à toutes les personnes dans le besoin.</p>
+						<h2>{textData.t8}</h2>
+						<p>{textData.p8a}</p>
+						<p dangerouslySetInnerHTML={{ __html: textData.p8b }} />
 					</div>
 					<div>
 						<StaticImage 
