@@ -255,6 +255,8 @@ const Accueil = ({lang, textData}) => {
 		}
 	});
 	
+	const shareUrl = lang === 'fr' ? 'https://rever.solutionsjustes.org' : 'https://rever.solutionsjustes.org/en'
+	
 	return (
 		<div ref={gsapContainerRef} id='gsap-container'>
 			<Section1Hero >
@@ -351,27 +353,30 @@ const Accueil = ({lang, textData}) => {
 								{textData.b6c}
 							</button>
 							<div className='tooltip'>
-								<CopyLinkButton lang={lang} url={'https://rever.solutionsjustes.org/'} />
+								<CopyLinkButton 
+									lang={lang} 
+									url={shareUrl}
+								/>
 								<p>{lang === 'fr' ? localisedText.fr.ou : ''}{lang === 'en' ? localisedText.en.ou : ''}</p>
 								<ul>
 									<li><a 
-										href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Bonjour%2C%0A%0AJ'esp%C3%A8re%20que%20tu%20vas%20bien.%20Je%20voulais%20te%20parler%20d'une%20campagne%20importante%20sur%20l'immigration%20humanitaire%2C%20qui%20met%20en%20lumi%C3%A8re%20les%20statuts%20d%E2%80%99immigration%2C%20l%E2%80%99absence%20de%20statut%20et%20leurs%20impacts%20sur%20la%20vie%20des%20personnes.%0A%0Ahttps%3A%2F%2Frever.solutionsjustes.org%2F%0A%0AChaque%20histoire%20m%C3%A9rite%20d'%C3%AAtre%20entendue.%20Ensemble%2C%20nous%20pouvons%20faire%20la%20diff%C3%A9rence%20en%20apprenant%20cette%20r%C3%A9alit%C3%A9%20et%20soutenir%20ces%20voix.%20Je%20t'invite%20%C3%A0%20d%C3%A9couvrir%20la%20campagne%20et%20%C3%A0%20partager%20tes%20r%C3%A9flexions.%0A%0AMerci%20de%20ton%20soutien%20!%0A%0ACordialement%2C`}
+										href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Bonjour%2C%0A%0AJ'esp%C3%A8re%20que%20tu%20vas%20bien.%20Je%20voulais%20te%20parler%20d'une%20campagne%20importante%20sur%20l'immigration%20humanitaire%2C%20qui%20met%20en%20lumi%C3%A8re%20les%20statuts%20d%E2%80%99immigration%2C%20l%E2%80%99absence%20de%20statut%20et%20leurs%20impacts%20sur%20la%20vie%20des%20personnes.%0A%0A${shareUrl}%2F%0A%0AChaque%20histoire%20m%C3%A9rite%20d'%C3%AAtre%20entendue.%20Ensemble%2C%20nous%20pouvons%20faire%20la%20diff%C3%A9rence%20en%20apprenant%20cette%20r%C3%A9alit%C3%A9%20et%20soutenir%20ces%20voix.%20Je%20t'invite%20%C3%A0%20d%C3%A9couvrir%20la%20campagne%20et%20%C3%A0%20partager%20tes%20r%C3%A9flexions.%0A%0AMerci%20de%20ton%20soutien%20!%0A%0ACordialement%2C`}
 										target='_blank'
 										rel='noreferrer'
 										>Courriel</a></li>
 									<li><a 
-										href='https://www.facebook.com/dialog/share?app_id=2315665215432948&display=popup&href=https%3A%2F%2Frever.solutionsjustes.org'
+										href={`https://www.facebook.com/dialog/share?app_id=2315665215432948&display=popup&href=${shareUrl}`}
 										target='_blank'
 										rel='noreferrer'
 										>Facebook</a></li>
 									<li><a
-										href='https://www.linkedin.com/sharing/share-offsite/?url=https://rever.solutionsjustes.org'
+										href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
 										target='_blank'
 										rel='noreferrer'
 										>LinkedIn</a></li>
 									<li>
 										<a
-											href='https://twitter.com/intent/tweet?text=https://rever.solutionsjustes.org/'
+											href={`https://twitter.com/intent/tweet?text=${shareUrl}`}
 											target='_blank'
 											rel='noreferrer'
 											>
