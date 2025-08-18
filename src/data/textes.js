@@ -74,10 +74,32 @@ export default function lesTextes() { return {
 	},
 	quiz: {
 		fr: {
-			
+			t1: "<span>Au-delà</span>	<span class='right'>des</span> <span>statuts</span>",
+			p2a: "Testez vos connaissances avec notre quiz interactif ! 🧠💡",
+			t2: `<span>Vous vous demandez comment les différents</span> statuts d'immigration <b>influencent la vie quotidienne</b> <span>des personnes migrantes&nbsp;? </span>`,
+			p2b: "Ce quiz vous offrira une perspective unique sur les défis auxquels font face les personnes migrantes et vous permettra de mieux <b>comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien.</b>",
+			b2: "Commencer le quiz",
+			t3a: 'Oups !',
+			p3a: "En vérité, cette personne",
+			t3b: 'Effectivement !',
+			p3b: "Cette personne",
+			p4a: "<p><b>Pas de panique, vous êtes sur la bonne voie&nbsp;!</b> Il est normal de ne pas tout savoir : les personnes migrantes sans statut et à statut précaire vivent souvent dans l'invisibilité, ce qui rend difficile la compréhension de leurs histoires et de leurs défis. Cependant, ce quiz vous a permis de mieux comprendre certains aspects clés de la réalité des personnes migrantes et les enjeux liés à leur statut d'immigration.</p><p>Nous vous encourageons à poursuivre votre apprentissage<br/> <a href='/connaitre/#sans-statut'>en explorant ces autres récits</a><br/> et en nous suivant sur les réseaux sociaux pour en savoir plus.</p>",
+			p4b: "<p><b>Félicitations&nbsp;!</b> Vous avez désormais une meilleure compréhension de la réalité vécue par les personnes migrantes sans statut ou à statut précaire, dont de nombreux problèmes et enjeux découlent de leur statut d’immigration.</p> <p>Continuez à vous informer <Link to='/connaitre/#sans-statut'>avec ces autres récits</Link><br/> et en nous suivant sur les réseaux sociaux.</p>",
+			seo: "Ce quiz offre une perspective unique sur les défis auxquels font face les personnes migrantes et permet de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien."
 		},
 		en: {
-			
+			t1: '...',
+			p2a: '...',
+			t2: '...',
+			p2b: '...',
+			b2: '...',
+			t3a: '...',
+			p3a: '...',
+			t3b: '...',
+			p3b: '...',
+			p4a: '...',
+			p4b: '...',
+			seo: '...',
 		}
 	},
 	pied: {

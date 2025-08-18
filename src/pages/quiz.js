@@ -1,12 +1,17 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PageLayout from '../layouts/pageLayout'
 import Quiz from '../components/pQuiz'
+import lesTextes from '../data/textes'
 
 const Page = () => {
+  const [textes, setTextes] = useState(lesTextes());
   
   return (
     <PageLayout lang='fr'>
-      <Quiz />
+      { textes ? 
+       <Quiz lang='fr' textData={textes.quiz.fr} />
+        : '...'
+      }
     </PageLayout>
   )
 }

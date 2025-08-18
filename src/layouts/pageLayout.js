@@ -39,7 +39,7 @@ const localisedText = [
       title: 'Testez vos connaissances'
     },
     en: {
-      to: 'en/quiz',
+      to: '/en/quiz',
       texte: 'Quiz',
       title: 'Test your knowledge'
     }

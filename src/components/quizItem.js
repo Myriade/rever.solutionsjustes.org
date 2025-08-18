@@ -193,7 +193,7 @@ const Choix = styled.div`
 
 gsap.registerPlugin(useGSAP);
 
-const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
+const QuizItem = ({ itemData, itemIndex, onQuizItemChange, staticTexts }) => {
 	const [selectedChoice, setSelectedChoice] = useState(null);
 	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
 	const [choixArray, setChoixArray] = useState(null);
@@ -347,15 +347,15 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 						<div className='answer'>
 							{ selectedChoice === rightAnswerId.current ? 
 								(<>
-									<p>Effectivement&nbsp;!</p> 
-									<p>Cette personne <span className='lowercase'>{rightAnswerText.current}</span>.</p>
+									<p>{staticTexts.t3b}</p> 
+									<p>{staticTexts.p3b} <span className='lowercase'>{rightAnswerText.current}</span>.</p>
 								</>)
 							: ''} 
 							
 							{ selectedChoice !== rightAnswerId.current && selectedChoice !== null ?
 								(<>
-									<p>Oups !</p>
-									<p>En vérité, cette personne <span className='lowercase'>{rightAnswerText.current}</span>.</p>
+									<p>{staticTexts.t3a}</p>
+									<p>{staticTexts.p3a} <span className='lowercase'>{rightAnswerText.current}</span>.</p>
 								</>)
 							: '' }
 						</div>

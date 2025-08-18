@@ -286,7 +286,18 @@ const SectionPartager = styled.section`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin);
 
-const Quiz = () => {
+const localisedText = {
+  fr: {
+    partager: 'Partager ce quiz',
+    ou: 'ou partager par'
+  },
+  en: {
+    partager: 'Share this Quiz',
+    ou: 'or share by'
+  }
+}
+
+const Quiz = ({lang, textData}) => {
   const [screenType, setScreenType] = useState(''); 
   const [answersProgression, setAnswersProgression] = useState(null);
   const [goodAnswerCount, setGoodAnswerCount] = useState(0);
@@ -302,6 +313,8 @@ const Quiz = () => {
       title: 'Chargement ...',
     }
   }
+  
+  const shareUrl = lang === 'fr' ? 'https://rever.solutionsjustes.org/quiz' : 'https://rever.solutionsjustes.org/en/quiz'
   
   /******** Fetch and parse data *********/
   let fetchedData = useWixData(
@@ -533,6 +546,28 @@ const Quiz = () => {
     }
   });
   
+  const nextCta = () => {
+    if (lang === 'fr') {
+      return (<>
+        <button className='button centered' onClick={ goNextHandler }>
+          Prochaine question<span>❯</span>
+        </button>
+        <p className='instructions'>
+          Encore {answersProgression.length - activeQuestion} question{answersProgression.length - activeQuestion > 1 && 's'} à répondre.
+        </p>
+      </>);
+    } else if (lang === 'en') {
+      return (<>
+        <button className='button centered' onClick={ goNextHandler }>
+          Next question<span>❯</span>
+        </button>
+        <p className='instructions'>
+          {answersProgression.length - activeQuestion} more question{answersProgression.length - activeQuestion > 1 && 's'} to answer.
+        </p>
+      </>);
+    }
+  };
+  
   return (
     <div ref={gsapPageContainerRef} id='gsap-container'>
   
@@ -546,29 +581,25 @@ const Quiz = () => {
           quality={100}
         />
         <div className='overlay-text'>
-          <h1>
-            <span>Au-delà</span> 
-            <span className='right'>des</span> 
-            <span>statuts</span>
-          </h1>
+          <h1 dangerouslySetInnerHTML={{ __html: textData.t1 }} />
         </div>
       </Section1Hero>
       
       <Section2Intro className='intro'>
         <div className='card'>
           <div className='titre'>
-            <h2>Testez vos connaissances avec notre quiz interactif&nbsp;!&nbsp;🧠💡</h2>
+            <h2>{textData.p2a}</h2>
           </div>
           <div className='texte'>
-            <h3><span>Vous vous demandez comment les différents</span> statuts d'immigration <b>influencent la vie quotidienne</b> <span>des personnes migrantes&nbsp;? </span></h3>
-            <p>Ce quiz vous offrira une perspective unique sur les défis auxquels font face les personnes migrantes et vous permettra de mieux <b>comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien.</b></p>
+            <h3 dangerouslySetInnerHTML={{ __html: textData.t2 }} />
+            <p dangerouslySetInnerHTML={{ __html: textData.p2b }} />
           </div>
           <div className='cta'>
             <button 
               className='button centered'
               onClick={goNextHandler}
             >
-              Commencer le quiz&nbsp;&nbsp;<span>→</span>
+              {textData.b2}&nbsp;&nbsp;<span>→</span>
             </button>
           </div>
         </div>
@@ -603,6 +634,7 @@ const Quiz = () => {
               itemData={item.data} 
               itemIndex={qIndex}
               onQuizItemChange={ (answerResult) => updateQuiz(qIndex, answerResult) } 
+              staticTexts={textData}
             />
           )})}
         </section>
@@ -613,35 +645,20 @@ const Quiz = () => {
           <>
           
             { answersProgression[ answersProgression.length - 1 ].answerState === 'attente' ? 
-              <div className='grid next'>
-                <button className='button centered' onClick={ goNextHandler }>
-                  Prochaine question<span>❯</span>
-                </button>
-                <p className='instructions'>
-                  Encore {answersProgression.length - activeQuestion} question{answersProgression.length - activeQuestion > 1 && 's'} à répondre.
-                </p>
-              </div>
+              <div className='grid next'>{nextCta()}</div>
             : ''}
             
             <div className='resultats'>
               { answersProgression[ answersProgression.length - 1 ].answerState !== 'attente' ?
                 <>
                   <p className='resultats__finaux'>
-                   Résultat : { goodAnswerCount }/{answersProgression.length} !
+                   { lang === 'fr' ? 'Résultat :' : 'Result :'} { goodAnswerCount }/{answersProgression.length} !
                   </p>
                   
                   { goodAnswerCount < 4 ? 
-                    <>
-                      <p><b>Pas de panique, vous êtes sur la bonne voie&nbsp;!</b> Il est normal de ne pas tout savoir : les personnes migrantes sans statut et à statut précaire vivent souvent dans l'invisibilité, ce qui rend difficile la compréhension de leurs histoires et de leurs défis. Cependant, ce quiz vous a permis de mieux comprendre certains aspects clés de la réalité des personnes migrantes et les enjeux liés à leur statut d'immigration.</p>
-                      <p>Nous vous encourageons à poursuivre votre apprentissage<br/> 
-                      <Link to='/connaitre/#sans-statut'>en explorant ces autres récits</Link><br/> 
-                      et en nous suivant sur les réseaux sociaux pour en savoir plus.</p>
-                    </>
+                    <div dangerouslySetInnerHTML={{ __html: textData.p4a }} />
                   : 
-                    <>
-                      <p><b>Félicitations&nbsp;!</b> Vous avez désormais une meilleure compréhension de la réalité vécue par les personnes migrantes sans statut ou à statut précaire, dont de nombreux problèmes et enjeux découlent de leur statut d’immigration.</p>
-                      <p>Continuez à vous informer <Link to='/connaitre/#sans-statut'>avec ces autres récits</Link><br/> et en nous suivant sur les réseaux sociaux.</p>
-                    </>
+                    <div dangerouslySetInnerHTML={{ __html: textData.p4b }} />
                   }
                   
                   <div className='socials'>
@@ -683,30 +700,34 @@ const Quiz = () => {
               className='button centered'
               onClick={shareClickHandler}
             >
-              Partager ce quiz
+              {lang === 'fr' ? localisedText.fr.partager: ''}
+              {lang === 'en' ? localisedText.en.partager: ''}
             </button>
             <div className='tooltip'>
-              <CopyLinkButton url={'https://rever.solutionsjustes.org/quiz'} />
-              <p>ou partager par : </p>
+              <CopyLinkButton 
+                lang={lang}
+                url={shareUrl} 
+              />
+              <p>{lang === 'fr' ? localisedText.fr.ou : ''}{lang === 'en' ? localisedText.en.ou : ''}</p>
               <ul>
                 <li><a 
-                  href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Testez%20vos%20connaissances%20et%20apprenez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%0Ahttps%3A%2F%2Frever.solutionsjustes.org%2Fquiz%0A`}
+                  href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Testez%20vos%20connaissances%20et%20apprenez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%0A${shareUrl}`}
                   target='_blank'
                   rel='noreferrer'
-                  >Courriel</a></li>
+                  >{lang === 'fr' ? 'Courriel' : 'Email'}</a></li>
                 <li><a 
-                  href='https://www.facebook.com/dialog/share?app_id=2315665215432948&display=popup&href=https%3A%2F%2Frever.solutionsjustes.org%2Fquiz'
+                  href={`https://www.facebook.com/dialog/share?app_id=2315665215432948&display=popup&href=${shareUrl}`}
                   target='_blank'
                   rel='noreferrer'
                   >Facebook</a></li>
                 <li><a
-                  href='https://www.linkedin.com/sharing/share-offsite/?url=https://rever.solutionsjustes.org/quiz'
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
                   target='_blank'
                   rel='noreferrer'
                   >LinkedIn</a></li>
                 <li>
                   <a
-                    href='https://twitter.com/intent/tweet?text=Testez%20vos%20connaissances%20et%20apprenez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%20https%3A%2F%2Frever.solutionsjustes.org%2Fquiz'
+                    href={`https://twitter.com/intent/tweet?text=Testez%20vos%20connaissances%20et%20apprenez%20d%E2%80%99avantage%20sur%20les%20r%C3%A9alit%C3%A9s%20migratoires%20au%20Qu%C3%A9bec%3A%20${shareUrl}`}
                     target='_blank'
                     rel='noreferrer'
                     >
