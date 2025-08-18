@@ -1,12 +1,4 @@
 export default function lesTextes() { return {
-	entete: {
-		fr: {
-			
-		},
-		en: {
-			
-		}
-	},
 	rever: {
 		fr: {
 			t1: `<span>Rêver</span> <span class='right'>à</span> <span>l’essentiel</span>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import PageLayout from '../layouts/pageLayout.fr'
+import PageLayout from '../layouts/pageLayout'
 import Accueil from '../components/pAccueil'
 import lesTextes from '../data/textes'
 
@@ -7,7 +7,7 @@ const Page = () => {
   const [textes, setTextes] = useState(lesTextes());
   
   return (
-    <PageLayout>
+    <PageLayout lang='fr'>
       { textes ? 
         <Accueil lang='fr' textData={textes.rever.fr} />
         : '...'
@@ -20,6 +20,7 @@ export default Page
 
 export const Head = () => (
   <>
+    <html lang='fr' />
     <title>Rêver à l’essentiel | Solutions justes</title>
     <link rel='stylesheet' href='/glide.core.min.css' />
     <link rel='stylesheet' href='/glide.theme.min.css' />

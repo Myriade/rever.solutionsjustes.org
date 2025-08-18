@@ -23,10 +23,10 @@ const CopyLinkButton = ({ lang, url }) => {
 				fontSize: '1rem',
 			}}
 		>
-			{ !copied && lang == 'fr' ? 'Copier le lien' : ''} 
-			{ !copied && lang == 'en' ? 'Copy link' : ''} 
-			{ copied && lang == 'fr' ? 'Copié !' : ''} 
-			{ copied && lang == 'en' ? 'Copied !' : ''} 
+			{ !copied && lang === 'fr' ? 'Copier le lien' : ''} 
+			{ !copied && lang === 'en' ? 'Copy link' : ''} 
+			{ copied && lang === 'fr' ? 'Copié !' : ''} 
+			{ copied && lang === 'en' ? 'Copied !' : ''} 
 		</button>
 	);
 };

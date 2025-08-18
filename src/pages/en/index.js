@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import PageLayout from '../../layouts/pageLayout.en'
+import PageLayout from '../../layouts/pageLayout'
 import Accueil from '../../components/pAccueil'
 import lesTextes from '../../data/textes'
 
@@ -7,7 +7,7 @@ const Page = () => {
   const [textes, setTextes] = useState(lesTextes());
   
   return (
-    <PageLayout>
+    <PageLayout lang='en'>
       { textes ? 
         <Accueil lang='en' textData={textes.rever.en} />
         : '...'

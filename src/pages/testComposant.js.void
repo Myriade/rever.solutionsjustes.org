@@ -1,10 +1,10 @@
 import React from 'react'
-import PageLayout from '../layouts/pageLayout.fr'
+import PageLayout from '../layouts/pageLayout'
 //import Accueil from '../components/pAccueil'
 
 const TestComposant = () => {
   return (
-    <PageLayout>
+    <PageLayout lang='fr'>
       
       <div>
         <div>

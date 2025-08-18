@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect }  from 'react'
-import PageLayout from '../layouts/pageLayout.fr'
+import PageLayout from '../layouts/pageLayout'
 import Connaitre from '../components/pConnaitre'
 
 const Page = () => {
   return (
-    <PageLayout>
+    <PageLayout lang='fr'>
       <Connaitre />
     </PageLayout>
   )

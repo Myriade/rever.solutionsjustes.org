@@ -1,11 +1,11 @@
 import React from 'react'
-import PageLayout from '../layouts/pageLayout.fr'
+import PageLayout from '../layouts/pageLayout'
 import Quiz from '../components/pQuiz'
 
 const Page = () => {
   
   return (
-    <PageLayout>
+    <PageLayout lang='fr'>
       <Quiz />
     </PageLayout>
   )

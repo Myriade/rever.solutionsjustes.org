@@ -1,5 +1,5 @@
 import React from 'react'
-import PageLayout from '../../layouts/pageLayout.en'
+import PageLayout from '../../layouts/pageLayout'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 
@@ -9,7 +9,7 @@ const Section = styled.section`
 
 const Error404Page = () => {
   return (
-    <PageLayout>
+    <PageLayout lang='en'>
       
       <Section>
         <div>
