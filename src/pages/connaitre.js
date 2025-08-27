@@ -5,9 +5,22 @@ import lesTextes from '../data/textes'
 const textes = lesTextes();
 
 const Page = () => {
+  const [headerBottom, setHeaderBottom] = useState(null);
+  
+  // pour le navbar pin
+  useEffect(() => {
+    if (!headerBottom) {
+      const headerHtml = document.querySelector('#gatsby-focus-wrapper header')
+      if (headerHtml) {
+        const result = headerHtml.getBoundingClientRect().bottom;
+        setHeaderBottom(result)
+      }
+    }
+  }, [headerBottom])
+  
   return (
     <PageLayout lang='fr'>
-      <Connaitre lang='fr' textData={textes.connaitre.fr} />
+      <Connaitre lang='fr' textData={textes.connaitre.fr} headerBottomInViewport={headerBottom} />
     </PageLayout>
   )
 }

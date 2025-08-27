@@ -618,7 +618,7 @@ const initializeBreakpointHandling = (breakPointsArray, onBreakpointChange) => {
   return createBreakpointHandler(breakPointsArray, onBreakpointChange);
 };
 
-const Connaitre = ({lang, textData}) => {
+const Connaitre = ({lang, textData, headerBottomInViewport}) => {
   /********  States, refs, context and data variables ********/
   const [screenType, setScreenType] = useState(null); 
   const [isHtmlReady, setIsHtmlReady] = useState(false);
@@ -955,7 +955,7 @@ const Connaitre = ({lang, textData}) => {
   
   // Mobiles touch GSAP Animations sobres (appelé au moment du screenTypeCheck)
   const sobreGsapAnimations = contextSafe(() => {
-    const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom; // pour le navbar pin
+    // const headerBottomInViewport = document.querySelector('#page-wrapper header').getBoundingClientRect().bottom; // pour le navbar pin
     const navElement = gsapContainerRef.current.querySelector('#realites-nav');
     const allRealitesElement = gsapContainerRef.current.querySelector('#realites-container');
     
