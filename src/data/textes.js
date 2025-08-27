@@ -66,10 +66,47 @@ export default function lesTextes() { return {
 	},
 	connaitre: {
 		fr: {
-			
+			t1: `<span class='right'>Connaître</span><span>l’essentiel&nbsp;...</span> <span class='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>`,
+			t2: 'Récits, mythes et réalités',
+			p2a: 'Ce ne sont que quelques exemples parmi de nombreuses autres situations.',
+			t2a: 'Mon statut',
+			t2b: 'Les impacts',
+			t2c: 'Mythe et réalité',
+			b2: "S'impliquer",
+			t3: "S'impliquer davantage",
+			t3a: 'Je souhaite accueillir un atelier',
+			p3a: 'Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école ?',
+			b3a: 'Contactez-nous',
+			t3b: 'Je veux faire du bénévolat',
+			st3b: "Vous souhaitez aider et vous avez un peu de temps à nous offrir ? Devenez bénévole chez nous!",
+			p3b: ` <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
+			<p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
+			<a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>`, 
+			b3b: 'Nous rejoindre',
+			t3c: 'Je souhaite signer des pétitions',
+			p3c: 'Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.', 
+			b3c: 'Agir',
+			seo: 'Connaître l’essentiel de certains statuts d’immigration précaires et de l’absence de statut. Récits, mythes et réalités. Bonjour, je suis Maria et je suis une personne sans statut d’immigration.'
 		},
 		en: {
-			
+			t1: '...',
+			t2: '...',
+			p2a: '...',
+			t2a: '...',
+			t2b: '...',
+			t2c: '...',
+			b2: '...',
+			t3: '...',
+			t3a: '...',
+			p3a: '...',
+			b3a: '...',
+			t3b: '...',
+			p3b: '...', 
+			b3b: '...',
+			t3c: '...',
+			p3c: '...', 
+			b3c: '...',
+			seo: '...'
 		}
 	},
 	quiz: {

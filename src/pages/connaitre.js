@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect }  from 'react'
 import PageLayout from '../layouts/pageLayout'
 import Connaitre from '../components/pConnaitre'
+import lesTextes from '../data/textes'
+const textes = lesTextes();
 
 const Page = () => {
   return (
     <PageLayout lang='fr'>
-      <Connaitre />
+      <Connaitre lang='fr' textData={textes.connaitre.fr} />
     </PageLayout>
   )
 }

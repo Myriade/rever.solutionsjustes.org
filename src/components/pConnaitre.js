@@ -618,7 +618,7 @@ const initializeBreakpointHandling = (breakPointsArray, onBreakpointChange) => {
   return createBreakpointHandler(breakPointsArray, onBreakpointChange);
 };
 
-const Connaitre = () => {
+const Connaitre = ({lang, textData}) => {
   /********  States, refs, context and data variables ********/
   const [screenType, setScreenType] = useState(null); 
   const [isHtmlReady, setIsHtmlReady] = useState(false);
@@ -1310,11 +1310,7 @@ const Connaitre = () => {
         quality={100}
       />
       <div className='overlay-text'>
-        <h1>
-          <span className='right'>Connaître</span>
-          <span>l’essentiel&nbsp;...</span>
-          <span className='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>
-        </h1>
+        <h1 dangerouslySetInnerHTML={{ __html: textData.t1 }} />
       </div>
     </Section1Hero>
     
@@ -1322,7 +1318,7 @@ const Connaitre = () => {
       <div ref={gsapContainerRef} id='gsap-container'>
         <SectionRealites id='section-realites'>
           <div className='titre'>
-            <h2>Récits, mythes et réalités</h2>
+            <h2>{textData.t2}</h2>
           </div>
           
           <nav id='realites-nav'>
@@ -1334,7 +1330,7 @@ const Connaitre = () => {
                 >
                   <a 
                     onClick={(e) => navClickHandler(index, e)}
-                    aria-label='Aller à la section'
+                    aria-label={lang === 'fr' ? 'Aller à la section' : 'Go to section'}
                     href={`#${realite.data.identifiantUnique}`}
                   >
                     <div className='avatar'>
@@ -1348,7 +1344,7 @@ const Connaitre = () => {
               <li className='realite-nav-item shortcut'>
                 <a href='#s-impliquer' onClick={(event) => simpliquerClickHandler(event)}>
                   <div className='avatar'><div>✓</div></div>
-                  S'impliquer
+                  {textData.b2}
                 </a>
               </li>
             </ul>
