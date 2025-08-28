@@ -1383,7 +1383,7 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
                       
                       <div className='recit__narratif'>
                         <p className='recit__instruction instruction'>
-                          Faites défiler pour lire mon histoire
+                          {lang === 'fr' ? 'Faites défiler vers le bas pour lire mon histoire' : 'Scroll down to read my story'}
                         </p>
                         <div className='presentation' dangerouslySetInnerHTML={{ __html: realite.data.prsentation }}></div>
                         <div className='impacts'>
@@ -1393,14 +1393,14 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
                           </div>
                           <div className='impacts__content'>
                             <p className='impacts__instruction instruction'>
-                              Faites défiler pour voir les impacts
+                              {lang === 'fr' ? 'Faites défiler vers le bas pour voir les impacts' : 'Scroll down to see the impacts'}
                             </p>
                             {realite.parsedData.lesImpacts.map( (paragraphe, pIndex) => { 
                               return (
                                 <div key={pIndex} className='impact' dangerouslySetInnerHTML={{ __html: paragraphe }}></div>
                             )})}
                           </div>
-                          <p className='impacts__fin'>Ce ne sont que quelques exemples parmi de nombreuses autres situations.</p>
+                          <p className='impacts__fin'>{textData.p2a}</p>
                         </div>
                       </div>
                     </div>
@@ -1408,10 +1408,10 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
                     <div className='mythe'>
                       <div className='mythe__intro'>
                         <h3 className='mythe__titre'>
-                          <div className='mythe__etiquette'>MYTHE&nbsp;:</div>
+                          <div className='mythe__etiquette'>{lang === 'fr' ? 'MYTHE' : 'MYTH'}&nbsp;:</div>
                           «&nbsp;<span className='biffer'>{realite.data.mythePhraseTitre}</span>&nbsp;»
                         </h3>
-                        <p className='mythe__instruction instruction'>Faites défiler pour lire la suite</p>
+                        <p className='mythe__instruction instruction'>{ lang === 'fr' ? 'Faites défiler vers le bas pour lire la suite' : 'Scroll down to read more'}</p>
                         <div className='mythe__sous-titre'>
                           <div>
                             <img
@@ -1431,16 +1431,16 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
                       <nav className='shortcuts'>
                         <button
                           onClick={ () => labelClickHandler(index, 'mon-statut') } 
-                          aria-label='Aller à la section'
-                        >&#8250; Mon statut</button>
+                          aria-label={lang === 'fr' ? 'Aller à la section' : 'Go to section'}
+                        >&#8250; {textData.t2a}</button>
                         <button
                           onClick={ () => labelClickHandler(index, 'les-impacts') }
-                          aria-label='Aller à la section'
-                        >&#8250; Les impacts</button>
+                          aria-label={lang === 'fr' ? 'Aller à la section' : 'Go to section'}
+                        >&#8250; {textData.t2b}</button>
                         <button
                           onClick={ () => labelClickHandler(index, 'mythe-et-realite') }
-                          aria-label='Aller à la section'
-                        >&#8250; Mythe et réalité</button>
+                          aria-label={lang === 'fr' ? 'Aller à la section' : 'Go to section'}
+                        >&#8250; {textData.t2c}</button>
                       </nav>
                       <div className='progress__bar-background'>
                         <div className='progress__bar-animate'></div>
@@ -1468,10 +1468,10 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
                   { recitsArray.map( (item, index) => {
                     return (
                       <button 
-                        title={`voir l'histoire de ${item.data.title}`}
+                        title={lang === 'fr' ? `Lire l'histoire de ${item.data.title}` : `Read ${item.data.title}'s story`}
                         data-glide-dir={`=${index}`} 
                         key={`point-${index}`}
-                        aria-label={`Aller à la fiche ${index + 1}`}
+                        aria-label={lang === 'fr' ? `Aller à la fiche ${index + 1}` : `Go to slide ${index + 1}`}
                         onClick={ () => glideControlClickHandler(index)}
                       >
                         <div className='glide__bullet' ></div>
@@ -1508,13 +1508,13 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
     
     <Section4Cta id='s-impliquer'>
       <div>
-        <h2>S'impliquer davantage</h2>
+        <h2>{textData.t3}</h2>
         <div className='grid'>
         
           <div className='sensibilsation'>
             <div className='intro'>
-              <h3>Je souhaite accueillir un atelier</h3>
-              <p>Voulez-vous organiser une activité de sensibilisation ou une formation dans votre entreprise, organisation, fête de quartier ou école&nbsp;?</p>
+              <h3>{textData.t3a}</h3>
+              <p>{textData.p3a}</p>
             </div>
             <StaticImage 
               src='../images/connaitre/MCM_SiteWeb_Illustration-Statut-migratoire-precaire.png'
@@ -1530,18 +1530,17 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
               target='_blank' 
               rel='noreferrer'
             >
-              Contactez-nous
+              {textData.b3a}
             </a>
           </div>
           
           <div className='benevolat'>
             <div className='intro'>
-              <h3>Je veux faire du bénévolat</h3>
-              <p>Vous souhaitez aider et vous avez un peu de temps à nous offrir&nbsp;? Devenez bénévole chez nous&nbsp;!</p>
+              <h3>{textData.t3b}</h3>
+              <p>{textData.st3b}</p>
             </div>
-            <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
-            <p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
-            <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>
+            <div dangerouslySetInnerHTML={{ __html: textData.p3b }} />
+            <a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>{textData.b3b}</a>
           </div>
           
           { typeof fetchedCtaData[0].data.titre === 'string' ?

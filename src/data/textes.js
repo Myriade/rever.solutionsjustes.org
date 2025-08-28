@@ -80,12 +80,8 @@ export default function lesTextes() { return {
 			t3b: 'Je veux faire du bénévolat',
 			st3b: "Vous souhaitez aider et vous avez un peu de temps à nous offrir ? Devenez bénévole chez nous!",
 			p3b: ` <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
-			<p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>
-			<a href='https://www.solutionsjustes.org/benevolat' className='button centered' target='_blank' rel='noreferrer'>Nous rejoindre</a>`, 
+			<p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>`, 
 			b3b: 'Nous rejoindre',
-			t3c: 'Je souhaite signer des pétitions',
-			p3c: 'Signer des pétitions de nos allié·e·s est une manière d’agir pour faire entendre votre voix et changer les choses.', 
-			b3c: 'Agir',
 			seo: 'Connaître l’essentiel de certains statuts d’immigration précaires et de l’absence de statut. Récits, mythes et réalités. Bonjour, je suis Maria et je suis une personne sans statut d’immigration.'
 		},
 		en: {
@@ -101,6 +97,7 @@ export default function lesTextes() { return {
 			p3a: '...',
 			b3a: '...',
 			t3b: '...',
+			st3b: '...',
 			p3b: '...', 
 			b3b: '...',
 			t3c: '...',
@@ -137,14 +134,6 @@ export default function lesTextes() { return {
 			p4a: '...',
 			p4b: '...',
 			seo: '...',
-		}
-	},
-	pied: {
-		fr: {
-			
-		},
-		en: {
-			
 		}
 	}
 }}
