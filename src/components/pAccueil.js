@@ -293,10 +293,10 @@ const Accueil = ({lang, textData}) => {
 					<h2>{textData.t3}</h2>
 					<p>{textData.p3}</p>
 				</div>
-				<StatutsImmigrationList />
+				<StatutsImmigrationList lang={lang}/>
 			</Section3Statuts>
 			
-			<HistoiresList textData={textData} />
+			<HistoiresList textData={textData} lang={lang} />
 			
 			<Section5Video id='video'>
 				<div>

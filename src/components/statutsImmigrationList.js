@@ -64,12 +64,21 @@ const placeholderData = {
 	'_id': 'placeholder',
 }
 
-const StatutsImmigrationList = () => {
-	let content = useWixData(
-		'Import691', 
-		'_manualSort_a4b23ee5-c1a8-41bc-a4e2-0ff853a347ec',
-		placeholderData
-	);
+const StatutsImmigrationList = ({lang}) => {
+	let collection = null;
+	let manualSort = null;
+	
+	if (lang === 'fr') {
+		collection = 'Import691'
+		manualSort = '_manualSort_a4b23ee5-c1a8-41bc-a4e2-0ff853a347ec'
+	}
+	
+	if (lang === 'en') {
+		collection = 'PageRever-Statutsmigr-English'
+		manualSort = '_manualSort_71bc7407-1f47-4f95-8409-c7e2e3cd9fc8'
+	}
+	
+	const	content = useWixData(collection, manualSort, placeholderData);
 	
 	useEffect(() => {
 		const statutsGlide = new Glide('.glide', {
