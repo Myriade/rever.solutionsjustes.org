@@ -201,12 +201,14 @@ export default function PageLayout({ children, lang }) {
           </Link>
         </nav>
         <div className='mirror'>
-          <Link 
-            to={lang === 'fr' ? localisedText[3].fr.to : localisedText[3].en.to}
-            title={lang === 'fr' ? localisedText[3].fr.title : localisedText[3].en.title}
-          >
-            {lang === 'fr' ? localisedText[3].fr.texte : localisedText[3].en.texte}
-          </Link>
+          {lang === 'en' ? 
+            <Link 
+              to={lang === 'fr' ? localisedText[3].fr.to : localisedText[3].en.to}
+              title={lang === 'fr' ? localisedText[3].fr.title : localisedText[3].en.title}
+            >
+              {lang === 'fr' ? localisedText[3].fr.texte : localisedText[3].en.texte}
+            </Link>
+          : ''}
         </div>
       </Header>
       
