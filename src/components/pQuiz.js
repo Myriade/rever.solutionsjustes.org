@@ -317,11 +317,21 @@ const Quiz = ({lang, textData}) => {
   const shareUrl = lang === 'fr' ? 'https://rever.solutionsjustes.org/quiz' : 'https://rever.solutionsjustes.org/en/quiz'
   
   /******** Fetch and parse data *********/
-  let fetchedData = useWixData(
-    'QuizAudeladesStatuts', 
-    '_manualSort_5b60fad8-3b02-40b7-9a25-6e59ca5f5651',
-    placeholderData
-  );
+  let collection = null;
+  let manualSort = null;
+  
+  if (lang === 'fr') {
+    collection = 'QuizAudeladesStatuts'
+    manualSort = '_manualSort_5b60fad8-3b02-40b7-9a25-6e59ca5f5651'
+  }
+  
+  if (lang === 'en') {
+    collection = 'Quiz-En'
+    manualSort = ''
+  }
+  
+  let fetchedData = useWixData(collection, manualSort, placeholderData);
+  
   const quizData = fetchedData;
   if (quizData && quizData.length > 1) {
     //console.log(quizData);
@@ -630,6 +640,7 @@ const Quiz = ({lang, textData}) => {
         <section className='full-width' id='quiz'>
           { quizData.map( (item, qIndex) => { return (
             <QuizItem  
+              lang= {lang}
               key={item._id} 
               itemData={item.data} 
               itemIndex={qIndex}

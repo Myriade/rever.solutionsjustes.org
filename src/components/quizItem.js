@@ -193,7 +193,16 @@ const Choix = styled.div`
 
 gsap.registerPlugin(useGSAP);
 
-const QuizItem = ({ itemData, itemIndex, onQuizItemChange, staticTexts }) => {
+const localisedText = {
+	fr: {
+		opinion: "Selon vous, <br/>cette personne est dans quelle situation ?"
+	},
+	en: {
+		opinion: "In your opinion, <br/>what is this person's situation?"
+	}
+}
+
+const QuizItem = ({ lang, itemData, itemIndex, onQuizItemChange, staticTexts }) => {
 	const [selectedChoice, setSelectedChoice] = useState(null);
 	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
 	const [choixArray, setChoixArray] = useState(null);
@@ -315,7 +324,8 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange, staticTexts }) => {
 			
 				<Interaction className='interaction'>
 					<div className='question'>
-						<h3>Selon vous,<br/> cette personne est dans quelle situation&nbsp;?</h3>
+						{ lang === 'fr' ? <h3 dangerouslySetInnerHTML={{ __html: localisedText.fr.opinion }}/> : '' }
+						{ lang === 'en' ? <h3 dangerouslySetInnerHTML={{ __html: localisedText.en.opinion }}/> : '' }
 					</div>
 					
 					<Choix ref={choixRef} className='choix'>
@@ -336,7 +346,10 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange, staticTexts }) => {
 												htmlFor={choiceId}
 												className={ choiceId === selectedChoice ? 'selected' : '' }
 											>
-												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> Elle {choix.text}.
+												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> 
+												{ lang === 'fr' && 'Elle ' }
+												{ lang === 'en' && 'They '} 
+												{choix.text}.
 											</label>
 										</div>
 								)})}

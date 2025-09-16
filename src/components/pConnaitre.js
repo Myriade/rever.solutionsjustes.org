@@ -1163,12 +1163,21 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
       nomDuStatutExact: 'Chargement ...',
     }
   }
+  let collection = null;
+  let manualSort = null;
   
-  let fetchedData = useWixData(
-    'PageConnaitre-Recits', 
-    '_manualSort_d4963379-4cc6-44fa-bbed-e60987fe611d',
-    placeholderData
-  );
+  if (lang === 'fr') {
+    collection = 'PageConnaitre-Recits'
+    manualSort = '_manualSort_d4963379-4cc6-44fa-bbed-e60987fe611d'
+  }
+  
+  if (lang === 'en') {
+    collection = 'Connaitre-Recits-En'
+    manualSort = '_manualSort_625b9742-bfaa-476a-941a-914797d0daac'
+  }
+  
+  let fetchedData = useWixData(collection, manualSort, placeholderData);
+  
   const recitsArray = fetchedData;
   if (recitsArray && recitsArray.length === 4) {
     recitsArray.forEach( recit => {
