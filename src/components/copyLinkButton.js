@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const CopyLinkButton = ({ url }) => {
+const CopyLinkButton = ({ lang, url }) => {
 	const [copied, setCopied] = useState(false);
 
 	const copyToClipboard = () => {
@@ -23,7 +23,10 @@ const CopyLinkButton = ({ url }) => {
 				fontSize: '1rem',
 			}}
 		>
-			{copied ? 'Copié !' : 'Copier le lien'}
+			{ !copied && lang === 'fr' ? 'Copier le lien' : ''} 
+			{ !copied && lang === 'en' ? 'Copy link' : ''} 
+			{ copied && lang === 'fr' ? 'Copié !' : ''} 
+			{ copied && lang === 'en' ? 'Copied !' : ''} 
 		</button>
 	);
 };

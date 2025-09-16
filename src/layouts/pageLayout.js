@@ -4,8 +4,63 @@ import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import '../styles/globals.scss'
-
+import lesTextes from '../data/textes'
 import CookieConsent from '../components/cookieConsent'
+
+const localisedText = [
+  {
+    fr: {
+      to: '/',
+      texte: 'Rêver',
+      title: "Rêver à l'essentiel"
+    },
+    en: {
+      to: '/en',
+      texte: 'Dream',
+      title: 'Dream to the essential'
+    }
+  },
+  {
+    fr: {
+      to: '/connaitre',
+      texte: 'Connaître',
+      title: "Connaître l'essentiel"
+    },
+    en: {
+      to: '/en/know',
+      texte: 'Know',
+      title: 'Know the essential'
+    }
+  },
+  {
+    fr: {
+      to: '/quiz',
+      texte: 'Quiz',
+      title: 'Testez vos connaissances'
+    },
+    en: {
+      to: '/en/quiz',
+      texte: 'Quiz',
+      title: 'Test your knowledge'
+    }
+  },
+  {
+    fr: {
+      to: '/en',
+      texte: 'En',
+      title: 'english'
+    },
+    en: {
+      to: '/',
+      texte: 'Fr',
+      title: 'français'
+    }
+  },
+  {
+    fr: "Numéro d'organisme de bienfaisance enregistré",
+    en: "..."
+  }
+]
 
 const Header = styled.header`
   position: fixed;
@@ -14,15 +69,16 @@ const Header = styled.header`
   width: 100%;
   background: var(--color-bleu-tres-fonce);
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
   align-items: center;
-  gap: 2rem;
+  gap: 0.3rem 2rem;
   z-index: 50;
   padding-inline: 3vw;
   
   .internal-nav {
     display: flex;
-    justify-items: center;
+    margin-inline: auto;
     gap: 1rem;}
   
   a {
@@ -34,9 +90,19 @@ const Header = styled.header`
     &.active {
         text-decoration: underline;}}}
         
+  ${media.onlySmall`
+    .sj-logo {
+      max-width: 120px;}
+    .internal-nav {
+      min-width: 75vw;}
+  `}
+        
   ${media.mediumUp`
+    .sj-logo {
+      max-width: 180px;}
     .mirror {
-      width: 180px;}
+      width: 180px;
+      text-align: right;}
   `}
   
 `;
@@ -94,7 +160,8 @@ const Footer = styled.footer`
     font-size: 0.8rem;}
 `;
 
-export default function PageLayout({ children }) {
+export default function PageLayout({ children, lang }) {
+  
   return (
     <>
       <Header>
@@ -107,15 +174,42 @@ export default function PageLayout({ children }) {
             src='../images/logo-horizontal.svg'
             placeholder='#282560'
             alt='Solutions Justes'
-            style={{maxWidth: '180px'}}
+            layout='constrained'
           />
         </a>
         <nav className='internal-nav'>
-          <Link to='/' activeClassName='active' title='Rêver à l&rsquo;essentiel'>Rêver</Link>
-          <Link to='/connaitre' activeClassName='active' title='Connaître l&rsquo;essentiel'>Connaître</Link>
-          <Link to='/quiz' activeClassName='active' title='Testez vos connaissances'>Quiz</Link>
+          <Link 
+            activeClassName='active' 
+            to={lang === 'fr' ? localisedText[0].fr.to : localisedText[0].en.to}
+            title={lang === 'fr' ? localisedText[0].fr.title : localisedText[0].en.title}
+          >
+            {lang === 'fr' ? localisedText[0].fr.texte : localisedText[0].en.texte}
+          </Link>
+          <Link 
+            activeClassName='active'
+            to={lang === 'fr' ? localisedText[1].fr.to : localisedText[1].en.to}
+            title={lang === 'fr' ? localisedText[1].fr.title : localisedText[1].en.title}
+          >
+            {lang === 'fr' ? localisedText[1].fr.texte : localisedText[1].en.texte}
+          </Link>
+          <Link 
+            activeClassName='active'
+            to={lang === 'fr' ? localisedText[2].fr.to : localisedText[2].en.to}
+            title={lang === 'fr' ? localisedText[2].fr.title : localisedText[2].en.title}
+          >
+            {lang === 'fr' ? localisedText[2].fr.texte : localisedText[2].en.texte}
+          </Link>
         </nav>
-        <div className='mirror'></div>
+        <div className='mirror'>
+          {lang === 'en' ? 
+            <Link 
+              to={lang === 'fr' ? localisedText[3].fr.to : localisedText[3].en.to}
+              title={lang === 'fr' ? localisedText[3].fr.title : localisedText[3].en.title}
+            >
+              {lang === 'fr' ? localisedText[3].fr.texte : localisedText[3].en.texte}
+            </Link>
+          : ''}
+        </div>
       </Header>
       
       <Main>
@@ -126,7 +220,7 @@ export default function PageLayout({ children }) {
       </Main>
       
       <Footer>
-        <p>Numéro d'organisme de bienfaisance enregistré : 107718868 RR 0001</p>
+        <p>{lang === 'fr' ? localisedText[4].fr : localisedText[4].en} : 107718868 RR 0001</p>
         <p>Copyright © 2024 <a href='https://www.solutionsjustes.org/'>Solutions Justes</a></p>
       </Footer>
       
@@ -135,10 +229,4 @@ export default function PageLayout({ children }) {
     </>
   )
 }
-
-export const Head = () => {
-  <>
-    <html lang="fr" />
-  </>
-};
 

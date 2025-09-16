@@ -228,7 +228,7 @@ const transformData = ( (inputArray, targetArray, associatedId) => {
 		
 });
 
-const HistoiresList = () => {
+const HistoiresList = ({textData, lang}) => {
 	// State
 	const [contentPersonnes, setContentPersonnes] = useState([placeholderPersonne]);
 	const [contentLignesTemps, setContentLignesTemps] = useState([placeholderLigneTemps]);
@@ -241,34 +241,44 @@ const HistoiresList = () => {
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
 	// Data fetch
-	const histoiresImgArray = histoiresImgData(); // Temp hardcoded 
-	const wixPersonnesData = useWixData(
-		'PageRever-Histoireconsequence', 
-		'_manualSort_adbe7ddc-ef0d-4bb5-94b7-deac5047fa94',
-		placeholderPersonne
-	);
+	const histoiresImgArray = histoiresImgData(); // Those images are hardcoded 
+	
+	let wixData = {};
+	
+	if (lang === 'fr') {
+		wixData = {
+			collPersonnes: 'PageRever-Histoireconsequence',
+			sortPersonnes: '_manualSort_adbe7ddc-ef0d-4bb5-94b7-deac5047fa94',
+			collLigne: 'PageReverLignesdutemps',
+			sortLigne: '_manualSort_660ea147-5f5d-41b4-a4a9-61a8ef2634e5'
+		}
+	}
+	
+	if (lang === 'en') {
+		wixData = {
+			collPersonnes: 'PageRever-Cpersonnes-English',
+			sortPersonnes:'_manualSort_789b2b47-5d55-4454-906b-c380dc9df585',
+			collLigne: 'Rever-Lignesdutemps-En',
+			sortLigne: '_manualSort_6153e760-a013-465c-8234-ab4ae67ff124'
+		}
+	}
+	
+	const wixPersonnesData = useWixData(wixData.collPersonnes, wixData.sortPersonnes, placeholderPersonne);
 	useEffect(() => {
 		if (wixPersonnesData) {
 			setContentPersonnes(wixPersonnesData);
-			//console.log('wixPersonnesData = ', wixPersonnesData);
 		}
 	}, [wixPersonnesData]);
 	
-	const wixLigneTempsData = useWixData(
-		'PageReverLignesdutemps', 
-		'_manualSort_660ea147-5f5d-41b4-a4a9-61a8ef2634e5',
-		placeholderLigneTemps
-	);
+	const wixLigneTempsData = useWixData(wixData.collLigne, wixData.sortLigne, placeholderLigneTemps);
 	
 	// Data concatenation from 2 Wix data collections
 	useEffect(() => {
-		//console.log('contentLignesTemps = ', contentLignesTemps);
 		if (wixLigneTempsData.length > 1 && contentPersonnes.length > 1 ) {
 				
 			contentPersonnes.forEach( (personne, i) => {
 				
 				const transformedData = transformData(wixLigneTempsData, wixPersonnesData, personne._id);
-				//console.log('transformedData ', personne.data.idUnique, ', = ', transformedData);
 				setContentLignesTemps(prevState => {
 					const newState = [...prevState];
 					newState[i] = { ...newState[i], transformedData };
@@ -277,8 +287,6 @@ const HistoiresList = () => {
 				setIsDataReady(true);
 				
 			});
-			
-			//console.log('contentLignesTemps = ', contentLignesTemps);
 			
 		}
 	}, [wixLigneTempsData, wixPersonnesData, contentPersonnes]);
@@ -437,8 +445,8 @@ const HistoiresList = () => {
 	return (
 		<section id='consequences'>
 			<Intro className='grid'>
-				<h2>Les conséquences de statuts d'immigration absents ou précaires</h2>
-				<p>En plus de faire face à une charge mentale excessive, une personne im·migrante sans statut ou à statut précaire peut ressentir les conséquences de sa situation migratoire sur sa santé mentale, ses conditions d'emploi et sa situation familiale.</p>
+				<h2>{textData.t4}</h2>
+				<p>{textData.p4}</p>
 			</Intro>
 			
 			<div ref={gsapScopeRef} style={{marginTop: 'calc(var(--v-spacer) / 1.5)'}}>
@@ -458,7 +466,7 @@ const HistoiresList = () => {
 								onClick={() => histoireSwitchClickHandler(cardIndex)} 
 								className='button' 
 							>
-								Lire son histoire
+								{textData.b4}
 							</button>
 						</div>
 					)})}
@@ -472,7 +480,7 @@ const HistoiresList = () => {
 							id={`histoire-${histoireItem.data.idUnique}`} 
 							key={histoireIndex}
 						>
-							<h3 className='histoire__titre'>L'histoire de {histoireItem.data.title}</h3>
+							<h3 className='histoire__titre'>{textData.t4b} {histoireItem.data.title}</h3>
 							<p className='histoire__resume'>{histoireItem.data.titre}</p>
 							
 							<div className='all-controls'>

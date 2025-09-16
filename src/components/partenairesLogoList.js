@@ -43,7 +43,7 @@ const SectionPartenaires = styled.section`
 	
 `;
 
-const PartenairesLogoList = () => {
+const PartenairesLogoList = ({titre}) => {
 	
 	const placeholderData = {
 		data: {
@@ -63,7 +63,7 @@ const PartenairesLogoList = () => {
 	
 	return (
 		<SectionPartenaires id='plus-loin'>
-			<h2>Pour aller plus loin</h2>
+			<h2>{titre}</h2>
 			<div className='partenaires grid'>
 				{partenaireArray.map( (partenaire, pindex) => { 
 					

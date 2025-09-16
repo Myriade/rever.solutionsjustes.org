@@ -1,5 +1,5 @@
 import React from 'react'
-import PageLayout from '../layouts/pageLayout'
+import PageLayout from '../../layouts/pageLayout'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 
@@ -9,12 +9,12 @@ const Section = styled.section`
 
 const Error404Page = () => {
   return (
-    <PageLayout lang='fr'>
+    <PageLayout lang='en'>
       
       <Section>
         <div>
-          <h2>Page non trouvée.</h2>
-          <Link to='/' className='button button--centered'>Retour à l’accueil</Link>
+          <h2>Page not found.</h2>
+          <Link to='/en' className='button button--centered'>Back to home</Link>
         </div>
       </Section>
       

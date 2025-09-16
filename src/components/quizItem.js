@@ -193,7 +193,16 @@ const Choix = styled.div`
 
 gsap.registerPlugin(useGSAP);
 
-const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
+const localisedText = {
+	fr: {
+		opinion: "Selon vous, <br/>cette personne est dans quelle situation ?"
+	},
+	en: {
+		opinion: "In your opinion, <br/>what is this person's situation?"
+	}
+}
+
+const QuizItem = ({ lang, itemData, itemIndex, onQuizItemChange, staticTexts }) => {
 	const [selectedChoice, setSelectedChoice] = useState(null);
 	const [arrayIsShuffled, setArrayIsShuffled] = useState(false);
 	const [choixArray, setChoixArray] = useState(null);
@@ -315,7 +324,8 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 			
 				<Interaction className='interaction'>
 					<div className='question'>
-						<h3>Selon vous,<br/> cette personne est dans quelle situation&nbsp;?</h3>
+						{ lang === 'fr' ? <h3 dangerouslySetInnerHTML={{ __html: localisedText.fr.opinion }}/> : '' }
+						{ lang === 'en' ? <h3 dangerouslySetInnerHTML={{ __html: localisedText.en.opinion }}/> : '' }
 					</div>
 					
 					<Choix ref={choixRef} className='choix'>
@@ -336,7 +346,10 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 												htmlFor={choiceId}
 												className={ choiceId === selectedChoice ? 'selected' : '' }
 											>
-												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> Elle {choix.text}.
+												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> 
+												{ lang === 'fr' && 'Elle ' }
+												{ lang === 'en' && 'They '} 
+												{choix.text}.
 											</label>
 										</div>
 								)})}
@@ -347,15 +360,15 @@ const QuizItem = ({ itemData, itemIndex, onQuizItemChange }) => {
 						<div className='answer'>
 							{ selectedChoice === rightAnswerId.current ? 
 								(<>
-									<p>Effectivement&nbsp;!</p> 
-									<p>Cette personne <span className='lowercase'>{rightAnswerText.current}</span>.</p>
+									<p>{staticTexts.t3b}</p> 
+									<p>{staticTexts.p3b} <span className='lowercase'>{rightAnswerText.current}</span>.</p>
 								</>)
 							: ''} 
 							
 							{ selectedChoice !== rightAnswerId.current && selectedChoice !== null ?
 								(<>
-									<p>Oups !</p>
-									<p>En vérité, cette personne <span className='lowercase'>{rightAnswerText.current}</span>.</p>
+									<p>{staticTexts.t3a}</p>
+									<p>{staticTexts.p3a} <span className='lowercase'>{rightAnswerText.current}</span>.</p>
 								</>)
 							: '' }
 						</div>
