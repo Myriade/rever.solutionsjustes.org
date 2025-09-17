@@ -1,13 +1,30 @@
-import React, { useState, useRef, useEffect }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import PageLayout from '../../layouts/pageLayout'
 import Connaitre from '../../components/pConnaitre'
 import lesTextes from '../../data/textes'
 const textes = lesTextes();
 
 const Page = () => {
+  const [headerBottom, setHeaderBottom] = useState(null);
+  
+  // pour le navbar pin
+  useEffect(() => {
+    if (!headerBottom) {
+      const headerHtml = document.querySelector('#gatsby-focus-wrapper header')
+      if (headerHtml) {
+        const result = headerHtml.getBoundingClientRect().bottom;
+        setHeaderBottom(result)
+      }
+    }
+  }, [headerBottom])
+  
   return (
     <PageLayout lang='en'>
-      <Connaitre lang='en' textData={textes.connaitre.en} />
+      <Connaitre 
+        lang='en' 
+        textData={textes.connaitre.en} 
+        headerBottomInViewport={headerBottom} 
+      />
     </PageLayout>
   )
 }

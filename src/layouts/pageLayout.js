@@ -4,7 +4,6 @@ import { StaticImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import '../styles/globals.scss'
-import lesTextes from '../data/textes'
 import CookieConsent from '../components/cookieConsent'
 
 const localisedText = [
