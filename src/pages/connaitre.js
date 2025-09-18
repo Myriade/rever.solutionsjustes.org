@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import PageLayout from '../layouts/pageLayout'
 import Connaitre from '../components/pConnaitre'
 import lesTextes from '../data/textes'
@@ -20,7 +20,11 @@ const Page = () => {
   
   return (
     <PageLayout lang='fr'>
-      <Connaitre lang='fr' textData={textes.connaitre.fr} headerBottomInViewport={headerBottom} />
+      <Connaitre 
+        lang='fr' 
+        textData={textes.connaitre.fr} 
+        headerBottomInViewport={headerBottom} 
+      />
     </PageLayout>
   )
 }
