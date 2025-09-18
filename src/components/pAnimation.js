@@ -29,11 +29,13 @@ export default function PAnimation() {
 	const gsapScopeRef = useRef();
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	useGSAP(() => {
-		gsap.set("path", {
-			drawSVG: "0%"
-		});
+		gsap.set("#click path", {drawSVG: "1%"});
+		gsap.set("#scroll path", {drawSVG: "0%"});
+		gsap.set("#scroll2 path:not(.plan1)", {drawSVG: "0%"});
+		gsap.set("#scroll2 .plan1", {drawSVG: "2%"});
 	},{ scope: gsapScopeRef }); 
 	
+	// Au click sur bouton
 	const onClickEvent = contextSafe((pathName) => {
 		if (pathName === 'epines') {
 			gsap.to('#click .epine path', {
@@ -42,7 +44,7 @@ export default function PAnimation() {
 			);
 		} else if (pathName === 'reset') {
 			gsap.set("#click path", {
-				drawSVG: "0%"
+				drawSVG: "1%"
 			});
 		} else {
 			gsap.to(`#click #${pathName} path`, {
@@ -52,18 +54,71 @@ export default function PAnimation() {
 		}
 	});
 	
+	// au scroll, même rythme
 	useGSAP(() => {
 		gsap.to("#scroll path", {
 			drawSVG: "100%", // End with path fully drawn
 			ease: "none", // Linear progression with scroll
 			scrollTrigger: {
 				trigger: "#scroll", // Use body as trigger
-				start: "top 80%", // Start when top of body hits top of viewport
+				start: "top 60%", // Start when top of body hits top of viewport
+				end: "bottom 75%", // End when bottom of body hits bottom of viewport
+				scrub: 1, // Smooth scrubbing, takes 1 second to "catch up"
+				markers: true
+			}
+		})
+	},{ scope: gsapScopeRef }); 
+	
+	// au scroll, rythmes différents
+	useGSAP(() => {
+		console.log('scroll2')
+		gsap.to("#scroll2 .plan1 path", {
+			drawSVG: "100%", // End with path fully drawn
+			ease: "none", // Linear progression with scroll
+			scrollTrigger: {
+				trigger: "#scroll2", // Use body as trigger
+				start: "top 60%", // Start when top of body hits top of viewport
 				end: "bottom 75%", // End when bottom of body hits bottom of viewport
 				scrub: 1, // Smooth scrubbing, takes 1 second to "catch up"
 				markers: false
 			}
-		})
+		});
+		
+		gsap.to("#scroll2 .plan2 path", {
+			drawSVG: "100%", // End with path fully drawn
+			ease: "none", // Linear progression with scroll
+			scrollTrigger: {
+				trigger: "#scroll2", // Use body as trigger
+				start: "top 50%", // Start when top of body hits top of viewport
+				end: "bottom 75%", // End when bottom of body hits bottom of viewport
+				scrub: 1, // Smooth scrubbing, takes 1 second to "catch up"
+				markers: false
+			}
+		});
+		
+		gsap.to("#scroll2 .plan3 path", {
+			drawSVG: "100%", // End with path fully drawn
+			ease: "none", // Linear progression with scroll
+			scrollTrigger: {
+				trigger: "#scroll2", // Use body as trigger
+				start: "top 40%", // Start when top of body hits top of viewport
+				end: "bottom 75%", // End when bottom of body hits bottom of viewport
+				scrub: 1, // Smooth scrubbing, takes 1 second to "catch up"
+				markers: false
+			}
+		});
+		
+		gsap.to("#scroll2 .epine path", {
+			drawSVG: "100%", // End with path fully drawn
+			ease: "none", // Linear progression with scroll
+			scrollTrigger: {
+				trigger: "#scroll2", // Use body as trigger
+				start: "top 30%", // Start when top of body hits top of viewport
+				end: "bottom 75%", // End when bottom of body hits bottom of viewport
+				scrub: 1, // Smooth scrubbing, takes 1 second to "catch up"
+				markers: false
+			}
+		});
 	},{ scope: gsapScopeRef }); 
 	
 	return (
@@ -93,7 +148,7 @@ export default function PAnimation() {
 				
 				<hr/>
 				<h3>Déployer toutes les lignes au scroll, même rythme</h3>
-				<p>Défiler vers le bas 👇 👇</p>
+				<p>Défiler vers le bas 👇 👇  Départ et fin synchronisés</p>
 				
 				<section style={{width: '500px', height: '500px'}} id="scroll">
 					<LiereTest />
@@ -101,7 +156,10 @@ export default function PAnimation() {
 				
 				<hr/>
 				<h3>Déployer toutes les lignes au scroll, rythmes différents</h3>
-				<p style={{minHeight: '30vh'}}>[À venir]</p>
+				<p>Défiler vers le bas 👇 👇  Départs à intervalle, puis fin synchronisée</p>
+				<section style={{width: '500px', height: '500px', marginBottom: '30vh'}} id="scroll2">
+					<LiereTest />
+				</section>
 				
 			</Styled>
 		</div>
