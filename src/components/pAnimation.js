@@ -7,6 +7,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import { useGSAP } from '@gsap/react'
 
+import LiereTest from '../images/enracinee/LiereTest.js'
+
 const Styled = styled.section`
 	background: white;
 	
@@ -25,10 +27,12 @@ export default function PAnimation() {
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
 	const onClickEvent = contextSafe(() => {
-		gsap.to('.box', { x: 180 });
+		gsap.from("path", {
+			duration:3,
+			drawSVG: 0}
+		);
 	});
 	
-	gsap.from(".draw-me", {duration:1,drawSVG: 0});
 	
 	return (
 		<div ref={gsapScopeRef} id='gsap-container'>
@@ -40,13 +44,11 @@ export default function PAnimation() {
 				<p className='box'>Ça va bouger</p>
 				<hr/>
 				
-				<StaticImage 
-					className='draw-me'
-					src='../images/enracinee/LiereWeb_test_epaisseur_fixe.svg' 
-					width={500}
-					height={500}
-					alt=""
-				/>
+				<section
+					style={{width: '500px', height: '500px'}}
+				>
+					<LiereTest />
+				</section>
 				
 			</Styled>
 		</div>
