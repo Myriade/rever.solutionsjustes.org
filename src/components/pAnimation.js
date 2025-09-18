@@ -12,12 +12,21 @@ import LiereTest from '../images/enracinee/LiereTest.js'
 const Styled = styled.section`
 	background: white;
 	
+	section {
+		width: 100%;}
+	
 	path {
-		stroke-dashoffset: 5%
-	}
+		stroke-dashoffset: 5%}
+		
+	.buttons {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;}
 	
 	${media.mediumUp`
-		
+		section {
+			width: 500px;
+			height: 500px;}
 	`}
 	
 `;
@@ -130,7 +139,7 @@ export default function PAnimation() {
 				<h3>Déployer les lignes une à la fois</h3>
 				<p>Cliquez les boutons pour voir chacune des lignes se déployer en 3 secondes</p>
 				
-				<div style={{display: 'flex', gap: '1rem'}}>
+				<div className='buttons'>
 					<button onClick={() => onClickEvent('base_x5F_1')}>base_x5F_1</button> 
 					<button onClick={() => onClickEvent('base_x5F_2')}>base_x5F_2</button> 
 					<button onClick={() => onClickEvent('base_x5F_3')}>base_x5F_3</button> 
@@ -142,7 +151,7 @@ export default function PAnimation() {
 					<button onClick={() => onClickEvent('reset')}>Réinitialiser</button>
 				</div>
 				
-				<section style={{width: '500px', height: '500px'}} id='click' >
+				<section id='click' >
 					<LiereTest />
 				</section>
 				
@@ -150,14 +159,14 @@ export default function PAnimation() {
 				<h3>Déployer toutes les lignes au scroll, même rythme</h3>
 				<p>Défiler vers le bas 👇 👇  Départ et fin synchronisés</p>
 				
-				<section style={{width: '500px', height: '500px'}} id="scroll">
+				<section id="scroll">
 					<LiereTest />
 				</section>
 				
 				<hr/>
 				<h3>Déployer toutes les lignes au scroll, rythmes différents</h3>
 				<p>Défiler vers le bas 👇 👇  Départs à intervalle, puis fin synchronisée</p>
-				<section style={{width: '500px', height: '500px', marginBottom: '30vh'}} id="scroll2">
+				<section style={{marginBottom: '30vh'}} id="scroll2">
 					<LiereTest />
 				</section>
 				
