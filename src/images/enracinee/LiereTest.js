@@ -15,16 +15,16 @@ const Liere = () => {
 	return (
 		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1000 1000" >
 			<Group>
-				<g id="epine_x5F_1" className='epine'>
+				<g id="epine_x5F_1" className='epine plan4'>
 					<path className="st0" d="M777.84,327.51c7.24,29.92,7.38,46.99-11.01,83.63"/>
 				</g>
-				<g id="epine_x5F_2" className='epine'>
+				<g id="epine_x5F_2" className='epine plan4'>
 					<path className="st0" d="M458.69,600.92c-26.8-15.15-39.36-26.71-53.56-65.17"/>
 				</g>
-				<g id="epine_x5F_3" className='epine'>
+				<g id="epine_x5F_3" className='epine plan4'>
 					<path className="st0" d="M431.91,580.91c-27.21-14.4-40.08-25.61-55.34-63.66"/>
 				</g>
-				<g id="epine_x5F_4" className='epine'>
+				<g id="epine_x5F_4" className='epine plan4'>
 					<path className="st0" d="M164.61,636.34c-16.44,26.02-22.04,42.15-16.35,82.75"/>
 				</g>
 				<g id="base_x5F_2" className='plan3'>
@@ -46,7 +46,7 @@ const Liere = () => {
 				<g id="ombre_x5F_1_x5F_partie_x5F_1" className='plan1'>
 					<path className="st6" d="M624,220.64c90.67,39.69,183.18,79.03,160,188.36s-198.67,132.09-200,78c-0.97-39.27,48.59-91.44,97.59-16.44" />
 				</g>
-				<g id="ombre_x5F_1_x5F_partie_x5F_2" className='epine'>
+				<g id="ombre_x5F_1_x5F_partie_x5F_2" className='plan4'>
 					<path className="st6" d="M217.67,879C97,845,92.33,771.67,107.67,687.67S281,484.33,395,585s180,103.33,242.67,88.67 c33.53-7.85,102.99-71.48,112-114"/>
 				</g>
 			</Group>

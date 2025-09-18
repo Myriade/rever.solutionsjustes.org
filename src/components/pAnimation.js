@@ -117,7 +117,7 @@ export default function PAnimation() {
 			}
 		});
 		
-		gsap.to("#scroll2 .epine path", {
+		gsap.to("#scroll2 .plan4 path", {
 			drawSVG: "100%", // End with path fully drawn
 			ease: "none", // Linear progression with scroll
 			scrollTrigger: {
