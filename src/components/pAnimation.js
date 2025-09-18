@@ -69,7 +69,7 @@ export default function PAnimation() {
 	return (
 		<div ref={gsapScopeRef} id='gsap-container'>
 			<Styled>
-				<h2>Tests d'animations vectorielles</h2>
+				<h2>Tests d'animations vectorielles interactives</h2>
 				
 				<hr/>
 				<h3>Déployer les lignes une à la fois</h3>
