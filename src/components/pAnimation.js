@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { StaticImage } from "gatsby-plugin-image"
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import { useGSAP } from '@gsap/react'
 
 const Styled = styled.section`
@@ -14,7 +16,7 @@ const Styled = styled.section`
 	
 `;
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
 export default function PAnimation() {
 	
@@ -26,13 +28,26 @@ export default function PAnimation() {
 		gsap.to('.box', { x: 180 });
 	});
 	
+	gsap.from(".draw-me", {duration:1,drawSVG: 0});
+	
 	return (
 		<div ref={gsapScopeRef} id='gsap-container'>
 			<Styled>
 				<h2>Page juste pour tester une animation vectorielle</h2>
 				<h3>Défiler vers le bas 👇 👇</h3>
-			<button onClick={onClickEvent}>Click-moi</button>
+				<hr/>
+				<button onClick={onClickEvent}>Click-moi</button>
 				<p className='box'>Ça va bouger</p>
+				<hr/>
+				
+				<StaticImage 
+					className='draw-me'
+					src='../images/enracinee/LiereWeb_test_epaisseur_fixe.svg' 
+					width={500}
+					height={500}
+					alt=""
+				/>
+				
 			</Styled>
 		</div>
 	);
