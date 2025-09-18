@@ -64,7 +64,7 @@ export default function PAnimation() {
 				start: "top 60%", // Start when top of body hits top of viewport
 				end: "bottom 75%", // End when bottom of body hits bottom of viewport
 				scrub: 1, // Smooth scrubbing, takes 1 second to "catch up"
-				markers: true
+				markers: false
 			}
 		})
 	},{ scope: gsapScopeRef }); 
