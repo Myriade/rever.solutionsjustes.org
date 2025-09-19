@@ -26,9 +26,9 @@ const localisedText = [
       title: "Connaître l'essentiel"
     },
     en: {
-      to: '/en/know',
-      texte: 'Know',
-      title: 'Know the essential'
+      to: '/en/learn',
+      texte: 'Learn',
+      title: 'Learn the essentials'
     }
   },
   {

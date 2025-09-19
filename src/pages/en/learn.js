@@ -41,7 +41,7 @@ export const Head = () => (
     <meta property='og:description' content='' />
     <meta property='og:image' content='https://rever.solutionsjustes.org/rever-essentiel-solutions-justes-mcm-og.jpg' />
     <meta property='og:image:alt' content='' />
-    <meta property='og:url' content='https://rever.solutionsjustes.org/en/know' />
+    <meta property='og:url' content='https://rever.solutionsjustes.org/en/learn' />
     <meta property='og:type' content='website' />
     
     <link rel='stylesheet' href='/glide.core.min.css' />

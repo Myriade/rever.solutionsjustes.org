@@ -35,6 +35,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
 export default function PAnimation() {
 	
+	// GSAP Setup de depart
 	const gsapScopeRef = useRef();
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	useGSAP(() => {

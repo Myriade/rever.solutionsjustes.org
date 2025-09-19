@@ -252,6 +252,7 @@ const HistoiresList = ({textData, lang}) => {
 			collLigne: 'PageReverLignesdutemps',
 			sortLigne: '_manualSort_660ea147-5f5d-41b4-a4a9-61a8ef2634e5'
 		}
+		
 	}
 	
 	if (lang === 'en') {
@@ -480,7 +481,10 @@ const HistoiresList = ({textData, lang}) => {
 							id={`histoire-${histoireItem.data.idUnique}`} 
 							key={histoireIndex}
 						>
-							<h3 className='histoire__titre'>{textData.t4b} {histoireItem.data.title}</h3>
+							<h3 className='histoire__titre'>
+								{ lang === 'fr' ? <span>{textData.t4b} {histoireItem.data.title}</span> : ''}
+								{ lang === 'en' ?  <span>{histoireItem.data.title}{textData.t4b}</span> : ''}
+							</h3>
 							<p className='histoire__resume'>{histoireItem.data.titre}</p>
 							
 							<div className='all-controls'>
