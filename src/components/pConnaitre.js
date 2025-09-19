@@ -33,7 +33,6 @@ const Section1Hero = styled.div`
     color: white;
     line-height: 1em;
     text-transform: uppercase;
-    text-align: center;
     margin: 0 var(--h-spacer);
     display: grid;
     align-content: space-evenly;
@@ -55,6 +54,7 @@ const Section1Hero = styled.div`
       text-align: unset;
       height: calc(95vh - var(--header-height));
       font-size: clamp(25px, 12vw, 22vh); 
+      padding-bottom: 0.25em;
       span.right {
         text-align: right;}
       span.small {
@@ -1163,20 +1163,23 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
       nomDuStatutExact: 'Chargement ...',
     }
   }
-  let collection = null;
+  let collectionRecits = null;
   let manualSort = null;
+  let collectionCta = null;
   
   if (lang === 'fr') {
-    collection = 'PageConnaitre-Recits'
+    collectionRecits = 'PageConnaitre-Recits'
     manualSort = '_manualSort_d4963379-4cc6-44fa-bbed-e60987fe611d'
+    collectionCta = 'PageConnaitre-Appelalaction'
   }
   
   if (lang === 'en') {
-    collection = 'Connaitre-Recits-En'
+    collectionRecits = 'Connaitre-Recits-En'
     manualSort = '_manualSort_625b9742-bfaa-476a-941a-914797d0daac'
+    collectionCta = 'Connaitre-Appelalaction-En'
   }
   
-  let fetchedData = useWixData(collection, manualSort, placeholderData);
+  let fetchedData = useWixData(collectionRecits, manualSort, {});
   
   const recitsArray = fetchedData;
   if (recitsArray && recitsArray.length === 4) {
@@ -1186,11 +1189,9 @@ const Connaitre = ({lang, textData, headerBottomInViewport}) => {
       recit.parsedData.lesImpacts = extractLisTags(recit.data.lesImpacts);
     });
   }
-  let fetchedCtaData = useWixData(
-    'PageConnaitre-Appelalaction',
-    '', 
-    placeholderData
-  );
+  
+  let fetchedCtaData = useWixData(collectionCta, '', placeholderData);
+  
   //console.log(fetchedCtaData);
   
   /******** Browser Effects (useEffect) *******/

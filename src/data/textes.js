@@ -64,7 +64,7 @@ export default function lesTextes() { return {
 	},
 	connaitre: {
 		fr: {
-			t1: `<span class='right'>Connaître</span><span>l’essentiel&nbsp;...</span> <span class='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>`,
+			t1: `<span class='right'>Connaître</span><span></span>&nbsp;<span>l’essentiel&nbsp;...</span> <span class='small'>... de certains statuts d’immigration précaires et de l’absence de statut</span>`,
 			t2: 'Récits, mythes et réalités',
 			p2a: 'Ce ne sont que quelques exemples parmi de nombreuses autres situations.',
 			t2a: 'Mon statut',
@@ -77,31 +77,29 @@ export default function lesTextes() { return {
 			b3a: 'Contactez-nous',
 			t3b: 'Je veux faire du bénévolat',
 			st3b: "Vous souhaitez aider et vous avez un peu de temps à nous offrir ? Devenez bénévole chez nous!",
-			p3b: ` <p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
+			p3b: `<p>Accueillir et orienter les personnes, faire de l’interprétariat, de la défense des droits, écrire des articles, animer un atelier, aider a la communication… Il y a bien des façons d’aider l'organisme et les personnes qu'il dessert.</p>
 			<p>Envoyez-nous votre proposition de bénévolat via le formulaire ci-dessous.</p>`, 
 			b3b: 'Nous rejoindre',
-			seo: 'Connaître l’essentiel de certains statuts d’immigration précaires et de l’absence de statut. Récits, mythes et réalités. Bonjour, je suis Maria et je suis une personne sans statut d’immigration.'
 		},
 		en: {
-			t1: '...',
-			t2: '...',
-			p2a: '...',
-			t2a: '...',
-			t2b: '...',
-			t2c: '...',
-			b2: '...',
-			t3: '...',
-			t3a: '...',
-			p3a: '...',
-			b3a: '...',
-			t3b: '...',
-			st3b: '...',
-			p3b: '...', 
-			b3b: '...',
-			t3c: '...',
-			p3c: '...', 
-			b3c: '...',
-			seo: '...'
+			t1:  `<span>Learn </span><span class='right'>the </span><span>essentials&nbsp;...</span> <span class='small'>... about certain precarious immigration statuses and the absence of status</span>`,
+			t2: 'Stories, Myths, and Realities',
+			p2a: 'These are just a few examples among many other situations.',
+			t2a: 'My Status',
+			t2b: 'The Impacts',
+			t2c: 'Myth vs. Reality',
+			b2: 'Take Action',
+			t3: 'Get Involved',
+			t3a: 'I Want to Host a Workshop',
+			p3a: 'Would you like to organize an awareness activity or training in your workplace, organization, neighborhood event, or "school?',
+			b3a: 'Contact us',
+			t3b: 'I Want to Volunteer',
+			st3b: 'Do you want to help and have a bit of time to give? Become a volunteer with us!',
+			p3b: `<p>You can welcome and guide people, help with interpretation, defend rights, write articles, lead a workshop, support communications… There are many ways to help our organization and the people we serve.</p><p>Send us your volunteer proposal using the form below.</p>`, 
+			b3b: 'Joins us',
+			t3c: 'I Want to Sign Petitions',
+			p3c: 'Signing petitions from our allies is a way to take action, make your voice heard, and help create change',
+			b3c: 'Take action'
 		}
 	},
 	quiz: {
