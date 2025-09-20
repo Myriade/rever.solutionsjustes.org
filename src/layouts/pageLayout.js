@@ -15,8 +15,8 @@ const localisedText = [
     },
     en: {
       to: '/en',
-      texte: 'Dream',
-      title: 'Dream to the essential'
+      texte: 'Rêver',
+      title: "Rêver à l'essentiel"
     }
   },
   {
