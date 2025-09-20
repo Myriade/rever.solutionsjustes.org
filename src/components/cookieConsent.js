@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
-// import { gsap } from 'gsap'
-// import { useGSAP } from '@gsap/react'
 
 const Consentement = styled.section`
 	position: fixed;
@@ -45,8 +43,18 @@ const Consentement = styled.section`
 	
 `;
 
-export default function CookieConsent() {
+export default function CookieConsent({lang}) {
 	const [isConsentOk, setIsConsentOk] = useState(true);
+	
+	let textMarkup = null;
+	
+	if (lang === 'fr') {
+		textMarkup = `Nous utilisons des cookies pour comprendre comment vous interagissez avec notre site. En poursuivant la visite de ce site web, vous consentez à notre utilisation de ces cookies. <a href='https://www.solutionsjustes.org/politique-confidentialite' target='_blank' rel='noreferrer'>Voir notre politique de confidentialité</a>`
+	}
+	
+	if (lang === 'en') {
+		textMarkup = `We use cookies to understand how you interact with our website. By continuing to browse this site, you consent to our use of cookies. <a href='https://www.solutionsjustes.org/politique-confidentialite' target='_blank' rel='noreferrer'>View our privacy policy.</a>`
+	}
 	
 	// event handler
 	const onConsentClick = () => {
@@ -73,7 +81,7 @@ export default function CookieConsent() {
 	if (!isConsentOk) {
 		return (
 			<Consentement>
-				<p>Nous utilisons des cookies pour comprendre comment vous interagissez avec notre site. En poursuivant la visite de ce site web, vous consentez à notre utilisation de ces cookies. <a href='https://www.solutionsjustes.org/politique-confidentialite' target='_blank' rel='noreferrer'>Voir notre politique de confidentialité</a></p>
+				<p dangerouslySetInnerHTML={{ __html: textMarkup }} ></p>
 				<div>
 					<button
 						className='button'

@@ -57,7 +57,7 @@ const localisedText = [
   },
   {
     fr: "Numéro d'organisme de bienfaisance enregistré",
-    en: "..."
+    en: "Registered Charity Number"
   }
 ]
 
@@ -223,7 +223,7 @@ export default function PageLayout({ children, lang }) {
         <p>Copyright © 2024 <a href='https://www.solutionsjustes.org/'>Solutions Justes</a></p>
       </Footer>
       
-      <CookieConsent />
+      <CookieConsent lang={lang} />
       
     </>
   )
