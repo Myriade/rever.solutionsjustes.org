@@ -348,7 +348,7 @@ const QuizItem = ({ lang, itemData, itemIndex, onQuizItemChange, staticTexts }) 
 											>
 												<span>{index === 0 && 'A'}{index === 1 && 'B'}{index === 2 && 'C'}</span> 
 												{ lang === 'fr' && 'Elle ' }
-												{ lang === 'en' && 'They '} 
+												{ lang === 'en' && 'This person '} 
 												{choix.text}.
 											</label>
 										</div>

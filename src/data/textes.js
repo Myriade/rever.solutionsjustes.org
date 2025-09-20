@@ -118,18 +118,17 @@ export default function lesTextes() { return {
 			seo: "Ce quiz offre une perspective unique sur les défis auxquels font face les personnes migrantes et permet de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien."
 		},
 		en: {
-			t1: '...',
-			p2a: '...',
-			t2: '...',
-			p2b: '...',
-			b2: '...',
+			t1: "<span class='right'>Beyond </span>	<span></span> <span>Statuses</span>",
+			p2a: 'Test your knowledge with our interactive quiz! 🧠💡',
+			t2: 'Are you wondering how different immigration statuses affect the daily lives of im·migrants and refugees?',
+			p2b: 'This quiz will give you a unique perspective on the challenges they face and help you better understand the often-overlooked link between immigration status and everyday well-being.',
+			b2: 'Start the quiz',
 			t3a: 'Oops!',
 			p3a: 'Actually, this person',
 			t3b: 'Indeed!',
 			p3b: 'This person',
-			p4a: '...',
-			p4b: '...',
-			seo: '...',
+			p4a: '<p><b>Don’t worry, you’re on the right track!</b> It’s completely normal not to know everything. </p><p>Migrants without status or with precarious status often live in invisibility, making it difficult to understand their stories and the challenges they face.</p><p>However, this quiz has helped shed light on some key aspects of their reality and the issues related to immigration status.</p><p>We encourage you to continue learning by exploring more of these stories and following us on social media to learn more.</p>',
+			p4b: '<p><b>Congratulations!</b></p> <p>You now have a better understanding of the reality faced by migrants without status or with precarious status, many of whose challenges and issues stem from their immigration status.</p><p>Keep learning by exploring more of these stories and following us on social media.</p>'
 		}
 	}
 }}

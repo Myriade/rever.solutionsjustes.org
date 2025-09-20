@@ -19,14 +19,13 @@ export default Page
 
 export const Head = () => ( 
   <>
-    <title>Quiz : Au-delà des statuts d'immigration | Solutions justes</title>
-    <meta name='description' content="" />
+    <title>Quiz : Beyond Statuses | Solutions justes</title>
+    <meta name='description' content="This quiz offers a unique perspective on the challenges faced by migrants and helps shed light on the often-overlooked connection between immigration status and daily well-being." />
     
-    <meta property='og:title' content="Quiz : ... | Solutions justes" />
-    <meta property='og:description' content="" />
+    <meta property='og:title' content="Quiz : Beyond Statuses| Solutions justes" />
+    <meta property='og:description' content="This quiz offers a unique perspective on the challenges faced by migrants and helps shed light on the often-overlooked connection between immigration status and daily well-being." />
     <meta property='og:image' content='https://rever.solutionsjustes.org/quiz-solutions-justes-mcm-og.jpg' />
-    <meta property='og:image:alt' content="Testez vos connaissances avec notre quiz interactif ! 🧠💡
-    Vous vous demandez comment les différents statuts d'immigration influencent la vie quotidienne des personnes migrantes ? Ce quiz vous offrira une perspective unique sur les défis auxquels font face les personnes migrantes et vous permettra de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien." />
+    <meta property='og:image:alt' content="Je rêvais d’une meilleure vie au Québec. Je rêve maintenant de ne plus vivre dans l’angoisse de devoir quitter. - Personne en attente de sa résidence permanente depuis 7 ans. Informez-vous sur les réalités migratoires au Québec. Solutions Justes, MCM" />
     <meta property='og:url' content='https://rever.solutionsjustes.org/en/quiz' />
     <meta property='og:type' content='website' />
   </>

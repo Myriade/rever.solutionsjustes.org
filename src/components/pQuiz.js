@@ -326,7 +326,7 @@ const Quiz = ({lang, textData}) => {
   
   if (lang === 'en') {
     collection = 'Quiz-En'
-    manualSort = ''
+    manualSort = '_manualSort_49bad383-8b39-41ea-ba2d-4986ab1bc3db'
   }
   
   let fetchedData = useWixData(collection, manualSort, placeholderData);
