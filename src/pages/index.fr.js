@@ -7,7 +7,7 @@ const Page = () => {
   const [textes, setTextes] = useState(lesTextes());
   
   return (
-    <PageLayout lang='fr'>
+    <PageLayout lang='fr' i18nLink='/en'>
       { textes ? 
         <Accueil lang='fr' textData={textes.rever.fr} />
         : '...'

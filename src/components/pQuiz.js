@@ -313,7 +313,7 @@ const Quiz = ({lang, textData}) => {
     }
   }
   
-  const shareUrl = lang === 'fr' ? 'https://rever.solutionsjustes.org/quiz' : 'https://rever.solutionsjustes.org/en/quiz'
+  const shareUrl = 'https://rever.solutionsjustes.org/quiz'
   
   /******** Fetch and parse data *********/
   let collection = null;

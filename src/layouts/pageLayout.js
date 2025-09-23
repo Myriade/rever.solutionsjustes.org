@@ -159,7 +159,7 @@ const Footer = styled.footer`
     font-size: 0.8rem;}
 `;
 
-export default function PageLayout({ children, lang }) {
+export default function PageLayout({ children, lang, i18nLink }) {
   
   return (
     <>
@@ -200,14 +200,12 @@ export default function PageLayout({ children, lang }) {
           </Link>
         </nav>
         <div className='mirror'>
-          {lang === 'en' ? 
             <Link 
-              to={lang === 'fr' ? localisedText[3].fr.to : localisedText[3].en.to}
+              to={i18nLink}
               title={lang === 'fr' ? localisedText[3].fr.title : localisedText[3].en.title}
             >
               {lang === 'fr' ? localisedText[3].fr.texte : localisedText[3].en.texte}
             </Link>
-          : ''}
         </div>
       </Header>
       

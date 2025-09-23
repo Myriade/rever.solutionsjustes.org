@@ -19,7 +19,7 @@ const Page = () => {
   }, [headerBottom])
   
   return (
-    <PageLayout lang='en'>
+    <PageLayout lang='en' i18nLink='/connaitre'>
       <Connaitre 
         lang='en' 
         textData={textes.connaitre.en} 

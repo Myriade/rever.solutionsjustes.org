@@ -7,7 +7,7 @@ const Page = () => {
   const [textes, setTextes] = useState(lesTextes());
   
   return (
-    <PageLayout lang='fr'>
+    <PageLayout lang='fr' i18nLink='/en/quiz'>
       { textes ? 
        <Quiz lang='fr' textData={textes.quiz.fr} />
         : '...'

@@ -6,7 +6,7 @@ import lesTextes from '../data/textes'
 const Page = () => {
   const [textes, setTextes] = useState(lesTextes());
   return (
-    <PageLayout lang='en'>
+    <PageLayout lang='en' i18nLink='/quiz'>
       { textes ? 
        <Quiz lang='en' textData={textes.quiz.en} />
         : '...'
