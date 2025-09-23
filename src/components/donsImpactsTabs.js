@@ -109,6 +109,7 @@ const Container = styled.div`
 		p {
 			color: white;
 			height: calc(10 * 1.35rem);
+			line-height: clamp(1.2em, 3vh, 1.35em);
 			overflow: hidden;
 			padding: 0;}}
 	
@@ -128,15 +129,15 @@ const DonsImpactTabs = ({textData}) => {
 	
 	const data = [
 		{
-			montant: '20\u00A0$',
+			montant: '35\u00A0$',
 			impact: textData.p6a1,
 		} ,
 		{
-			montant: '200\u00A0$',
+			montant: '350\u00A0$',
 			impact: textData.p6a2,
 		} ,
 		{
-			montant: '2000\u00A0$',
+			montant: '4 050\u00A0$',
 			impact: textData.p6a3,
 		}
 	]
@@ -170,7 +171,7 @@ const DonsImpactTabs = ({textData}) => {
 			<div className='cta'>
 				<a 
 					className='button centered' 
-					href='https://www.canadahelps.org/en/charities/montreal-city-mission/campaign/just-solutions-20th-anniversary-campaign' 
+					href='https://www.zeffy.com/fr-CA/donation-form/solutions-justes-quebec' 
 					target='_blank' 
 					rel='noreferrer'
 				>
