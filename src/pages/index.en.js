@@ -30,7 +30,7 @@ export const Head = () => (
 ' />
     <meta property='og:image' content='https://rever.solutionsjustes.org/rever-essentiel-solutions-justes-mcm-og.jpg' />
     <meta property='og:image:alt' content='Je rêvais d’une meilleure vie au Québec. Je rêve maintenant de ne plus vivre dans l’angoisse de devoir quitter. - Personne en attente de sa résidence permanente depuis 7 ans. Informez-vous sur les réalités migratoires au Québec. Solutions Justes, MCM' />
-    <meta property='og:url' content='https://rever.solutionsjustes.org/en' />
+    <meta property='og:url' content='https://rever.solutionsjustes.org/en/' />
     <meta property='og:type' content='website' />
   </>
 );
