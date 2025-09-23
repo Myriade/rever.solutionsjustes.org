@@ -20,6 +20,7 @@ export default Page
 
 export const Head = () => ( 
   <>
+    <html lang='fr' />
     <title>Quiz : Au-delà des statuts d'immigration | Solutions justes</title>
     <meta name='description' content="Ce quiz offre une perspective unique sur les défis auxquels font face les personnes migrantes et permet de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien." />
     

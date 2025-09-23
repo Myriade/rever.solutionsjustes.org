@@ -19,6 +19,7 @@ export default Page
 
 export const Head = () => ( 
   <>
+    <html lang='en' />
     <title>Quiz : Beyond Statuses | Solutions justes</title>
     <meta name='description' content="This quiz offers a unique perspective on the challenges faced by migrants and helps shed light on the often-overlooked connection between immigration status and daily well-being." />
     

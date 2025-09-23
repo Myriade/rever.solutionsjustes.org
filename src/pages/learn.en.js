@@ -33,6 +33,7 @@ export default Page
 
 export const Head = () => (
   <>
+    <html lang='en' />
     <title>Learn the essentials | Solutions justes</title>
     <meta name='title' content='Learn the essentials | Solutions justes' />
     <meta name='description' content='' />

@@ -20,7 +20,8 @@ export default Page
 
 export const Head = () => (
   <>
-    <title>Rêver à l’essentiel | Solutions justes</title>
+    <html lang='en' />
+    <title>Rêver à l’essentiel | Solutions justes | En</title>
     <link rel='stylesheet' href='/glide.core.min.css' />
     <link rel='stylesheet' href='/glide.theme.min.css' />
     <meta name='description' content='Every dream deserves not to be essential! Together, let’s learn about the reality of humanitarian immigration and amplify the voices of those striving for a better future.' />

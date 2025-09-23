@@ -33,6 +33,7 @@ export default Page
 
 export const Head = () => (
   <>
+    <html lang='fr' />
     <title>Connaître l’essentiel | Solutions justes</title>
     <meta name='title' content='Connaître l’essentiel | Solutions justes' />
     <meta name='description' content='Connaître l’essentiel de certains statuts d’immigration précaires et de l’absence de statut. Récits, mythes et réalités. Bonjour, je suis Maria et je suis une personne sans statut d’immigration.' />
