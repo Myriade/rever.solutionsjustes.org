@@ -1,7 +1,7 @@
 import React, { useState, useEffect }  from 'react'
-import PageLayout from '../../layouts/pageLayout'
-import Connaitre from '../../components/pConnaitre'
-import lesTextes from '../../data/textes'
+import PageLayout from '../layouts/pageLayout'
+import Connaitre from '../components/pConnaitre'
+import lesTextes from '../data/textes'
 const textes = lesTextes();
 
 const Page = () => {
