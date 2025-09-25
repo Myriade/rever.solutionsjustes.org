@@ -24,8 +24,17 @@ const Video = styled.section`
 	${media.mediumUp``};
 `;
 
-const Chapitre = styled.section`
+const Chapitres = styled.section`
+	display: grid;
+	gap: 5vw;
+	
+	section:nth-child(even) {
+		padding-left: 10vw}
+	section:nth-child(odd) {
+		padding-right: 10vw}
+`;
 
+const Chapitre = styled.section`
 	img {
 		border: 1rem solid #3a1737;}
 
@@ -37,9 +46,13 @@ const Chapitre = styled.section`
 	.color2 .text {
 		background: #729b76;}
 	.color3 .text {
-		background: #295534;}
+		background: #295534;
+		h2, p {
+			color: white;}}
 	.color4 .text {
-		background: #2d3837;}
+		background: #2d3837;
+		h2, p {
+			color: white;}}
 	
 	${media.mediumUp``};
 `;
@@ -70,67 +83,75 @@ const PEnracinee = ({lang, texts}) => {
 				<script src="https://player.vimeo.com/api/player.js"></script>
 			</Video>
 			
-			<Chapitre><div id='chapitre1' className=''>
-				<StaticImage 
-					src='../images/MCM_Visuel-Histoire.png'
-					alt='temp'
-				/>
-				<div className='text'>
-					<h2>{texts.bloc1.titre}</h2>
-					{texts.bloc1.texte.map((item, index) => <p key={index}>{item}</p>)}
-				</div>
-			</div></Chapitre>
+			<Chapitres>
+			
+				<Chapitre><div id='chapitre1' className=''>
+					<StaticImage 
+						src='../images/enracinee/temp-1.png'
+						alt='temp'
+					/>
+					<div className='text'>
+						<h2>{texts.bloc1.titre}</h2>
+						{texts.bloc1.texte.map((item, index) => <p key={index}>{item}</p>)}
+					</div>
+				</div></Chapitre>
+					
+				<Chapitre><div id='chapitre2' className='color2'>
+					<StaticImage 
+						src='../images/enracinee/temp-2.png'
+						alt='temp'
+					/>
+					<div className='text'>
+						<h2>{texts.bloc2.titre}</h2>
+						{texts.bloc2.texte.map((item, index) => <p key={index}>{item}</p>)}
+					</div>
+				</div></Chapitre>
 				
-			<Chapitre><div id='chapitre2' className='color2'>
-				<StaticImage 
-					src='../images/MCM_Visuel-Histoire.png'
-					alt='temp'
-				/>
-				<div className='text'>
-					<h2>{texts.bloc2.titre}</h2>
-					{texts.bloc2.texte.map((item, index) => <p key={index}>{item}</p>)}
-				</div>
-			</div></Chapitre>
-			
-			<Chapitre><div id='chapitre3' className='color3'>
-				<StaticImage 
-					src='../images/MCM_Visuel-Histoire.png'
-					alt='temp'
-				/>
-				<div className='text'>
-					<h2>Bloc 3</h2>
-				</div>
-			</div></Chapitre>
-			
-			<Chapitre><div id='chapitre4' className='color4'>
-				<StaticImage 
-					src='../images/MCM_Visuel-Histoire.png'
-					alt='temp'
-				/>
-				<div className='text'>
-					<h2>Bloc 4</h2>
-				</div>
-			</div></Chapitre>
-			
-			<Chapitre><div id='chapitre5' className='color3'>
-				<StaticImage 
-					src='../images/MCM_Visuel-Histoire.png'
-					alt='temp'
-				/>
-				<div className='text'>
-					<h2>Bloc 5</h2>
-				</div>
-			</div></Chapitre>
-			
-			<Chapitre><div id='chapitre6' className='color2'>
-				<StaticImage 
-					src='../images/MCM_Visuel-Histoire.png'
-					alt='temp'
-				/>
-				<div className='text'>
-					<h2>Bloc 6</h2>
-				</div>
-			</div></Chapitre>
+				<Chapitre><div id='chapitre3' className='color3'>
+					<StaticImage 
+						src='../images/enracinee/temp-3.png'
+						alt='temp'
+					/>
+					<div className='text'>
+						<h2>{texts.bloc3.titre}</h2>
+						{texts.bloc3.texte.map((item, index) => <p key={index}>{item}</p>)}
+					</div>
+				</div></Chapitre>
+				
+				<Chapitre><div id='chapitre4' className='color4'>
+					<StaticImage 
+						src='../images/enracinee/temp-4.png'
+						alt='temp'
+					/>
+					<div className='text'>
+						<h2>{texts.bloc4.titre}</h2>
+						{texts.bloc4.texte.map((item, index) => <p key={index}>{item}</p>)}
+					</div>
+				</div></Chapitre>
+				
+				<Chapitre><div id='chapitre5' className='color3'>
+					<StaticImage 
+						src='../images/enracinee/temp-5.png'
+						alt='temp'
+					/>
+					<div className='text'>
+						<h2>{texts.bloc5.titre}</h2>
+						{texts.bloc5.texte.map((item, index) => <p key={index}>{item}</p>)}
+					</div>
+				</div></Chapitre>
+				
+				<Chapitre><div id='chapitre6' className='color2'>
+					<StaticImage 
+						src='../images/enracinee/temp-6.png'
+						alt='temp'
+					/>
+					<div className='text'>
+						<h2>{texts.bloc6.titre}</h2>
+						{texts.bloc6.texte.map((item, index) => <p key={index}>{item}</p>)}
+					</div>
+				</div></Chapitre>
+				
+			</Chapitres>
 		
 		</div>
 	)
