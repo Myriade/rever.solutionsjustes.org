@@ -23,7 +23,7 @@ const Intro = styled.section`
 	flex-wrap: wrap;
 	align-items: flex-start;
 	padding-bottom: 0 !important;
-	margin-bottom: 10vh;
+	margin-bottom: 6vh;
 	
 	.chapitre {
 		margin-top: 10vh;
@@ -32,9 +32,8 @@ const Intro = styled.section`
 	${media.desktopUp`
 		> div:nth-child(2) {
 			max-width: 30vw !important;
-			margin-left: calc(var(--h-spacer) * 2);
 			.gatsby-image-wrapper {
-				right: -5rem;}
+				}
 		.chapitre {
 			max-width: 100%;}}
 	`};
@@ -66,7 +65,7 @@ const Video = styled.div`
 const Chapitres = styled.section`
 	display: flex;
 	flex-wrap: wrap;
-	gap: 16vh 6%;
+	gap: 13vh 3vw;
 	margin-inline: 2rem;
 `;
 
@@ -78,9 +77,9 @@ const Chapitre = styled.div`
 		border-radius: 3rem;}
 		
 	&:nth-child(odd) .chapitre {
-		margin-right: calc(var(--h-spacer) * 2);
+		
 		.gatsby-image-wrapper {
-			left: -15vw;}}
+			}}
 
 	.text {
 		p {
@@ -117,7 +116,6 @@ const Chapitre = styled.div`
 			color: white;}}
 	
 	.gatsby-image-wrapper {
-		width: 120%;
 		position: relative;
 		top: -10vh;
 		border: 1rem solid #3a1737;
@@ -140,18 +138,6 @@ const Chapitre = styled.div`
 	
 	${media.desktopUp`
 		width: 47%;
-		
-		.chapitre {
-			margin-inline: 0 !important;
-			.gatsby-image-wrapper {
-				left: -5vw !important;}}
-				
-		.gatsby-image-wrapper {
-			width: auto;
-			max-width: 70vw;}
-			
-		#chapitre3, #chapitre5 {
-			margin-top: 20vh;}
 	`};
 `;
 
@@ -258,7 +244,7 @@ const PEnracinee = ({lang, texts}) => {
 			<Banniere>
 				<div className='temp'>
 					<hr/>
-					<p><i>[Appels à l'action : à venir]</i></p>
+					<p><i>[ .... Lien vers Rapport et Appels à l'action : à venir .... ]</i></p>
 				</div>
 			</Banniere>
 		
