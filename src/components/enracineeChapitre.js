@@ -9,11 +9,14 @@ import { useGSAP } from '@gsap/react';
 
 const Styled = styled.div`
 	max-width: 100% !important;
-		background: #b5bca2;
+	
+	.content {
 		padding: 2rem;
 		border-radius: 3rem;
+		background: #b5bca2;}
 		
-	.gatsby-image-wrapper {}
+	.gatsby-image-wrapper {
+		transform: scale(1.2) translateY(-6vh);}
 	
 	.text {
 		p {
@@ -33,25 +36,28 @@ const Styled = styled.div`
 	h2 {
 		font-size: 1.5rem;
 		letter-spacing: 0.05em;
-		margin-bottom: 0.25rem;
-		margin-top: -1rem;}
+		margin-bottom: 0.25rem;}
 		
-	&.color2 {
+	&.color2 .content {
 		background: #729b76;}
 		
-	&.color3 {
+	&.color3 .content {
 		background: #295534;
 		h2, p {
 			color: white;}}
 			
-	&.color4 {
+	&.color4 .content {
 		background: #2d3837;
 		h2, p {
 			color: white;}}
+			
+	&.chapitre--modelA .content {
+		margin-right: 10vw;}
+	
+	&.chapitre--modelB .content {
+		margin-left: 10vw;}
 	
 	.gatsby-image-wrapper {
-		position: relative;
-		top: -10vh;
 		border: 1rem solid #3a1737;
 		--size: 0.75rem;
 		--g: #0000 98%, #000;
@@ -71,7 +77,18 @@ const Styled = styled.div`
 		-webkit-mask-repeat: no-repeat;}
 	
 	${media.desktopUp`
-		width: 47%;
+		width: 42vw;
+		
+		.gatsby-image-wrapper {
+			transform: scale(1.12) translateY(-6vh) translateX(-3vw);}
+		
+		&.chapitre--modelA {
+			margin-top: 20vh;}
+			
+		&.chapitre--modelA .content, 
+		&.chapitre--modelB .content {
+			margin-inline: 0;	
+		}
 	`};
 `;
 
@@ -99,18 +116,20 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 	
 	return (
 		<Styled 
-			className={`chapitre ${color}`} 
+			className={`chapitre ${color} chapitre--${model}`} 
 			id={id}
-		>				
-			{imageData && 
-				<GatsbyImage
-					image={imageData} 
-					alt={id} 
-				/>
-			}
-			<div className='text'>
-				<h2>{texts.titre}</h2>
-				{texts.texte.map((item, index) => <p key={index}>{item}</p>)}
+		>
+			<div class='content'>
+				{imageData && 
+					<GatsbyImage
+						image={imageData} 
+						alt={id} 
+					/>
+				}
+				<div className='text'>
+					<h2>{texts.titre}</h2>
+					{texts.texte.map((item, index) => <p key={index}>{item}</p>)}
+				</div>
 			</div>
 		</Styled>
 	);
