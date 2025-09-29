@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import { StaticImage } from "gatsby-plugin-image"
 import { Link } from 'gatsby'
+import Chapitre from './enracineeChapitre'
 
 const Banniere = styled.div`
 	background: white;
@@ -69,78 +70,6 @@ const Chapitres = styled.section`
 	margin-inline: 2rem;
 `;
 
-const Chapitre = styled.div`
-	max-width: 100% !important;
-	.chapitre {
-		background: #b5bca2;
-		padding: 2rem;
-		border-radius: 3rem;}
-		
-	&:nth-child(odd) .chapitre {
-		
-		.gatsby-image-wrapper {
-			}}
-
-	.text {
-		p {
-			display: none;}
-		p:nth-of-type(1) {
-			display: block;
-			font-weight: bold;}
-		p:nth-of-type(2) {
-			display: block;}
-		p:nth-of-type(3) {
-			display: block;
-			white-space: nowrap;
-			max-width: 70ch;
-			overflow: hidden;
-			text-overflow: "... [défilement vers la suite, à coder]";}}
-		
-	h2 {
-		font-size: 1.5rem;
-		letter-spacing: 0.05em;
-		margin-bottom: 0.25rem;
-		margin-top: -1rem;}
-		
-	.chapitre.color2 {
-		background: #729b76;}
-		
-	.chapitre.color3 {
-		background: #295534;
-		h2, p {
-			color: white;}}
-			
-	.chapitre.color4 {
-		background: #2d3837;
-		h2, p {
-			color: white;}}
-	
-	.gatsby-image-wrapper {
-		position: relative;
-		top: -10vh;
-		border: 1rem solid #3a1737;
-		--size: 0.75rem;
-		--g: #0000 98%, #000;
-		mask: 
-			radial-gradient(var(--size) at 0 0, var(--g)) 0 0,
-			radial-gradient(var(--size) at 100% 0, var(--g)) 100% 0,
-			radial-gradient(var(--size) at 0 100%, var(--g)) 0 100%,
-			radial-gradient(var(--size) at 100% 100%, var(--g)) 100% 100%;
-		mask-size: 51% 51%;
-		mask-repeat: no-repeat;
-		-webkit-mask: 
-			radial-gradient(var(--size) at 0 0, var(--g)) 0 0,
-			radial-gradient(var(--size) at 100% 0, var(--g)) 100% 0,
-			radial-gradient(var(--size) at 0 100%, var(--g)) 0 100%,
-			radial-gradient(var(--size) at 100% 100%, var(--g)) 100% 100%;
-		-webkit-mask-size: 51% 51%;
-		-webkit-mask-repeat: no-repeat;}
-	
-	${media.desktopUp`
-		width: 47%;
-	`};
-`;
-
 const localisedText = {
 	fr: {
 	},
@@ -169,75 +98,62 @@ const PEnracinee = ({lang, texts}) => {
 					<iframe src="https://player.vimeo.com/video/235215203?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin"></iframe>
 					<script src="https://player.vimeo.com/api/player.js"></script>
 				</Video>
-				
-				<Chapitre><div id='chapitre1' className='chapitre'>
-					<StaticImage 
-						src='../images/enracinee/temp-1.png'
-						alt='temp'
-					/>
-					<div className='text'>
-						<h2>{texts.bloc1.titre}</h2>
-						{texts.bloc1.texte.map((item, index) => <p key={index}>{item}</p>)}
-					</div>
-				</div></Chapitre>
+				<Chapitre
+					id='chapitre1'
+					lang={lang}
+					imgFile='temp-1'
+					texts={texts.bloc2}
+					color='color1'
+					model='modelA'
+				/>
 			</Intro>
 			
 			<Chapitres>
 					
-				<Chapitre><div id='chapitre2' className='chapitre color2'>
-					<StaticImage 
-						src='../images/enracinee/temp-2.png'
-						alt='temp'
-					/>
-					<div className='text'>
-						<h2>{texts.bloc2.titre}</h2>
-						{texts.bloc2.texte.map((item, index) => <p key={index}>{item}</p>)}
-					</div>
-				</div></Chapitre>
+				<Chapitre
+					id='chapitre2'
+					lang={lang}
+					imgFile='temp-2'
+					texts={texts.bloc2}
+					color='color2'
+					model='modelB'
+				/>
 				
-				<Chapitre><div id='chapitre3' className='chapitre color3'>
-					<StaticImage 
-						src='../images/enracinee/temp-3.png'
-						alt='temp'
-					/>
-					<div className='text'>
-						<h2>{texts.bloc3.titre}</h2>
-						{texts.bloc3.texte.map((item, index) => <p key={index}>{item}</p>)}
-					</div>
-				</div></Chapitre>
+				<Chapitre
+					id='chapitre3'
+					lang={lang}
+					imgFile='temp-3'
+					texts={texts.bloc3}
+					color='color3'
+					model='modelA'
+				/>
 				
-				<Chapitre><div id='chapitre4' className='chapitre color4'>
-					<StaticImage 
-						src='../images/enracinee/temp-4.png'
-						alt='temp'
-					/>
-					<div className='text'>
-						<h2>{texts.bloc4.titre}</h2>
-						{texts.bloc4.texte.map((item, index) => <p key={index}>{item}</p>)}
-					</div>
-				</div></Chapitre>
+				<Chapitre
+					id='chapitre4'
+					lang={lang}
+					imgFile='temp-4'
+					texts={texts.bloc4}
+					color='color4'
+					model='modelB'
+				/>
 				
-				<Chapitre><div id='chapitre5' className='chapitre color3'>
-					<StaticImage 
-						src='../images/enracinee/temp-5.png'
-						alt='temp'
-					/>
-					<div className='text'>
-						<h2>{texts.bloc5.titre}</h2>
-						{texts.bloc5.texte.map((item, index) => <p key={index}>{item}</p>)}
-					</div>
-				</div></Chapitre>
+				<Chapitre
+					id='chapitre5'
+					lang={lang}
+					imgFile='temp-5'
+					texts={texts.bloc5}
+					color='color3'
+					model='modelA'
+				/>
 				
-				<Chapitre><div id='chapitre6' className='chapitre color2'>
-					<StaticImage 
-						src='../images/enracinee/temp-6.png'
-						alt='temp'
-					/>
-					<div className='text'>
-						<h2>{texts.bloc6.titre}</h2>
-						{texts.bloc6.texte.map((item, index) => <p key={index}>{item}</p>)}
-					</div>
-				</div></Chapitre>
+				<Chapitre
+					id='chapitre6'
+					lang={lang}
+					imgFile='temp-6'
+					texts={texts.bloc6}
+					color='color2'
+					model='modelB'
+				/>
 				
 			</Chapitres>
 			
