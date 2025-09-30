@@ -16,9 +16,15 @@ const Styled = styled.div`
 		background: #b5bca2;}
 		
 	.gatsby-image-wrapper {
-		transform: scale(1.2) translateY(-6vh);}
+		width: 112%;
+		position: relative;
+		bottom: 5rem;}
+		
+	&.chapitre--modelA .gatsby-image-wrapper {
+		right: calc(var(--h-spacer) + 2rem);}
 	
 	.text {
+		margin-top: -2rem;
 		p {
 			display: none;}
 		p:nth-of-type(1) {
@@ -77,13 +83,19 @@ const Styled = styled.div`
 		-webkit-mask-repeat: no-repeat;}
 	
 	${media.desktopUp`
-		width: 42vw;
+		width: 41vw;
 		
 		.gatsby-image-wrapper {
-			transform: scale(1.12) translateY(-6vh) translateX(-3vw);}
+			width: 112%;}
 		
 		&.chapitre--modelA {
-			margin-top: 20vh;}
+			margin-top: 20vh;
+			.gatsby-image-wrapper {
+				right: 0;}}
+				
+		&.chapitre--modelB {
+			.gatsby-image-wrapper {
+				right: calc(var(--h-spacer) + 2rem);}}
 			
 		&.chapitre--modelA .content, 
 		&.chapitre--modelB .content {

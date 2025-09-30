@@ -20,54 +20,34 @@ const Banniere = styled.div`
 const Intro = styled.section`
 	background: white;
 	display: flex;
-	gap: var(--v-spacer) var(--h-spacer);
+	gap: calc(var(--v-spacer) *2) var(--h-spacer);
 	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: start;
 	padding-bottom: 0 !important;
 	margin-bottom: 6vh;
 	
-	> * {
-		margin-inline: 0 !important;}
-	
-	.chapitre {
-		margin-top: 10vh;
-		max-width: 85%;}
-	
 	${media.desktopUp`
-		> :first-child {
-			margin-top: -10vh;}
-		.chapitre {
+		#chapitre1 {
 			max-width: calc( 30vw - var(--h-spacer) ) !important;
-			.gatsby-image-wrapper {
-				transform: scale(1.05) translateY(-6vh);}
-			}
-		}
+			&.chapitre--modelA {
+				margin-top: 3rem;}}
 	`};
 `;
 
 const Video = styled.div`
 	width: 100%;
-	display: grid;
-	grid-template-columns: 0 auto;
-	align-items: start;
+	display: flex;
 		
 	iframe {
-		width: 100%;
-		height: 100%;}
+		width: 100%;}
 		
 	.set-height {
-		height: clamp(150px, 35vh, 520px);
-		width: 0;}
-		
-	${media.mediumUp`
-		.set-height {
-			height: clamp(500px, 80vh, 800px);
-			width: 0;}
-	`}
+		width: 0;
+		padding-top: 56.25%;}
 		
 	${media.desktopUp`
-		max-width: calc( 64vw - var(--h-spacer) - var(--h-spacer) ) !important;
+		width: calc( 60vw - var(--h-spacer) - var(--h-spacer) ) !important;
 	`};
 `;
 
@@ -78,8 +58,7 @@ const Chapitres = styled.section`
 	align-items: start;
 	
 	> div:last-child {
-		.gatsby-image-wrapper {
-			transform: scale(1.05) translateY(-6vh);}
+		.gatsby-image-wrapper {}
 	}
 `;
 
@@ -107,9 +86,16 @@ const PEnracinee = ({lang, texts}) => {
 			
 			<Intro>
 				<Video>
-					<div className='set-height'></div>
-					<iframe src="https://player.vimeo.com/video/235215203?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-					<script src="https://player.vimeo.com/api/player.js"></script>
+					<div class='set-height'></div>
+					<iframe 
+						id="ytplayer" 
+						type="text/html" 
+						width="720"
+						src="https://www.youtube.com/embed/yL-fwv2Z3rE"
+						frameborder="0" 
+						allowfullscreen 
+						rel="0" 
+					/>
 				</Video>
 				<Chapitre
 					id='chapitre1'
