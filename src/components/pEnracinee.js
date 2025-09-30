@@ -101,7 +101,7 @@ const PEnracinee = ({lang, texts}) => {
 					id='chapitre1'
 					lang={lang}
 					imgFile='temp-1'
-					texts={texts.bloc2}
+					texts={texts.bloc1}
 					color='color1'
 					model='modelA'
 				/>

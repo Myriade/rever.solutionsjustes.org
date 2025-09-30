@@ -158,7 +158,7 @@ export default function PAnimation() {
 				
 				<hr/>
 				<h3>Déployer toutes les lignes au scroll, même rythme</h3>
-				<p>Défiler vers le bas 👇 👇  Départ et fin synchronisés</p>
+				<p>Défiler <b>tranquilement</b> vers le bas 👇 👇  Départ et fin synchronisés</p>
 				
 				<section id="scroll">
 					<LiereTest />
@@ -166,7 +166,7 @@ export default function PAnimation() {
 				
 				<hr/>
 				<h3>Déployer toutes les lignes au scroll, rythmes différents</h3>
-				<p>Défiler vers le bas 👇 👇  Départs à intervalle, puis fin synchronisée</p>
+				<p>Défiler <b>tranquilement</b> vers le bas 👇 👇  Départs à intervalle, puis fin synchronisée</p>
 				<section style={{marginBottom: '30vh'}} id="scroll2">
 					<LiereTest />
 				</section>
