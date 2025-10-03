@@ -331,7 +331,7 @@ const Accueil = ({lang, textData}) => {
 					<div className='sensibiliser'>
 						<h3>2. {textData.t6b}</h3>
 						<p>{textData.p6b}</p>
-						<Link to={lang === 'f' ? '/connaitre' : '/en/learn'} className='button centered'>
+						<Link to={lang === 'fr' ? '/connaitre' : '/en/learn'} className='button centered'>
 							{textData.b6b}
 						</Link>
 					</div>
