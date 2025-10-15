@@ -2,11 +2,10 @@ import React, {useState, useRef} from "react"
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import { StaticImage } from "gatsby-plugin-image"
-import { Link } from 'gatsby'
 import Chapitre from './enracineeChapitre'
 
 const Banniere = styled.div`
-	background: white;
+	background: #eee;
 	width: 100%;
 	padding: initial !important;
 	display: grid;
@@ -38,6 +37,7 @@ const Intro = styled.section`
 const Video = styled.div`
 	width: 100%;
 	display: flex;
+	background: #eee;
 		
 	iframe {
 		width: 100%;}
@@ -79,21 +79,24 @@ const PEnracinee = ({lang, texts}) => {
 				<div className='temp'>
 					<h1>Bannière</h1>
 					<p>[ .... À venir: image, titre et bouton «sortie rapide» .... ]</p>
-					<hr/>
-					<p><i>[Animation à coder par Myriam : les chapitres apparaissent un à la fois en fade-in]</i></p>
 				</div>
 			</Banniere>
 			
+			<section>
+				<p><i>[Animation à coder par Myriam : les chapitres apparaissent un à la fois en fade-in]</i></p>
+			</section>
+			
 			<Intro>
 				<Video>
-					<div class='set-height'></div>
+					<div className='set-height'></div>
+					{/*<p><i>[Vidéo]</i></p>*/}
 					<iframe 
 						id="ytplayer" 
 						type="text/html" 
 						width="720"
 						src="https://www.youtube.com/embed/yL-fwv2Z3rE"
-						frameborder="0" 
-						allowfullscreen 
+						frameBorder="0" 
+						allowFullScreen 
 						rel="0" 
 					/>
 				</Video>

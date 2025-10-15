@@ -6,13 +6,14 @@ import { media } from '../styles/mixins.js'
 
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const Styled = styled.div`
 	max-width: 100% !important;
 	
 	.content {
 		padding: 2rem;
-		border-radius: 3rem;
+		border-radius: 3px;
 		background: #b5bca2;}
 		
 	.gatsby-image-wrapper {
@@ -104,7 +105,7 @@ const Styled = styled.div`
 	`};
 `;
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 	
@@ -126,12 +127,56 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 	const image = data.allFile.nodes.find(node => node.name === imgFile);
 	const imageData = getImage(image.childImageSharp.gatsbyImageData);
 	
+	// Défilement du texte avec GSAP
+	const gsapScopeRef = useRef();
+	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
+	
+	const chapitreAnimation = contextSafe(() => {
+		console.log('chapitreAnimation');
+		
+		// Titre apparait
+		gsap.from('h2', {
+			scrollTrigger: {
+				id: id,
+				trigger: '.content',
+				start: '50% 50%',
+				//markers: true
+			},
+			autoAlpha: 0,
+		});
+		
+		// Premier paragraphe apparait
+		gsap.from('.paragraphs p:first-child', {
+			scrollTrigger: {
+				trigger: '.content',
+				start: '50% 40%',
+			},
+			autoAlpha: 0,
+		});
+		
+		// Autres paragraphe apparaissent
+		gsap.from('.paragraphs p:not(:first-child)', {
+			scrollTrigger: {
+				trigger: '.content',
+				start: '50% 30%',
+			},
+			autoAlpha: 0,
+		});
+		
+	},{ scope: gsapScopeRef }); 
+	
+	// GSAP init
+	useEffect( () => {
+		chapitreAnimation()
+	},[chapitreAnimation])
+	
 	return (
 		<Styled 
 			className={`chapitre ${color} chapitre--${model}`} 
 			id={id}
+			ref={gsapScopeRef}
 		>
-			<div class='content'>
+			<div className='content'>
 				{imageData && 
 					<GatsbyImage
 						image={imageData} 
@@ -140,7 +185,9 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 				}
 				<div className='text'>
 					<h2>{texts.titre}</h2>
-					{texts.texte.map((item, index) => <p key={index}>{item}</p>)}
+					<div className='paragraphs'>
+						{texts.texte.map((item, index) => <p key={index}>{item}</p>)}
+					</div>
 				</div>
 			</div>
 		</Styled>
