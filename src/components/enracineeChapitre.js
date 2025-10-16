@@ -25,25 +25,20 @@ const Styled = styled.div`
 		right: calc(var(--h-spacer) + 2rem);}
 	
 	.text {
-		margin-top: -2rem;
-		p {
-			display: none;}
-		p:nth-of-type(1) {
-			display: block;
-			font-weight: bold;}
-		p:nth-of-type(2) {
-			display: block;}
-		p:nth-of-type(3) {
-			display: block;
-			white-space: nowrap;
-			max-width: 70ch;
-			overflow: hidden;
-			text-overflow: "... [défilement vers la suite, à coder]";}}
+		overflow: hidden;
+		margin-top: -2rem;}
+			
+	.paragraphs {
+		max-height: 30vh;
+		overflow: hidden;
+		p:first-child {
+			margin-top: 0;
+			font-weight: bold;}}
 		
 	h2 {
 		font-size: 1.5rem;
 		letter-spacing: 0.05em;
-		margin-bottom: 0.25rem;}
+		margin-bottom: 1em;}
 		
 	&.color2 .content {
 		background: #729b76;}
@@ -107,7 +102,9 @@ const Styled = styled.div`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
+const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
+	const gsapScopeRef = useRef();
+	const paragraphsRef = useRef();
 	
 	// Charge en GraphQL toutes les images du répertoire images/enracinee
 	const data = useStaticQuery(graphql`
@@ -128,19 +125,19 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 	const imageData = getImage(image.childImageSharp.gatsbyImageData);
 	
 	// Défilement du texte avec GSAP
-	const gsapScopeRef = useRef();
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
 	const chapitreAnimation = contextSafe(() => {
-		console.log('chapitreAnimation');
+		const paragraphsElement = paragraphsRef.current;
+		if (!paragraphsElement) return;
+		
+		const paragraphsHiddenHeight = paragraphsElement.scrollHeight - paragraphsElement.offsetHeight;
 		
 		// Titre apparait
 		gsap.from('h2', {
 			scrollTrigger: {
-				id: id,
 				trigger: '.content',
 				start: '50% 50%',
-				//markers: true
 			},
 			autoAlpha: 0,
 		});
@@ -163,11 +160,26 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 			autoAlpha: 0,
 		});
 		
+		// Défilement des paragraphes 
+		gsap.to( '.paragraphs__scroll', {
+			scrollTrigger: {
+				id: `p-${id}`,
+				trigger: '.content',
+				start: '50% 30%',
+				end: '50% 0%',
+				scrub: 0.1,
+			},
+			y: -1 * paragraphsHiddenHeight,
+		})
+		
 	},{ scope: gsapScopeRef }); 
 	
 	// GSAP init
 	useEffect( () => {
-		chapitreAnimation()
+		console.log('Chapitre useEffect');
+		if (data) {
+			chapitreAnimation()
+		}
 	},[chapitreAnimation])
 	
 	return (
@@ -185,8 +197,10 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 				}
 				<div className='text'>
 					<h2>{texts.titre}</h2>
-					<div className='paragraphs'>
-						{texts.texte.map((item, index) => <p key={index}>{item}</p>)}
+					<div className='paragraphs' ref={paragraphsRef}>
+						<div className='paragraphs__scroll'>
+							{texts.texte.map((item, index) => <p key={index}>{item}</p>)}
+						</div>
 					</div>
 				</div>
 			</div>
