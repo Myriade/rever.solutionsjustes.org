@@ -1,8 +1,12 @@
-import React, {useState, useRef} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import { StaticImage } from "gatsby-plugin-image"
 import Chapitre from './enracineeChapitre'
+
+import { gsap } from 'gsap'
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const Banniere = styled.div`
 	background: #eee;
@@ -69,22 +73,64 @@ const localisedText = {
 	}
 }
 
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
 const PEnracinee = ({lang, texts}) => {
+	const [data, setData] = useState(true)
 	const [shareTooltipOn, setShareTooltipOn] = useState(false);
-	const gsapContainerRef = useRef();
+	const gsapScopeRef = useRef();
+	
+	// Animations GSAP
+	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
+	
+	const pinAnimation = contextSafe(() => {
+		const chapitres = gsap.utils.toArray('#chapitres .chapitre');
+		const contents = gsap.utils.toArray('.chapitre .content');
+		
+		// Pin chapitres
+		// contents.forEach( (content, index) => {
+		// 	let pin = ScrollTrigger.create({
+		// 		id: `pin-${index}`,
+		// 		trigger: content,
+		// 		pin: true,
+		// 		start: "bottom bottom",
+		// 		end: "+=400",
+		// 	});
+		// });
+		
+		// Alpha reveal chapitres
+		chapitres.forEach( (chapitre, index) => {
+			gsap.from( chapitre, {
+				scrollTrigger: {
+					id: `reveal-${index}`,
+					trigger: chapitre,
+					start: "50% bottom",
+					end: "top 10%",
+					scrub: 0.1,
+				},
+				autoAlpha: 0,
+			});
+		});
+
+	},{ scope: gsapScopeRef }); 
+	
+	
+	// GSAP init
+	useEffect( () => {
+		if (data) {
+			pinAnimation()
+		}
+	},[pinAnimation])
+	
 	
 	return (
-		<div ref={gsapContainerRef} id='gsap-container'>
+		<div ref={gsapScopeRef} id='gsap-container'>
 			<Banniere>
 				<div className='temp'>
 					<h1>Bannière</h1>
 					<p>[ .... À venir: image, titre et bouton «sortie rapide» .... ]</p>
 				</div>
 			</Banniere>
-			
-			<section>
-				<p><i>[Animation à coder par Myriam : les chapitres apparaissent un à la fois en fade-in]</i></p>
-			</section>
 			
 			<Intro>
 				<Video>
@@ -110,7 +156,7 @@ const PEnracinee = ({lang, texts}) => {
 				/>
 			</Intro>
 			
-			<Chapitres>
+			<Chapitres id='chapitres'>
 					
 				<Chapitre
 					id='chapitre2'

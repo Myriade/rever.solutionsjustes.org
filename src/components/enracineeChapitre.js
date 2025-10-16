@@ -176,7 +176,6 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 	
 	// GSAP init
 	useEffect( () => {
-		console.log('Chapitre useEffect');
 		if (data) {
 			chapitreAnimation()
 		}
