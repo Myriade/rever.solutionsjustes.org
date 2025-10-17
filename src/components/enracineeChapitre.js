@@ -25,6 +25,7 @@ const Styled = styled.div`
 		right: calc(var(--h-spacer) + 2rem);}
 	
 	.text {
+		color: var(--color-pourpre);
 		overflow: hidden;
 		margin-top: -2rem;}
 			
@@ -39,6 +40,12 @@ const Styled = styled.div`
 		font-size: 1.5rem;
 		letter-spacing: 0.05em;
 		margin-bottom: 1em;}
+		
+	h2 strong, 
+	.text p:first-child strong {
+		background-color: var(--color-jaune);
+		color: var(--color-pourpre);
+		font-weight: bold;}
 		
 	&.color2 .content {
 		background: #729b76;}
@@ -85,7 +92,7 @@ const Styled = styled.div`
 			width: 112%;}
 		
 		&.chapitre--modelA {
-			margin-top: 20vh;
+			margin-top: 50vh;
 			.gatsby-image-wrapper {
 				right: 0;}}
 				
@@ -168,6 +175,8 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 				start: '50% 30%',
 				end: '50% 0%',
 				scrub: 0.1,
+				pin: true,
+				// pinSpacing: false, // Conflit sur mobile, à troubleshooter
 			},
 			y: -1 * paragraphsHiddenHeight,
 		})
@@ -198,7 +207,7 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 					<h2>{texts.titre}</h2>
 					<div className='paragraphs' ref={paragraphsRef}>
 						<div className='paragraphs__scroll'>
-							{texts.texte.map((item, index) => <p key={index}>{item}</p>)}
+							{texts.texte.map((item, index) => <p key={index} dangerouslySetInnerHTML={{ __html: item }}/>)}
 						</div>
 					</div>
 				</div>

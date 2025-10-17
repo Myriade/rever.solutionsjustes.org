@@ -85,7 +85,7 @@ const PEnracinee = ({lang, texts}) => {
 	
 	const pinAnimation = contextSafe(() => {
 		const chapitres = gsap.utils.toArray('#chapitres .chapitre');
-		const contents = gsap.utils.toArray('.chapitre .content');
+		const contents = gsap.utils.toArray('.chapitre.chapitre--modelB .content');
 		
 		// Pin chapitres
 		// contents.forEach( (content, index) => {
