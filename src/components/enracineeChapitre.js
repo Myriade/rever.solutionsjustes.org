@@ -10,18 +10,23 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const Styled = styled.div`
 	max-width: 100% !important;
+	margin-bottom: 7rem;
 	
 	.content {
+		transform: scale(0.85);
+		opacity: 0.5;
 		padding: 2rem;
 		border-radius: 3px;
 		background: #b5bca2;}
 		
-	.gatsby-image-wrapper {
-		width: 112%;
+	.illustration {
 		position: relative;
 		bottom: 5rem;}
 		
-	&.chapitre--modelA .gatsby-image-wrapper {
+	.illustration {
+		max-width: 50vh;}
+		
+	&.chapitre--modelA .illustration {
 		right: calc(var(--h-spacer) + 2rem);}
 	
 	.text {
@@ -29,9 +34,9 @@ const Styled = styled.div`
 		overflow: hidden;
 		margin-top: -2rem;}
 			
-	.paragraphs {
-		max-height: 30vh;
-		overflow: hidden;
+		.paragraphs {
+			max-height: 30vh;
+			overflow: hidden;
 		p:first-child {
 			margin-top: 0;
 			font-weight: bold;}}
@@ -66,7 +71,7 @@ const Styled = styled.div`
 	&.chapitre--modelB .content {
 		margin-left: 10vw;}
 	
-	.gatsby-image-wrapper {
+	.illustration {
 		border: 1rem solid #3a1737;
 		--size: 0.75rem;
 		--g: #0000 98%, #000;
@@ -87,23 +92,22 @@ const Styled = styled.div`
 	
 	${media.desktopUp`
 		width: 41vw;
+		margin-bottom: 0;
 		
-		.gatsby-image-wrapper {
+		.illustration {
 			width: 112%;}
 		
 		&.chapitre--modelA {
-			margin-top: 50vh;
-			.gatsby-image-wrapper {
+			.illustration {
 				right: 0;}}
 				
 		&.chapitre--modelB {
-			.gatsby-image-wrapper {
+			.illustration {
 				right: calc(var(--h-spacer) + 2rem);}}
 			
 		&.chapitre--modelA .content, 
 		&.chapitre--modelB .content {
-			margin-inline: 0;	
-		}
+			margin-inline: 0;}
 	`};
 `;
 
@@ -140,11 +144,37 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 		
 		const paragraphsHiddenHeight = paragraphsElement.scrollHeight - paragraphsElement.offsetHeight;
 		
+		// Content pins
+		gsap.to('.pin', {
+			scrollTrigger: {
+				id: `pin-${id}`,
+				trigger: '.pin',
+				start: 'top 17%',
+				end: `+=${paragraphsHiddenHeight + 200}`,
+				pin: true
+			}
+		})
+		
+		// // Content zoom in & alpha
+		gsap.to('.content', {
+			scrollTrigger: {
+				id: `scale-${id}`,
+				trigger: '.content',
+				start: 'top 17%',
+				end: '15% 17%',
+				scrub: 0.1
+			},
+			scale: 1,
+			autoAlpha: 1,
+		})
+		 
 		// Titre apparait
 		gsap.from('h2', {
 			scrollTrigger: {
+				id: `titre-${id}`,
 				trigger: '.content',
-				start: '50% 50%',
+				start: '17% 17%',
+				end: '20% 17%'
 			},
 			autoAlpha: 0,
 		});
@@ -152,17 +182,21 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 		// Premier paragraphe apparait
 		gsap.from('.paragraphs p:first-child', {
 			scrollTrigger: {
+				id: `p1-${id}`,
 				trigger: '.content',
-				start: '50% 40%',
+				start: '20% 17%',
+				end: '25% 17%'
 			},
 			autoAlpha: 0,
 		});
 		
-		// Autres paragraphe apparaissent
+		// Autres paragraphes apparaissent
 		gsap.from('.paragraphs p:not(:first-child)', {
 			scrollTrigger: {
+				id: `ps-${id}`,
 				trigger: '.content',
-				start: '50% 30%',
+				start: '25% 17%',
+				end: '30% 17%',
 			},
 			autoAlpha: 0,
 		});
@@ -170,13 +204,11 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 		// Défilement des paragraphes 
 		gsap.to( '.paragraphs__scroll', {
 			scrollTrigger: {
-				id: `p-${id}`,
+				id: `pscroll-${id}`,
 				trigger: '.content',
-				start: '50% 30%',
-				end: '50% 0%',
-				scrub: 0.1,
-				pin: true,
-				// pinSpacing: false, // Conflit sur mobile, à troubleshooter
+				start: '30% 17%',
+				end: `+=${paragraphsHiddenHeight + 200}`,
+				scrub: 0.1
 			},
 			y: -1 * paragraphsHiddenHeight,
 		})
@@ -196,18 +228,22 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 			id={id}
 			ref={gsapScopeRef}
 		>
-			<div className='content'>
-				{imageData && 
-					<GatsbyImage
-						image={imageData} 
-						alt={id} 
-					/>
-				}
-				<div className='text'>
-					<h2>{texts.titre}</h2>
-					<div className='paragraphs' ref={paragraphsRef}>
-						<div className='paragraphs__scroll'>
-							{texts.texte.map((item, index) => <p key={index} dangerouslySetInnerHTML={{ __html: item }}/>)}
+			<div className='pin'>
+				<div className='content'>
+					{imageData && 
+						<div className='illustration'>
+							<GatsbyImage
+								image={imageData} 
+								alt={id} 
+							/>
+						</div>
+					}
+					<div className='text'>
+						<h2>{texts.titre}</h2>
+						<div className='paragraphs' ref={paragraphsRef}>
+							<div className='paragraphs__scroll'>
+								{texts.texte.map((item, index) => <p key={index} dangerouslySetInnerHTML={{ __html: item }}/>)}
+							</div>
 						</div>
 					</div>
 				</div>

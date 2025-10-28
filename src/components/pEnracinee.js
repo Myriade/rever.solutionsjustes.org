@@ -8,7 +8,7 @@ import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-const Banniere = styled.div`
+const Banniere = styled.section`
 	background: #eee;
 	width: 100%;
 	padding: initial !important;
@@ -56,14 +56,17 @@ const Video = styled.div`
 `;
 
 const Chapitres = styled.section`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 13vh 6vw;
-	align-items: start;
-	
-	> div:last-child {
-		.gatsby-image-wrapper {}
-	}
+	${media.desktopUp`
+		.chapitre--modelB {
+			margin-inline: 0 !important;}
+		.chapitre--modelA {
+			margin-inline: auto 0 !important;}
+			
+		#chapitre6 {
+			margin-inline: auto !important;
+			margin-top: 7rem;
+		}
+	`}
 `;
 
 const localisedText = {
@@ -78,53 +81,9 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 const PEnracinee = ({lang, texts}) => {
 	const [data, setData] = useState(true)
 	const [shareTooltipOn, setShareTooltipOn] = useState(false);
-	const gsapScopeRef = useRef();
-	
-	// Animations GSAP
-	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
-	
-	const pinAnimation = contextSafe(() => {
-		const chapitres = gsap.utils.toArray('#chapitres .chapitre');
-		const contents = gsap.utils.toArray('.chapitre.chapitre--modelB .content');
-		
-		// Pin chapitres
-		// contents.forEach( (content, index) => {
-		// 	let pin = ScrollTrigger.create({
-		// 		id: `pin-${index}`,
-		// 		trigger: content,
-		// 		pin: true,
-		// 		start: "bottom bottom",
-		// 		end: "+=400",
-		// 	});
-		// });
-		
-		// Alpha reveal chapitres
-		chapitres.forEach( (chapitre, index) => {
-			gsap.from( chapitre, {
-				scrollTrigger: {
-					id: `reveal-${index}`,
-					trigger: chapitre,
-					start: "50% bottom",
-					end: "top 10%",
-					scrub: 0.1,
-				},
-				autoAlpha: 0,
-			});
-		});
-
-	},{ scope: gsapScopeRef }); 
-	
-	
-	// GSAP init
-	useEffect( () => {
-		if (data) {
-			pinAnimation()
-		}
-	},[pinAnimation])
-	
 	
 	return (
-		<div ref={gsapScopeRef} id='gsap-container'>
+		<>
 			<Banniere>
 				<div className='temp'>
 					<h1>Bannière</h1>
@@ -135,8 +94,8 @@ const PEnracinee = ({lang, texts}) => {
 			<Intro>
 				<Video>
 					<div className='set-height'></div>
-					{/*<p><i>[Vidéo]</i></p>*/}
-					<iframe 
+					<p><i>[Vidéo]</i></p>
+					{/*<iframe 
 						id="ytplayer" 
 						type="text/html" 
 						width="720"
@@ -144,7 +103,7 @@ const PEnracinee = ({lang, texts}) => {
 						frameBorder="0" 
 						allowFullScreen 
 						rel="0" 
-					/>
+					/>*/}
 				</Video>
 				<Chapitre
 					id='chapitre1'
@@ -212,7 +171,7 @@ const PEnracinee = ({lang, texts}) => {
 				</div>
 			</Banniere>
 		
-		</div>
+		</>
 	)
 }
 
