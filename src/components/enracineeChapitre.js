@@ -37,9 +37,28 @@ const Styled = styled.div`
 		.paragraphs {
 			max-height: 30vh;
 			overflow: hidden;
-		p:first-child {
-			margin-top: 0;
-			font-weight: bold;}}
+			position: relative;
+			
+			> p {
+				margin-top: 0;
+				font-weight: bold;}
+				
+			&__overflow {
+				overflow: hidden;
+				position: relative;}
+			
+			&__before,
+			&__after {
+				position: absolute;
+				width: 100%;
+				height: 1em;
+				background: linear-gradient(#fff, rgba(255,255,255,0))}
+				
+			&__before {
+				top: 0;}
+			&__after {
+				bottom: 0;}
+		}
 		
 	h2 {
 		font-size: 1.5rem;
@@ -135,7 +154,21 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 	const image = data.allFile.nodes.find(node => node.name === imgFile);
 	const imageData = getImage(image.childImageSharp.gatsbyImageData);
 	
-	// Défilement du texte avec GSAP
+	// Mapper les couleurs 
+	let bgColor = 'rgba(255,255,255,0)'
+	if (color) {
+		if (color === 'color1') {
+			bgColor = '#b5bca2'
+		} else if (color === 'color2') {
+			bgColor = '#729b76'
+		} else if (color === 'color3') {
+			bgColor = '#295534'
+		} else if (color === 'color4') {
+			bgColor = '#2d3837'
+		}
+	}
+	
+	// Animations et scroll avec GSAP
 	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
 	
 	const chapitreAnimation = contextSafe(() => {
@@ -155,13 +188,13 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 			}
 		})
 		
-		// // Content zoom in & alpha
+		// Content zoom in & alpha
 		gsap.to('.content', {
 			scrollTrigger: {
 				id: `scale-${id}`,
 				trigger: '.content',
-				start: 'top 17%',
-				end: '15% 17%',
+				start: 'top 80%',
+				end: 'top 55%',
 				scrub: 0.1
 			},
 			scale: 1,
@@ -173,8 +206,8 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 			scrollTrigger: {
 				id: `titre-${id}`,
 				trigger: '.content',
-				start: '17% 17%',
-				end: '20% 17%'
+				start: '5% 55%',
+				end: '10% 55%'
 			},
 			autoAlpha: 0,
 		});
@@ -184,8 +217,8 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 			scrollTrigger: {
 				id: `p1-${id}`,
 				trigger: '.content',
-				start: '20% 17%',
-				end: '25% 17%'
+				start: '15% 55%',
+				end: '20% 55%'
 			},
 			autoAlpha: 0,
 		});
@@ -195,8 +228,8 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 			scrollTrigger: {
 				id: `ps-${id}`,
 				trigger: '.content',
-				start: '25% 17%',
-				end: '30% 17%',
+				start: '25% 55%',
+				end: '30% 55%',
 			},
 			autoAlpha: 0,
 		});
@@ -205,8 +238,8 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 		gsap.to( '.paragraphs__scroll', {
 			scrollTrigger: {
 				id: `pscroll-${id}`,
-				trigger: '.content',
-				start: '30% 17%',
+				trigger: '.pin',
+				start: 'top 17%',
 				end: `+=${paragraphsHiddenHeight + 200}`,
 				scrub: 0.1
 			},
@@ -241,9 +274,20 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 					<div className='text'>
 						<h2>{texts.titre}</h2>
 						<div className='paragraphs' ref={paragraphsRef}>
-							<div className='paragraphs__scroll'>
-								{texts.texte.map((item, index) => <p key={index} dangerouslySetInnerHTML={{ __html: item }}/>)}
+							<p dangerouslySetInnerHTML={{ __html: texts.texte[0] }}/>
+							<div className='paragraphs__overflow'>
+								<div className='paragraphs__scroll'>
+									{texts.texte.slice(1).map((item, index) => <p key={index} dangerouslySetInnerHTML={{ __html: item }}/>) }
+								</div>
+								<div 
+									className='paragraphs__before' 
+									style={{ background: `linear-gradient(${bgColor}, rgba(255,255,255,0))`}}
+								/>
 							</div>
+							<div 
+								className='paragraphs__after' 
+								style={{ background: `linear-gradient(rgba(255,255,255,0), ${bgColor})`}}
+							/>
 						</div>
 					</div>
 				</div>
