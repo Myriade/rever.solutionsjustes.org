@@ -7,9 +7,16 @@ const Page = () => {
   const [textes, setTextes] = useState(getTexts());
   
   return (
-    <PageLayout lang='fr' i18nLink='/en/enracinee'>
+    <PageLayout 
+      lang='fr' 
+      i18nLink='/en/enracinee'
+      bgColor='#fffaf2'
+    >
       { textes ? 
-        <PEnracinee lang='fr' texts={textes.fr} />
+        <PEnracinee 
+          lang='fr' 
+          texts={textes.fr}
+        />
         : '...'
       } 
     </PageLayout>

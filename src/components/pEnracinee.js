@@ -9,7 +9,7 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const Banniere = styled.section`
-	background: #eee;
+	background: white;
 	width: 100%;
 	padding: initial !important;
 	display: grid;
@@ -21,7 +21,6 @@ const Banniere = styled.section`
 `;
 
 const Intro = styled.section`
-	background: white;
 	display: flex;
 	gap: calc(var(--v-spacer) *2) var(--h-spacer);
 	flex-wrap: wrap;
@@ -41,7 +40,7 @@ const Intro = styled.section`
 const Video = styled.div`
 	width: 100%;
 	display: flex;
-	background: #eee;
+	background: white;
 		
 	iframe {
 		width: 100%;}

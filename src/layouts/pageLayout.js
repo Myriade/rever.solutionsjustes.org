@@ -159,7 +159,7 @@ const Footer = styled.footer`
     font-size: 0.8rem;}
 `;
 
-export default function PageLayout({ children, lang, i18nLink }) {
+export default function PageLayout({ children, lang, i18nLink, bgColor }) {
   
   return (
     <>
@@ -209,7 +209,9 @@ export default function PageLayout({ children, lang, i18nLink }) {
         </div>
       </Header>
       
-      <Main>
+      <Main
+        style={ bgColor ? {background: bgColor} : {background: 'transparent'}}
+      >
         {children}
         <div className='loading-placeholder'>
           <img src='/logo.jpg' alt='Solutions Justes, logo' />
