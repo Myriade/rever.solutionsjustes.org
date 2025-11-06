@@ -11,6 +11,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 const Banniere = styled.section`
 	background: white;
 	width: 100%;
+	height: 20vh;
 	padding: initial !important;
 	display: grid;
 	
@@ -27,7 +28,7 @@ const Intro = styled.section`
 	justify-content: space-between;
 	align-items: start;
 	padding-bottom: 0 !important;
-	margin-bottom: 6vh;
+	margin-bottom: 0;
 	
 	${media.desktopUp`
 		#chapitre1 {
@@ -38,9 +39,10 @@ const Intro = styled.section`
 `;
 
 const Video = styled.div`
-	width: 100%;
+	width: 80%;
 	display: flex;
-	background: white;
+	background: lightgrey;
+	margin-bottom: 10vh;
 		
 	iframe {
 		width: 100%;}
@@ -50,12 +52,13 @@ const Video = styled.div`
 		padding-top: 56.25%;}
 		
 	${media.desktopUp`
-		width: calc( 60vw - var(--h-spacer) - var(--h-spacer) ) !important;
+		width: 60%;
 	`};
 `;
 
 const Chapitres = styled.section`
 	${media.desktopUp`
+		padding-top: 0 !important;
 		.chapitre--modelB {
 			margin-inline: 0 !important;}
 		.chapitre--modelA {
@@ -67,6 +70,28 @@ const Chapitres = styled.section`
 		}
 	`}
 `;
+
+const Vecteur = styled.section`
+	position: absolute;
+	width: 100%;
+	top: 20vh;
+	left: 0; 
+	right: 0;
+	margin: auto;
+	background: rgba(255,192,203,0.7);
+	padding-top: 0;
+	z-index: 50;
+	opacity: 0.5;
+	
+	> * {
+		max-width: none !important;}
+	
+	.cls-1 {
+		fill: none;
+		stroke: #0071bc;
+		stroke-miterlimit: 10;
+		stroke-width: 150px;}
+`
 
 const localisedText = {
 	fr: {
@@ -90,77 +115,76 @@ const PEnracinee = ({lang, texts}) => {
 				</div>
 			</Banniere>
 			
-			<Intro>
-				<Video>
-					<div className='set-height'></div>
-					<p><i>[Vidéo]</i></p>
-					{/*<iframe 
-						id="ytplayer" 
-						type="text/html" 
-						width="720"
-						src="https://www.youtube.com/embed/yL-fwv2Z3rE"
-						frameBorder="0" 
-						allowFullScreen 
-						rel="0" 
-					/>*/}
-				</Video>
-				<Chapitre
-					id='chapitre1'
-					lang={lang}
-					imgFile='temp-1'
-					texts={texts.bloc1}
-					color='color1'
-					model='modelA'
-				/>
-			</Intro>
+			<Vecteur>
+				<div style={{background: 'white', textAlign: 'center'}}>
+					[Vecteur]
+				</div>
+			</Vecteur>
 			
 			<Chapitres id='chapitres'>
+				<div style={{marginInline: '0'}}>
+					<Video>
+						<div className='set-height'></div>
+						<p><i>[Vidéo]</i></p>
+						{/*<iframe 
+							id="ytplayer" 
+							type="text/html" 
+							width="720"
+							src="https://www.youtube.com/embed/yL-fwv2Z3rE"
+							frameBorder="0" 
+							allowFullScreen 
+							rel="0" 
+						/>*/}
+					</Video>
 					
-				<Chapitre
-					id='chapitre2'
-					lang={lang}
-					imgFile='temp-2'
-					texts={texts.bloc2}
-					color='color2'
-					model='modelB'
-				/>
-				
-				<Chapitre
-					id='chapitre3'
-					lang={lang}
-					imgFile='temp-3'
-					texts={texts.bloc3}
-					color='color3'
-					model='modelA'
-				/>
-				
-				<Chapitre
-					id='chapitre4'
-					lang={lang}
-					imgFile='temp-4'
-					texts={texts.bloc4}
-					color='color4'
-					model='modelB'
-				/>
-				
-				<Chapitre
-					id='chapitre5'
-					lang={lang}
-					imgFile='temp-5'
-					texts={texts.bloc5}
-					color='color3'
-					model='modelA'
-				/>
-				
-				<Chapitre
-					id='chapitre6'
-					lang={lang}
-					imgFile='temp-6'
-					texts={texts.bloc6}
-					color='color2'
-					model='modelB'
-				/>
-				
+					<Chapitre
+						id='chapitre1'
+						lang={lang}
+						imgFile='temp-1'
+						texts={texts.bloc1}
+						model='right'
+					/>
+						
+					<Chapitre
+						id='chapitre2'
+						lang={lang}
+						imgFile='temp-2'
+						texts={texts.bloc2}
+						model='left'
+					/>
+					
+					<Chapitre
+						id='chapitre3'
+						lang={lang}
+						imgFile='temp-3'
+						texts={texts.bloc3}
+						model='right'
+					/>
+					
+					<Chapitre
+						id='chapitre4'
+						lang={lang}
+						imgFile='temp-4'
+						texts={texts.bloc4}
+						model='left'
+					/>
+					
+					<Chapitre
+						id='chapitre5'
+						lang={lang}
+						imgFile='temp-5'
+						texts={texts.bloc5}
+						model='right'
+					/>
+					
+					<Chapitre
+						id='chapitre6'
+						lang={lang}
+						imgFile='temp-6'
+						texts={texts.bloc6}
+						model='left'
+					/>
+				</div>
 			</Chapitres>
 			
 			<Banniere>

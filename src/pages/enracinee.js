@@ -10,7 +10,6 @@ const Page = () => {
     <PageLayout 
       lang='fr' 
       i18nLink='/en/enracinee'
-      bgColor='#fffaf2'
     >
       { textes ? 
         <PEnracinee 

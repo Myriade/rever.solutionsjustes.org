@@ -9,30 +9,49 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const Styled = styled.div`
-	max-width: 100% !important;
-	margin-bottom: 7rem;
+	width: 80%;
+	margin-bottom: 10vh;
+	
+	&.chapitre--right {
+		margin-inline: 0 2xl:0%;}
+	
+	&.chapitre--left {
+		margin-inline: 20% 0;}
+	
+	${media.desktopUp`
+		width: 60%;
+		
+		&.chapitre--right {
+			margin-inline: 40% 20%;
+			.illustration {
+				justify-self: right;
+				transform: translateX(25%) }}
+		
+		&.chapitre--left {
+			margin-inline: 20% 40%;
+			.illustration {
+				transform: translateX(-25%)}}
+	`};
 	
 	.content {
+		display: grid;
 		transform: scale(0.85);
 		opacity: 0.5;
-		padding: 2rem;
+		padding: 4vh 10%;
 		border-radius: 3px;
 		background: #b5bca2;}
 		
 	.illustration {
 		position: relative;
-		bottom: 5rem;}
+		bottom: 10vh;}
 		
 	.illustration {
 		max-width: 50vh;}
-		
-	&.chapitre--modelA .illustration {
-		right: calc(var(--h-spacer) + 2rem);}
 	
 	.text {
 		color: var(--color-pourpre);
 		overflow: hidden;
-		margin-top: -2rem;}
+		margin-top: -5vh;}
 			
 		.paragraphs {
 			max-height: 30vh;
@@ -70,25 +89,6 @@ const Styled = styled.div`
 		background-color: var(--color-jaune);
 		color: var(--color-pourpre);
 		font-weight: bold;}
-		
-	&.color2 .content {
-		background: #729b76;}
-		
-	&.color3 .content {
-		background: #295534;
-		h2, p {
-			color: white;}}
-			
-	&.color4 .content {
-		background: #2d3837;
-		h2, p {
-			color: white;}}
-			
-	&.chapitre--modelA .content {
-		margin-right: 10vw;}
-	
-	&.chapitre--modelB .content {
-		margin-left: 10vw;}
 	
 	.illustration {
 		border: 1rem solid #3a1737;
@@ -108,26 +108,6 @@ const Styled = styled.div`
 			radial-gradient(var(--size) at 100% 100%, var(--g)) 100% 100%;
 		-webkit-mask-size: 51% 51%;
 		-webkit-mask-repeat: no-repeat;}
-	
-	${media.desktopUp`
-		width: 41vw;
-		margin-bottom: 0;
-		
-		.illustration {
-			width: 112%;}
-		
-		&.chapitre--modelA {
-			.illustration {
-				right: 0;}}
-				
-		&.chapitre--modelB {
-			.illustration {
-				right: calc(var(--h-spacer) + 2rem);}}
-			
-		&.chapitre--modelA .content, 
-		&.chapitre--modelB .content {
-			margin-inline: 0;}
-	`};
 `;
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
