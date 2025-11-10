@@ -53,6 +53,7 @@ const Video = styled.div`
 		
 	${media.desktopUp`
 		width: 60%;
+		margin-inline: 10% 30%;
 	`};
 `;
 
@@ -74,23 +75,39 @@ const Chapitres = styled.section`
 const Vecteur = styled.section`
 	position: absolute;
 	width: 100%;
-	top: 20vh;
-	left: 0; 
-	right: 0;
+	inset: 20vh 0;
 	margin: auto;
-	background: rgba(255,192,203,0.7);
-	padding-top: 0;
+	padding-top: 0 !important;
 	z-index: 50;
 	opacity: 0.5;
+	display: flex;
+	justify-content: space-between;
+	align-items: stretch;
 	
-	> * {
-		max-width: none !important;}
+	> div {
+		margin-inline: unset !important;
+		width: 35%;
+		position: relative;
+		display: flex;}
+	
+	svg {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		background: rgba(255,192,203,0.7);}
 	
 	.cls-1 {
 		fill: none;
 		stroke: #0071bc;
 		stroke-miterlimit: 10;
 		stroke-width: 150px;}
+		
+	.cls-2 {
+		fill: none;
+		stroke: orange;
+		stroke-miterlimit: 10;
+		stroke-width: 5px;}
 `
 
 const localisedText = {
@@ -116,13 +133,18 @@ const PEnracinee = ({lang, texts}) => {
 			</Banniere>
 			
 			<Vecteur>
-				<div style={{background: 'white', textAlign: 'center'}}>
-					[Vecteur]
+				<div>
+					
+				</div>
+				<div>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 602.52 9280.22" preserveAspectRatio="none" width="100%" height="100%">
+						<path class="cls-1" d="M392.24,48.07c-468.89,713.15,103.06,1502.98,103.06,2083.22,0,377.56-429.93,289.45-402.03,777.9,30.48,533.56,442.32,1278.58,397.56,1787.71-31,352.64-387.89,327.51-402.84,889.7-12.47,468.67,219.29,829.82,367.03,1346.04,110.31,385.41,69.47,822.6-130.37,1145.11-191.3,308.72,298.64,588.62-140.46,1148.47"/>
+					</svg>
 				</div>
 			</Vecteur>
 			
 			<Chapitres id='chapitres'>
-				<div style={{marginInline: '0'}}>
+				<div style={{marginInline: '0', maxWidth: 'unset'}}>
 					<Video>
 						<div className='set-height'></div>
 						<p><i>[Vidéo]</i></p>

@@ -13,7 +13,7 @@ const Styled = styled.div`
 	margin-bottom: 10vh;
 	
 	&.chapitre--right {
-		margin-inline: 0 2xl:0%;}
+		margin-inline: 0 20%;}
 	
 	&.chapitre--left {
 		margin-inline: 20% 0;}
@@ -22,15 +22,15 @@ const Styled = styled.div`
 		width: 60%;
 		
 		&.chapitre--right {
-			margin-inline: 40% 20%;
+			margin-inline: 30% 10%;
 			.illustration {
-				justify-self: right;
-				transform: translateX(25%) }}
+				transform: translateX(-25%) }}
 		
 		&.chapitre--left {
-			margin-inline: 20% 40%;
+			margin-inline: 10% 30%;
 			.illustration {
-				transform: translateX(-25%)}}
+				justify-self: right;
+				transform: translateX(25%)}}
 	`};
 	
 	.content {
