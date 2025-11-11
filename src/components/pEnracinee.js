@@ -121,7 +121,7 @@ const PEnracinee = ({lang, texts}) => {
 	
 	// GSAP Setup de depart
 	useGSAP(() => {
-		gsap.set("path", {drawSVG: "1%"});
+		gsap.set("path", {drawSVG: "5%"});
 		gsap.to(".vecteurs", {
 			opacity: 1,
 			duration: 2
