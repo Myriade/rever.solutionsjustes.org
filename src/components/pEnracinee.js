@@ -58,6 +58,7 @@ const Chapitres = styled.section`
 
 const ScrollCtnr = styled.section`
 	.vecteurs {
+		opacity: 0;
 		position: absolute;
 		width: 100%;
 		inset: 20vh 0;
@@ -79,8 +80,7 @@ const ScrollCtnr = styled.section`
 		z-index: 40;
 		path {
 			stroke: #0071bc;
-			stroke-width: 175px;
-		}}
+			stroke-width: 175px;}}
 	
 	svg {
 		position: absolute;
@@ -122,6 +122,10 @@ const PEnracinee = ({lang, texts}) => {
 	// GSAP Setup de depart
 	useGSAP(() => {
 		gsap.set("path", {drawSVG: "1%"});
+		gsap.to(".vecteurs", {
+			opacity: 1,
+			duration: 2
+		});
 	},{ scope: vecteursScopeRef });
 	
 	// Animation vecteurs au scroll
