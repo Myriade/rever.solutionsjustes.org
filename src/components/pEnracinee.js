@@ -43,6 +43,7 @@ const Video = styled.div`
 	display: flex;
 	background: lightgrey;
 	margin-bottom: 10vh;
+	position: relative;
 		
 	iframe {
 		width: 100%;}
@@ -78,36 +79,45 @@ const Vecteur = styled.section`
 	inset: 20vh 0;
 	margin: auto;
 	padding-top: 0 !important;
-	z-index: 50;
-	opacity: 0.5;
 	display: flex;
 	justify-content: space-between;
 	align-items: stretch;
 	
-	> div {
-		margin-inline: unset !important;
-		width: 35%;
-		position: relative;
-		display: flex;}
+	.vecteur--large {
+		display: none;}
+		
+	.vecteur--gauche {
+		path {
+			stroke: #00a99d;
+			stroke-width: 400px;
+		}}
+		
+	.vecteur--droite {
+		z-index: 50;
+		path {
+			stroke: #0071bc;
+			stroke-width: 175px;
+		}}
 	
 	svg {
 		position: absolute;
-		top: 0;
-		bottom: 0;
-		right: 0;
-		background: rgba(255,192,203,0.7);}
+		inset: 0 0;}
 	
-	.cls-1 {
+	path {
 		fill: none;
 		stroke: #0071bc;
-		stroke-miterlimit: 10;
-		stroke-width: 150px;}
+		stroke-miterlimit: 10;}
 		
-	.cls-2 {
-		fill: none;
-		stroke: orange;
-		stroke-miterlimit: 10;
-		stroke-width: 5px;}
+	${media.desktopUp`
+		.vecteur--etroit {
+			display: none;}
+			
+		.vecteur--large {
+			display: flex;
+			margin-inline: unset !important;
+			width: 35%;
+			position: relative;}
+	`}
 `
 
 const localisedText = {
@@ -133,13 +143,21 @@ const PEnracinee = ({lang, texts}) => {
 			</Banniere>
 			
 			<Vecteur>
-				<div>
+				<div className='vecteur--large vecteur--gauche'>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570.59 9300.81" preserveAspectRatio="none" width="100%" height="100%">
+						<path class="cls-1" d="M197.85,29.26c179.95,1216.81-14.61,1499.98,34.78,2537.16,69.13,1451.7,133.94,1871.87,20.74,2751.32-179.73,1396.4,380.21,2260.51-48.39,3933.42"/>
+					</svg>
+				</div>
+				<div className='vecteur--large vecteur--droite'>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 584.6 9280.71" preserveAspectRatio="none" width="100%" height="100%">
+						<path class="cls-1" d="M207.83,30.11C-112.7,904.65,639.69,588.22,469.54,1889.05c-59,451.03-404.23,543.96-376.33,1032.4,30.48,533.56,444.29,968.24,399.53,1477.37-31,352.64-389.86,637.85-404.82,1200.04-12.47,468.67,251.77,821.61,367.03,1346.04,89.22,405.97,32.57,787.04-130.37,1145.11-164.25,360.95-85.1,768.53,148.8,1144.47"/>
+					</svg>
+				</div>
+				<div className='vecteur--etroit vecteur--gauche'>
 					
 				</div>
-				<div>
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 602.52 9280.22" preserveAspectRatio="none" width="100%" height="100%">
-						<path class="cls-1" d="M392.24,48.07c-468.89,713.15,103.06,1502.98,103.06,2083.22,0,377.56-429.93,289.45-402.03,777.9,30.48,533.56,442.32,1278.58,397.56,1787.71-31,352.64-387.89,327.51-402.84,889.7-12.47,468.67,219.29,829.82,367.03,1346.04,110.31,385.41,69.47,822.6-130.37,1145.11-191.3,308.72,298.64,588.62-140.46,1148.47"/>
-					</svg>
+				<div className='vecteur--etroit vecteur--droite'>
+					
 				</div>
 			</Vecteur>
 			
