@@ -27,17 +27,14 @@ const Styled = styled.div`
 				transform: translateX(-25%) }}
 		
 		&.chapitre--left {
-			margin-inline: 10% 30%;
-			.illustration {
-				justify-self: right;
-				transform: translateX(25%)}}
+			margin-inline: 10% 30%;}
 	`};
 	
 	.content {
 		display: grid;
 		transform: scale(0.85);
 		opacity: 0.5;
-		padding: 4vh 10%;
+		padding: 4vh 15% 4vh 5%;
 		border-radius: 3px;
 		background: #b5bca2;}
 		
@@ -48,47 +45,44 @@ const Styled = styled.div`
 	.illustration {
 		max-width: 50vh;}
 	
+	p.emphase {
+		margin-top: 0;
+		font-weight: bold;
+		strong {
+			background-color: var(--color-jaune);
+			color: var(--color-pourpre);
+			font-weight: bold;}}
+	
 	.text {
 		color: var(--color-pourpre);
 		overflow: hidden;
 		margin-top: -5vh;}
 			
-		.paragraphs {
-			max-height: 30vh;
+	.paragraphs {
+		max-height: 25vh;
+		overflow: hidden;
+		position: relative;
+			
+		&__overflow {
 			overflow: hidden;
-			position: relative;
+			position: relative;}
+		
+		&__before,
+		&__after {
+			position: absolute;
+			width: 100%;
+			height: 1em;
+			background: linear-gradient(#fff, rgba(255,255,255,0))}
 			
-			> p {
-				margin-top: 0;
-				font-weight: bold;}
-				
-			&__overflow {
-				overflow: hidden;
-				position: relative;}
-			
-			&__before,
-			&__after {
-				position: absolute;
-				width: 100%;
-				height: 1em;
-				background: linear-gradient(#fff, rgba(255,255,255,0))}
-				
-			&__before {
-				top: 0;}
-			&__after {
-				bottom: 0;}
-		}
+		&__before {
+			top: 0;}
+		&__after {
+			bottom: 0;}}
 		
 	h2 {
 		font-size: 1.5rem;
 		letter-spacing: 0.05em;
 		margin-bottom: 1em;}
-		
-	h2 strong, 
-	.text p:first-child strong {
-		background-color: var(--color-jaune);
-		color: var(--color-pourpre);
-		font-weight: bold;}
 	
 	.illustration {
 		border: 1rem solid #3a1737;
@@ -112,9 +106,10 @@ const Styled = styled.div`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
+const Chapitre = ({ id, lang, imgFile, texts, color, model, onPinSet }) => {
 	const gsapScopeRef = useRef();
 	const paragraphsRef = useRef();
+	const [hasPinSpacer, setHasPinSpacer] = useState(false)
 	
 	// Charge en GraphQL toutes les images du répertoire images/enracinee
 	const data = useStaticQuery(graphql`
@@ -146,6 +141,8 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 		} else if (color === 'color4') {
 			bgColor = '#2d3837'
 		}
+	} else {
+		color=''
 	}
 	
 	// Animations et scroll avec GSAP
@@ -230,10 +227,17 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 	
 	// GSAP init
 	useEffect( () => {
-		if (data) {
+		if (data && !hasPinSpacer) {
 			chapitreAnimation()
+			setHasPinSpacer(true)
 		}
-	},[chapitreAnimation])
+	},[chapitreAnimation, hasPinSpacer])
+	
+	useEffect( () => {
+		if (hasPinSpacer && onPinSet) {
+			onPinSet()
+		}
+	},[hasPinSpacer, onPinSet])
 	
 	return (
 		<Styled 
@@ -254,9 +258,12 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, markers }) => {
 					<div className='text'>
 						<h2>{texts.titre}</h2>
 						<div className='paragraphs' ref={paragraphsRef}>
-							<p dangerouslySetInnerHTML={{ __html: texts.texte[0] }}/>
 							<div className='paragraphs__overflow'>
 								<div className='paragraphs__scroll'>
+									<p 
+										dangerouslySetInnerHTML={{ __html: texts.texte[0] }}
+										className='emphase'
+									/>
 									{texts.texte.slice(1).map((item, index) => <p key={index} dangerouslySetInnerHTML={{ __html: item }}/>) }
 								</div>
 								<div 
