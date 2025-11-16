@@ -25,9 +25,9 @@ const Video = styled.div`
 	width: 80%;
 	display: flex;
 	background: lightgrey;
-	margin-bottom: 10vh;
+	margin-bottom: 10vh;	
 	position: relative;
-		
+	z-index: 45;	
 	iframe {
 		width: 100%;}
 		
@@ -42,6 +42,7 @@ const Video = styled.div`
 `;
 
 const Chapitres = styled.section`
+	
 	${media.desktopUp`
 		padding-top: 0 !important;
 		.chapitre--modelB {
@@ -77,10 +78,14 @@ const ScrollCtnr = styled.section`
 			stroke-width: 400px;}}
 		
 	.vecteur--droite {
-		z-index: 40;
 		path {
 			stroke: #0071bc;
 			stroke-width: 175px;}}
+			
+	.vecteur--ghost {
+		top: 0;
+		bottom: auto;
+	}
 	
 	svg {
 		position: absolute;
@@ -115,7 +120,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 const PEnracinee = ({lang, texts}) => {
 	const [data, setData] = useState(true)
 	const [shareTooltipOn, setShareTooltipOn] = useState(false)
-	const [isScrollReady, setIsScrollReady] = useState(false)
+	//const [isScrollReady, setIsScrollReady] = useState(false)
 	const vecteursScopeRef = useRef()
 	const contentRef = useRef()
 	
@@ -130,7 +135,7 @@ const PEnracinee = ({lang, texts}) => {
 	
 	// Animation vecteurs au scroll
 	useGSAP(() => {
-		if (isScrollReady) {
+		//if (isScrollReady) {
 			gsap.to(".vecteur--gauche path", {
 				drawSVG: "100%", 
 				ease: "none", 
@@ -155,8 +160,8 @@ const PEnracinee = ({lang, texts}) => {
 					markers: false
 				}
 			});
-		}
-	}, { scope: vecteursScopeRef, dependencies: [isScrollReady], })
+		//}
+	}, { scope: vecteursScopeRef, dependencies: [], })
 	
 	return (
 		<>
@@ -174,17 +179,9 @@ const PEnracinee = ({lang, texts}) => {
 							<path className="cls-1" d="M197.85,29.26c179.95,1216.81-14.61,1499.98,34.78,2537.16,69.13,1451.7,133.94,1871.87,20.74,2751.32-179.73,1396.4,380.21,2260.51-48.39,3933.42"/>
 						</svg>
 					</div>
-					<div className='large-only vecteur--droite'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 584.6 9280.71" preserveAspectRatio="none" width="100%" height="100%">
-							<path className="cls-1" d="M207.83,30.11C-112.7,904.65,639.69,588.22,469.54,1889.05c-59,451.03-404.23,543.96-376.33,1032.4,30.48,533.56,444.29,968.24,399.53,1477.37-31,352.64-389.86,637.85-404.82,1200.04-12.47,468.67,251.77,821.61,367.03,1346.04,89.22,405.97,32.57,787.04-130.37,1145.11-164.25,360.95-85.1,768.53,148.8,1144.47"/>
-						</svg>
-					</div>
-					<div className='small-only vecteur--gauche'>
-						
-					</div>
-					<div className='small-only vecteur--droite'>
-						
-					</div>
+					<div className='large-only vecteur--droite vecteur--ghost'></div>
+					<div className='small-only vecteur--gauche'></div>
+					<div className='small-only vecteur--droite vecteur--ghost'></div>
 				</div>
 			
 				<Chapitres id='chapitres' ref={contentRef}>
@@ -249,10 +246,22 @@ const PEnracinee = ({lang, texts}) => {
 							imgFile='temp-6'
 							texts={texts.bloc6}
 							model='left'
-							onPinSet={() => setIsScrollReady(true)} 
+							//onPinSet={() => setIsScrollReady(true)} 
 						/>
 					</div>
 				</Chapitres>
+				
+				<div className='vecteurs'>
+					<div className='large-only vecteur--gauche vecteur--ghost'></div>
+					<div className='large-only vecteur--droite'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 584.6 9280.71" preserveAspectRatio="none" width="100%" height="100%">
+							<path className="cls-1" d="M207.83,30.11C-112.7,904.65,639.69,588.22,469.54,1889.05c-59,451.03-404.23,543.96-376.33,1032.4,30.48,533.56,444.29,968.24,399.53,1477.37-31,352.64-389.86,637.85-404.82,1200.04-12.47,468.67,251.77,821.61,367.03,1346.04,89.22,405.97,32.57,787.04-130.37,1145.11-164.25,360.95-85.1,768.53,148.8,1144.47"/>
+						</svg>
+					</div>
+					<div className='small-only vecteur--gauche vecteur--ghost'></div>
+					<div className='small-only vecteur--droite'></div>
+				</div>
+				
 			</ScrollCtnr>
 			
 			<Banniere>
