@@ -32,7 +32,6 @@ const Styled = styled.div`
 		display: grid;
 		transform: scale(0.85);
 		opacity: 0.5;
-		border: 1px dashed rgb(181, 188, 162);
 		border-radius: 3px;
 		background: white;}
 	
