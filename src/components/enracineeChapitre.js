@@ -19,26 +19,26 @@ const Styled = styled.div`
 		margin-inline: 20% 0;}
 	
 	${media.desktopUp`
-		width: 60%;
+		width: 55%;
 				
 		&.chapitre--right {
-			margin-inline: 30% 10%;}
+			margin-inline: 30% 15%;}
 		
 		&.chapitre--left {
-			margin-inline: 10% 30%;}
+			margin-inline: 15% 30%;}
 	`};
 	
 	.content {
 		display: grid;
 		transform: scale(0.85);
 		opacity: 0.5;
-		padding: 0 15% 0 0;
 		border: 1px dashed rgb(181, 188, 162);
 		border-radius: 3px;
 		background: white;}
 	
 	.text {
 		padding-left: 2%;
+		padding-right: 12.5%;
 		color: var(--color-pourpre);
 		overflow: hidden;
 		margin-top: 5vh;}
