@@ -25,9 +25,9 @@ const Video = styled.div`
 	width: 80%;
 	display: flex;
 	background: lightgrey;
-	margin-bottom: 10vh;
+	margin-bottom: 10vh;	
 	position: relative;
-		
+	z-index: 45;	
 	iframe {
 		width: 100%;}
 		
@@ -42,6 +42,7 @@ const Video = styled.div`
 `;
 
 const Chapitres = styled.section`
+	
 	${media.desktopUp`
 		padding-top: 0 !important;
 		.chapitre--modelB {
@@ -77,10 +78,14 @@ const ScrollCtnr = styled.section`
 			stroke-width: 400px;}}
 		
 	.vecteur--droite {
-		z-index: 40;
 		path {
 			stroke: #0071bc;
-			stroke-width: 175px;}}
+			stroke-width: 250px;}}
+			
+	.vecteur--ghost {
+		top: 0;
+		bottom: auto;
+	}
 	
 	svg {
 		position: absolute;
@@ -98,8 +103,12 @@ const ScrollCtnr = styled.section`
 		.large-only {
 			display: flex;
 			margin-inline: unset !important;
-			width: 35%;
-			position: relative;}
+			position: relative;
+			
+			&.vecteur--gauche {
+				width: 35%;}
+			&.vecteur--droite {
+				width: 35%;}}
 	`}
 `
 
@@ -115,13 +124,13 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 const PEnracinee = ({lang, texts}) => {
 	const [data, setData] = useState(true)
 	const [shareTooltipOn, setShareTooltipOn] = useState(false)
-	const [isScrollReady, setIsScrollReady] = useState(false)
+	//const [isScrollReady, setIsScrollReady] = useState(false)
 	const vecteursScopeRef = useRef()
 	const contentRef = useRef()
 	
 	// GSAP Setup de depart
 	useGSAP(() => {
-		gsap.set("path", {drawSVG: "5%"});
+		gsap.set("path", {drawSVG: "3%"});
 		gsap.to(".vecteurs", {
 			opacity: 1,
 			duration: 2
@@ -130,7 +139,7 @@ const PEnracinee = ({lang, texts}) => {
 	
 	// Animation vecteurs au scroll
 	useGSAP(() => {
-		if (isScrollReady) {
+		//if (isScrollReady) {
 			gsap.to(".vecteur--gauche path", {
 				drawSVG: "100%", 
 				ease: "none", 
@@ -155,8 +164,8 @@ const PEnracinee = ({lang, texts}) => {
 					markers: false
 				}
 			});
-		}
-	}, { scope: vecteursScopeRef, dependencies: [isScrollReady], })
+		//}
+	}, { scope: vecteursScopeRef, dependencies: [], })
 	
 	return (
 		<>
@@ -170,21 +179,13 @@ const PEnracinee = ({lang, texts}) => {
 			<ScrollCtnr ref={vecteursScopeRef}>
 				<div className='vecteurs'>
 					<div className='large-only vecteur--gauche'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570.59 9300.81" preserveAspectRatio="none" width="100%" height="100%">
-							<path className="cls-1" d="M197.85,29.26c179.95,1216.81-14.61,1499.98,34.78,2537.16,69.13,1451.7,133.94,1871.87,20.74,2751.32-179.73,1396.4,380.21,2260.51-48.39,3933.42"/>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 586.01 9290.57" preserveAspectRatio="none" width="100%" height="100%">
+							<path class="cls-1" d="M199.07,19.24c117.6,1217.08-54.85,1755.25,31.78,2537.16,123.93,1118.56,255.39,1866.74,41.74,2751.32-284.99,1179.99,400.88,2073.7-73.39,3933.42"/>
 						</svg>
 					</div>
-					<div className='large-only vecteur--droite'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 584.6 9280.71" preserveAspectRatio="none" width="100%" height="100%">
-							<path className="cls-1" d="M207.83,30.11C-112.7,904.65,639.69,588.22,469.54,1889.05c-59,451.03-404.23,543.96-376.33,1032.4,30.48,533.56,444.29,968.24,399.53,1477.37-31,352.64-389.86,637.85-404.82,1200.04-12.47,468.67,251.77,821.61,367.03,1346.04,89.22,405.97,32.57,787.04-130.37,1145.11-164.25,360.95-85.1,768.53,148.8,1144.47"/>
-						</svg>
-					</div>
-					<div className='small-only vecteur--gauche'>
-						
-					</div>
-					<div className='small-only vecteur--droite'>
-						
-					</div>
+					<div className='large-only vecteur--droite vecteur--ghost'></div>
+					<div className='small-only vecteur--gauche'></div>
+					<div className='small-only vecteur--droite vecteur--ghost'></div>
 				</div>
 			
 				<Chapitres id='chapitres' ref={contentRef}>
@@ -206,7 +207,7 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre1'
 							lang={lang}
-							imgFile='temp-1'
+							imgFile='temp-gen'
 							texts={texts.bloc1}
 							model='right'
 						/>
@@ -214,7 +215,7 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre2'
 							lang={lang}
-							imgFile='temp-2'
+							imgFile='temp-gen'
 							texts={texts.bloc2}
 							model='left'
 						/>
@@ -222,7 +223,7 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre3'
 							lang={lang}
-							imgFile='temp-3'
+							imgFile='temp-gen'
 							texts={texts.bloc3}
 							model='right'
 						/>
@@ -230,7 +231,7 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre4'
 							lang={lang}
-							imgFile='temp-4'
+							imgFile='temp-gen'
 							texts={texts.bloc4}
 							model='left'
 						/>
@@ -238,7 +239,7 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre5'
 							lang={lang}
-							imgFile='temp-5'
+							imgFile='temp-gen'
 							texts={texts.bloc5}
 							model='right'
 						/>
@@ -246,13 +247,26 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre6'
 							lang={lang}
-							imgFile='temp-6'
+							imgFile='temp-gen'
 							texts={texts.bloc6}
 							model='left'
-							onPinSet={() => setIsScrollReady(true)} 
+							//onPinSet={() => setIsScrollReady(true)} 
 						/>
 					</div>
 				</Chapitres>
+				
+				<div className='vecteurs'>
+					<div className='large-only vecteur--gauche vecteur--ghost'></div>
+					<div className='large-only vecteur--droite'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 588.53 9313.43" preserveAspectRatio="none" width="100%" height="100%">
+							<path class="cls-1" d="M208.98,43.02c-320.53,874.53,391.87,558.11,221.72,1858.94-59,451.03-324.23,543.96-296.33,1032.4,30.48,533.56,322.61,979.15,319.53,1477.37-2.19,353.99-153.97,703.78-294.82,1200.04-128,451.02,141.77,821.61,257.03,1346.04,89.22,405.97,52.57,787.04-110.37,1145.11-164.25,360.95-65.1,768.53,168.8,1144.47"/>
+						</svg>
+						
+					</div>
+					<div className='small-only vecteur--gauche vecteur--ghost'></div>
+					<div className='small-only vecteur--droite'></div>
+				</div>
+				
 			</ScrollCtnr>
 			
 			<Banniere>
