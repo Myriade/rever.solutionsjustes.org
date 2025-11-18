@@ -9,24 +9,15 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const Styled = styled.div`
-	width: 80%;
+	width: 90%;
+	margin-inline: auto;
 	margin-bottom: 10vh;
 	
-	&.chapitre--right {
-		margin-inline: 0 20%;}
+	&.chapitre--right .illustration {
+		margin-right: -10%;}
 	
-	&.chapitre--left {
-		margin-inline: 20% 0;}
-	
-	${media.desktopUp`
-		width: 55%;
-				
-		&.chapitre--right {
-			margin-inline: 30% 15%;}
-		
-		&.chapitre--left {
-			margin-inline: 15% 30%;}
-	`};
+	&.chapitre--left .illustration {
+		margin-left: -10%;}
 	
 	.content {
 		display: grid;
@@ -36,16 +27,31 @@ const Styled = styled.div`
 		background: white;}
 	
 	.text {
-		padding-left: 2%;
-		padding-right: 12.5%;
 		color: var(--color-pourpre);
-		overflow: hidden;
 		margin-top: 5vh;}
 		
 	h2 {
 		font-size: 2rem;
 		letter-spacing: 0.05em;
 		margin-bottom: 1em;}
+		
+		${media.desktopUp`
+			width: 55%;
+					
+			&.chapitre--right {
+				margin-inline: 30% 15%;
+				.illustration {
+					margin-right: unset;}}
+			
+			&.chapitre--left {
+				margin-inline: 15% 30%;
+				.illustration {
+					margin-left: unset;}}
+				
+			.text {
+				padding-left: 2%;
+				padding-right: 12.5%;}
+		`};
 `;
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);

@@ -68,33 +68,40 @@ const ScrollCtnr = styled.section`
 		display: flex;
 		justify-content: space-between;
 		align-items: stretch;}
-	
-	.large-only {
-		display: none;}
 		
-	.vecteur--gauche {
-		path {
-			stroke: #00a99d;
-			stroke-width: 400px;}}
-		
-	.vecteur--droite {
-		path {
-			stroke: #0071bc;
-			stroke-width: 250px;}}
-			
-	.vecteur--ghost {
-		top: 0;
-		bottom: auto;
-	}
-	
 	svg {
 		position: absolute;
 		inset: 0 0;}
 	
 	path {
 		fill: none;
-		stroke: #0071bc;
 		stroke-miterlimit: 10;}
+	
+	.large-only {
+		display: none;}
+			
+	.vecteur--ghost {
+		top: 0;
+		bottom: auto;}
+		
+	.small-only {
+		display: flex;
+		margin-inline: unset !important;
+		position: relative;
+		
+		&.vecteur--gauche {
+			width: 15%;
+			path {
+				stroke: #ffc9de;
+				stroke-width: 70px;}}
+		&.vecteur--droite {
+			width: 15%;
+			svg {
+				position: fixed;
+				height: 90vh;
+				inset: auto 0 0 auto;}
+			path {
+				fill: #c8eb9b;}}}
 		
 	${media.desktopUp`
 		.small-only {
@@ -106,9 +113,15 @@ const ScrollCtnr = styled.section`
 			position: relative;
 			
 			&.vecteur--gauche {
-				width: 35%;}
+				width: 35%;
+				path {
+					stroke: #00a99d;
+					stroke-width: 400px;}}
 			&.vecteur--droite {
-				width: 35%;}}
+				width: 35%;
+				path {
+					stroke: #0071bc;
+					stroke-width: 250px;}}}
 	`}
 `
 
@@ -130,7 +143,8 @@ const PEnracinee = ({lang, texts}) => {
 	
 	// GSAP Setup de depart
 	useGSAP(() => {
-		gsap.set("path", {drawSVG: "3%"});
+		gsap.set(".large-only path", {drawSVG: "3%"});
+		gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%"});
 		gsap.to(".vecteurs", {
 			opacity: 1,
 			duration: 2
@@ -139,32 +153,43 @@ const PEnracinee = ({lang, texts}) => {
 	
 	// Animation vecteurs au scroll
 	useGSAP(() => {
-		//if (isScrollReady) {
-			gsap.to(".vecteur--gauche path", {
-				drawSVG: "100%", 
-				ease: "none", 
-				scrollTrigger: {
-					id: 'vecteur-gauche-large',
-					trigger: ".vecteurs",
-					start: "top 30%", 
-					end: "bottom 75%",
-					scrub: 1,
-				}
-			});
-			
-			gsap.to(".vecteur--droite path", {
-				drawSVG: "100%", 
-				ease: "none", 
-				scrollTrigger: {
-					id: 'vecteur-droite-large',
-					trigger: ".vecteurs", 
-					start: "top 30%", 
-					end: "bottom 75%", 
-					scrub: 1, 
-					markers: false
-				}
-			});
-		//}
+		gsap.to(".vecteur--gauche.large-only path", {
+			drawSVG: "100%", 
+			ease: "none", 
+			scrollTrigger: {
+				id: 'vecteur-gauche-large',
+				trigger: ".vecteurs",
+				start: "top 30%", 
+				end: "bottom 75%",
+				scrub: 1,
+			}
+		});
+		
+		gsap.to(".vecteur--droite.large-only path", {
+			drawSVG: "100%", 
+			ease: "none", 
+			scrollTrigger: {
+				id: 'vecteur-droite-large',
+				trigger: ".vecteurs", 
+				start: "top 30%", 
+				end: "bottom 75%", 
+				scrub: 1, 
+				markers: false
+			}
+		});
+		
+		gsap.to(".vecteur--gauche.small-only path", {
+			drawSVG: "100%", 
+			ease: "none", 
+			scrollTrigger: {
+				id: 'vecteur-gauche-large',
+				trigger: ".vecteurs",
+				start: "top 30%", 
+				end: "bottom 75%",
+				scrub: 1,
+			}
+		});
+		
 	}, { scope: vecteursScopeRef, dependencies: [], })
 	
 	return (
@@ -183,9 +208,13 @@ const PEnracinee = ({lang, texts}) => {
 							<path class="cls-1" d="M199.07,19.24c117.6,1217.08-54.85,1755.25,31.78,2537.16,123.93,1118.56,255.39,1866.74,41.74,2751.32-284.99,1179.99,400.88,2073.7-73.39,3933.42"/>
 						</svg>
 					</div>
-					<div className='large-only vecteur--droite vecteur--ghost'></div>
-					<div className='small-only vecteur--gauche'></div>
-					<div className='small-only vecteur--droite vecteur--ghost'></div>
+					<div className='large-only vecteur--ghost'></div>
+					<div className='small-only vecteur--gauche'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100.51 7612.47" preserveAspectRatio="none" width="100%" height="100%">
+							<path class="cls-1" d="M55.23,1.73c-18.19,367.18-23.85,987.17-9,1347,27.18,658.47,23.23,1135.89,3,1603-17.98,415.2-20.29,1214.75,1,1624,19.91,382.6,14.39,1375.5-5,1829-12.85,300.48-15.98,899.96,8,1205"/>
+						</svg>
+					</div>
+					<div className='small-only vecteur--ghost'></div>
 				</div>
 			
 				<Chapitres id='chapitres' ref={contentRef}>
@@ -207,7 +236,7 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre1'
 							lang={lang}
-							imgFile='temp-gen'
+							imgFile='temp-gen2'
 							texts={texts.bloc1}
 							model='right'
 						/>
@@ -231,7 +260,7 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre4'
 							lang={lang}
-							imgFile='temp-gen'
+							imgFile='temp-gen2'
 							texts={texts.bloc4}
 							model='left'
 						/>
@@ -247,7 +276,7 @@ const PEnracinee = ({lang, texts}) => {
 						<Chapitre
 							id='chapitre6'
 							lang={lang}
-							imgFile='temp-gen'
+							imgFile='temp-gen2'
 							texts={texts.bloc6}
 							model='left'
 							//onPinSet={() => setIsScrollReady(true)} 
@@ -256,15 +285,18 @@ const PEnracinee = ({lang, texts}) => {
 				</Chapitres>
 				
 				<div className='vecteurs'>
-					<div className='large-only vecteur--gauche vecteur--ghost'></div>
+					<div className='large-only vecteur--ghost'></div>
 					<div className='large-only vecteur--droite'>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 588.53 9313.43" preserveAspectRatio="none" width="100%" height="100%">
 							<path class="cls-1" d="M208.98,43.02c-320.53,874.53,391.87,558.11,221.72,1858.94-59,451.03-324.23,543.96-296.33,1032.4,30.48,533.56,322.61,979.15,319.53,1477.37-2.19,353.99-153.97,703.78-294.82,1200.04-128,451.02,141.77,821.61,257.03,1346.04,89.22,405.97,52.57,787.04-110.37,1145.11-164.25,360.95-65.1,768.53,168.8,1144.47"/>
 						</svg>
-						
 					</div>
-					<div className='small-only vecteur--gauche vecteur--ghost'></div>
-					<div className='small-only vecteur--droite'></div>
+					<div className='small-only vecteur--ghost'></div>
+					<div className='small-only vecteur--droite'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.75 1196">
+							<path class="cls-1" d="M64.75,0v1196S1.06,1018.85.75,957C-.25,758-.25,415,.75,153,.91,111.54,64.75,0,64.75,0Z"/>
+						</svg>
+					</div>
 				</div>
 				
 			</ScrollCtnr>
