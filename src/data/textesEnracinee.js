@@ -56,13 +56,37 @@ export default function getTexts() { return {
 	},
 	en: {
 		bloc1: {
-			titre: "",
+			titre: "t1",
 			texte: [
 				"..."
 			]
 		},
 		bloc2: {
-			titre: "",
+			titre: "t2",
+			texte: [
+				"..."
+			]
+		},
+		bloc3: {
+			titre: "t3",
+			texte: [
+				"..."
+			]
+		},
+		bloc4: {
+			titre: "t4",
+			texte: [
+				"..."
+			]
+		},
+		bloc5: {
+			titre: "t5",
+			texte: [
+				"..."
+			]
+		},
+		bloc6: {
+			titre: "t6",
 			texte: [
 				"..."
 			]
