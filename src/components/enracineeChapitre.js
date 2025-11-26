@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import styled from 'styled-components'
@@ -77,84 +77,59 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 	const image = data.allFile.nodes.find(node => node.name === imgFile);
 	const imageData = getImage(image.childImageSharp.gatsbyImageData);
 	
-	// Mapper les couleurs 
-	let bgColor = 'rgba(255,255,255,0)'
-	if (color) {
-		if (color === 'color1') {
-			bgColor = '#b5bca2'
-		} else if (color === 'color2') {
-			bgColor = '#729b76'
-		} else if (color === 'color3') {
-			bgColor = '#295534'
-		} else if (color === 'color4') {
-			bgColor = '#2d3837'
-		}
-	} else {
-		color=''
-	}
-	
 	// Animations et scroll avec GSAP
-	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
-	
-	const chapitreAnimation = contextSafe(() => {
-		
-		// Content zoom in & alpha
-		gsap.to('.content', {
-			scrollTrigger: {
-				id: `scale-${id}`,
-				trigger: '.content',
-				start: 'top 70%',
-				end: 'top 40%',
-				scrub: 0.1,
-			},
-			scale: 1,
-			autoAlpha: 1,
-		})
-		 
-		// Titre apparait
-		gsap.from('h2', {
-			scrollTrigger: {
-				id: `titre-${id}`,
-				trigger: '.paragraphs',
-				start: 'top 80%',
-				end: 'top 70%',
-				scrub: 0.1,
-			},
-			autoAlpha: 0,
-		});
-		
-		// Premier paragraphe apparait
-		gsap.from('.paragraphs p:first-child', {
-			scrollTrigger: {
-				id: `p1-${id}`,
-				trigger: '.paragraphs',
-				start: 'top 65%',
-				end: 'top 55%',
-				scrub: 0.1
-			},
-			autoAlpha: 0,
-		});
-		
-		// Autres paragraphes apparaissent
-		gsap.from('.paragraphs p:not(:first-child)', {
-			scrollTrigger: {
-				id: `ps-${id}`,
-				trigger: '.paragraphs',
-				start: 'top 55%',
-				end: 'top 45%',
-				scrub: 0.1
-			},
-			autoAlpha: 0,
-		});
-		
-	},{ scope: gsapScopeRef }); 
-	
-	// GSAP init
-	useEffect( () => {
-		if (data) {
-			chapitreAnimation()
+	useGSAP(() => {
+		if (imageData && texts) {
+			// Content zoom in & alpha
+			gsap.to('.content', {
+				scrollTrigger: {
+					id: `scale-${id}`,
+					trigger: '.content',
+					start: 'top 70%',
+					end: 'top 40%',
+					scrub: 0.1,
+				},
+				scale: 1,
+				autoAlpha: 1,
+			})
+			
+			// Titre apparait
+			gsap.from('h2', {
+				scrollTrigger: {
+					id: `titre-${id}`,
+					trigger: '.paragraphs',
+					start: 'top 80%',
+					end: 'top 70%',
+					scrub: 0.1,
+				},
+				autoAlpha: 0,
+			});
+			
+			// Premier paragraphe apparait
+			gsap.from('.paragraphs p:first-child', {
+				scrollTrigger: {
+					id: `p1-${id}`,
+					trigger: '.paragraphs',
+					start: 'top 65%',
+					end: 'top 55%',
+					scrub: 0.1
+				},
+				autoAlpha: 0,
+			});
+			
+			// Autres paragraphes apparaissent
+			gsap.from('.paragraphs p:not(:first-child)', {
+				scrollTrigger: {
+					id: `ps-${id}`,
+					trigger: '.paragraphs',
+					start: 'top 55%',
+					end: 'top 45%',
+					scrub: 0.1
+				},
+				autoAlpha: 0,
+			});
 		}
-	},[chapitreAnimation, data])
+	},{ scope: gsapScopeRef, dependencies: [imageData, texts] });
 	
 	return (
 		<Styled 
@@ -172,10 +147,11 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 					</div>
 				}
 				<div className='text'>
-					<h2>{texts.titre}</h2>
-					<div className='paragraphs'>
-						{texts.texte.map((item, index) => <p key={index} dangerouslySetInnerHTML={{ __html: item }}/>) }
-					</div>
+					<h2>{texts ? texts.titre : '...'}</h2>
+					{texts ? 
+						<div className='paragraphs' dangerouslySetInnerHTML={{ __html: texts.texte }}/>
+						: <div className='paragraphs'><p>...</p><p></p></div>
+					}
 				</div>
 			</div>
 		</Styled>
