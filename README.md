@@ -18,7 +18,7 @@ Librairies : GSAP, Glide
 ## Développement
 - Terminal : `npm run develop`
 - Dans un browser, la version en développement est disponible à l'adresse localhost:8000/
-- Pour trouver la valeur du tri manuel de Wix (_manualsort...), console.log les données brutes, et la tri se trouve dans une propriété de chaque élément data.  
+- Pour trouver la valeur du tri manuel de Wix (_manualsort...), console.log les données brutes, et la valeur du tri se trouve dans une propriété de chaque élément data.  
 
 ## Build
 Pour tester le build en local, avant le déploiement

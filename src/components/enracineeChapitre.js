@@ -147,7 +147,7 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 					</div>
 				}
 				<div className='text'>
-					<h2>{texts ? texts.titre : '...'}</h2>
+					<h2>{texts ? texts.title : '...'}</h2>
 					{texts ? 
 						<div className='paragraphs' dangerouslySetInnerHTML={{ __html: texts.texte }}/>
 						: <div className='paragraphs'><p>...</p><p></p></div>

@@ -128,14 +128,16 @@ const ScrollCtnr = styled.section`
 
 const localisedText = {
 	fr: {
+		chargement: 'chargement'
 	},
 	en: {
+		chargement: 'loading'
 	}
 }
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
-const PEnracinee = ({lang, texts}) => {
+const PEnracinee = ({lang}) => {
 	const [wixData, setWixData] = useState()
 	//const [shareTooltipOn, setShareTooltipOn] = useState(false)
 	
@@ -154,7 +156,7 @@ const PEnracinee = ({lang, texts}) => {
 	
 	if (lang === 'fr') {
 		collection = 'Import692'
-		manualSort = ''
+		manualSort = '_manualSort_609e1759-a61d-4150-b9d9-25754c3777a3'
 	}
 	
 	if (lang === 'en') {
@@ -173,7 +175,7 @@ const PEnracinee = ({lang, texts}) => {
 	
 	// GSAP Setup de depart
 	useGSAP(() => {
-		if (wixData && texts) {
+		if (wixData && wixData.length >= 6 ) {
 			gsap.set(".large-only path", {drawSVG: "3%"});
 			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%"});
 			gsap.to(".vecteurs", {
@@ -185,7 +187,7 @@ const PEnracinee = ({lang, texts}) => {
 	
 	// Animation vecteurs au scroll
 	useGSAP(() => {
-		if (wixData && texts) {
+		if (wixData && wixData.length >= 6) {
 			gsap.to(".vecteur--gauche.large-only path", {
 				drawSVG: "100%", 
 				ease: "none", 
@@ -266,12 +268,12 @@ const PEnracinee = ({lang, texts}) => {
 							/>*/}
 						</Video>
 						
-						{ wixData ? <>
+						{ wixData && wixData.length >= 6 ? <>
 							<Chapitre
 								id='chapitre1'
 								lang={lang}
 								imgFile='temp-gen2'
-								texts={texts.bloc1}
+								texts={wixData[0].data}
 								model='right'
 							/>
 								
@@ -279,7 +281,7 @@ const PEnracinee = ({lang, texts}) => {
 								id='chapitre2'
 								lang={lang}
 								imgFile='temp-gen'
-								texts={texts.bloc2}
+								texts={wixData[1].data}
 								model='left'
 							/>
 							
@@ -287,7 +289,7 @@ const PEnracinee = ({lang, texts}) => {
 								id='chapitre3'
 								lang={lang}
 								imgFile='temp-gen'
-								texts={texts.bloc3}
+								texts={wixData[2].data}
 								model='right'
 							/>
 							
@@ -295,7 +297,7 @@ const PEnracinee = ({lang, texts}) => {
 								id='chapitre4'
 								lang={lang}
 								imgFile='temp-gen2'
-								texts={texts.bloc4}
+								texts={wixData[3].data}
 								model='left'
 							/>
 							
@@ -303,7 +305,7 @@ const PEnracinee = ({lang, texts}) => {
 								id='chapitre5'
 								lang={lang}
 								imgFile='temp-gen'
-								texts={texts.bloc5}
+								texts={wixData[4].data}
 								model='right'
 							/>
 							
@@ -311,11 +313,10 @@ const PEnracinee = ({lang, texts}) => {
 								id='chapitre6'
 								lang={lang}
 								imgFile='temp-gen2'
-								texts={texts.bloc6}
+								texts={wixData[5].data}
 								model='left'
-								//onPinSet={() => setIsScrollReady(true)} 
 							/>
-						</> : ''}
+						</> : <p>... {localisedText[lang].chargement}</p>}
 					</div>
 				</Chapitres>
 				

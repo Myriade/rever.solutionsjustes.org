@@ -1,23 +1,17 @@
 import React, {useState} from 'react'
 import PageLayout from '../layouts/pageLayout'
 import PEnracinee from '../components/pEnracinee'
-import getTexts from '../data/textesEnracinee'
 
 const Page = () => {
-  const [textes, setTextes] = useState(getTexts());
   
   return (
     <PageLayout 
       lang='en' 
       i18nLink='/enracinee'
     >
-      { textes ? 
-        <PEnracinee 
-          lang='en' 
-          texts={textes.en}
-        />
-        : '...'
-      } 
+      <PEnracinee 
+        lang='en'
+      />
     </PageLayout>
   )
 }
