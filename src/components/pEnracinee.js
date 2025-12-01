@@ -9,6 +9,9 @@ import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+import LierreOrdiDroit from '../images/enracinee/lierre-ordi-droit-gabarit.js'
+import LierreOrdiGauche from '../images/enracinee/lierre-ordi-gauche.js'
+
 const Banniere = styled.section`
 	background: white;
 	width: 100%;
@@ -114,15 +117,9 @@ const ScrollCtnr = styled.section`
 			position: relative;
 			
 			&.vecteur--gauche {
-				width: 35%;
-				path {
-					stroke: #00a99d;
-					stroke-width: 400px;}}
+				width: 35%;}
 			&.vecteur--droite {
-				width: 35%;
-				path {
-					stroke: #0071bc;
-					stroke-width: 250px;}}}
+				width: 35%;}}
 	`}
 `
 
@@ -168,7 +165,6 @@ const PEnracinee = ({lang}) => {
 	
 	if (!wixData) {
 		if (fetchedData && fetchedData.length > 1) {
-			console.log('fetchedData', fetchedData);
 			setWixData(fetchedData)
 		}
 	}
@@ -176,8 +172,25 @@ const PEnracinee = ({lang}) => {
 	// GSAP Setup de depart
 	useGSAP(() => {
 		if (wixData && wixData.length >= 6 ) {
-			gsap.set(".large-only path", {drawSVG: "3%"});
+			
+			// ordi gauche	
+			gsap.set(".large-only.vecteur--gauche path", {drawSVG: "0%"});
+			gsap.set("#lg-1", {drawSVG: "20%"});
+			gsap.set("#lg-2", {drawSVG: "3%"});
+			gsap.set("#lg-3", {drawSVG: "5%"});
+			gsap.set("#lg-4", {drawSVG: "15%"});
+			gsap.set("#lg-5", {drawSVG: "25%"});
+			gsap.set("#lg-6", {drawSVG: "50%"});
+			
+			//gsap.set("#lg-8", {drawSVG: "50%"});
+			
+			// ordi droite
+			gsap.set(".large-only.vecteur--droite path", {drawSVG: "3%"});
+			
+			// Mobile
 			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%"});
+			
+			// Tous
 			gsap.to(".vecteurs", {
 				opacity: 1,
 				duration: 2
@@ -188,18 +201,49 @@ const PEnracinee = ({lang}) => {
 	// Animation vecteurs au scroll
 	useGSAP(() => {
 		if (wixData && wixData.length >= 6) {
-			gsap.to(".vecteur--gauche.large-only path", {
-				drawSVG: "100%", 
-				ease: "none", 
-				scrollTrigger: {
-					id: 'vecteur-gauche-large',
-					trigger: ".vecteurs",
-					start: "top 30%", 
-					end: "bottom 75%",
-					scrub: 1,
-				}
+			
+			// ordi gauche	
+			gsap.to("#lg-1", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-1", start: "top 20%", end: "bottom 35%", scrub: 1}
 			});
 			
+			gsap.to("#lg-2", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-2", start: "top 20%", end: "bottom 65%", scrub: 1}
+			});
+			
+			gsap.to("#lg-3", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-3", start: "top 20%", end: "bottom 45%", scrub: 1}
+			});
+			
+			gsap.to("#lg-4", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-4", start: "top 20%", end: "bottom 65%", scrub: 1}
+			});
+			
+			gsap.to("#lg-5", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-5", start: "top 20%", end: "bottom 55%", scrub: 1}
+			});
+			
+			gsap.to("#lg-6", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-6", start: "top 30%", end: "top 10%", scrub: 1}
+			});
+			
+			gsap.to("#lg-7", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-7", start: "top 20%", end: "bottom 75%", scrub: true}
+			});
+			
+			gsap.to("#lg-8", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-8", start: "top 20%", end: "bottom 75%", scrub: 1.3 }
+			});
+			
+			// ordi droite	
 			gsap.to(".vecteur--droite.large-only path", {
 				drawSVG: "100%", 
 				ease: "none", 
@@ -213,6 +257,7 @@ const PEnracinee = ({lang}) => {
 				}
 			});
 			
+			// mobile gauche
 			gsap.to(".vecteur--gauche.small-only path", {
 				drawSVG: "100%", 
 				ease: "none", 
@@ -239,9 +284,7 @@ const PEnracinee = ({lang}) => {
 			<ScrollCtnr ref={vecteursScopeRef}>
 				<div className='vecteurs'>
 					<div className='large-only vecteur--gauche'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 586.01 9290.57" preserveAspectRatio="none" width="100%" height="100%">
-							<path className="cls-1" d="M199.07,19.24c117.6,1217.08-54.85,1755.25,31.78,2537.16,123.93,1118.56,255.39,1866.74,41.74,2751.32-284.99,1179.99,400.88,2073.7-73.39,3933.42"/>
-						</svg>
+						<LierreOrdiGauche />
 					</div>
 					<div className='large-only vecteur--ghost'></div>
 					<div className='small-only vecteur--gauche'>
@@ -323,9 +366,7 @@ const PEnracinee = ({lang}) => {
 				<div className='vecteurs'>
 					<div className='large-only vecteur--ghost'></div>
 					<div className='large-only vecteur--droite'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 588.53 9313.43" preserveAspectRatio="none" width="100%" height="100%">
-							<path className="cls-1" d="M208.98,43.02c-320.53,874.53,391.87,558.11,221.72,1858.94-59,451.03-324.23,543.96-296.33,1032.4,30.48,533.56,322.61,979.15,319.53,1477.37-2.19,353.99-153.97,703.78-294.82,1200.04-128,451.02,141.77,821.61,257.03,1346.04,89.22,405.97,52.57,787.04-110.37,1145.11-164.25,360.95-65.1,768.53,168.8,1144.47"/>
-						</svg>
+						<LierreOrdiDroit />
 					</div>
 					<div className='small-only vecteur--ghost'></div>
 					<div className='small-only vecteur--droite'>
