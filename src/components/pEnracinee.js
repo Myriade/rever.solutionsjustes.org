@@ -179,10 +179,10 @@ const PEnracinee = ({lang}) => {
 			gsap.set("#lg-2", {drawSVG: "3%"});gsap.set("#lg-3", {drawSVG: "5%"});
 			gsap.set("#lg-4", {drawSVG: "15%"});gsap.set("#lg-5", {drawSVG: "25%"});
 			
-			//gsap.set(".lg-8-9", {drawSVG: "100%"});
-			
 			// ordi droite
-			gsap.set(".large-only.vecteur--droite path", {drawSVG: "3%"});
+			gsap.set(".large-only.vecteur--droite path", {drawSVG: "0%"});
+			gsap.set("#ld-1", {drawSVG: "3%"});gsap.set("#ld-2", {drawSVG: "3%"});
+			//gsap.set("#ld-3", {drawSVG: "100%"});
 			
 			// Mobile
 			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%"});
@@ -282,17 +282,12 @@ const PEnracinee = ({lang}) => {
 			});
 			
 			// ordi droite	
-			gsap.to(".vecteur--droite.large-only path", {
-				drawSVG: "100%", 
-				ease: "none", 
-				scrollTrigger: {
-					id: 'vecteur-droite-large',
-					trigger: ".vecteurs", 
-					start: "top 30%", 
-					end: "bottom 75%", 
-					scrub: 1, 
-					markers: false
-				}
+			gsap.to("#ld-1", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-1", start: "top 20%", end: "bottom 65%", scrub: 1}
+			}); gsap.to("#ld-2", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-2", start: "top 20%", end: "bottom 45%", scrub: 1}
 			});
 			
 			// mobile gauche
