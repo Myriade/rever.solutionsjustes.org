@@ -176,13 +176,10 @@ const PEnracinee = ({lang}) => {
 			// ordi gauche	
 			gsap.set(".large-only.vecteur--gauche path", {drawSVG: "0%"});
 			gsap.set("#lg-1", {drawSVG: "20%"});
-			gsap.set("#lg-2", {drawSVG: "3%"});
-			gsap.set("#lg-3", {drawSVG: "5%"});
-			gsap.set("#lg-4", {drawSVG: "15%"});
-			gsap.set("#lg-5", {drawSVG: "25%"});
-			gsap.set("#lg-6", {drawSVG: "50%"});
+			gsap.set("#lg-2", {drawSVG: "3%"});gsap.set("#lg-3", {drawSVG: "5%"});
+			gsap.set("#lg-4", {drawSVG: "15%"});gsap.set("#lg-5", {drawSVG: "25%"});
 			
-			//gsap.set("#lg-8", {drawSVG: "50%"});
+			//gsap.set(".lg-8-9", {drawSVG: "100%"});
 			
 			// ordi droite
 			gsap.set(".large-only.vecteur--droite path", {drawSVG: "3%"});
@@ -211,21 +208,17 @@ const PEnracinee = ({lang}) => {
 			gsap.to("#lg-2", {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { trigger: "#lg-2", start: "top 20%", end: "bottom 65%", scrub: 1}
-			});
-			
-			gsap.to("#lg-3", {
+			}); gsap.to("#lg-3", {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { trigger: "#lg-3", start: "top 20%", end: "bottom 45%", scrub: 1}
 			});
 			
 			gsap.to("#lg-4", {
 				drawSVG: "100%", ease: "none", 
-				scrollTrigger: { trigger: "#lg-4", start: "top 20%", end: "bottom 65%", scrub: 1}
-			});
-			
-			gsap.to("#lg-5", {
+				scrollTrigger: { trigger: "#lg-4", start: "top 10%", end: "bottom 75%", scrub: 1}
+			}); gsap.to("#lg-5", {
 				drawSVG: "100%", ease: "none", 
-				scrollTrigger: { trigger: "#lg-5", start: "top 20%", end: "bottom 55%", scrub: 1}
+				scrollTrigger: { trigger: "#lg-5", start: "top 10%", end: "bottom 80%", scrub: 1}
 			});
 			
 			gsap.to("#lg-6", {
@@ -238,9 +231,54 @@ const PEnracinee = ({lang}) => {
 				scrollTrigger: { trigger: "#lg-7", start: "top 20%", end: "bottom 75%", scrub: true}
 			});
 			
-			gsap.to("#lg-8", {
+			gsap.to(".lg-8-9", {
 				drawSVG: "100%", ease: "none", 
-				scrollTrigger: { trigger: "#lg-8", start: "top 20%", end: "bottom 75%", scrub: 1.3 }
+				scrollTrigger: { trigger: ".lg-8-9", start: "top 20%", end: "bottom 95%", scrub: 1}
+			});
+			
+			gsap.to("#lg-10", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-10", start: "top 20%", end: "bottom 75%", scrub: true}
+			});
+			
+			gsap.to(".lg-11-12", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-11", start: "top 20%", end: "bottom 95%", scrub: 1}
+			});
+			
+			gsap.to("#lg-13", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-13", start: "top 20%", end: "bottom 95%", scrub: 1}
+			});
+			
+			gsap.to("#lg-14", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-14", start: "top 20%", end: "bottom 65%", scrub: true}
+			});
+			
+			gsap.to(".lg-15-16", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-15", start: "top 20%", end: "bottom 75%", scrub: 1}
+			});
+			
+			gsap.to("#lg-17", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-17", start: "top 20%", end: "bottom 55%", scrub: true}
+			});
+			
+			gsap.to("#lg-18", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-18", start: "top 20%", end: "bottom 55%", scrub: true}
+			});
+			
+			gsap.to("#lg-19", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-19", start: "top 75%", end: "top 50%", scrub: true}
+			});
+			
+			gsap.to("#lg-20", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#lg-20", start: "top 75%", end: "top 30%", scrub: 1}
 			});
 			
 			// ordi droite	
