@@ -345,7 +345,7 @@ const PEnracinee = ({lang}) => {
 			
 			gsap.to("#ld-13", {
 				drawSVG: "100%", ease: "none", 
-				scrollTrigger: { trigger: "#ld-13", start: "top 40%", end: "bottom 70%", scrub: true, markers: true}
+				scrollTrigger: { trigger: "#ld-13", start: "top 40%", end: "bottom 70%", scrub: true}
 			});
 			
 			// mobile gauche
