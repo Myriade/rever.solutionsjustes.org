@@ -181,8 +181,8 @@ const PEnracinee = ({lang}) => {
 			
 			// ordi droite
 			gsap.set(".large-only.vecteur--droite path", {drawSVG: "0%"});
-			gsap.set("#ld-1", {drawSVG: "3%"});gsap.set("#ld-2", {drawSVG: "3%"});
-			//gsap.set("#ld-3", {drawSVG: "100%"});
+			gsap.set("#ld-1", {drawSVG: "3%"});
+			gsap.set("#ld-2", {drawSVG: "2.8%"});
 			
 			// Mobile
 			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%"});
@@ -208,7 +208,8 @@ const PEnracinee = ({lang}) => {
 			gsap.to("#lg-2", {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { trigger: "#lg-2", start: "top 20%", end: "bottom 65%", scrub: 1}
-			}); gsap.to("#lg-3", {
+			}); 
+			gsap.to("#lg-3", {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { trigger: "#lg-3", start: "top 20%", end: "bottom 45%", scrub: 1}
 			});
@@ -216,7 +217,8 @@ const PEnracinee = ({lang}) => {
 			gsap.to("#lg-4", {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { trigger: "#lg-4", start: "top 10%", end: "bottom 75%", scrub: 1}
-			}); gsap.to("#lg-5", {
+			}); 
+			gsap.to("#lg-5", {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { trigger: "#lg-5", start: "top 10%", end: "bottom 80%", scrub: 1}
 			});
@@ -285,9 +287,65 @@ const PEnracinee = ({lang}) => {
 			gsap.to("#ld-1", {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { trigger: "#ld-1", start: "top 20%", end: "bottom 65%", scrub: 1}
-			}); gsap.to("#ld-2", {
+			}); 
+			
+			gsap.to("#ld-2", {
 				drawSVG: "100%", ease: "none", 
-				scrollTrigger: { trigger: "#ld-2", start: "top 20%", end: "bottom 45%", scrub: 1}
+				scrollTrigger: { trigger: "#ld-2", start: "top 30%", end: "bottom 70%", scrub: 1}
+			});
+			
+			gsap.to("#ld-3", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-3", start: "top 30%", end: "bottom 70%", scrub: 1}
+			});
+			
+			gsap.to("#ld-4", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-4", start: "top 30%", end: "bottom 70%", scrub: 1}
+			});
+			
+			gsap.to("#ld-5", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-5", start: "top 30%", end: "bottom 40%", scrub: 1}
+			});
+			
+			gsap.to("#ld-6", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-6", start: "top 30%", end: "bottom 70%", scrub: 1}
+			});
+			gsap.to("#ld-7", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-6", start: "top 30%", end: "bottom 75%", scrub: true}
+			});
+			
+			gsap.to("#ld-8", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-8", start: "top 33%", end: "bottom 70%", scrub: 1}
+			});
+			
+			gsap.to("#ld-9", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-9", start: "top 40%", end: "bottom 70%", scrub: 1}
+			});
+			
+			gsap.to("#ld-10", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-10", start: "top 35%", end: "bottom 80%", scrub: true}
+			});
+			
+			gsap.to("#ld-11", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-11", start: "top 35%", end: "bottom 80%", scrub: 1}
+			});
+			
+			gsap.to("#ld-12", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-12", start: "top 30%", end: "bottom 80%", scrub: 1}
+			});
+			
+			gsap.to("#ld-13", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { trigger: "#ld-13", start: "top 40%", end: "bottom 70%", scrub: true, markers: true}
 			});
 			
 			// mobile gauche
@@ -315,6 +373,7 @@ const PEnracinee = ({lang}) => {
 			</Banniere>
 			
 			<ScrollCtnr ref={vecteursScopeRef}>
+			
 				<div className='vecteurs'>
 					<div className='large-only vecteur--gauche'>
 						<LierreOrdiGauche />
