@@ -158,7 +158,7 @@ const PEnracinee = ({lang}) => {
 	
 	if (lang === 'en') {
 		collection = 'Enracinee-En'
-		manualSort = ''
+		manualSort = '_manualSort_c53c7168-c1f4-4f95-bf5d-b132894b6c31'
 	}
 	
 	const fetchedData = useWixData(collection, manualSort, placeholderData);

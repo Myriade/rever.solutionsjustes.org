@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import styled from 'styled-components'
@@ -24,7 +24,9 @@ const Styled = styled.div`
 		transform: scale(0.85);
 		opacity: 0.5;
 		border-radius: 3px;
-		background: white;}
+		background: white;
+		
+		border: 1px solid var(--color-pourpre);}
 	
 	.text {
 		color: var(--color-pourpre);
@@ -34,6 +36,8 @@ const Styled = styled.div`
 		font-size: 2rem;
 		letter-spacing: 0.05em;
 		margin-bottom: 1em;}
+		
+	p { font-size: 1.2rem;}
 		
 		${media.desktopUp`
 			width: 55%;
@@ -49,7 +53,7 @@ const Styled = styled.div`
 					margin-left: unset;}}
 				
 			.text {
-				padding-left: 2%;
+				padding-left: 4%;
 				padding-right: 12.5%;}
 		`};
 `;
@@ -57,7 +61,9 @@ const Styled = styled.div`
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
+	const [hasParagraphs, setHasParagraphs] = useState(false);
 	const gsapScopeRef = useRef();
+	const paragraphes = useRef();
 	
 	// Charge en GraphQL toutes les images du répertoire images/enracinee
 	const data = useStaticQuery(graphql`
@@ -77,9 +83,16 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 	const image = data.allFile.nodes.find(node => node.name === imgFile);
 	const imageData = getImage(image.childImageSharp.gatsbyImageData);
 	
+	// Check if paragraphs exist (more than one)
+	useEffect( ()=>{
+		if (paragraphes.current.childNodes.length > 1) {
+		  setHasParagraphs(true)
+		}
+	},[])
+	
 	// Animations et scroll avec GSAP
 	useGSAP(() => {
-		if (imageData && texts) {
+		if (hasParagraphs && imageData && texts) {
 			// Content zoom in & alpha
 			gsap.to('.content', {
 				scrollTrigger: {
@@ -129,7 +142,7 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 				autoAlpha: 0,
 			});
 		}
-	},{ scope: gsapScopeRef, dependencies: [imageData, texts] });
+	},{ scope: gsapScopeRef, dependencies: [hasParagraphs, imageData, texts] });
 	
 	return (
 		<Styled 
@@ -149,7 +162,7 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 				<div className='text'>
 					<h2>{texts ? texts.title : '...'}</h2>
 					{texts ? 
-						<div className='paragraphs' dangerouslySetInnerHTML={{ __html: texts.texte }}/>
+						<div className='paragraphs' dangerouslySetInnerHTML={{ __html: texts.texte }} ref={paragraphes}/>
 						: <div className='paragraphs'><p>...</p><p></p></div>
 					}
 				</div>
