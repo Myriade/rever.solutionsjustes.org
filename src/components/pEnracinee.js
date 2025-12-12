@@ -46,7 +46,9 @@ const Video = styled.div`
 `;
 
 const Chapitres = styled.section`
-	
+	> div {
+		margin-inline: 0; 
+		max-width: unset;}
 	${media.desktopUp`
 		padding-top: 0 !important;
 		.chapitre--modelB {
@@ -499,7 +501,7 @@ const PEnracinee = ({lang}) => {
 				</div>
 			
 				<Chapitres id='chapitres' ref={contentRef}>
-					<div style={{marginInline: '0', maxWidth: 'unset'}}>
+					<div>
 						<Video>
 							<div className='set-height'></div>
 							<p><i>[Vidéo]</i></p>

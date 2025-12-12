@@ -13,6 +13,24 @@ const Styled = styled.div`
 	margin-inline: auto;
 	margin-bottom: 10vh;
 	
+	.illustration {
+		position: relative;
+		padding: 15px;
+		&::after {
+			content: url("/images/enracinee/v1-c5d4cb.svg");
+			position: absolute;
+			inset: -5px -2px 0 -2px;}}
+	
+	&#chapitre2 .illustration::after {
+		content: url("/images/enracinee/v2-769379.svg");}
+	&#chapitre3 .illustration::after {
+		content: url("/images/enracinee/v3-49766d.svg");}
+	&#chapitre4 .illustration::after,
+	&#chapitre6 .illustration::after {
+		content: url("/images/enracinee/v4-2a4242.svg");}
+	&#chapitre5 .illustration::after {
+		content: url("/images/enracinee/v5-0c1a21.svg");}
+	
 	&.chapitre--right .illustration {
 		margin-right: -10%;}
 	
@@ -25,12 +43,13 @@ const Styled = styled.div`
 		opacity: 0.5;
 		border-radius: 3px;
 		background: white;
-		
 		border: 1px solid var(--color-pourpre);}
 	
 	.text {
 		color: var(--color-pourpre);
-		margin-top: 5vh;}
+		margin-top: 5vh;
+		padding-left: 4%;
+		padding-right: 12.5%;}
 		
 	h2 {
 		font-size: 2rem;
@@ -39,23 +58,22 @@ const Styled = styled.div`
 		
 	p { font-size: 1.2rem;}
 		
-		${media.desktopUp`
-			width: 55%;
-					
-			&.chapitre--right {
-				margin-inline: 30% 15%;
-				.illustration {
-					margin-right: unset;}}
-			
-			&.chapitre--left {
-				margin-inline: 15% 30%;
-				.illustration {
-					margin-left: unset;}}
+	${media.desktopUp`
+		width: 55%;
+		
+		.illustration {
+			padding: 30px;}
 				
-			.text {
-				padding-left: 4%;
-				padding-right: 12.5%;}
-		`};
+		&.chapitre--right {
+			margin-inline: 30% 15%;
+			.illustration {
+				margin-right: unset;}}
+		
+		&.chapitre--left {
+			margin-inline: 15% 30%;
+			.illustration {
+				margin-left: unset;}}
+	`};
 `;
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
