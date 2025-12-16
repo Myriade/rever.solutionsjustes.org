@@ -78,7 +78,7 @@ const Styled = styled.div`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
+const Chapitre = ({ id, lang, imgFile, texts, color, model, rendered, onRenderChange }) => {
 	const [hasParagraphs, setHasParagraphs] = useState(false);
 	const gsapScopeRef = useRef();
 	const paragraphes = useRef();
@@ -103,10 +103,21 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model }) => {
 	
 	// Check if paragraphs exist (more than one)
 	useEffect( ()=>{
-		if (paragraphes.current.childNodes.length > 1) {
+		if (!hasParagraphs && paragraphes.current.childNodes.length > 1) {
 		  setHasParagraphs(true)
 		}
-	},[])
+	},[hasParagraphs])
+	
+	// Sends 
+	useEffect( ()=>{
+		if (typeof rendered === 'number' && hasParagraphs && imageData) {
+			if (rendered === 5) {
+				setTimeout(() => {
+					onRenderChange(true)
+				}, 500);
+			}
+		}
+	},[rendered, hasParagraphs, imageData, onRenderChange])
 	
 	// Animations et scroll avec GSAP
 	useGSAP(() => {

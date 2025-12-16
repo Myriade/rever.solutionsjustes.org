@@ -138,6 +138,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
 const PEnracinee = ({lang}) => {
 	const [wixData, setWixData] = useState()
+	const [chapitreRendered, setChapitreRendered] = useState();
 	//const [shareTooltipOn, setShareTooltipOn] = useState(false)
 	
 	const vecteursScopeRef = useRef()
@@ -173,7 +174,7 @@ const PEnracinee = ({lang}) => {
 	
 	// GSAP Setup de depart
 	useGSAP(() => {
-		if (wixData && wixData.length >= 6 ) {
+		if (wixData && wixData.length >= 6 && chapitreRendered ) {
 			
 			// Tous
 			gsap.to(".vecteurs", {
@@ -203,11 +204,11 @@ const PEnracinee = ({lang}) => {
 			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%"});
 			
 		}
-	},{ scope: vecteursScopeRef, dependencies: [wixData] });
+	},{ scope: vecteursScopeRef, dependencies: [wixData, chapitreRendered] });
 	
 	// Animation vecteurs au scroll
 	useGSAP(() => {
-		if (wixData && wixData.length >= 6) {
+		if (wixData && wixData.length >= 6 && chapitreRendered) {
 			
 			const enterTween = { autoAlpha: 1, duration: 0.5, ease: 'none' }
 			const leaveBackTween = { autoAlpha: 0, duration: 0.5, ease: 'none' }
@@ -474,7 +475,7 @@ const PEnracinee = ({lang}) => {
 				}
 			});
 		}
-	}, { scope: vecteursScopeRef, dependencies: [wixData], })
+	}, { scope: vecteursScopeRef, dependencies: [wixData, chapitreRendered], })
 	
 	return (
 		<>
@@ -522,7 +523,8 @@ const PEnracinee = ({lang}) => {
 								lang={lang}
 								imgFile='temp-gen2'
 								texts={wixData[0].data}
-								model='right'
+								model='right' 
+								rendered={0}
 							/>
 								
 							<Chapitre
@@ -530,7 +532,8 @@ const PEnracinee = ({lang}) => {
 								lang={lang}
 								imgFile='temp-gen'
 								texts={wixData[1].data}
-								model='left'
+								model='left' 
+								rendered={1}
 							/>
 							
 							<Chapitre
@@ -538,7 +541,8 @@ const PEnracinee = ({lang}) => {
 								lang={lang}
 								imgFile='temp-gen'
 								texts={wixData[2].data}
-								model='right'
+								model='right' 
+								rendered={2}
 							/>
 							
 							<Chapitre
@@ -546,7 +550,8 @@ const PEnracinee = ({lang}) => {
 								lang={lang}
 								imgFile='temp-gen2'
 								texts={wixData[3].data}
-								model='left'
+								model='left' 
+								rendered={3}
 							/>
 							
 							<Chapitre
@@ -554,7 +559,8 @@ const PEnracinee = ({lang}) => {
 								lang={lang}
 								imgFile='temp-gen'
 								texts={wixData[4].data}
-								model='right'
+								model='right' 
+								rendered={4}
 							/>
 							
 							<Chapitre
@@ -563,6 +569,8 @@ const PEnracinee = ({lang}) => {
 								imgFile='temp-gen2'
 								texts={wixData[5].data}
 								model='left'
+								rendered={5}
+								onRenderChange={setChapitreRendered}
 							/>
 						</> : <p>... {localisedText[lang].chargement}</p>}
 					</div>
