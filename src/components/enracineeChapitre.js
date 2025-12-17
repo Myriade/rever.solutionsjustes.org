@@ -67,6 +67,16 @@ const Styled = styled.div`
 		color: var(--color-pourpre);
 		padding-left: 4%;
 		padding-right: 12.5%;}
+	
+	button.readmore {
+		text-transform: uppercase;
+		color: var(--color-pourpre);
+		border: 1px solid var(--color-pourpre);
+		background: rgba(255, 188, 82, 0.3);
+		padding: 0.5em 1em;
+		border-radius: var(--border-radius);
+		&:hover {
+			cursor: pointer;}}
 		
 	h2 {
 		font-size: 1.75rem;
@@ -101,7 +111,7 @@ const Styled = styled.div`
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const Chapitre = ({ id, lang, imgFile, texts, color, model, rendered, onRenderChange }) => {
+const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered, onRenderChange }) => {
 	const [hasParagraphs, setHasParagraphs] = useState(false);
 	const gsapScopeRef = useRef();
 	const paragraphes = useRef();
@@ -131,7 +141,7 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, rendered, onRenderCh
 		}
 	},[hasParagraphs])
 	
-	// Sends 
+	// Sends render State to Parent component
 	useEffect( ()=>{
 		if (typeof rendered === 'number' && hasParagraphs && imageData) {
 			if (rendered === 5) {
@@ -196,6 +206,13 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, rendered, onRenderCh
 		}
 	},{ scope: gsapScopeRef, dependencies: [hasParagraphs, imageData, texts] });
 	
+	// Event Handler
+	const { contextSafe } = useGSAP({ scope: gsapScopeRef });
+	const readmoreClickHandler = contextSafe( id => {
+		console.log('readmore clicked')
+		gsap.to( window, { duration: 3, scrollTo: { y: `#${id}`, offsetY: -50 }});
+	});
+	
 	return (
 		<Styled 
 			className={`chapitre ${color} chapitre--${model}`} 
@@ -229,6 +246,14 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, rendered, onRenderCh
 						<div className='paragraphs' dangerouslySetInnerHTML={{ __html: texts.texte }} ref={paragraphes}/>
 						: <div className='paragraphs'><p>...</p><p></p></div>
 					}
+					{readMoreId ? 
+						<button
+							className='readmore'
+							onClick={() => readmoreClickHandler(readMoreId)}
+						>
+							Lire la suite
+						</button>
+					: ''}
 				</div>
 			</div>
 		</Styled>

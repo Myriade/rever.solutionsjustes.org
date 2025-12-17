@@ -83,7 +83,10 @@ const ScrollCtnr = styled.section`
 		padding-top: 0 !important;
 		display: flex;
 		justify-content: space-between;
-		align-items: stretch;}
+		align-items: stretch;
+		&:last-child {
+			z-index: 40;
+		}}
 		
 	svg {
 		position: absolute;
@@ -134,16 +137,18 @@ const ScrollCtnr = styled.section`
 			&.vecteur--gauche {
 				width: 35%;}
 			&.vecteur--droite {
-				width: 35%;}}
+				width: 35%;
+				z-index: 40;}}
 		
 		button.shortcut {
 			position: absolute;
 			z-index: 46;
 			inset: 30rem 10rem auto auto;
+			text-transform: uppercase;
 			color: var(--color-pourpre);
 			border: 2px solid var(--color-pourpre);
 			font-weight: bold;
-			width: 15ch;
+			width: 19ch;
 			text-align: center;
 			background: rgba(255, 188, 82, 0.8);
 			padding: 1em 2em;
@@ -530,6 +535,7 @@ const PEnracinee = ({lang}) => {
 				</button>
 			
 				<div className='vecteurs'>
+				
 					<div className='large-only vecteur--gauche'>
 						<LierreOrdiGauche />
 					</div>
@@ -540,6 +546,18 @@ const PEnracinee = ({lang}) => {
 						</svg>
 					</div>
 					<div className='small-only vecteur--ghost'></div>
+					
+					<div className='large-only vecteur--ghost'></div>
+					<div className='large-only vecteur--droite'>
+						<LierreOrdiDroit />
+					</div>
+					<div className='small-only vecteur--ghost'></div>
+					<div className='small-only vecteur--droite'>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.75 1196">
+							<path className="cls-1" d="M64.75,0v1196S1.06,1018.85.75,957C-.25,758-.25,415,.75,153,.91,111.54,64.75,0,64.75,0Z"/>
+						</svg>
+					</div>
+					
 				</div>
 			
 				<Chapitres id='chapitres' ref={contentRef}>
@@ -561,6 +579,7 @@ const PEnracinee = ({lang}) => {
 						{ wixData && wixData.length >= 6 ? <>
 							<Chapitre
 								id='chapitre1'
+								readMoreId='chapitre2' 
 								lang={lang}
 								imgFile='temp-gen2'
 								texts={wixData[0].data}
@@ -570,6 +589,7 @@ const PEnracinee = ({lang}) => {
 								
 							<Chapitre
 								id='chapitre2'
+								readMoreId='chapitre3' 
 								lang={lang}
 								imgFile='temp-gen'
 								texts={wixData[1].data}
@@ -579,6 +599,7 @@ const PEnracinee = ({lang}) => {
 							
 							<Chapitre
 								id='chapitre3'
+								readMoreId='chapitre4' 
 								lang={lang}
 								imgFile='temp-gen'
 								texts={wixData[2].data}
@@ -588,6 +609,7 @@ const PEnracinee = ({lang}) => {
 							
 							<Chapitre
 								id='chapitre4'
+								readMoreId='chapitre5' 
 								lang={lang}
 								imgFile='temp-gen2'
 								texts={wixData[3].data}
@@ -597,6 +619,7 @@ const PEnracinee = ({lang}) => {
 							
 							<Chapitre
 								id='chapitre5'
+								readMoreId='chapitre6' 
 								lang={lang}
 								imgFile='temp-gen'
 								texts={wixData[4].data}
@@ -616,19 +639,6 @@ const PEnracinee = ({lang}) => {
 						</> : <p>... {localisedText[lang].chargement}</p>}
 					</div>
 				</Chapitres>
-				
-				<div className='vecteurs'>
-					<div className='large-only vecteur--ghost'></div>
-					<div className='large-only vecteur--droite'>
-						<LierreOrdiDroit />
-					</div>
-					<div className='small-only vecteur--ghost'></div>
-					<div className='small-only vecteur--droite'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.75 1196">
-							<path className="cls-1" d="M64.75,0v1196S1.06,1018.85.75,957C-.25,758-.25,415,.75,153,.91,111.54,64.75,0,64.75,0Z"/>
-						</svg>
-					</div>
-				</div>
 				
 			</ScrollCtnr>
 			
