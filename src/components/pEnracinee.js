@@ -147,7 +147,9 @@ const ScrollCtnr = styled.section`
 			text-align: center;
 			background: rgba(255, 188, 82, 0.8);
 			padding: 1em 2em;
-			border-radius: var(--border-radius);}
+			border-radius: var(--border-radius);
+			&:hover {
+				cursor: pointer;}}
 	`}
 `
 

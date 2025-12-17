@@ -63,7 +63,7 @@ const Styled = styled.div`
 		border: 1px solid var(--color-pourpre);}
 	
 	.text {
-		margin-top: 1em;
+		margin-block: 1em;
 		color: var(--color-pourpre);
 		padding-left: 4%;
 		padding-right: 12.5%;}
@@ -92,7 +92,7 @@ const Styled = styled.div`
 				margin-left: unset;}}
 				
 		.text {
-			margin-top: 2.5em;}
+			margin-block: 2.5em;}
 		
 		h2 {
 			font-size: 2rem;}
