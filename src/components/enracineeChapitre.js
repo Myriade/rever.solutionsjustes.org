@@ -137,7 +137,9 @@ const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered
 	// Check if paragraphs exist (more than one)
 	useEffect( ()=>{
 		if (!hasParagraphs && paragraphes.current.childNodes.length > 1) {
-		  setHasParagraphs(true)
+			setTimeout(() => {
+		  	setHasParagraphs(true)
+			}, 250);
 		}
 	},[hasParagraphs])
 	
@@ -145,9 +147,7 @@ const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered
 	useEffect( ()=>{
 		if (typeof rendered === 'number' && hasParagraphs && imageData) {
 			if (rendered === 5) {
-				setTimeout(() => {
-					onRenderChange(true)
-				}, 500);
+				onRenderChange(true)
 			}
 		}
 	},[rendered, hasParagraphs, imageData, onRenderChange])
@@ -155,6 +155,7 @@ const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered
 	// Animations et scroll avec GSAP
 	useGSAP(() => {
 		if (hasParagraphs && imageData && texts) {
+			
 			// Content zoom in & alpha
 			gsap.to('.content', {
 				scrollTrigger: {
