@@ -13,7 +13,9 @@ import LierreOrdiDroit from '../images/enracinee/lierre-ordi-droit.js'
 import LierreOrdiGauche from '../images/enracinee/lierre-ordi-gauche.js'
 
 const Banniere = styled.section`
-	background: white;
+	position: relative;
+	z-index: 45;
+	background: #eee;
 	width: 100%;
 	height: 20vh;
 	padding: initial !important;
@@ -64,6 +66,14 @@ const Chapitres = styled.section`
 `;
 
 const ScrollCtnr = styled.section`
+	&::before {
+		content: "";
+		background: url("/images/enracinee/fond-texture-gris.png") no-repeat fixed 0 bottom;
+		background-size: 100% 100%;
+		width: 100%;
+		position: absolute;
+		inset: 0 0 0 0;}
+	
 	.vecteurs {
 		opacity: 0;
 		position: absolute;
@@ -110,6 +120,9 @@ const ScrollCtnr = styled.section`
 				fill: #c8eb9b;}}}
 		
 	${media.desktopUp`
+		&::before {
+			background-size: 100% auto;}
+		
 		.small-only {
 			display: none;}
 			
@@ -122,6 +135,16 @@ const ScrollCtnr = styled.section`
 				width: 35%;}
 			&.vecteur--droite {
 				width: 35%;}}
+		
+		.vecteurs:first-child::after {
+			content: "Lire le récit de Hana ↓";
+			position: absolute;
+			inset: 30vh 5vw auto auto;
+			color: var(--color-pourpre);
+			font-weight: bold;
+			width: 15ch;
+			text-align: center;
+		}
 	`}
 `
 
