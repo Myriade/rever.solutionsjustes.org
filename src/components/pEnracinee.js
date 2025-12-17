@@ -581,7 +581,7 @@ const PEnracinee = ({lang}) => {
 								id='chapitre1'
 								readMoreId='chapitre2' 
 								lang={lang}
-								imgFile='temp-gen2'
+								imgFile='chapitre1'
 								texts={wixData[0].data}
 								model='right' 
 								rendered={0}
@@ -591,7 +591,7 @@ const PEnracinee = ({lang}) => {
 								id='chapitre2'
 								readMoreId='chapitre3' 
 								lang={lang}
-								imgFile='temp-gen'
+								imgFile='chapitre2'
 								texts={wixData[1].data}
 								model='left' 
 								rendered={1}
@@ -601,7 +601,7 @@ const PEnracinee = ({lang}) => {
 								id='chapitre3'
 								readMoreId='chapitre4' 
 								lang={lang}
-								imgFile='temp-gen'
+								imgFile='chapitre3'
 								texts={wixData[2].data}
 								model='right' 
 								rendered={2}
@@ -611,7 +611,7 @@ const PEnracinee = ({lang}) => {
 								id='chapitre4'
 								readMoreId='chapitre5' 
 								lang={lang}
-								imgFile='temp-gen2'
+								imgFile='chapitre4'
 								texts={wixData[3].data}
 								model='left' 
 								rendered={3}
@@ -621,7 +621,7 @@ const PEnracinee = ({lang}) => {
 								id='chapitre5'
 								readMoreId='chapitre6' 
 								lang={lang}
-								imgFile='temp-gen'
+								imgFile='chapitre5'
 								texts={wixData[4].data}
 								model='right' 
 								rendered={4}
@@ -630,7 +630,7 @@ const PEnracinee = ({lang}) => {
 							<Chapitre
 								id='chapitre6'
 								lang={lang}
-								imgFile='temp-gen2'
+								imgFile='chapitre6'
 								texts={wixData[5].data}
 								model='left'
 								rendered={5}
