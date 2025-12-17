@@ -8,6 +8,7 @@ import useWixData from '../utils/useWixData'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 
 import LierreOrdiDroit from '../images/enracinee/lierre-ordi-droit.js'
 import LierreOrdiGauche from '../images/enracinee/lierre-ordi-gauche.js'
@@ -28,7 +29,6 @@ const Banniere = styled.section`
 `;
 
 const Video = styled.div`
-	width: 80%;
 	display: flex;
 	background: lightgrey;
 	margin-bottom: 10vh;	
@@ -136,15 +136,18 @@ const ScrollCtnr = styled.section`
 			&.vecteur--droite {
 				width: 35%;}}
 		
-		.vecteurs:first-child::after {
-			content: "Lire le récit de Hana ↓";
+		button.shortcut {
 			position: absolute;
-			inset: 30vh 5vw auto auto;
+			z-index: 46;
+			inset: 30rem 10rem auto auto;
 			color: var(--color-pourpre);
+			border: 2px solid var(--color-pourpre);
 			font-weight: bold;
 			width: 15ch;
 			text-align: center;
-		}
+			background: rgba(255, 188, 82, 0.8);
+			padding: 1em 2em;
+			border-radius: var(--border-radius);}
 	`}
 `
 
@@ -157,7 +160,7 @@ const localisedText = {
 	}
 }
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, DrawSVGPlugin);
 
 const PEnracinee = ({lang}) => {
 	const [wixData, setWixData] = useState()
@@ -194,6 +197,12 @@ const PEnracinee = ({lang}) => {
 			setWixData(fetchedData)
 		}
 	}
+	
+	// Event Handler
+	const { contextSafe } = useGSAP({ scope: vecteursScopeRef });
+	const shortcutClickHandler = contextSafe(() => {
+		gsap.to( window, { duration: 4, scrollTo: { y: '#recit', offsetY: -700 }});
+	});
 	
 	// GSAP Setup de depart
 	useGSAP(() => {
@@ -509,7 +518,14 @@ const PEnracinee = ({lang}) => {
 				</div>
 			</Banniere>
 			
-			<ScrollCtnr ref={vecteursScopeRef}>
+			<ScrollCtnr id='recit' ref={vecteursScopeRef}>
+			
+				<button
+					className='shortcut large-only'
+					onClick={shortcutClickHandler}
+				>
+					Lire le récit de Hana ↓
+				</button>
 			
 				<div className='vecteurs'>
 					<div className='large-only vecteur--gauche'>

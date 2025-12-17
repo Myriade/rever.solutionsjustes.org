@@ -15,21 +15,38 @@ const Styled = styled.div`
 	
 	.illustration {
 		position: relative;
-		padding: 15px;
-		&::after {
-			content: url("/images/enracinee/v1-c5d4cb.svg");
-			position: absolute;
-			inset: -5px -2px 0 -2px;}}
+		padding: 15px;}
+		
+	.cadre {
+		position: absolute;
+		inset: -5px -2px 0 -2px;
+		.cadre--path {
+			fill: #c1caaf;}
+		.contour {
+			fill: none;
+			stroke: #191a16;
+			stroke-miterlimit: 10;
+			stroke-width: 4px;}
+		.coins {
+			fill:#191a16;}}
 	
-	&#chapitre2 .illustration::after {
-		content: url("/images/enracinee/v2-769379.svg");}
-	&#chapitre3 .illustration::after {
-		content: url("/images/enracinee/v3-49766d.svg");}
-	&#chapitre4 .illustration::after,
-	&#chapitre6 .illustration::after {
-		content: url("/images/enracinee/v4-2a4242.svg");}
-	&#chapitre5 .illustration::after {
-		content: url("/images/enracinee/v5-0c1a21.svg");}
+	&#chapitre2 .cadre--path {
+		fill: #467251;}
+		
+	&#chapitre3 .cadre--path {
+		fill: #2E5E45;}
+		
+	&#chapitre4 .cadre--path,
+	&#chapitre6 .cadre--path {
+		fill: #154939;}
+		
+	&#chapitre5 {
+		.cadre--path {
+			fill: #191a16;}
+		.coins {
+			fill: #ddc99d;}
+		.contour {
+			stroke: #ddc99d;}}
 	
 	&.chapitre--right .illustration {
 		margin-right: -10%;}
@@ -46,13 +63,13 @@ const Styled = styled.div`
 		border: 1px solid var(--color-pourpre);}
 	
 	.text {
+		margin-top: 1em;
 		color: var(--color-pourpre);
-		margin-top: 5vh;
 		padding-left: 4%;
 		padding-right: 12.5%;}
 		
 	h2 {
-		font-size: 2rem;
+		font-size: 1.75rem;
 		letter-spacing: 0.05em;
 		margin-bottom: 1em;}
 		
@@ -73,6 +90,12 @@ const Styled = styled.div`
 			margin-inline: 15% 30%;
 			.illustration {
 				margin-left: unset;}}
+				
+		.text {
+			margin-top: 2.5em;}
+		
+		h2 {
+			font-size: 2rem;}
 	`};
 `;
 
@@ -186,6 +209,18 @@ const Chapitre = ({ id, lang, imgFile, texts, color, model, rendered, onRenderCh
 							image={imageData} 
 							alt={id} 
 						/>
+						<svg className='cadre' data-name="Calque 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 742.3 419.64">
+							<g id="Calque_1-2" data-name="Calque 1">
+								<path className="cadre--path" d="M700.3,42v335.64H42V42h658.3M742.3,0H0v419.64h742.3V0h0Z"/>
+								<rect className="contour" x="42.15" y="42.58" width="658.06" height="334.78"/>
+								<g>
+									<path className="coins" d="M14.13,15.81c5.96,3.53,11.13,7.98,16.12,12.7,4.92,4.78,9.58,9.77,13.35,15.58-5.96-3.53-11.13-7.97-16.12-12.7-4.92-4.79-9.57-9.77-13.35-15.58h0Z"/>
+									<path className="coins" d="M728.8,15.81c-3.78,5.81-8.43,10.79-13.35,15.58-4.98,4.72-10.15,9.17-16.12,12.7,3.77-5.81,8.43-10.8,13.35-15.58,4.99-4.72,10.16-9.16,16.12-12.7h0Z"/>
+									<path className="coins" d="M728.8,404.23c-5.96-3.53-11.13-7.98-16.12-12.7-4.92-4.78-9.58-9.77-13.35-15.58,5.96,3.53,11.13,7.97,16.12,12.7,4.92,4.79,9.57,9.77,13.35,15.58h0Z"/>
+									<path className="coins" d="M14.13,404.23c3.78-5.81,8.43-10.79,13.35-15.58,4.98-4.72,10.15-9.17,16.12-12.7-3.77,5.81-8.43,10.8-13.35,15.58-4.99,4.72-10.16,9.16-16.12,12.7h0Z"/>
+								</g>
+							</g>
+						</svg>
 					</div>
 				}
 				<div className='text'>
