@@ -72,13 +72,19 @@ const ScrollCtnr = styled.section`
 		background-size: 100% 100%;
 		width: 100%;
 		position: absolute;
-		inset: 0 0 0 0;}
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;}
 	
 	.vecteurs {
 		opacity: 0;
 		position: absolute;
 		width: 100%;
-		inset: 20vh 0;
+		top: 20vh;
+		right: 0;
+		bottom: 20vh;
+		left: 0;
 		margin: auto;
 		padding-top: 0 !important;
 		display: flex;
@@ -90,7 +96,10 @@ const ScrollCtnr = styled.section`
 		
 	svg {
 		position: absolute;
-		inset: 0 0;}
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;}
 	
 	path {
 		fill: none;
@@ -118,7 +127,10 @@ const ScrollCtnr = styled.section`
 			svg {
 				position: fixed;
 				height: 90vh;
-				inset: auto 0 0 auto;}
+				top: auto;
+				right: 0;
+				bottom: 0;
+				left: auto;}
 			path {
 				fill: #c8eb9b;}}}
 		
@@ -143,7 +155,8 @@ const ScrollCtnr = styled.section`
 		button.shortcut {
 			position: absolute;
 			z-index: 46;
-			inset: 30rem 10rem auto auto;
+			top: 30rem;
+			right: 10rem;
 			text-transform: uppercase;
 			color: var(--color-pourpre);
 			border: 2px solid var(--color-pourpre);

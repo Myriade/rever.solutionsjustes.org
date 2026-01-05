@@ -19,7 +19,10 @@ const Styled = styled.div`
 		
 	.cadre {
 		position: absolute;
-		inset: -5px -2px 0 -2px;
+		top: -5px;
+		right: -2px;
+		bottom: 0;
+		left: -2px;
 		.cadre--path {
 			fill: #c1caaf;}
 		.contour {
