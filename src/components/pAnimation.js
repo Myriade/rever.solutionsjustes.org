@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import { useGSAP } from '@gsap/react'
 
-import LiereTest from '../images/enracinee/LiereTest.js'
+import LiereTest from '../images/enraciner/LiereTest.js'
 
 const Styled = styled.section`
 	background: white;

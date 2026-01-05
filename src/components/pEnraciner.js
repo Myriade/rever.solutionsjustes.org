@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from "react"
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
-import Chapitre from './enracineeChapitre'
+import Chapitre from './enracinerChapitre'
 
 import useWixData from '../utils/useWixData'
 import { gsap } from 'gsap'
@@ -10,8 +10,8 @@ import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 
-import LierreOrdiDroit from '../images/enracinee/lierre-ordi-droit.js'
-import LierreOrdiGauche from '../images/enracinee/lierre-ordi-gauche.js'
+import LierreOrdiDroit from '../images/enraciner/lierre-ordi-droit.js'
+import LierreOrdiGauche from '../images/enraciner/lierre-ordi-gauche.js'
 
 const Banniere = styled.section`
 	position: relative;
@@ -68,7 +68,7 @@ const Chapitres = styled.section`
 const ScrollCtnr = styled.section`
 	&::before {
 		content: "";
-		background: url("/images/enracinee/fond-texture-gris.png") no-repeat fixed 0 bottom;
+		background: url("/images/enraciner/fond-texture-gris.png") no-repeat fixed 0 bottom;
 		background-size: 100% 100%;
 		width: 100%;
 		position: absolute;
@@ -182,7 +182,7 @@ const localisedText = {
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, DrawSVGPlugin);
 
-const PEnracinee = ({lang}) => {
+const PEnraciner = ({lang}) => {
 	const [wixData, setWixData] = useState()
 	const [chapitreRendered, setChapitreRendered] = useState();
 	//const [shareTooltipOn, setShareTooltipOn] = useState(false)
@@ -666,4 +666,4 @@ const PEnracinee = ({lang}) => {
 	)
 }
 
-export default PEnracinee
+export default PEnraciner

@@ -1,16 +1,16 @@
 import React, {useState} from 'react'
 import PageLayout from '../layouts/pageLayout'
-import PEnracinee from '../components/pEnracinee'
+import PEnraciner from '../components/pEnraciner'
 
 const Page = () => {
   
   return (
     <PageLayout 
-      lang='en' 
-      i18nLink='/enracinee'
+      lang='fr' 
+      i18nLink='/en/enraciner'
     >
-      <PEnracinee 
-        lang='en'
+      <PEnraciner 
+        lang='fr'
       />
     </PageLayout>
   )
@@ -28,7 +28,7 @@ export const Head = () => (
     <meta property='og:description' content='' />
     <meta property='og:image' content='' />
     <meta property='og:image:alt' content='' />
-    <meta property='og:url' content='https://rever.solutionsjustes.org/enracinee' />
+    <meta property='og:url' content='https://rever.solutionsjustes.org/enraciner' />
     <meta property='og:type' content='website' />
   </>
 );

@@ -119,10 +119,10 @@ const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered
 	const gsapScopeRef = useRef();
 	const paragraphes = useRef();
 	
-	// Charge en GraphQL toutes les images du répertoire images/enracinee
+	// Charge en GraphQL toutes les images du répertoire images/enraciner
 	const data = useStaticQuery(graphql`
 		query { 
-			allFile(filter: {sourceInstanceName: {eq: "images"}, relativeDirectory: {eq: "enracinee"}}) {
+			allFile(filter: {sourceInstanceName: {eq: "images"}, relativeDirectory: {eq: "enraciner"}}) {
 				nodes {
 					childImageSharp {
 						gatsbyImageData(layout: CONSTRAINED)
