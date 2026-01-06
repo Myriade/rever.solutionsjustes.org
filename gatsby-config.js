@@ -18,7 +18,15 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     }, 
-    "gatsby-plugin-sass", 
+    {
+      resolve: "gatsby-plugin-sass",
+      options: {
+        sassOptions: {
+          outputStyle: "expanded",
+          sourceMap: true,
+        },
+      },
+    },
     "gatsby-plugin-sitemap", {
       resolve: 'gatsby-plugin-manifest',
       options: {
