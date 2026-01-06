@@ -20,6 +20,7 @@ const Styled = styled.div`
 	.cadre {
 		position: absolute;
 		inset: -5px -2px 0 -2px;
+		width: calc(100% + 4px);
 		.cadre--path {
 			fill: #c1caaf;}
 		.contour {
@@ -29,13 +30,6 @@ const Styled = styled.div`
 			stroke-width: 4px;}
 		.coins {
 			fill:#191a16;}}
-			
-	@supports not (inset: 0) {
-		.cadre {
-			top: -5px;
-			right: -2px;
-			bottom: 0;
-			left: -2px;}}
 	
 	&#chapitre2 .cadre--path {
 		fill: #467251;}
