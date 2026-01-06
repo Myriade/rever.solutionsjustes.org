@@ -1,6 +1,6 @@
 {
   "name": "Rêver à l'essentiel",
-  "version": "2.4",
+  "version": "2.4.1",
   "private": true,
   "description": "Microsite de campagne pour Solutions Justes / MCM",
   "author": "Myriam Bizier / Myriade Web",
@@ -27,7 +27,7 @@
     "gatsby-plugin-i18n": "^1.0.1",
     "gatsby-plugin-image": "^3.13.1",
     "gatsby-plugin-manifest": "^5.13.1",
-    "gatsby-plugin-sass": "^6.13.1",
+    "gatsby-plugin-sass": "^6.15.0",
     "gatsby-plugin-sharp": "^5.13.1",
     "gatsby-plugin-sitemap": "^6.13.1",
     "gatsby-plugin-styled-components": "^6.13.1",
