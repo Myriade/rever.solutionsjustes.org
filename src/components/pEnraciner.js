@@ -72,10 +72,16 @@ const ScrollCtnr = styled.section`
 		background-size: 100% 100%;
 		width: 100%;
 		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;}
+		inset: 0;}
+		
+	@supports not (inset: 0) {
+		&::before {
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+		}
+	}
 	
 	.vecteurs {
 		opacity: 0;
@@ -96,10 +102,7 @@ const ScrollCtnr = styled.section`
 		
 	svg {
 		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;}
+		inset: 0;}
 	
 	path {
 		fill: none;
@@ -127,12 +130,23 @@ const ScrollCtnr = styled.section`
 			svg {
 				position: fixed;
 				height: 90vh;
-				top: auto;
-				right: 0;
-				bottom: 0;
-				left: auto;}
+				inset: auto 0 0 auto;}
 			path {
 				fill: #c8eb9b;}}}
+				
+	@supports not (inset: 0) {
+		.svg {
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;}
+		.small-only.vecteur--droite {
+			top: auto;
+			right: 0;
+			bottom: 0;
+			left: auto;
+		}
+	}
 		
 	${media.desktopUp`
 		&::before {
