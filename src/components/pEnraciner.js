@@ -66,22 +66,18 @@ const Chapitres = styled.section`
 `;
 
 const ScrollCtnr = styled.section`
+	position: relative;
 	&::before {
 		content: "";
-		background: url("/images/enraciner/fond-texture-gris.png") no-repeat fixed 0 bottom;
-		background-size: 100% 100%;
+		background: url("/images/enraciner/fond-texture-gris.png") no-repeat;
+		position: fixed;
+		bottom: 0;
+		left: 0;
 		width: 100%;
-		position: absolute;
-		inset: 0;}
-		
-	@supports not (inset: 0) {
-		&::before {
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-		}
-	}
+		height: 100vh;
+		background-size: 100% auto;
+		background-position: center bottom;
+		z-index: -1;}
 	
 	.vecteurs {
 		opacity: 0;
@@ -97,8 +93,7 @@ const ScrollCtnr = styled.section`
 		justify-content: space-between;
 		align-items: stretch;
 		&:last-child {
-			z-index: 40;
-		}}
+			z-index: 40;}}
 		
 	svg {
 		position: absolute;
@@ -133,25 +128,8 @@ const ScrollCtnr = styled.section`
 				inset: auto 0 0 auto;}
 			path {
 				fill: #c8eb9b;}}}
-				
-	@supports not (inset: 0) {
-		.svg {
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;}
-		.small-only.vecteur--droite {
-			top: auto;
-			right: 0;
-			bottom: 0;
-			left: auto;
-		}
-	}
 		
 	${media.desktopUp`
-		&::before {
-			background-size: 100% auto;}
-		
 		.small-only {
 			display: none;}
 			
