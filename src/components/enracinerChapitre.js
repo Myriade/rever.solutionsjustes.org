@@ -15,12 +15,13 @@ const Styled = styled.div`
 	
 	.illustration {
 		position: relative;
-		padding: 15px;}
+		padding: 5%;}
 		
 	.cadre {
 		position: absolute;
 		inset: -5px -2px 0 -2px;
 		width: calc(100% + 4px);
+		height: 100%;
 		.cadre--path {
 			fill: #c1caaf;}
 		.contour {
@@ -88,10 +89,7 @@ const Styled = styled.div`
 		
 	${media.desktopUp`
 		width: 55%;
-		
-		.illustration {
-			padding: 30px;}
-				
+			
 		&.chapitre--right {
 			margin-inline: 30% 15%;
 			.illustration {
@@ -228,7 +226,7 @@ const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered
 							image={imageData} 
 							alt={id} 
 						/>
-						<svg className='cadre' data-name="Calque 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 742.3 419.64">
+						<svg className='cadre' data-name="Calque 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 742.3 419.64"  preserveAspectRatio="none">
 							<g id="Calque_1-2" data-name="Calque 1">
 								<path className="cadre--path" d="M700.3,42v335.64H42V42h658.3M742.3,0H0v419.64h742.3V0h0Z"/>
 								<rect className="contour" x="42.15" y="42.58" width="658.06" height="334.78"/>

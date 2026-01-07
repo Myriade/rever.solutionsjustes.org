@@ -394,17 +394,13 @@ const PEnraciner = ({lang}) => {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { 
 					trigger: "#ld-1", start: "top 20%", end: "bottom 65%", scrub: 1, 
-					onEnter: self => gsap.to(self.trigger, enterTween),
-					onLeaveBack: self => gsap.to(self.trigger, leaveBackTween)
 				}
 			}); 
 			
 			gsap.to("#ld-2", {
 				drawSVG: "100%", ease: "none", 
 				scrollTrigger: { 
-					trigger: "#ld-2", start: "top 30%", end: "bottom 70%", scrub: 1, 
-					onEnter: self => gsap.to(self.trigger, enterTween),
-					onLeaveBack: self => gsap.to(self.trigger, leaveBackTween)
+					trigger: "#ld-2", start: "top 30%", end: "bottom 70%", scrub: 1,
 				}
 			});
 			
