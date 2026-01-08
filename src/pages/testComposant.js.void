@@ -1,15 +1,22 @@
 import React from 'react'
 import PageLayout from '../layouts/pageLayout'
-//import Accueil from '../components/pAccueil'
+import EnracinerChapitre from '../components/enracinerChapitre'
 
 const TestComposant = () => {
   return (
     <PageLayout lang='fr'>
       
-      <div>
+      <div style={{background: 'white', minHeight: '30vh'}}>
         <div>
           <h2>Page juste pour tester un composant isolé</h2>
-          
+          <EnracinerChapitre
+            id='chapitretest'
+            lang='fr'
+            imgFile='chapitre1'
+            texts='lorem ipsum' 
+            model='right' 
+            rendered={0} 
+          />
         </div>
       </div>
       

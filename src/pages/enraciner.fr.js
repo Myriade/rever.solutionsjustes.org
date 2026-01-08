@@ -21,14 +21,14 @@ export default Page
 export const Head = () => (
   <>
     <html lang='fr' />
-    <title>Enracinée | Solutions justes</title>
+    <title>Enraciner | Solutions justes</title>
     <meta name='description' content='' />
     
-    <meta property='og:title' content='Enracinée | Solutions justes' />
+    <meta property='og:title' content='Enraciner | Solutions justes' />
     <meta property='og:description' content='' />
     <meta property='og:image' content='' />
     <meta property='og:image:alt' content='' />
-    <meta property='og:url' content='https://rever.solutionsjustes.org/enraciner' />
+    <meta property='og:url' content='https://rever.solutionsjustes.org/enraciner/' />
     <meta property='og:type' content='website' />
   </>
 );
