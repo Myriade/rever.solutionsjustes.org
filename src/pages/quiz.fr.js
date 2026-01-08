@@ -29,7 +29,7 @@ export const Head = () => (
     <meta property='og:image' content='https://rever.solutionsjustes.org/quiz-solutions-justes-mcm-og.jpg' />
     <meta property='og:image:alt' content="Testez vos connaissances avec notre quiz interactif ! 🧠💡
     Vous vous demandez comment les différents statuts d'immigration influencent la vie quotidienne des personnes migrantes ? Ce quiz vous offrira une perspective unique sur les défis auxquels font face les personnes migrantes et vous permettra de mieux comprendre les liens souvent méconnus entre le statut d'immigration et le bien-être quotidien." />
-    <meta property='og:url' content='https://rever.solutionsjustes.org/quiz' />
+    <meta property='og:url' content='https://rever.solutionsjustes.org/quiz/' />
     <meta property='og:type' content='website' />
   </>
 );

@@ -255,7 +255,7 @@ const Accueil = ({lang, textData}) => {
 		}
 	});
 	
-	const shareUrl = 'https://rever.solutionsjustes.org'
+	const shareUrl = 'https://rever.solutionsjustes.org/'
 	
 	return (
 		<div ref={gsapContainerRef} id='gsap-container'>
