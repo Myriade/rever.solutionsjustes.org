@@ -12,6 +12,8 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 
 import LierreOrdiDroit from '../images/enraciner/lierre-ordi-droit.js'
 import LierreOrdiGauche from '../images/enraciner/lierre-ordi-gauche.js'
+import LierreMobileDroit from '../images/enraciner/lierre-mobile-droit.js'
+import LierreMobileGauche from '../images/enraciner/lierre-mobile-gauche.js'
 
 const Banniere = styled.section`
 	position: relative;
@@ -51,6 +53,7 @@ const Chapitres = styled.section`
 	> div {
 		margin-inline: 0; 
 		max-width: unset;}
+		
 	${media.desktopUp`
 		padding-top: 0 !important;
 		.chapitre--modelB {
@@ -75,7 +78,7 @@ const ScrollCtnr = styled.section`
 		left: 0;
 		width: 100%;
 		height: 100vh;
-		background-size: 100% auto;
+		background-size: 100% 100%;
 		background-position: center bottom;
 		z-index: -1;}
 	
@@ -83,7 +86,7 @@ const ScrollCtnr = styled.section`
 		opacity: 0;
 		position: absolute;
 		width: 100%;
-		top: 20vh;
+		top: 5vh;
 		right: 0;
 		bottom: 20vh;
 		left: 0;
@@ -105,37 +108,32 @@ const ScrollCtnr = styled.section`
 	
 	.large-only {
 		display: none;}
-			
-	.vecteur--ghost {
-		top: 0;
-		bottom: auto;}
 		
 	.small-only {
-		display: flex;
-		margin-inline: unset !important;
 		position: relative;
-		
-		&.vecteur--gauche {
-			width: 15%;
-			path {
-				stroke: #ffc9de;
-				stroke-width: 70px;}}
+		width: 15%;
+				
 		&.vecteur--droite {
-			width: 15%;
 			svg {
-				position: fixed;
-				height: 90vh;
-				inset: auto 0 0 auto;}
-			path {
-				fill: #c8eb9b;}}}
+				z-index: 20;
+				width: 100%;
+				top: 0;
+				left: 0;}}}
+	
+	${media.mediumUp`
+		&::before {
+			background-size: 100% auto;}
+	`}
 		
 	${media.desktopUp`
+		.vecteurs {
+			top: 20vh;}
+			
 		.small-only {
 			display: none;}
 			
 		.large-only {
-			display: flex;
-			margin-inline: unset !important;
+			display: block;
 			position: relative;
 			
 			&.vecteur--gauche {
@@ -185,7 +183,7 @@ const PEnraciner = ({lang}) => {
 	/******** Fetch Wix data *********/
 	const placeholderData = {
 		data: {
-			title: 'Chargement ...',
+			title: localisedText[lang].chargement,
 		}
 	}
 	
@@ -245,7 +243,8 @@ const PEnraciner = ({lang}) => {
 			gsap.set("#ld-2", {drawSVG: "2.8%", autoAlpha: 1});
 			
 			// Mobile
-			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%"});
+			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%", autoAlpha: 1});
+			gsap.set(".small-only.vecteur--droite path", {autoAlpha: 1});
 			
 		}
 	},{ scope: vecteursScopeRef, dependencies: [wixData, chapitreRendered] });
@@ -536,29 +535,10 @@ const PEnraciner = ({lang}) => {
 				</button>
 			
 				<div className='vecteurs'>
-				
-					<div className='large-only vecteur--gauche'>
-						<LierreOrdiGauche />
-					</div>
-					<div className='large-only vecteur--ghost'></div>
-					<div className='small-only vecteur--gauche'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100.51 7612.47" preserveAspectRatio="none" width="100%" height="100%">
-							<path className="cls-1" d="M55.23,1.73c-18.19,367.18-23.85,987.17-9,1347,27.18,658.47,23.23,1135.89,3,1603-17.98,415.2-20.29,1214.75,1,1624,19.91,382.6,14.39,1375.5-5,1829-12.85,300.48-15.98,899.96,8,1205"/>
-						</svg>
-					</div>
-					<div className='small-only vecteur--ghost'></div>
-					
-					<div className='large-only vecteur--ghost'></div>
-					<div className='large-only vecteur--droite'>
-						<LierreOrdiDroit />
-					</div>
-					<div className='small-only vecteur--ghost'></div>
-					<div className='small-only vecteur--droite'>
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.75 1196">
-							<path className="cls-1" d="M64.75,0v1196S1.06,1018.85.75,957C-.25,758-.25,415,.75,153,.91,111.54,64.75,0,64.75,0Z"/>
-						</svg>
-					</div>
-					
+					<div className='large-only vecteur--gauche'><LierreOrdiGauche /></div>
+					<div className='small-only vecteur--gauche'><LierreMobileGauche /></div>
+					<div className='large-only vecteur--droite'><LierreOrdiDroit /></div>
+					<div className='small-only vecteur--droite'><LierreMobileDroit /></div>
 				</div>
 			
 				<Chapitres id='chapitres' ref={contentRef}>

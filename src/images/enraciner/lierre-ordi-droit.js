@@ -41,7 +41,7 @@ const Svg = styled.svg`
 	}
 `;
 
-export default function LierreOrdiDroit() { return (
+export default function LierreMobileDroit() { return (
 	<Svg 
 		id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.51 8083.28" 
 		preserveAspectRatio="none" width="100%" height="100%"

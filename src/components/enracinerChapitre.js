@@ -50,11 +50,11 @@ const Styled = styled.div`
 		.contour {
 			stroke: #ddc99d;}}
 	
-	&.chapitre--right .illustration {
-		margin-right: -10%;}
+	&.chapitre--right {
+		margin-left: 10%;}
 	
-	&.chapitre--left .illustration {
-		margin-left: -10%;}
+	&.chapitre--left {
+		margin-right: 10%;}
 	
 	.content {
 		display: grid;
