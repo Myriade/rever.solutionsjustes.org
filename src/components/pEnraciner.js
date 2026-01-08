@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useRef} from "react"
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
@@ -94,9 +94,7 @@ const ScrollCtnr = styled.section`
 		padding-top: 0 !important;
 		display: flex;
 		justify-content: space-between;
-		align-items: stretch;
-		&:last-child {
-			z-index: 40;}}
+		align-items: stretch;}
 		
 	svg {
 		position: absolute;
@@ -115,10 +113,7 @@ const ScrollCtnr = styled.section`
 				
 		&.vecteur--droite {
 			svg {
-				z-index: 20;
-				width: 100%;
-				top: 0;
-				left: 0;}}}
+				height: 90vh;}}}
 	
 	${media.mediumUp`
 		&::before {
@@ -242,8 +237,14 @@ const PEnraciner = ({lang}) => {
 			gsap.set("#ld-1", {drawSVG: "3%", autoAlpha: 1});
 			gsap.set("#ld-2", {drawSVG: "2.8%", autoAlpha: 1});
 			
-			// Mobile
-			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "3%", autoAlpha: 1});
+			// Mobile gauche
+			gsap.set(".small-only.vecteur--gauche path", {drawSVG: "0%"});
+			gsap.set(".mg-1", {drawSVG: "3%", autoAlpha: 1});
+			gsap.set(".mg-2", {drawSVG: "3.5%", autoAlpha: 1});
+			gsap.set("#mg-3", {drawSVG: "5%", autoAlpha: 1});
+			
+			// Mobile droite
+			gsap.set(".small-only.vecteur--droite", {zIndex: 20});
 			gsap.set(".small-only.vecteur--droite path", {autoAlpha: 1});
 			
 		}
@@ -502,15 +503,82 @@ const PEnraciner = ({lang}) => {
 			});
 			
 			// mobile gauche
-			gsap.to(".vecteur--gauche.small-only path", {
-				drawSVG: "100%", 
-				ease: "none", 
+			gsap.to(".vecteur--gauche.small-only .mg-1", {
+				drawSVG: "100%", ease: "none", 
 				scrollTrigger: {
-					id: 'vecteur-gauche-large',
-					trigger: ".vecteurs",
-					start: "top 30%", 
-					end: "bottom 75%",
-					scrub: 1,
+					trigger: ".vecteurs", start: "top 30%", end: "bottom 75%", scrub: 1,
+				}
+			});
+			
+			gsap.to(".vecteur--gauche.small-only .mg-2", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: {
+					trigger: ".vecteurs", start: "top 20%", end: "bottom 85%", scrub: true,
+				}
+			});
+			
+			gsap.to(".vecteur--gauche.small-only #mg-3", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: {
+					trigger: ".vecteurs", start: "top 10%", end: "bottom 75%", scrub: 1,
+				}
+			});
+			
+			gsap.to("#mg-4", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { 
+					trigger: "#mg-4", start: "top 50%", end: "bottom 50%", scrub: 1,
+					onEnter: self => gsap.to(self.trigger, enterTween),
+					onLeaveBack: self => gsap.to(self.trigger, leaveBackTween)
+				}
+			});
+			
+			gsap.to("#mg-5", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { 
+					trigger: "#mg-5", start: "top 50%", end: "bottom 50%", scrub: true,
+					onEnter: self => gsap.to(self.trigger, enterTween),
+					onLeaveBack: self => gsap.to(self.trigger, leaveBackTween)
+				}
+			});
+			
+			gsap.to("#mg-6", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { 
+					trigger: "#mg-6", start: "top 50%", end: "bottom 50%", scrub: 1,
+					onEnter: self => gsap.to(self.trigger, enterTween),
+					onLeaveBack: self => gsap.to(self.trigger, leaveBackTween)
+				}
+			});
+			
+			gsap.to("#mg-7", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { 
+					trigger: "#mg-7", start: "top 50%", end: "bottom 50%", scrub: true,
+					onEnter: self => gsap.to(self.trigger, enterTween),
+					onLeaveBack: self => gsap.to(self.trigger, leaveBackTween)
+				}
+			});
+			
+			gsap.to("#mg-8", {
+				drawSVG: "100%", ease: "none", 
+				scrollTrigger: { 
+					trigger: "#mg-8", start: "top 50%", end: "bottom 70%", scrub: true,
+					onEnter: self => gsap.to(self.trigger, enterTween),
+					onLeaveBack: self => gsap.to(self.trigger, leaveBackTween)
+				}
+			});
+			
+			// mobile droite
+			gsap.to(".vecteur--droite.small-only svg", {
+				scrollTrigger: {
+					id: 'vecteur-droite-mobile',
+					trigger: '.vecteur--droite.small-only',
+					start: "top 10%",
+					end: "bottom bottom",
+					pin: true,
+					pinSpacing: false,
+					scrub: 1
 				}
 			});
 		}

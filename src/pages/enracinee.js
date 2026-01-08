@@ -1,6 +1,5 @@
-import React, {useState} from 'react'
+import React from 'react'
 import PageLayout from '../layouts/pageLayout'
-import PEnraciner from '../components/pEnraciner'
 
 const Page = () => {
   

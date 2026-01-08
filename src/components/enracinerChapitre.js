@@ -54,7 +54,7 @@ const Styled = styled.div`
 		margin-left: 10%;}
 	
 	&.chapitre--left {
-		margin-right: 10%;}
+		margin-right: 7%;}
 	
 	.content {
 		display: grid;
