@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react"
+import React, {useState, useRef, useEffect} from "react"
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
@@ -15,7 +15,66 @@ import LierreOrdiGauche from '../images/enraciner/lierre-ordi-gauche.js'
 import LierreMobileDroit from '../images/enraciner/lierre-mobile-droit.js'
 import LierreMobileGauche from '../images/enraciner/lierre-mobile-gauche.js'
 
+const banniereBgColor = '58, 23, 55' // pourpre: 58, 23, 55 | bleu fonce: 40, 37, 96
+
 const Banniere = styled.section`
+	position: relative;
+	z-index: 45;
+	width: 100%;
+	min-height: 20vh;
+	display: grid;
+	gap: var(--h-spacer);
+	min-height: 25vh;
+	background: linear-gradient(rgba(${banniereBgColor}, 0.9)), url(../images/enraciner/banniere-temp.jpg) no-repeat center 30%;
+	background-size: cover;
+	
+	.entete__titre {
+		color: white;
+		display: grid;
+		align-content: center;
+		gap: 1rem;
+		h1, p { 
+			margin-block: 0;}}
+		
+	.entete__boutons {
+		display: grid;
+		gap: 1rem;
+		align-content: center;
+		justify-items: center;
+		.button {
+			font-weight: normal;}}
+		
+	button.fuite {
+		background: var(--color-pourpre);
+		border: 1px solid transparent;
+		border-left: 0;
+		border-right: 0;
+		font-size: 1.12rem;
+		padding: 0.75rem 0;
+		&::before, &::after {
+			margin-block: -1px;
+			background: var(--color-pourpre);}
+		&::before {
+			border: 1px solid transparent;
+			border-right: 0;}
+		&::after {
+			border: 1px solid transparent;
+			border-left: 0;}
+		&:hover {
+			border-color: var(--color-jaune);
+			color: var(--color-jaune);
+			&::before, &::after {
+				border-color: var(--color-jaune);}}}
+		
+	a.rapport:hover {
+		text-shadow: 0.5px 0.5px 0.5px white;}
+	
+	${media.desktopUp`
+		grid-template-columns: 2fr 1fr;
+	`};
+`;
+
+const Cta = styled.section`
 	position: relative;
 	z-index: 45;
 	background: #eee;
@@ -25,8 +84,8 @@ const Banniere = styled.section`
 	display: grid;
 	
 	.temp {
-		padding: 5vh}
-	
+			padding: 5vh}
+		
 	${media.desktopUp``};
 `;
 
@@ -208,6 +267,11 @@ const PEnraciner = ({lang}) => {
 	const shortcutClickHandler = contextSafe(() => {
 		gsap.to( window, { duration: 4, scrollTo: { y: '#recit', offsetY: -700 }});
 	});
+	
+	const quitterLeSite = () => {
+	// 	window.open("https://ici.radio-canada.ca/","_newtab");
+	// 	window.location.replace('https://www.google.ca/search')
+	}
 	
 	// GSAP Setup de depart
 	useGSAP(() => {
@@ -586,10 +650,14 @@ const PEnraciner = ({lang}) => {
 	
 	return (
 		<>
-			<Banniere>
-				<div className='temp'>
-					<h1>Bannière</h1>
-					<p>[ .... À venir: image, titre et bouton «sortie rapide» .... ]</p>
+			<Banniere className='entete'>
+				<div className='entete__titre'>
+					<h1>Enraciner</h1>
+					<p>Lorem ipsum color sit amet, consectetur adipisicing elit. Architecto colorem magnam blanditiis accusamus repellat eius placeat optio recusandae.</p>
+				</div>
+				<div className='entete__boutons'>
+					<div><button className='button fuite' id="quitter">Quitter rapidement le site →</button></div>
+					<div><a href='#' className='button rapport'>Lire le rapport d'activité</a></div>
 				</div>
 			</Banniere>
 			
@@ -691,12 +759,12 @@ const PEnraciner = ({lang}) => {
 				
 			</ScrollCtnr>
 			
-			<Banniere>
+			<Cta>
 				<div className='temp'>
 					<hr/>
 					<p><i>[ .... Lien vers Rapport et Appels à l'action : à venir .... ]</i></p>
 				</div>
-			</Banniere>
+			</Cta>
 		
 		</>
 	)
