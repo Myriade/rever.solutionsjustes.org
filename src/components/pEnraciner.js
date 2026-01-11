@@ -269,8 +269,8 @@ const PEnraciner = ({lang}) => {
 	});
 	
 	const quitterLeSite = () => {
-	// 	window.open("https://ici.radio-canada.ca/","_newtab");
-	// 	window.location.replace('https://www.google.ca/search')
+		window.open("https://ici.radio-canada.ca/","_newtab");
+		window.location.replace('https://www.google.ca/search')
 	}
 	
 	// GSAP Setup de depart
@@ -656,7 +656,7 @@ const PEnraciner = ({lang}) => {
 					<p>Lorem ipsum color sit amet, consectetur adipisicing elit. Architecto colorem magnam blanditiis accusamus repellat eius placeat optio recusandae.</p>
 				</div>
 				<div className='entete__boutons'>
-					<div><button className='button fuite' id="quitter">Quitter rapidement le site →</button></div>
+					<div><button className='button fuite' id="quitter" onClick={quitterLeSite}>Quitter rapidement le site →</button></div>
 					<div><a href='#' className='button rapport'>Lire le rapport d'activité</a></div>
 				</div>
 			</Banniere>
