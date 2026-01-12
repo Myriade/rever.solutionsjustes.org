@@ -1,14 +1,19 @@
 import React, {useState, useRef, useEffect} from "react"
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
-import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
-import Chapitre from './enracinerChapitre'
+import { StaticImage } from "gatsby-plugin-image"
+import { Link } from 'gatsby'
 
 import useWixData from '../utils/useWixData'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
+import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
+
+import Chapitre from './enracinerChapitre'
+import CopyLinkButton from './copyLinkButton'
+import DonsImpactTabs from './donsImpactsTabs'
 
 import LierreOrdiDroit from '../images/enraciner/lierre-ordi-droit.js'
 import LierreOrdiGauche from '../images/enraciner/lierre-ordi-gauche.js'
@@ -16,6 +21,8 @@ import LierreMobileDroit from '../images/enraciner/lierre-mobile-droit.js'
 import LierreMobileGauche from '../images/enraciner/lierre-mobile-gauche.js'
 
 const banniereBgColor = '58, 23, 55' // pourpre: 58, 23, 55 | bleu fonce: 40, 37, 96
+
+const shareUrl = 'https://rever.solutionsjustes.org/enraciner/'
 
 const Banniere = styled.section`
 	position: relative;
@@ -72,21 +79,6 @@ const Banniere = styled.section`
 	${media.desktopUp`
 		grid-template-columns: 2fr 1fr;
 	`};
-`;
-
-const Cta = styled.section`
-	position: relative;
-	z-index: 45;
-	background: #eee;
-	width: 100%;
-	height: 20vh;
-	padding: initial !important;
-	display: grid;
-	
-	.temp {
-			padding: 5vh}
-		
-	${media.desktopUp``};
 `;
 
 const Video = styled.div`
@@ -215,24 +207,119 @@ const ScrollCtnr = styled.section`
 	`}
 `
 
+const Cta = styled.section`
+	.grid {
+		display: grid;
+		gap: calc(var(--v-spacer) / 2) var(--h-spacer);
+		> div {
+			padding: calc(var(--v-spacer) / 2) 1.5rem;
+			background: var(--color-bleu-tres-pale);
+			border-radius: var(--border-radius);
+			display: grid;
+			gap: 1.5rem;
+			justify-items: left;
+			align-content: space-between;
+			overflow: hidden;}
+			
+		h3, p {
+			margin-block: 0;}
+			
+		h3 {
+			font-weight: 600;}
+		
+		.button {
+			padding-inline: 3vw;}
+		
+		${media.mediumUp`
+			grid-template-columns: 1fr 1fr;
+		`}
+		
+		${media.largeUp`
+			grid-template-columns: 1fr 1fr 1fr;
+		`}
+		
+		.donner {
+			padding: 0;
+			gap: 0;
+			.intro {
+				padding: calc(var(--v-spacer) / 2) 1.5rem}}
+	
+	.partager .cta {
+		position: relative;
+		width: 100%;
+		display: grid;
+		justify-items; center;}
+		
+	.tooltip {
+		opacity: 0;
+		height: 0;
+		overflow: hidden;
+		position: absolute;
+		top: -150px;
+		right: 0;
+		background: var(--color-bleu-clair);
+		color: white;
+		padding: 0.5rem 1.5rem;
+		border-radius: var(--border-radius);
+		border-bottom-left-radius: 0;
+		z-index: 30;
+		display: grid;
+		gap: 0.75rem;
+		padding-block: 1.25rem;
+		ul {
+			list-style-type: none;
+			padding-left: 0;
+			display: flex;
+			gap: 1rem;
+			margin-block:0;}
+		a, .copylink {
+			text-align: center;
+			border: 1px solid white;
+			border-radius: 4px;
+			padding: 0.25em;
+			font-weight: bold;
+			&:hover {
+				cursor: pointer;
+				border-color: var(--color-bleu-tres-fonce);
+			}
+		}
+		p {
+			margin-block: 0;
+			text-align: center;
+		}
+	}
+	
+`;
+
 const localisedText = {
 	fr: {
-		chargement: 'chargement'
+		chargement: 'chargement',
+		rapportTitre: 'Rapport titre lorem ipsum ...',
+		rapportParagraphe: 'Paragraphe Lorem ipsum color sit amet, consectetur adipisicing elit. Colorem coloremque libero cupiditate architecto ab possimus rem similique, recusandae eos soluta numquam quod maxime quidem repellendus qui vero voluptatibus et consectetur...',
+		rapportTelecharger: 'Télécharger le PDF',
+		partager: 'Partager',
+		ou: 'ou partager par'
 	},
 	en: {
-		chargement: 'loading'
+		chargement: 'loading',
+		rapportTitre: 'Rapport title lorem ipsum ...',
+		rapportParagraphe: 'Paragraph english Lorem ipsum color sit amet, consectetur adipisicing elit. Colorem coloremque libero cupiditate architecto ab possimus rem similique, recusandae eos soluta numquam quod maxime quidem repellendus qui vero voluptatibus et consectetur...',
+		rapportTelecharger: 'Download PDF',
+		partager: 'Share',
+		ou: 'or share by'
 	}
 }
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, DrawSVGPlugin);
 
-const PEnraciner = ({lang}) => {
+const PEnraciner = ({lang, ctaTexts}) => {
 	const [wixData, setWixData] = useState()
 	const [chapitreRendered, setChapitreRendered] = useState();
-	//const [shareTooltipOn, setShareTooltipOn] = useState(false)
+	const [shareTooltipOn, setShareTooltipOn] = useState(false)
 	
 	const vecteursScopeRef = useRef()
 	const contentRef = useRef()
+	const ctaRef = useRef()
 	
 	/******** Fetch Wix data *********/
 	const placeholderData = {
@@ -272,6 +359,17 @@ const PEnraciner = ({lang}) => {
 		window.open("https://ici.radio-canada.ca/","_newtab");
 		window.location.replace('https://www.google.ca/search')
 	}
+	
+	const { contextSafe: ctaContextSafe } = useGSAP({ scope: ctaRef });
+	const shareClickHandler = ctaContextSafe(() => {
+		if (!shareTooltipOn) {
+			gsap.to( '.tooltip', { duration: 0.5, opacity: 1, height: 'auto' });
+			setShareTooltipOn(true);
+		} else {
+			gsap.to( '.tooltip', { duration: 0.5, opacity: 0, height: 0 });
+			setShareTooltipOn(false);
+		}
+	});
 	
 	// GSAP Setup de depart
 	useGSAP(() => {
@@ -759,11 +857,77 @@ const PEnraciner = ({lang}) => {
 				
 			</ScrollCtnr>
 			
-			<Cta>
-				<div className='temp'>
-					<hr/>
-					<p><i>[ .... Lien vers Rapport et Appels à l'action : à venir .... ]</i></p>
-				</div>
+			<Cta id='agir' ref={ctaRef}>
+				{ ctaTexts ? <>
+					<div className='grid'>
+						<div className='rapport'>
+							<h3>{localisedText[lang].rapportTitre}</h3>
+							<p>{localisedText[lang].rapportParagraphe}</p>
+							<a href='#' className='button centered'>
+								{localisedText[lang].rapportTelecharger}
+							</a>
+						</div>
+					
+						<div className='donner'>
+							<div className='intro'>
+								<h3>{ctaTexts.t6a}</h3>
+								<p>{ctaTexts.p6a}</p>
+							</div>
+							<DonsImpactTabs textData={ctaTexts} />
+						</div>
+						
+						<div className='partager'>
+							<h3>{ctaTexts.t6c}</h3>
+							<p>{ctaTexts.p6c}</p>
+							<StaticImage
+								src='../images/rever-a-l-essentiel-MCM.webp'
+								placeholder='dominantColor'
+								alt='Je rêvais de contribuer à la société québécoise, je rêve maintenant d\u2019être payé pour mon travail' 
+								style={{width: '180px', marginInline: 'auto'}}
+							/>
+							<div className='cta'>
+								<button 
+									className='button centered'
+									onClick={shareClickHandler}
+								>
+									{ctaTexts.b6c}
+								</button>
+								<div className='tooltip'>
+									<CopyLinkButton 
+										lang={lang} 
+										url={shareUrl}
+									/>
+									<p>{lang === 'fr' ? localisedText.fr.ou : ''}{lang === 'en' ? localisedText.en.ou : ''}</p>
+									<ul>
+										<li><a 
+											href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Bonjour%2C%0A%0AJ'esp%C3%A8re%20que%20tu%20vas%20bien.%20Je%20voulais%20te%20parler%20d'une%20campagne%20importante%20sur%20l'immigration%20humanitaire%2C%20qui%20met%20en%20lumi%C3%A8re%20les%20statuts%20d%E2%80%99immigration%2C%20l%E2%80%99absence%20de%20statut%20et%20leurs%20impacts%20sur%20la%20vie%20des%20personnes.%0A%0A${shareUrl}%2F%0A%0AChaque%20histoire%20m%C3%A9rite%20d'%C3%AAtre%20entendue.%20Ensemble%2C%20nous%20pouvons%20faire%20la%20diff%C3%A9rence%20en%20apprenant%20cette%20r%C3%A9alit%C3%A9%20et%20soutenir%20ces%20voix.%20Je%20t'invite%20%C3%A0%20d%C3%A9couvrir%20la%20campagne%20et%20%C3%A0%20partager%20tes%20r%C3%A9flexions.%0A%0AMerci%20de%20ton%20soutien%20!%0A%0ACordialement%2C`}
+											target='_blank'
+											rel='noreferrer'
+											>Courriel</a></li>
+										<li><a 
+											href={`https://www.facebook.com/dialog/share?app_id=2315665215432948&display=popup&href=${shareUrl}`}
+											target='_blank'
+											rel='noreferrer'
+											>Facebook</a></li>
+										<li><a
+											href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
+											target='_blank'
+											rel='noreferrer'
+											>LinkedIn</a></li>
+										<li>
+											<a
+												href={`https://twitter.com/intent/tweet?text=${shareUrl}`}
+												target='_blank'
+												rel='noreferrer'
+												>
+											X</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</> : '...'}
 			</Cta>
 		
 		</>

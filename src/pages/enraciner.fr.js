@@ -1,8 +1,10 @@
 import React from 'react'
 import PageLayout from '../layouts/pageLayout'
 import PEnraciner from '../components/pEnraciner'
+import ctaTextes from '../data/textes'
 
 const Page = () => {
+  const textes = ctaTextes();
   
   return (
     <PageLayout 
@@ -11,6 +13,7 @@ const Page = () => {
     >
       <PEnraciner 
         lang='fr'
+        ctaTexts={textes.rever.fr}
       />
     </PageLayout>
   )
