@@ -193,17 +193,10 @@ const ScrollCtnr = styled.section`
 			z-index: 46;
 			top: 30rem;
 			right: 10rem;
+			left: auto;
 			text-transform: uppercase;
-			color: var(--color-pourpre);
-			border: 2px solid var(--color-pourpre);
-			font-weight: bold;
-			width: 19ch;
-			text-align: center;
-			background: rgba(255, 188, 82, 0.8);
-			padding: 1em 2em;
-			border-radius: var(--border-radius);
-			&:hover {
-				cursor: pointer;}}
+			display: inline;
+			max-width: fit-content;
 	`}
 `
 
@@ -762,7 +755,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 			<ScrollCtnr id='recit' ref={vecteursScopeRef}>
 			
 				<button
-					className='shortcut large-only'
+					className='shortcut button large-only'
 					onClick={shortcutClickHandler}
 				>
 					Lire le récit de Hana ↓
@@ -794,7 +787,6 @@ const PEnraciner = ({lang, ctaTexts}) => {
 						{ wixData && wixData.length >= 6 ? <>
 							<Chapitre
 								id='chapitre1'
-								readMoreId='chapitre2' 
 								lang={lang}
 								imgFile='chapitre1'
 								texts={wixData[0].data}
@@ -804,7 +796,6 @@ const PEnraciner = ({lang, ctaTexts}) => {
 								
 							<Chapitre
 								id='chapitre2'
-								readMoreId='chapitre3' 
 								lang={lang}
 								imgFile='chapitre2'
 								texts={wixData[1].data}
@@ -814,7 +805,6 @@ const PEnraciner = ({lang, ctaTexts}) => {
 							
 							<Chapitre
 								id='chapitre3'
-								readMoreId='chapitre4' 
 								lang={lang}
 								imgFile='chapitre3'
 								texts={wixData[2].data}
@@ -824,7 +814,6 @@ const PEnraciner = ({lang, ctaTexts}) => {
 							
 							<Chapitre
 								id='chapitre4'
-								readMoreId='chapitre5' 
 								lang={lang}
 								imgFile='chapitre4'
 								texts={wixData[3].data}
@@ -834,7 +823,6 @@ const PEnraciner = ({lang, ctaTexts}) => {
 							
 							<Chapitre
 								id='chapitre5'
-								readMoreId='chapitre6' 
 								lang={lang}
 								imgFile='chapitre5'
 								texts={wixData[4].data}
