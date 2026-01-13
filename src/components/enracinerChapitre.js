@@ -71,13 +71,13 @@ const Styled = styled.div`
 		padding-right: 12.5%;}
 	
 	button.readmore {
-		text-transform: uppercase;
-		color: var(--color-pourpre);
-		border: 1px solid var(--color-pourpre);
-		background: rgba(255, 188, 82, 0.3);
-		padding: 0.5em 1em;
-		border-radius: var(--border-radius);
+		font-size: 3rem;
+		color: var(--color-bleu-tres-fonce);
+		background: none;
+		padding: 0;
+		border: 0;
 		&:hover {
+			color: var(--color-bleu-clair);
 			cursor: pointer;}}
 		
 	h2 {
@@ -251,7 +251,7 @@ const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered
 							className='readmore'
 							onClick={() => readmoreClickHandler(readMoreId)}
 						>
-							Lire la suite
+							↷
 						</button>
 					: ''}
 				</div>

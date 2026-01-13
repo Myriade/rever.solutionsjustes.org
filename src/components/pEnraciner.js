@@ -787,6 +787,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 						{ wixData && wixData.length >= 6 ? <>
 							<Chapitre
 								id='chapitre1'
+								readMoreId='chapitre2' 
 								lang={lang}
 								imgFile='chapitre1'
 								texts={wixData[0].data}
@@ -796,6 +797,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 								
 							<Chapitre
 								id='chapitre2'
+								readMoreId='chapitre3' 
 								lang={lang}
 								imgFile='chapitre2'
 								texts={wixData[1].data}
@@ -805,6 +807,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 							
 							<Chapitre
 								id='chapitre3'
+								readMoreId='chapitre4' 
 								lang={lang}
 								imgFile='chapitre3'
 								texts={wixData[2].data}
@@ -814,6 +817,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 							
 							<Chapitre
 								id='chapitre4'
+								readMoreId='chapitre5' 
 								lang={lang}
 								imgFile='chapitre4'
 								texts={wixData[3].data}
@@ -823,6 +827,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 							
 							<Chapitre
 								id='chapitre5'
+								readMoreId='chapitre6' 
 								lang={lang}
 								imgFile='chapitre5'
 								texts={wixData[4].data}
