@@ -20,30 +20,40 @@ import LierreOrdiGauche from '../images/enraciner/lierre-ordi-gauche.js'
 import LierreMobileDroit from '../images/enraciner/lierre-mobile-droit.js'
 import LierreMobileGauche from '../images/enraciner/lierre-mobile-gauche.js'
 
-const banniereBgColor = '58, 23, 55' // pourpre: 58, 23, 55 | bleu fonce: 40, 37, 96
-
 const shareUrl = 'https://rever.solutionsjustes.org/enraciner/'
 
 const Banniere = styled.section`
 	position: relative;
 	z-index: 45;
 	width: 100%;
-	min-height: 20vh;
+	padding-top: calc(var(--v-spacer) *.5) !important;
 	display: grid;
+	justify-items: start;
+	align-items: start;
 	gap: var(--h-spacer);
-	min-height: 25vh;
-	background: linear-gradient(rgba(${banniereBgColor}, 0.9)), url(../images/enraciner/banniere-temp.jpg) no-repeat center 30%;
+	min-height: 40vh;
+	background: url(../images/enraciner/banniere-enraciner.png) no-repeat center center;
 	background-size: cover;
 	
 	.entete__titre {
-		color: white;
+		margin-left: var(--h-spacer);
+		padding-bottom: var(--v-spacer);
 		display: grid;
 		align-content: center;
+		justify-content: start;
 		gap: 1rem;
 		h1, p { 
-			margin-block: 0;}}
+			color: white;
+			margin-block: 0;}
+		h1 {
+			font-size: clamp(25px, 12vw, 150px);
+			color: white;
+			line-height: 1em;
+			text-transform: uppercase;}}
 		
 	.entete__boutons {
+		margin-right: var(--h2-spacer);
+		justify-self: end;
 		display: grid;
 		gap: 1rem;
 		align-content: center;
@@ -77,8 +87,12 @@ const Banniere = styled.section`
 		text-shadow: 0.5px 0.5px 0.5px white;}
 	
 	${media.desktopUp`
-		grid-template-columns: 2fr 1fr;
-	`};
+		grid-template-columns: 45% 30%;
+		gap: 25%;
+		.entete__titre h1 {
+			font-size: clamp(50px, 10vh, 120px);
+		}
+	`}
 `;
 
 const Video = styled.div`
@@ -287,6 +301,11 @@ const Cta = styled.section`
 const localisedText = {
 	fr: {
 		chargement: 'chargement',
+		banniereTitre: 'Enraciner',
+		banniereSousTitre: 'Lorem ipsum color sit amet, consectetur adipisicing architecto colorem',
+		exitBouton: 'Quitter rapidement le site',
+		rapportBouton: "Lire le rapport d'activité",
+		recitBouton: 'Lire le récit de Hana',
 		rapportTitre: 'Rapport titre lorem ipsum ...',
 		rapportParagraphe: 'Paragraphe Lorem ipsum color sit amet, consectetur adipisicing elit. Colorem coloremque libero cupiditate architecto ab possimus rem similique, recusandae eos soluta numquam quod maxime quidem repellendus qui vero voluptatibus et consectetur...',
 		rapportTelecharger: 'Télécharger le PDF',
@@ -295,6 +314,11 @@ const localisedText = {
 	},
 	en: {
 		chargement: 'loading',
+		banniereTitre: 'Enrooted',
+		banniereSousTitre: 'Lorem ipsum color sit amet, consectetur adipisicing architecto colorem',
+		exitBouton: 'Quicky leave this website',
+		rapportBouton: 'Read ...',
+		recitBouton: "Read Hana's story",
 		rapportTitre: 'Rapport title lorem ipsum ...',
 		rapportParagraphe: 'Paragraph english Lorem ipsum color sit amet, consectetur adipisicing elit. Colorem coloremque libero cupiditate architecto ab possimus rem similique, recusandae eos soluta numquam quod maxime quidem repellendus qui vero voluptatibus et consectetur...',
 		rapportTelecharger: 'Download PDF',
@@ -743,12 +767,12 @@ const PEnraciner = ({lang, ctaTexts}) => {
 		<>
 			<Banniere className='entete'>
 				<div className='entete__titre'>
-					<h1>Enraciner</h1>
-					<p>Lorem ipsum color sit amet, consectetur adipisicing elit. Architecto colorem magnam blanditiis accusamus repellat eius placeat optio recusandae.</p>
+					<h1>{localisedText[lang].banniereTitre}</h1>
+					<p>{localisedText[lang].banniereSousTitre}</p>
 				</div>
 				<div className='entete__boutons'>
-					<div><button className='button fuite' id="quitter" onClick={quitterLeSite}>Quitter rapidement le site →</button></div>
-					<div><a href='#' className='button rapport'>Lire le rapport d'activité</a></div>
+					<div><button className='button fuite' id="quitter" onClick={quitterLeSite}>{localisedText[lang].exitBouton} →</button></div>
+					<div><a href='#' className='button rapport'>{localisedText[lang].rapportBouton}</a></div>
 				</div>
 			</Banniere>
 			
@@ -758,7 +782,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 					className='shortcut button large-only'
 					onClick={shortcutClickHandler}
 				>
-					Lire le récit de Hana ↓
+					{localisedText[lang].recitBouton} ↓
 				</button>
 			
 				<div className='vecteurs'>
@@ -772,8 +796,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 					<div>
 						<Video>
 							<div className='set-height'></div>
-							<p><i>[Vidéo]</i></p>
-							{/*<iframe 
+							<iframe 
 								id="ytplayer" 
 								type="text/html" 
 								width="720"
@@ -781,7 +804,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 								frameBorder="0" 
 								allowFullScreen 
 								rel="0" 
-							/>*/}
+							/>
 						</Video>
 						
 						{ wixData && wixData.length >= 6 ? <>
