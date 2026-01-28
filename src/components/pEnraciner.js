@@ -192,6 +192,7 @@ const ScrollCtnr = styled.section`
 	.small-only {
 		position: relative;
 		width: 15%;
+		margin-top: 2vh;
 				
 		&.vecteur--droite {
 			svg {

@@ -71,9 +71,12 @@ const Styled = styled.div`
 		padding-right: 12.5%;}
 	
 	button.readmore {
+		position: relative;
 		background: none;
 		padding: 0;
 		border: 0;
+		width: 36px;
+		height: 36px;
 		path {
 			stroke: var(--color-bleu-tres-fonce);}
 		&:hover {
@@ -262,7 +265,7 @@ const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered
 							onClick={() => readmoreClickHandler(readMoreId)}
 							title={localisedText[lang].readMore}
 						>
-							<svg mlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
 						</button>
 					: ''}
 				</div>
