@@ -32,7 +32,7 @@ const Banniere = styled.section`
 	align-items: start;
 	gap: var(--h-spacer);
 	min-height: 40vh;
-	background: url(../images/enraciner/banniere-enraciner.png) no-repeat center center;
+	background: url(/images/enraciner/banniere-enraciner.png) no-repeat center center;
 	background-size: cover;
 	
 	.entete__titre {
