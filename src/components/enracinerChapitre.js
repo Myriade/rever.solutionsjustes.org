@@ -71,14 +71,15 @@ const Styled = styled.div`
 		padding-right: 12.5%;}
 	
 	button.readmore {
-		font-size: 3rem;
-		color: var(--color-bleu-tres-fonce);
 		background: none;
 		padding: 0;
 		border: 0;
+		path {
+			stroke: var(--color-bleu-tres-fonce);}
 		&:hover {
-			color: var(--color-bleu-clair);
-			cursor: pointer;}}
+			cursor: pointer;
+			path { 
+				stroke: var(--color-bleu-clair);}}}
 		
 	h2 {
 		font-size: 1.75rem;
@@ -109,6 +110,15 @@ const Styled = styled.div`
 `;
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const localisedText = {
+	fr: {
+		readMore: 'Lire la suite',
+	},
+	en: {
+		readMore: 'Continue reading',
+	}
+}
 
 const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered, onRenderChange }) => {
 	const [hasParagraphs, setHasParagraphs] = useState(false);
@@ -250,8 +260,9 @@ const Chapitre = ({ id, readMoreId, lang, imgFile, texts, color, model, rendered
 						<button
 							className='readmore'
 							onClick={() => readmoreClickHandler(readMoreId)}
+							title={localisedText[lang].readMore}
 						>
-							↷
+							<svg mlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
 						</button>
 					: ''}
 				</div>

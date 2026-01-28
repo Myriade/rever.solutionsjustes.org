@@ -135,6 +135,7 @@ const Chapitres = styled.section`
 
 const ScrollCtnr = styled.section`
 	position: relative;
+	
 	&::before {
 		content: "";
 		background: url("/images/enraciner/fond-texture-gris.png") no-repeat;
@@ -161,7 +162,15 @@ const ScrollCtnr = styled.section`
 		justify-content: space-between;
 		align-items: stretch;}
 		
-	svg {
+	button.shortcut {
+		padding-right: 1.5em;
+		svg.lucide-chevron-down-icon {
+			position: absolute;
+			inset: 0.65em 0 auto auto;
+			path {
+				stroke: white;}}}
+		
+	.vecteurs svg {
 		position: absolute;
 		inset: 0;}
 	
@@ -210,7 +219,7 @@ const ScrollCtnr = styled.section`
 			left: auto;
 			text-transform: uppercase;
 			display: inline;
-			max-width: fit-content;
+			max-width: fit-content;}
 	`}
 `
 
@@ -782,7 +791,8 @@ const PEnraciner = ({lang, ctaTexts}) => {
 					className='shortcut button large-only'
 					onClick={shortcutClickHandler}
 				>
-					{localisedText[lang].recitBouton} ↓
+					{localisedText[lang].recitBouton} 
+					<svg mlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className='lucide lucide-chevron-down-icon lucide-chevron-down'><path d="m6 9 6 6 6-6"/></svg>
 				</button>
 			
 				<div className='vecteurs'>
@@ -797,6 +807,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 						<Video>
 							<div className='set-height'></div>
 							<iframe 
+								title="Vidéo Enraciner"
 								id="ytplayer" 
 								type="text/html" 
 								width="720"
