@@ -57,17 +57,16 @@ const Banniere = styled.section`
 		display: grid;
 		gap: 1rem;
 		align-content: center;
-		justify-items: center;
+		justify-items: right;
 		.button {
-			font-weight: normal;}}
+			font-weight: normal;
+			font-size: 1.12rem;}}
 		
 	button.fuite {
 		background: var(--color-pourpre);
 		border: 1px solid transparent;
 		border-left: 0;
 		border-right: 0;
-		font-size: 1.12rem;
-		padding: 0.75rem 0;
 		&::before, &::after {
 			margin-block: -1px;
 			background: var(--color-pourpre);}
@@ -83,21 +82,29 @@ const Banniere = styled.section`
 			&::before, &::after {
 				border-color: var(--color-jaune);}}}
 		
-	a.rapport:hover {
-		text-shadow: 0.5px 0.5px 0.5px white;}
+	button.rapport {
+		padding-right: 1.5em;
+		&:hover {
+			text-shadow: 0.5px 0.5px 0.5px white;}
+		
+		svg.lucide-chevron-down-icon {
+			position: absolute;
+			inset: 0.25em 0 auto auto;
+			path {
+				stroke: white;}}}
 	
 	${media.desktopUp`
 		grid-template-columns: 45% 30%;
 		gap: 25%;
 		.entete__titre h1 {
-			font-size: clamp(50px, 10vh, 120px);
-		}
+			font-size: clamp(50px, 10vh, 120px);}
+		button.rapport svg.lucide-chevron-down-icon {
+		top: 0.6em;
 	`}
 `;
 
 const Video = styled.div`
 	display: flex;
-	background: lightgrey;
 	margin-bottom: 10vh;	
 	position: relative;
 	z-index: 45;	
@@ -163,12 +170,13 @@ const ScrollCtnr = styled.section`
 		align-items: stretch;}
 		
 	button.shortcut {
-		padding-right: 1.5em;
-		svg.lucide-chevron-down-icon {
-			position: absolute;
-			inset: 0.65em 0 auto auto;
-			path {
-				stroke: white;}}}
+		padding-right: 1.5em;}
+		
+	svg.lucide-chevron-down-icon {
+		position: absolute;
+		inset: 0.65em 0 auto auto;
+		path {
+			stroke: white;}}
 		
 	.vecteurs svg {
 		position: absolute;
@@ -377,8 +385,8 @@ const PEnraciner = ({lang, ctaTexts}) => {
 	
 	// Event Handler
 	const { contextSafe } = useGSAP({ scope: vecteursScopeRef });
-	const shortcutClickHandler = contextSafe(() => {
-		gsap.to( window, { duration: 4, scrollTo: { y: '#recit', offsetY: -700 }});
+	const shortcutClickHandler = contextSafe( (destination, offset) => {
+		gsap.to( window, { duration: 4, scrollTo: { y: destination, offsetY: offset }});
 	});
 	
 	const quitterLeSite = () => {
@@ -780,8 +788,20 @@ const PEnraciner = ({lang, ctaTexts}) => {
 					<p>{localisedText[lang].banniereSousTitre}</p>
 				</div>
 				<div className='entete__boutons'>
-					<div><button className='button fuite' id="quitter" onClick={quitterLeSite}>{localisedText[lang].exitBouton} →</button></div>
-					<div><a href='#' className='button rapport'>{localisedText[lang].rapportBouton}</a></div>
+					<div><button 
+						className='button fuite' 
+						id="quitter" 
+						onClick={quitterLeSite}
+					>
+							{localisedText[lang].exitBouton} →
+						</button></div>
+					<div><button 
+						className='button rapport'
+						onClick={ () => shortcutClickHandler('#agir', -50) }
+					>
+						{localisedText[lang].rapportBouton}
+						<svg mlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" className='lucide lucide-chevron-down-icon lucide-chevron-down'><path d="m6 9 6 6 6-6"/></svg>
+					</button></div>
 				</div>
 			</Banniere>
 			
@@ -789,7 +809,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 			
 				<button
 					className='shortcut button large-only'
-					onClick={shortcutClickHandler}
+					onClick={ () => shortcutClickHandler('#recit', -750) }
 				>
 					{localisedText[lang].recitBouton} 
 					<svg mlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className='lucide lucide-chevron-down-icon lucide-chevron-down'><path d="m6 9 6 6 6-6"/></svg>
@@ -806,15 +826,16 @@ const PEnraciner = ({lang, ctaTexts}) => {
 					<div>
 						<Video>
 							<div className='set-height'></div>
-							<iframe 
-								title="Vidéo Enraciner"
-								id="ytplayer" 
-								type="text/html" 
-								width="720"
-								src="https://www.youtube.com/embed/yL-fwv2Z3rE"
-								frameBorder="0" 
-								allowFullScreen 
-								rel="0" 
+							<iframe
+								src='https://www.youtube-nocookie.com/embed/yL-fwv2Z3rE?si=HFvBzDUZJMr3zBiu&rel=0' 
+								title='De toi à moi: témoignage d’une personne sans statut d’immigration.'
+								width="720" height="405" 
+								allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+								frameBorder="0"
+								webkitallowfullscreen="true"
+								mozallowfullscreen="true"
+								allowFullScreen
+								referrerPolicy='strict-origin-when-cross-origin'
 							/>
 						</Video>
 						
