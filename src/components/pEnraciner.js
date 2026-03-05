@@ -1,8 +1,7 @@
-import React, {useState, useRef, useEffect} from "react"
+import React, {useState, useRef} from "react"
 import styled from 'styled-components'
 import { media } from '../styles/mixins.js'
 import { StaticImage } from "gatsby-plugin-image"
-import { Link } from 'gatsby'
 
 import useWixData from '../utils/useWixData'
 import { gsap } from 'gsap'
@@ -13,14 +12,11 @@ import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 
 import Chapitre from './enracinerChapitre'
 import CopyLinkButton from './copyLinkButton'
-import DonsImpactTabs from './donsImpactsTabs'
 
 import LierreOrdiDroit from '../images/enraciner/lierre-ordi-droit.js'
 import LierreOrdiGauche from '../images/enraciner/lierre-ordi-gauche.js'
 import LierreMobileDroit from '../images/enraciner/lierre-mobile-droit.js'
 import LierreMobileGauche from '../images/enraciner/lierre-mobile-gauche.js'
-
-const shareUrl = 'https://rever.solutionsjustes.org/enraciner/'
 
 const Banniere = styled.section`
 	position: relative;
@@ -262,12 +258,6 @@ const Cta = styled.section`
 		${media.largeUp`
 			grid-template-columns: 1fr 1fr 1fr;
 		`}
-		
-		.donner {
-			padding: 0;
-			gap: 0;
-			.intro {
-				padding: calc(var(--v-spacer) / 2) 1.5rem}}
 	
 	.partager .cta {
 		position: relative;
@@ -316,38 +306,68 @@ const Cta = styled.section`
 	
 `;
 
-const localisedText = {
+const texts = {
 	fr: {
 		chargement: 'chargement',
 		banniereTitre: 'Enraciner',
-		banniereSousTitre: 'Lorem ipsum color sit amet, consectetur adipisicing architecto colorem',
 		exitBouton: 'Quitter rapidement le site',
-		rapportBouton: "Lire le rapport d'activité",
+		rapportBouton: "Lire le rapport",
 		recitBouton: 'Lire le récit de Hana',
-		rapportTitre: 'Rapport titre lorem ipsum ...',
-		rapportParagraphe: 'Paragraphe Lorem ipsum color sit amet, consectetur adipisicing elit. Colorem coloremque libero cupiditate architecto ab possimus rem similique, recusandae eos soluta numquam quod maxime quidem repellendus qui vero voluptatibus et consectetur...',
-		rapportTelecharger: 'Télécharger le PDF',
-		partager: 'Partager',
-		ou: 'ou partager par'
+		cta1:{
+			titre: 'Rapport Entre protection et précarité',
+			paragraphe: 'Découvrez notre rapport d’analyse sur l’accès à la justice pour les femmes migrantes et les personnes migrantes 2ELGBTQIA+ à statut précaire ou sans statut.',
+			bouton: 'Consulter le rapport',
+			url: 'https://myriadeweb.com',
+			imageAlt: "Entre protection et précarité.	Rapport d'analyse sur l'accès à la justice pour les femmes migrantes et les personnes migrantes 2ELGBTQIA+ à statut précaire ou sans statut. Solutions Justes."
+		},
+		cta2: {
+			titre: 'Signer notre lettre',
+			paragraphe1: 'Soutenez notre démarche pour financer le poste d’une intervenante juridique spécialisée en violence conjugale.',
+			paragraphe2: 'Chaque signature compte.',
+			bouton: 'Signer la lettre',
+			url: 'https://myriadeweb.com'
+		},
+		cta3: {
+			titre: "Passer le mot",
+			paragraphe: "Partagez cette campagne à vos proches et collègues afin de les sensibiliser à la cause.",
+			bouton: "Partager",
+			ou: 'ou partager par',
+			imageAlt: "Je rêvais de bâtir une vie avec mon mari au Québec. Je rêve maintenant de sécurité et d'un statut qui ne dépend plus de lui. - Personne parrainée par un citoyen canadien. Soutenez un acces egal a la justice. Solutions Justes MCM."
+		}
 	},
 	en: {
 		chargement: 'loading',
-		banniereTitre: 'Enrooted',
-		banniereSousTitre: 'Lorem ipsum color sit amet, consectetur adipisicing architecto colorem',
+		banniereTitre: 'Enraciner',
 		exitBouton: 'Quicky leave this website',
-		rapportBouton: 'Read ...',
+		rapportBouton: 'Read the report',
 		recitBouton: "Read Hana's story",
-		rapportTitre: 'Rapport title lorem ipsum ...',
-		rapportParagraphe: 'Paragraph english Lorem ipsum color sit amet, consectetur adipisicing elit. Colorem coloremque libero cupiditate architecto ab possimus rem similique, recusandae eos soluta numquam quod maxime quidem repellendus qui vero voluptatibus et consectetur...',
-		rapportTelecharger: 'Download PDF',
-		partager: 'Share',
-		ou: 'or share by'
+		cta1: {
+			titre: 'Report Between Protection and Precarity',
+			paragraphe: 'Découvrez notre rapport d’analyse sur l’accès à la justice pour les femmes migrantes et les personnes migrantes 2ELGBTQIA+ à statut précaire ou sans statut.',
+			bouton: 'Read the report',
+			url: 'https://myriadeweb.com',
+			imageAlt: "Entre protection et précarité.	Rapport d'analyse sur l'accès à la justice pour les femmes migrantes et les personnes migrantes 2ELGBTQIA+ à statut précaire ou sans statut. Solutions Justes."
+		},
+		cta2: {
+			titre: 'Sign our letter',
+			paragraphe1: 'Support our efforts to fund a legal caseworker position specialized in intimate partner violence.',
+			paragraphe2: 'Every signature counts.',
+			bouton: 'Sign the letter',
+			url: 'https://myriadeweb.com'
+		},
+		cta3: {
+			titre: "Spread the word",
+			paragraphe: "Help us raise awareness by sharing this campaign with your friends and colleagues.",
+			bouton: "Share",
+			ou: 'or share by',
+			imageAlt: "I dreamed	of building a life with my husband in Quebec. Now, I dream of safety and a status that no longer depends on him. - Person sponsored by a Canadian citizen. Support equal access to justice. Solutions Justes MCM"
+		}
 	}
 }
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, DrawSVGPlugin);
 
-const PEnraciner = ({lang, ctaTexts}) => {
+const PEnraciner = ({lang}) => {
 	const [wixData, setWixData] = useState()
 	const [chapitreRendered, setChapitreRendered] = useState();
 	const [shareTooltipOn, setShareTooltipOn] = useState(false)
@@ -356,10 +376,20 @@ const PEnraciner = ({lang, ctaTexts}) => {
 	const contentRef = useRef()
 	const ctaRef = useRef()
 	
+	let videoUrl = null;
+	let shareUrl = null;
+	if (lang === 'fr') {
+		videoUrl = `https://www.youtube-nocookie.com/embed/eiOniHMcWEQ?si=HFvBzDUZJMr3zBiu&rel=0`
+		shareUrl = 'https://rever.solutionsjustes.org/enraciner/'
+	} else if (lang === "en") {
+		videoUrl = 'https://www.youtube-nocookie.com/embed/SkoJTdyTATA?si=HFvBzDUZJMr3zBiu&rel=0'
+		shareUrl = 'https://rever.solutionsjustes.org/en/enraciner/'
+	}
+	
 	/******** Fetch Wix data *********/
 	const placeholderData = {
 		data: {
-			title: localisedText[lang].chargement,
+			title: texts[lang].chargement,
 		}
 	}
 	
@@ -785,8 +815,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 		<>
 			<Banniere className='entete'>
 				<div className='entete__titre'>
-					<h1>{localisedText[lang].banniereTitre}</h1>
-					<p>{localisedText[lang].banniereSousTitre}</p>
+					<h1>{texts[lang].banniereTitre}</h1>
 				</div>
 				<div className='entete__boutons'>
 					<div><button 
@@ -794,13 +823,13 @@ const PEnraciner = ({lang, ctaTexts}) => {
 						id="quitter" 
 						onClick={quitterLeSite}
 					>
-							{localisedText[lang].exitBouton} →
+							{texts[lang].exitBouton} →
 						</button></div>
 					<div><button 
 						className='button rapport'
 						onClick={ () => shortcutClickHandler('#agir', -50) }
 					>
-						{localisedText[lang].rapportBouton}
+						{texts[lang].rapportBouton}
 						<svg mlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" className='lucide lucide-chevron-down-icon lucide-chevron-down'><path d="m6 9 6 6 6-6"/></svg>
 					</button></div>
 				</div>
@@ -812,7 +841,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 					className='shortcut button large-only'
 					onClick={ () => shortcutClickHandler('#recit', -750) }
 				>
-					{localisedText[lang].recitBouton} 
+					{texts[lang].recitBouton} 
 					<svg mlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className='lucide lucide-chevron-down-icon lucide-chevron-down'><path d="m6 9 6 6 6-6"/></svg>
 				</button>
 			
@@ -828,7 +857,7 @@ const PEnraciner = ({lang, ctaTexts}) => {
 						<Video>
 							<div className='set-height'></div>
 							<iframe
-								src='https://www.youtube-nocookie.com/embed/yL-fwv2Z3rE?si=HFvBzDUZJMr3zBiu&rel=0' 
+								src={videoUrl}
 								title='De toi à moi: témoignage d’une personne sans statut d’immigration.'
 								width="720" height="405" 
 								allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
@@ -900,83 +929,99 @@ const PEnraciner = ({lang, ctaTexts}) => {
 								rendered={5}
 								onRenderChange={setChapitreRendered}
 							/>
-						</> : <p>... {localisedText[lang].chargement}</p>}
+						</> : <p>... {texts[lang].chargement}</p>}
 					</div>
 				</Chapitres>
 				
 			</ScrollCtnr>
 			
 			<Cta id='agir' ref={ctaRef}>
-				{ ctaTexts ? <>
-					<div className='grid'>
-						<div className='rapport'>
-							<h3>{localisedText[lang].rapportTitre}</h3>
-							<p>{localisedText[lang].rapportParagraphe}</p>
-							<a href='#' className='button centered'>
-								{localisedText[lang].rapportTelecharger}
-							</a>
-						</div>
-					
-						<div className='donner'>
-							<div className='intro'>
-								<h3>{ctaTexts.t6a}</h3>
-								<p>{ctaTexts.p6a}</p>
-							</div>
-							<DonsImpactTabs textData={ctaTexts} />
-						</div>
-						
-						<div className='partager'>
-							<h3>{ctaTexts.t6c}</h3>
-							<p>{ctaTexts.p6c}</p>
-							<StaticImage
-								src='../images/rever-a-l-essentiel-MCM.webp'
+				<div className='grid'>
+					<div className='rapport'>
+						<h3>{texts[lang].cta1.titre}</h3>
+						<p>{texts[lang].cta1.paragraphe}</p>
+						<a href={texts[lang].cta1.url} target="_blank" rel="noreferrer" style={{display: 'grid', width: '100%'}}>
+							<StaticImage 
+								src='../images/enraciner/couverture-rapport-fr.png'
 								placeholder='dominantColor'
-								alt='Je rêvais de contribuer à la société québécoise, je rêve maintenant d\u2019être payé pour mon travail' 
+								alt={texts[lang].cta1.imageAlt}
 								style={{width: '180px', marginInline: 'auto'}}
 							/>
-							<div className='cta'>
-								<button 
-									className='button centered'
-									onClick={shareClickHandler}
-								>
-									{ctaTexts.b6c}
-								</button>
-								<div className='tooltip'>
-									<CopyLinkButton 
-										lang={lang} 
-										url={shareUrl}
-									/>
-									<p>{lang === 'fr' ? localisedText.fr.ou : ''}{lang === 'en' ? localisedText.en.ou : ''}</p>
-									<ul>
-										<li><a 
-											href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Bonjour%2C%0A%0AJ'esp%C3%A8re%20que%20tu%20vas%20bien.%20Je%20voulais%20te%20parler%20d'une%20campagne%20importante%20sur%20l'immigration%20humanitaire%2C%20qui%20met%20en%20lumi%C3%A8re%20les%20statuts%20d%E2%80%99immigration%2C%20l%E2%80%99absence%20de%20statut%20et%20leurs%20impacts%20sur%20la%20vie%20des%20personnes.%0A%0A${shareUrl}%2F%0A%0AChaque%20histoire%20m%C3%A9rite%20d'%C3%AAtre%20entendue.%20Ensemble%2C%20nous%20pouvons%20faire%20la%20diff%C3%A9rence%20en%20apprenant%20cette%20r%C3%A9alit%C3%A9%20et%20soutenir%20ces%20voix.%20Je%20t'invite%20%C3%A0%20d%C3%A9couvrir%20la%20campagne%20et%20%C3%A0%20partager%20tes%20r%C3%A9flexions.%0A%0AMerci%20de%20ton%20soutien%20!%0A%0ACordialement%2C`}
+						</a>
+						<a href={texts[lang].cta1.url} className='button centered' target="_blank" rel="noreferrer">
+							{texts[lang].cta1.bouton}
+						</a>
+					</div>
+				
+					<div className='signer'>
+						<h3>{texts[lang].cta2.titre}</h3>
+						<p>{texts[lang].cta2.paragraphe1}</p>
+						<p>{texts[lang].cta2.paragraphe2}</p>
+						<a href={texts[lang].cta2.url} className='button centered' target="_blank" rel="noreferrer">
+							{texts[lang].cta2.bouton}
+						</a>
+					</div>
+						
+					<div className='partager'>
+						<h3>{texts[lang].cta3.titre}</h3>
+						<p>{texts[lang].cta3.paragraphe}</p>
+						{ lang === 'fr' ?
+							<StaticImage 
+								src='../images/enraciner/cta-enraciner-fr.png' 
+								placeholder='dominantColor'
+								alt=''
+								style={{width: '180px', marginInline: 'auto'}}
+							/>
+						: 
+							<StaticImage 
+								src='../images/enraciner/cta-enraciner-en.png' 
+								placeholder='dominantColor'
+								alt=''
+								style={{width: '180px', marginInline: 'auto'}}
+							/>
+						}
+						<div className='cta'>
+							<button 
+								className='button centered'
+								onClick={shareClickHandler}
+							>
+								{texts[lang].cta3.bouton}
+							</button>
+							<div className='tooltip'>
+								<CopyLinkButton 
+									lang={lang} 
+									url={shareUrl}
+								/>
+								<p>{lang === 'fr' ? texts.fr.cta3.ou : ''}{lang === 'en' ? texts.en.cta3.ou : ''}</p>
+								<ul>
+									<li><a 
+										href={`mailto:?subject=Ensemble%20pour%20ne%20pas%20r%C3%AAver%20qu'%C3%A0%20l'essentiel%20%F0%9F%92%AD%F0%9F%8C%9F&body=Bonjour%2C%0A%0AJ'esp%C3%A8re%20que%20tu%20vas%20bien.%20Je%20voulais%20te%20parler%20d'une%20campagne%20importante%20sur%20l'immigration%20humanitaire%2C%20qui%20met%20en%20lumi%C3%A8re%20les%20statuts%20d%E2%80%99immigration%2C%20l%E2%80%99absence%20de%20statut%20et%20leurs%20impacts%20sur%20la%20vie%20des%20personnes.%0A%0A${shareUrl}%2F%0A%0AChaque%20histoire%20m%C3%A9rite%20d'%C3%AAtre%20entendue.%20Ensemble%2C%20nous%20pouvons%20faire%20la%20diff%C3%A9rence%20en%20apprenant%20cette%20r%C3%A9alit%C3%A9%20et%20soutenir%20ces%20voix.%20Je%20t'invite%20%C3%A0%20d%C3%A9couvrir%20la%20campagne%20et%20%C3%A0%20partager%20tes%20r%C3%A9flexions.%0A%0AMerci%20de%20ton%20soutien%20!%0A%0ACordialement%2C`}
+										target='_blank'
+										rel='noreferrer'
+										>Courriel</a></li>
+									<li><a 
+										href={`https://www.facebook.com/dialog/share?app_id=2315665215432948&display=popup&href=${shareUrl}`}
+										target='_blank'
+										rel='noreferrer'
+										>Facebook</a></li>
+									<li><a
+										href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
+										target='_blank'
+										rel='noreferrer'
+										>LinkedIn</a></li>
+									<li>
+										<a
+											href={`https://twitter.com/intent/tweet?text=${shareUrl}`}
 											target='_blank'
 											rel='noreferrer'
-											>Courriel</a></li>
-										<li><a 
-											href={`https://www.facebook.com/dialog/share?app_id=2315665215432948&display=popup&href=${shareUrl}`}
-											target='_blank'
-											rel='noreferrer'
-											>Facebook</a></li>
-										<li><a
-											href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
-											target='_blank'
-											rel='noreferrer'
-											>LinkedIn</a></li>
-										<li>
-											<a
-												href={`https://twitter.com/intent/tweet?text=${shareUrl}`}
-												target='_blank'
-												rel='noreferrer'
-												>
-											X</a>
-										</li>
-									</ul>
-								</div>
+											>
+										X</a>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
-				</> : '...'}
+				</div>
 			</Cta>
 		
 		</>
