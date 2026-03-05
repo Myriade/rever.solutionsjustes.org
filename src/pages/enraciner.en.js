@@ -24,8 +24,8 @@ export const Head = () => (
     
     <meta property='og:title' content='Enraciner | Solutions justes' />
     <meta property='og:description' content='' />
-    <meta property='og:image' content='' />
-    <meta property='og:image:alt' content='' />
+    <meta property='og:image' content='https://rever.solutionsjustes.org/images/enraciner/enraciner-solutions-justes-og' />
+    <meta property='og:image:alt' content='Enraciner' />
     <meta property='og:url' content='https://rever.solutionsjustes.org/en/enraciner/' />
     <meta property='og:type' content='website' />
   </>
