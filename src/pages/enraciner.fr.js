@@ -20,7 +20,7 @@ export const Head = () => (
   <>
     <html lang='fr' />
     <title>Enraciner | Solutions justes</title>
-    <meta name='description' content='' />
+    <meta name='description' content='Quand le statut d’immigration d’une personne dépend d’un·e partenaire violent·e, ni rester ni partir ne garantit sa sécurité. Découvrez l’histoire d’Hana et pourquoi il est urgent d’agir' />
     
     <meta property='og:title' content='Enraciner | Solutions justes' />
     <meta property='og:description' content='Quand le statut d’immigration d’une personne dépend d’un·e partenaire violent·e, ni rester ni partir ne garantit sa sécurité. Découvrez l’histoire d’Hana et pourquoi il est urgent d’agir' />
