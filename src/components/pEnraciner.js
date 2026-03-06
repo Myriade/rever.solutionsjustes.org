@@ -240,7 +240,11 @@ const Cta = styled.section`
 			gap: 1.5rem;
 			justify-items: left;
 			align-content: space-between;
-			overflow: hidden;}
+			overflow: hidden;
+			> div {
+				display: grid;
+				gap: 1.5rem;
+			}}
 			
 		h3, p {
 			margin-block: 0;}
@@ -317,7 +321,7 @@ const texts = {
 			titre: 'Rapport Entre protection et précarité',
 			paragraphe: 'Découvrez notre rapport d’analyse sur l’accès à la justice pour les femmes migrantes et les personnes migrantes 2ELGBTQIA+ à statut précaire ou sans statut.',
 			bouton: 'Consulter le rapport',
-			url: 'https://myriadeweb.com',
+			url: 'https://www.solutionsjustes.org/activites-danaides/rapports/entreprotectionetprecarite',
 			imageAlt: "Entre protection et précarité.	Rapport d'analyse sur l'accès à la justice pour les femmes migrantes et les personnes migrantes 2ELGBTQIA+ à statut précaire ou sans statut. Solutions Justes."
 		},
 		cta2: {
@@ -325,7 +329,7 @@ const texts = {
 			paragraphe1: 'Soutenez notre démarche pour financer le poste d’une intervenante juridique spécialisée en violence conjugale.',
 			paragraphe2: 'Chaque signature compte.',
 			bouton: 'Signer la lettre',
-			url: 'https://myriadeweb.com'
+			url: 'https://www.solutionsjustes.org/agissezmaintenant'
 		},
 		cta3: {
 			titre: "Passer le mot",
@@ -343,9 +347,9 @@ const texts = {
 		recitBouton: "Read Hana's story",
 		cta1: {
 			titre: 'Report Between Protection and Precarity',
-			paragraphe: 'Découvrez notre rapport d’analyse sur l’accès à la justice pour les femmes migrantes et les personnes migrantes 2ELGBTQIA+ à statut précaire ou sans statut.',
+			paragraphe: 'Discover our analysis report on access to justice for migrant women and 2SLGBTQIA+ migrants with precarious status or no status.',
 			bouton: 'Read the report',
-			url: 'https://myriadeweb.com',
+			url: 'https://www.solutionsjustes.org/en/activites-danaides/rapports/entreprotectionetprecarite',
 			imageAlt: "Entre protection et précarité.	Rapport d'analyse sur l'accès à la justice pour les femmes migrantes et les personnes migrantes 2ELGBTQIA+ à statut précaire ou sans statut. Solutions Justes."
 		},
 		cta2: {
@@ -353,7 +357,7 @@ const texts = {
 			paragraphe1: 'Support our efforts to fund a legal caseworker position specialized in intimate partner violence.',
 			paragraphe2: 'Every signature counts.',
 			bouton: 'Sign the letter',
-			url: 'https://myriadeweb.com'
+			url: 'https://www.solutionsjustes.org/en/agissezmaintenant'
 		},
 		cta3: {
 			titre: "Spread the word",
@@ -954,17 +958,21 @@ const PEnraciner = ({lang}) => {
 					</div>
 				
 					<div className='signer'>
-						<h3>{texts[lang].cta2.titre}</h3>
-						<p>{texts[lang].cta2.paragraphe1}</p>
-						<p>{texts[lang].cta2.paragraphe2}</p>
+						<div>
+							<h3>{texts[lang].cta2.titre}</h3>
+							<p>{texts[lang].cta2.paragraphe1}</p>
+							<p>{texts[lang].cta2.paragraphe2}</p>
+						</div>
 						<a href={texts[lang].cta2.url} className='button centered' target="_blank" rel="noreferrer">
 							{texts[lang].cta2.bouton}
 						</a>
 					</div>
 						
 					<div className='partager'>
-						<h3>{texts[lang].cta3.titre}</h3>
-						<p>{texts[lang].cta3.paragraphe}</p>
+						<div>
+							<h3>{texts[lang].cta3.titre}</h3>
+							<p>{texts[lang].cta3.paragraphe}</p>
+						</div>
 						{ lang === 'fr' ?
 							<StaticImage 
 								src='../images/enraciner/cta-enraciner-fr.png' 
