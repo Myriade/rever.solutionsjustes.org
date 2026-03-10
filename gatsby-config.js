@@ -2,6 +2,7 @@
  * @type {import('gatsby').GatsbyConfig}
  */
 module.exports = {
+  trailingSlash: "never",
   siteMetadata: {
     title: `Rêver à l'essentiel - Soutions Justes`,
     siteUrl: `https://rever.solutionsjustes.org`,
