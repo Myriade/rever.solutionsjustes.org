@@ -30,7 +30,7 @@ export const Head = () => (
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://rever.solutionsjustes.org/images/enraciner/enraciner-solutions-justes-og-2.png" />
-    <meta property='og:url' content='https://rever.solutionsjustes.org/en/enraciner/' />
+    <meta property='og:url' content='https://rever.solutionsjustes.org/en/enraciner' />
     <meta property='og:type' content='website' />
   </>
 );
