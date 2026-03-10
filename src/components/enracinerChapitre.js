@@ -77,7 +77,7 @@ const Styled = styled.div`
 		border: 0;
 		width: 36px;
 		height: 36px;
-		path {
+		svg path {
 			stroke: var(--color-bleu-tres-fonce);}
 		&:hover {
 			cursor: pointer;

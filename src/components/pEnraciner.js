@@ -95,7 +95,8 @@ const Banniere = styled.section`
 		.entete__titre h1 {
 			font-size: clamp(50px, 10vh, 120px);}
 		button.rapport svg.lucide-chevron-down-icon {
-		top: 0.6em;
+			top: 0.5em;
+		}
 	`}
 `;
 
@@ -170,7 +171,7 @@ const ScrollCtnr = styled.section`
 		
 	svg.lucide-chevron-down-icon {
 		position: absolute;
-		inset: 0.65em 0 auto auto;
+		inset: 0.5em 0 auto auto;
 		path {
 			stroke: white;}}
 		
