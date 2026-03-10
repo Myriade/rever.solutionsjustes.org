@@ -26,6 +26,10 @@ export const Head = () => (
     <meta property='og:description' content='Quand le statut d’immigration d’une personne dépend d’un·e partenaire violent·e, ni rester ni partir ne garantit sa sécurité. Découvrez l’histoire d’Hana et pourquoi il est urgent d’agir' />
     <meta property='og:image' content='https://rever.solutionsjustes.org/images/enraciner/enraciner-solutions-justes-og-1.png?v=2' />
     <meta property='og:image:alt' content='Enraciner' />
+    <meta property="og:image:width" content="3750" />
+    <meta property="og:image:height" content="1969" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://rever.solutionsjustes.org/images/enraciner/enraciner-solutions-justes-og-1.png?v=2" />
     <meta property='og:url' content='https://rever.solutionsjustes.org/enraciner/' />
     <meta property='og:type' content='website' />
   </>
