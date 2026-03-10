@@ -26,10 +26,10 @@ export const Head = () => (
     <meta property='og:description' content='When a person’s immigration status depends on a violent partner, neither staying nor leaving can guarantee their safety. Discover Hana’s story and why urgent action is needed.' />
     <meta property='og:image' content='https://rever.solutionsjustes.org/images/enraciner/enraciner-solutions-justes-og-1?v=2.png' />
     <meta property='og:image:alt' content='Enraciner' />
-    <meta property="og:image:width" content="3750" />
-    <meta property="og:image:height" content="1969" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://rever.solutionsjustes.org/images/enraciner/enraciner-solutions-justes-og-1.png?v=2" />
+    <meta name="twitter:image" content="https://rever.solutionsjustes.org/images/enraciner/enraciner-solutions-justes-og-2.png?v=3" />
     <meta property='og:url' content='https://rever.solutionsjustes.org/en/enraciner/' />
     <meta property='og:type' content='website' />
   </>
