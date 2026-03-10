@@ -45,6 +45,18 @@ const localisedText = [
   },
   {
     fr: {
+      to: '/enraciner',
+      texte: 'Enraciner',
+      title: 'Découvrez l’histoire d’Hana et pourquoi il est urgent d’agir'
+    },
+    en: {
+      to: '/en/enraciner',
+      texte: 'Enraciner',
+      title: 'Discover Hana’s story and why urgent action is needed'
+    }
+  },
+  {
+    fr: {
       to: '/en',
       texte: 'En',
       title: 'english'
@@ -198,13 +210,20 @@ export default function PageLayout({ children, lang, i18nLink, bgColor }) {
           >
             {lang === 'fr' ? localisedText[2].fr.texte : localisedText[2].en.texte}
           </Link>
+          <Link 
+            activeClassName='active'
+            to={lang === 'fr' ? localisedText[3].fr.to : localisedText[3].en.to}
+            title={lang === 'fr' ? localisedText[3].fr.title : localisedText[3].en.title}
+          >
+            {lang === 'fr' ? localisedText[3].fr.texte : localisedText[3].en.texte}
+          </Link>
         </nav>
         <div className='mirror'>
           <Link 
             to={i18nLink}
-            title={lang === 'fr' ? localisedText[3].fr.title : localisedText[3].en.title}
+            title={lang === 'fr' ? localisedText[4].fr.title : localisedText[4].en.title}
           >
-            {lang === 'fr' ? localisedText[3].fr.texte : localisedText[3].en.texte}
+            {lang === 'fr' ? localisedText[4].fr.texte : localisedText[4].en.texte}
           </Link>
         </div>
       </Header>
@@ -219,7 +238,7 @@ export default function PageLayout({ children, lang, i18nLink, bgColor }) {
       </Main>
       
       <Footer>
-        <p>{lang === 'fr' ? localisedText[4].fr : localisedText[4].en} : 107718868 RR 0001</p>
+        <p>{lang === 'fr' ? localisedText[5].fr : localisedText[5].en} : 107718868 RR 0001</p>
         <p>Copyright © 2024 <a href='https://www.solutionsjustes.org/'>Solutions Justes</a></p>
       </Footer>
       
